@@ -138,11 +138,11 @@
                                     </td>
                                     <td class="coluna-acao" style="text-align: right; padding: 10px 8px;">
                                         <input type="hidden" name="doc_req_inicial" id="val_doc_req_inicial">
-                                        <input type="file" id="file_doc_req_inicial" style="display:none;" onchange="handleFileUpload('doc_req_inicial')">
-                                        <div id="actions_doc_req_inicial">
-                                            <button type="button" class="btn-link-doc btn-upload" onclick="triggerUpload('doc_req_inicial')" style="background-color: #2e7d32; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">📤 Enviar</button>
-                                            <button type="button" class="btn-link-doc btn-abrir" style="display:none; background-color: #1e3a5f; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;" onclick="abrirDoc('doc_req_inicial')">👁️ Abrir</button>
-                                            <button type="button" class="btn-remove-imagem btn-remove" style="display:none; margin-left: 8px; background: none; border: none; color: #dc2626; cursor: pointer; font-weight: bold;" onclick="removerDoc('doc_req_inicial')" title="Remover">✕</button>
+                                        <input type="file" id="file_doc_req_inicial" style="display:none;" onchange="handleFileSelect('doc_req_inicial')">
+                                        <div id="actions_doc_req_inicial" style="display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
+                                            <span id="filename_doc_req_inicial" style="display:none; font-size: 0.85em; color: #475569; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></span>
+                                            <button type="button" class="btn-link-doc btn-upload" onclick="handleButtonClick('doc_req_inicial')" style="background-color: #2e7d32; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">📂 Carregar arquivo</button>
+                                            <button type="button" class="btn-link-doc btn-remove" style="display:none; background-color: #dc2626; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;" onclick="removerDoc('doc_req_inicial')" title="Remover">🗑️ Excluir</button>
                                         </div>
                                     </td>
                                 </tr>
@@ -158,11 +158,11 @@
                                     </td>
                                     <td class="coluna-acao" style="text-align: right; padding: 10px 8px;">
                                         <input type="hidden" name="doc_contrato_social" id="val_doc_contrato_social">
-                                        <input type="file" id="file_doc_contrato_social" style="display:none;" onchange="handleFileUpload('doc_contrato_social')">
-                                        <div id="actions_doc_contrato_social">
-                                            <button type="button" class="btn-link-doc btn-upload" onclick="triggerUpload('doc_contrato_social')" style="background-color: #2e7d32; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">📤 Enviar</button>
-                                            <button type="button" class="btn-link-doc btn-abrir" style="display:none; background-color: #1e3a5f; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;" onclick="abrirDoc('doc_contrato_social')">👁️ Abrir</button>
-                                            <button type="button" class="btn-remove-imagem btn-remove" style="display:none; margin-left: 8px; background: none; border: none; color: #dc2626; cursor: pointer; font-weight: bold;" onclick="removerDoc('doc_contrato_social')" title="Remover">✕</button>
+                                        <input type="file" id="file_doc_contrato_social" style="display:none;" onchange="handleFileSelect('doc_contrato_social')">
+                                        <div id="actions_doc_contrato_social" style="display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
+                                            <span id="filename_doc_contrato_social" style="display:none; font-size: 0.85em; color: #475569; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></span>
+                                            <button type="button" class="btn-link-doc btn-upload" onclick="handleButtonClick('doc_contrato_social')" style="background-color: #2e7d32; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">📂 Carregar arquivo</button>
+                                            <button type="button" class="btn-link-doc btn-remove" style="display:none; background-color: #dc2626; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;" onclick="removerDoc('doc_contrato_social')" title="Remover">🗑️ Excluir</button>
                                         </div>
                                     </td>
                                 </tr>
@@ -178,11 +178,11 @@
                                     </td>
                                     <td class="coluna-acao" style="text-align: right; padding: 10px 8px;">
                                         <input type="hidden" name="doc_id_representante" id="val_doc_id_representante">
-                                        <input type="file" id="file_doc_id_representante" style="display:none;" onchange="handleFileUpload('doc_id_representante')">
-                                        <div id="actions_doc_id_representante">
-                                            <button type="button" class="btn-link-doc btn-upload" onclick="triggerUpload('doc_id_representante')" style="background-color: #2e7d32; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">📤 Enviar</button>
-                                            <button type="button" class="btn-link-doc btn-abrir" style="display:none; background-color: #1e3a5f; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;" onclick="abrirDoc('doc_id_representante')">👁️ Abrir</button>
-                                            <button type="button" class="btn-remove-imagem btn-remove" style="display:none; margin-left: 8px; background: none; border: none; color: #dc2626; cursor: pointer; font-weight: bold;" onclick="removerDoc('doc_id_representante')" title="Remover">✕</button>
+                                        <input type="file" id="file_doc_id_representante" style="display:none;" onchange="handleFileSelect('doc_id_representante')">
+                                        <div id="actions_doc_id_representante" style="display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
+                                            <span id="filename_doc_id_representante" style="display:none; font-size: 0.85em; color: #475569; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></span>
+                                            <button type="button" class="btn-link-doc btn-upload" onclick="handleButtonClick('doc_id_representante')" style="background-color: #2e7d32; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">📂 Carregar arquivo</button>
+                                            <button type="button" class="btn-link-doc btn-remove" style="display:none; background-color: #dc2626; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;" onclick="removerDoc('doc_id_representante')" title="Remover">🗑️ Excluir</button>
                                         </div>
                                     </td>
                                 </tr>
@@ -198,11 +198,11 @@
                                     </td>
                                     <td class="coluna-acao" style="text-align: right; padding: 10px 8px;">
                                         <input type="hidden" name="doc_procuracao" id="val_doc_procuracao">
-                                        <input type="file" id="file_doc_procuracao" style="display:none;" onchange="handleFileUpload('doc_procuracao')">
-                                        <div id="actions_doc_procuracao">
-                                            <button type="button" class="btn-link-doc btn-upload" onclick="triggerUpload('doc_procuracao')" style="background-color: #2e7d32; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">📤 Enviar</button>
-                                            <button type="button" class="btn-link-doc btn-abrir" style="display:none; background-color: #1e3a5f; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;" onclick="abrirDoc('doc_procuracao')">👁️ Abrir</button>
-                                            <button type="button" class="btn-remove-imagem btn-remove" style="display:none; margin-left: 8px; background: none; border: none; color: #dc2626; cursor: pointer; font-weight: bold;" onclick="removerDoc('doc_procuracao')" title="Remover">✕</button>
+                                        <input type="file" id="file_doc_procuracao" style="display:none;" onchange="handleFileSelect('doc_procuracao')">
+                                        <div id="actions_doc_procuracao" style="display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
+                                            <span id="filename_doc_procuracao" style="display:none; font-size: 0.85em; color: #475569; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></span>
+                                            <button type="button" class="btn-link-doc btn-upload" onclick="handleButtonClick('doc_procuracao')" style="background-color: #2e7d32; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">📂 Carregar arquivo</button>
+                                            <button type="button" class="btn-link-doc btn-remove" style="display:none; background-color: #dc2626; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;" onclick="removerDoc('doc_procuracao')" title="Remover">🗑️ Excluir</button>
                                         </div>
                                     </td>
                                 </tr>
@@ -218,11 +218,11 @@
                                     </td>
                                     <td class="coluna-acao" style="text-align: right; padding: 10px 8px;">
                                         <input type="hidden" name="doc_comprovante_cadastral" id="val_doc_comprovante_cadastral">
-                                        <input type="file" id="file_doc_comprovante_cadastral" style="display:none;" onchange="handleFileUpload('doc_comprovante_cadastral')">
-                                        <div id="actions_doc_comprovante_cadastral">
-                                            <button type="button" class="btn-link-doc btn-upload" onclick="triggerUpload('doc_comprovante_cadastral')" style="background-color: #2e7d32; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">📤 Enviar</button>
-                                            <button type="button" class="btn-link-doc btn-abrir" style="display:none; background-color: #1e3a5f; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;" onclick="abrirDoc('doc_comprovante_cadastral')">👁️ Abrir</button>
-                                            <button type="button" class="btn-remove-imagem btn-remove" style="display:none; margin-left: 8px; background: none; border: none; color: #dc2626; cursor: pointer; font-weight: bold;" onclick="removerDoc('doc_comprovante_cadastral')" title="Remover">✕</button>
+                                        <input type="file" id="file_doc_comprovante_cadastral" style="display:none;" onchange="handleFileSelect('doc_comprovante_cadastral')">
+                                        <div id="actions_doc_comprovante_cadastral" style="display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
+                                            <span id="filename_doc_comprovante_cadastral" style="display:none; font-size: 0.85em; color: #475569; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></span>
+                                            <button type="button" class="btn-link-doc btn-upload" onclick="handleButtonClick('doc_comprovante_cadastral')" style="background-color: #2e7d32; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">📂 Carregar arquivo</button>
+                                            <button type="button" class="btn-link-doc btn-remove" style="display:none; background-color: #dc2626; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;" onclick="removerDoc('doc_comprovante_cadastral')" title="Remover">🗑️ Excluir</button>
                                         </div>
                                     </td>
                                 </tr>
@@ -268,60 +268,96 @@
         // ================================================================
         // OPERAÇÕES DE UPLOAD DE ARQUIVOS (BASE64)
         // ================================================================
-        function triggerUpload(id) {
-            document.getElementById('file_' + id).click();
-        }
-
-        function handleFileUpload(id) {
+        function handleButtonClick(id) {
             const fileInput = document.getElementById('file_' + id);
             const hiddenInput = document.getElementById('val_' + id);
-            if (fileInput.files && fileInput.files[0]) {
+            
+            if (!hiddenInput.value && fileInput.files && fileInput.files.length > 0) {
+                // State B -> Clicked "Enviar arquivo"
                 const file = fileInput.files[0];
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     hiddenInput.value = e.target.result; // Base64 Data URL
-                    hiddenInput.dispatchEvent(new Event('change', { bubbles: true })); // Trigger sync.js save
-                    updateDocUI(id, true);
+                    hiddenInput.dispatchEvent(new Event('change', { bubbles: true })); // Trigger sync.js
+                    updateDocUI(id);
                 };
                 reader.readAsDataURL(file);
+            } else {
+                // State A -> Clicked "Carregar arquivo"
+                fileInput.click();
             }
         }
 
-        function updateDocUI(id, hasFile) {
+        function handleFileSelect(id) {
+            updateDocUI(id);
+        }
+
+        function updateDocUI(id) {
+            const hiddenInput = document.getElementById('val_' + id);
+            const fileInput = document.getElementById('file_' + id);
+            const hasFile = !!(hiddenInput && hiddenInput.value);
+            
             const actionsDiv = document.getElementById('actions_' + id);
             if (!actionsDiv) return;
             const btnUpload = actionsDiv.querySelector('.btn-upload');
-            const btnAbrir = actionsDiv.querySelector('.btn-abrir');
             const btnRemover = actionsDiv.querySelector('.btn-remove');
+            const spanFilename = document.getElementById('filename_' + id);
             
             if (hasFile) {
+                // State C
                 if (btnUpload) btnUpload.style.display = 'none';
-                if (btnAbrir) btnAbrir.style.display = 'inline-block';
+                if (spanFilename) spanFilename.style.display = 'none';
                 if (btnRemover) btnRemover.style.display = 'inline-block';
             } else {
-                if (btnUpload) btnUpload.style.display = 'inline-block';
-                if (btnAbrir) btnAbrir.style.display = 'none';
-                if (btnRemover) btnRemover.style.display = 'none';
-            }
-        }
-
-        function abrirDoc(id) {
-            const hiddenInput = document.getElementById('val_' + id);
-            const dataUrl = hiddenInput.value;
-            if (dataUrl) {
-                const newTab = window.open();
-                newTab.document.write('<iframe src="' + dataUrl  + '" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;" allowfullscreen></iframe>');
+                const hasSelected = !!(fileInput && fileInput.files && fileInput.files.length > 0);
+                if (hasSelected) {
+                    // State B
+                    if (btnUpload) {
+                        btnUpload.innerHTML = '📤 Enviar arquivo';
+                        btnUpload.style.backgroundColor = '#1e3a5f';
+                        btnUpload.style.display = 'inline-block';
+                    }
+                    if (spanFilename) {
+                        spanFilename.textContent = fileInput.files[0].name;
+                        spanFilename.style.display = 'inline-block';
+                    }
+                    if (btnRemover) {
+                        btnRemover.style.display = 'inline-block';
+                    }
+                } else {
+                    // State A
+                    if (btnUpload) {
+                        btnUpload.innerHTML = '📂 Carregar arquivo';
+                        btnUpload.style.backgroundColor = '#2e7d32';
+                        btnUpload.style.display = 'inline-block';
+                    }
+                    if (spanFilename) {
+                        spanFilename.textContent = '';
+                        spanFilename.style.display = 'none';
+                    }
+                    if (btnRemover) {
+                        btnRemover.style.display = 'none';
+                    }
+                }
             }
         }
 
         function removerDoc(id) {
-            if (confirm('Deseja realmente remover este arquivo?')) {
-                const hiddenInput = document.getElementById('val_' + id);
-                hiddenInput.value = '';
-                hiddenInput.dispatchEvent(new Event('change', { bubbles: true })); // Trigger sync.js save
-                const fileInput = document.getElementById('file_' + id);
+            const hiddenInput = document.getElementById('val_' + id);
+            const fileInput = document.getElementById('file_' + id);
+            const hasFile = !!(hiddenInput && hiddenInput.value);
+            
+            if (hasFile) {
+                if (confirm('Deseja realmente remover este arquivo?')) {
+                    hiddenInput.value = '';
+                    hiddenInput.dispatchEvent(new Event('change', { bubbles: true })); // Trigger sync.js
+                    if (fileInput) fileInput.value = '';
+                    updateDocUI(id);
+                }
+            } else {
+                // Cancel selected file
                 if (fileInput) fileInput.value = '';
-                updateDocUI(id, false);
+                updateDocUI(id);
             }
         }
 
@@ -333,11 +369,11 @@
                 if (hiddenInput) {
                     // Escuta eventos change
                     hiddenInput.addEventListener('change', () => {
-                        updateDocUI(id, !!hiddenInput.value);
+                        updateDocUI(id);
                     });
                     // Estado inicial
                     setTimeout(() => {
-                        updateDocUI(id, !!hiddenInput.value);
+                        updateDocUI(id);
                     }, 500);
                 }
             });
@@ -409,67 +445,113 @@
                 <input type="hidden" name="docs_custom_files_${idx}" id="val_custom_${idx}" value="${valFile}">
                 <input type="file" id="file_custom_${idx}" style="display:none;">
                 
-                <button type="button" class="btn-link-doc btn-upload" style="display:${valFile ? 'none' : 'inline-block'}; background-color: #2e7d32; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">📤 Enviar</button>
-                <button type="button" class="btn-link-doc btn-abrir" style="display:${valFile ? 'inline-block' : 'none'}; background-color: #1e3a5f; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;" onclick="abrirCustomDoc('${idx}')">👁️ Abrir</button>
+                <span class="custom-filename" style="display:none; margin-right: 8px; font-size: 0.85em; color: #475569; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: middle;"></span>
                 
-                <button type="button" class="btn-remove-imagem" title="Remover" onclick="removerCustomDoc('${idx}', this)" style="background: none; border: none; color: #dc2626; cursor: pointer; font-weight: bold;">✕</button>
+                <button type="button" class="btn-link-doc btn-upload" style="background-color: #2e7d32; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">📂 Carregar arquivo</button>
+                
+                <button type="button" class="btn-link-doc btn-remove" title="Remover" style="background-color: #dc2626; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">🗑️ Excluir</button>
             `;
             list.appendChild(item);
 
-            // Add change listener for hidden input
             const hiddenInput = item.querySelector('#val_custom_' + idx);
-            hiddenInput.addEventListener('change', () => {
-                const hasFile = !!hiddenInput.value;
-                item.querySelector('.btn-upload').style.display = hasFile ? 'none' : 'inline-block';
-                item.querySelector('.btn-abrir').style.display = hasFile ? 'inline-block' : 'none';
-            });
-
-            // Set up file input trigger
-            item.querySelector('.btn-upload').addEventListener('click', () => {
-                item.querySelector('#file_custom_' + idx).click();
-            });
-
-            // Set up file input change handler
             const fileInput = item.querySelector('#file_custom_' + idx);
-            fileInput.addEventListener('change', () => {
-                if (fileInput.files && fileInput.files[0]) {
+            const txtInput = item.querySelector('input[type="text"]');
+            const btnUpload = item.querySelector('.btn-upload');
+            const btnRemove = item.querySelector('.btn-remove');
+            const spanFilename = item.querySelector('.custom-filename');
+
+            function updateUI() {
+                const hasFile = !!hiddenInput.value;
+                if (hasFile) {
+                    // State C (Uploaded)
+                    btnUpload.style.display = 'none';
+                    spanFilename.style.display = 'none';
+                    btnRemove.style.display = 'inline-block';
+                    txtInput.readOnly = true;
+                } else {
+                    const hasSelected = fileInput.files && fileInput.files.length > 0;
+                    if (hasSelected) {
+                        // State B (Selected but not uploaded)
+                        btnUpload.innerHTML = '📤 Enviar arquivo';
+                        btnUpload.style.backgroundColor = '#1e3a5f';
+                        btnUpload.style.display = 'inline-block';
+                        spanFilename.textContent = fileInput.files[0].name;
+                        spanFilename.style.display = 'inline-block';
+                        btnRemove.style.display = 'inline-block';
+                    } else {
+                        // State A (Empty)
+                        btnUpload.innerHTML = '📂 Carregar arquivo';
+                        btnUpload.style.backgroundColor = '#2e7d32';
+                        btnUpload.style.display = 'inline-block';
+                        spanFilename.textContent = '';
+                        spanFilename.style.display = 'none';
+                        btnRemove.style.display = 'inline-block';
+                        txtInput.readOnly = false;
+                    }
+                }
+            }
+
+            // Click handler on upload button
+            btnUpload.addEventListener('click', () => {
+                const hasFile = !!hiddenInput.value;
+                const hasSelected = fileInput.files && fileInput.files.length > 0;
+                
+                if (!hasFile && hasSelected) {
+                    // State B -> Upload the file
                     const file = fileInput.files[0];
                     const reader = new FileReader();
                     reader.onload = function(e) {
                         hiddenInput.value = e.target.result; // Base64
-                        const txtInput = item.querySelector('input[type="text"]');
                         txtInput.value = file.name;
                         txtInput.readOnly = true;
                         // Trigger sync.js save
                         hiddenInput.dispatchEvent(new Event('change', { bubbles: true }));
                         txtInput.dispatchEvent(new Event('change', { bubbles: true }));
+                        updateUI();
                     };
                     reader.readAsDataURL(file);
+                } else {
+                    // State A -> Click to select file
+                    fileInput.click();
                 }
             });
-        }
 
-        function abrirCustomDoc(idx) {
-            const val = document.getElementById('val_custom_' + idx).value;
-            if (val) {
-                const newTab = window.open();
-                newTab.document.write('<iframe src="' + val + '" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;" allowfullscreen></iframe>');
-            }
-        }
+            // Change handler on file input
+            fileInput.addEventListener('change', () => {
+                if (fileInput.files && fileInput.files[0]) {
+                    // Pre-fill text input with file name in State B
+                    txtInput.value = fileInput.files[0].name;
+                }
+                updateUI();
+            });
 
-        function removerCustomDoc(idx, btnEl) {
-            const item = btnEl.closest('.imagem-item');
-            if (item) {
-                // Clear inputs to let sync.js delete them from Supabase state
-                const hidden = item.querySelector('#val_custom_' + idx);
-                const txt = item.querySelector('input[type="text"]');
-                hidden.value = '';
-                txt.value = '';
-                hidden.dispatchEvent(new Event('change', { bubbles: true }));
-                txt.dispatchEvent(new Event('change', { bubbles: true }));
+            // Click handler on remove button
+            btnRemove.addEventListener('click', () => {
+                const hasFile = !!hiddenInput.value;
+                const hasSelected = fileInput.files && fileInput.files.length > 0;
                 
-                item.remove();
-            }
+                if (hasFile) {
+                    // State C -> Confirm remove from DB & delete row
+                    if (confirm('Deseja realmente remover este arquivo/link?')) {
+                        hiddenInput.value = '';
+                        txtInput.value = '';
+                        hiddenInput.dispatchEvent(new Event('change', { bubbles: true }));
+                        txtInput.dispatchEvent(new Event('change', { bubbles: true }));
+                        item.remove();
+                    }
+                } else if (hasSelected) {
+                    // State B -> Cancel selection (don't delete row, just reset to State A)
+                    fileInput.value = '';
+                    txtInput.value = '';
+                    updateUI();
+                } else {
+                    // State A -> Just delete empty custom row
+                    item.remove();
+                }
+            });
+
+            // Initial UI update
+            updateUI();
         }
     </script>
 

@@ -173,64 +173,102 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (blocoPendObs) blocoPendObs.style.display = 'none';
                 if (listDoc) listDoc.innerHTML = '';
             }
+        });
+    }
+
     // Exposição global das funções de upload para botões no HTML
     window.triggerUpload = function(id) {
         const fileInput = document.getElementById('file_' + id);
-        if (fileInput) fileInput.click();
-    };
-
-    window.handleFileUpload = function(id) {
-        const fileInput = document.getElementById('file_' + id);
         const hiddenInput = document.getElementById('val_' + id);
-        if (fileInput && fileInput.files && fileInput.files[0]) {
+        
+        if (!hiddenInput.value && fileInput.files && fileInput.files.length > 0) {
+            // State B -> Clicked "Enviar arquivo"
             const file = fileInput.files[0];
             const reader = new FileReader();
             reader.onload = function(e) {
                 hiddenInput.value = e.target.result; // Base64 Data URL
                 hiddenInput.dispatchEvent(new Event('change', { bubbles: true })); // Trigger sync.js save
-                window.updateDocUI(id, true);
+                window.updateDocUI(id);
             };
             reader.readAsDataURL(file);
+        } else {
+            // State A -> Clicked "Carregar arquivo"
+            if (fileInput) fileInput.click();
         }
     };
 
-    window.updateDocUI = function(id, hasFile) {
+    window.handleFileUpload = function(id) {
+        window.updateDocUI(id);
+    };
+
+    window.updateDocUI = function(id) {
+        const hiddenInput = document.getElementById('val_' + id);
+        const fileInput = document.getElementById('file_' + id);
+        const hasFile = !!(hiddenInput && hiddenInput.value);
+        
         const actionsDiv = document.getElementById('actions_' + id);
         if (!actionsDiv) return;
         const btnUpload = actionsDiv.querySelector('.btn-upload');
-        const btnAbrir = actionsDiv.querySelector('.btn-abrir');
         const btnRemover = actionsDiv.querySelector('.btn-remove');
+        const spanFilename = document.getElementById('filename_' + id);
         
         if (hasFile) {
+            // State C
             if (btnUpload) btnUpload.style.display = 'none';
-            if (btnAbrir) btnAbrir.style.display = 'inline-block';
+            if (spanFilename) spanFilename.style.display = 'none';
             if (btnRemover) btnRemover.style.display = 'inline-block';
         } else {
-            if (btnUpload) btnUpload.style.display = 'inline-block';
-            if (btnAbrir) btnAbrir.style.display = 'none';
-            if (btnRemover) btnRemover.style.display = 'none';
-        }
-    };
-
-    window.abrirDoc = function(id) {
-        const hiddenInput = document.getElementById('val_' + id);
-        const dataUrl = hiddenInput ? hiddenInput.value : '';
-        if (dataUrl) {
-            const newTab = window.open();
-            newTab.document.write('<iframe src="' + dataUrl  + '" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;" allowfullscreen></iframe>');
+            const hasSelected = !!(fileInput && fileInput.files && fileInput.files.length > 0);
+            if (hasSelected) {
+                // State B
+                if (btnUpload) {
+                    btnUpload.innerHTML = '📤 Enviar arquivo';
+                    btnUpload.style.backgroundColor = '#1e3a5f';
+                    btnUpload.style.display = 'inline-block';
+                }
+                if (spanFilename) {
+                    spanFilename.textContent = fileInput.files[0].name;
+                    spanFilename.style.display = 'inline-block';
+                }
+                if (btnRemover) {
+                    btnRemover.style.display = 'inline-block';
+                }
+            } else {
+                // State A
+                if (btnUpload) {
+                    btnUpload.innerHTML = '📂 Carregar arquivo';
+                    btnUpload.style.backgroundColor = '#2e7d32';
+                    btnUpload.style.display = 'inline-block';
+                }
+                if (spanFilename) {
+                    spanFilename.textContent = '';
+                    spanFilename.style.display = 'none';
+                }
+                if (btnRemover) {
+                    btnRemover.style.display = 'none';
+                }
+            }
         }
     };
 
     window.removerDoc = function(id) {
-        if (confirm('Deseja realmente remover este arquivo?')) {
-            const hiddenInput = document.getElementById('val_' + id);
-            if (hiddenInput) {
-                hiddenInput.value = '';
-                hiddenInput.dispatchEvent(new Event('change', { bubbles: true })); // Trigger sync.js save
+        const hiddenInput = document.getElementById('val_' + id);
+        const fileInput = document.getElementById('file_' + id);
+        const hasFile = !!(hiddenInput && hiddenInput.value);
+        
+        if (hasFile) {
+            if (confirm('Deseja realmente remover este arquivo?')) {
+                if (hiddenInput) {
+                    hiddenInput.value = '';
+                    hiddenInput.dispatchEvent(new Event('change', { bubbles: true })); // Trigger sync.js save
+                }
+                if (fileInput) fileInput.value = '';
+                window.updateDocUI(id);
             }
-            const fileInput = document.getElementById('file_' + id);
+        } else {
+            // Cancel selected file
             if (fileInput) fileInput.value = '';
-            window.updateDocUI(id, false);
+            window.updateDocUI(id);
         }
     };
 
@@ -238,11 +276,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const hiddenMatricula = document.getElementById('val_anexo_matricula');
     if (hiddenMatricula) {
         hiddenMatricula.addEventListener('change', () => {
-            window.updateDocUI('anexo_matricula', !!hiddenMatricula.value);
+            window.updateDocUI('anexo_matricula');
         });
         // Estado inicial
         setTimeout(() => {
-            window.updateDocUI('anexo_matricula', !!hiddenMatricula.value);
+            window.updateDocUI('anexo_matricula');
         }, 500);
     }
 });
