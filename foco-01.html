@@ -322,7 +322,7 @@
                         spanFilename.style.display = 'inline-block';
                     }
                     if (btnRemover) {
-                        btnRemover.style.display = 'inline-block';
+                        btnRemover.style.display = 'none'; // Hide Excluir during upload phase
                     }
                 } else {
                     // State A
@@ -336,7 +336,7 @@
                         spanFilename.style.display = 'none';
                     }
                     if (btnRemover) {
-                        btnRemover.style.display = 'none';
+                        btnRemover.style.display = 'none'; // Hide Excluir when empty
                     }
                 }
             }
@@ -354,10 +354,6 @@
                     if (fileInput) fileInput.value = '';
                     updateDocUI(id);
                 }
-            } else {
-                // Cancel selected file
-                if (fileInput) fileInput.value = '';
-                updateDocUI(id);
             }
         }
 
@@ -477,7 +473,7 @@
                         btnUpload.style.display = 'inline-block';
                         spanFilename.textContent = fileInput.files[0].name;
                         spanFilename.style.display = 'inline-block';
-                        btnRemove.style.display = 'inline-block';
+                        btnRemove.style.display = 'none'; // Hide Excluir during upload phase
                     } else {
                         // State A (Empty)
                         btnUpload.innerHTML = '📂 Carregar arquivo';
@@ -528,8 +524,6 @@
             // Click handler on remove button
             btnRemove.addEventListener('click', () => {
                 const hasFile = !!hiddenInput.value;
-                const hasSelected = fileInput.files && fileInput.files.length > 0;
-                
                 if (hasFile) {
                     // State C -> Confirm remove from DB & delete row
                     if (confirm('Deseja realmente remover este arquivo/link?')) {
@@ -539,11 +533,6 @@
                         txtInput.dispatchEvent(new Event('change', { bubbles: true }));
                         item.remove();
                     }
-                } else if (hasSelected) {
-                    // State B -> Cancel selection (don't delete row, just reset to State A)
-                    fileInput.value = '';
-                    txtInput.value = '';
-                    updateUI();
                 } else {
                     // State A -> Just delete empty custom row
                     item.remove();

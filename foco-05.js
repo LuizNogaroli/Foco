@@ -231,7 +231,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     spanFilename.style.display = 'inline-block';
                 }
                 if (btnRemover) {
-                    btnRemover.style.display = 'inline-block';
+                    btnRemover.style.display = 'none'; // Hide Excluir during upload phase
                 }
             } else {
                 // State A
@@ -245,7 +245,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     spanFilename.style.display = 'none';
                 }
                 if (btnRemover) {
-                    btnRemover.style.display = 'none';
+                    btnRemover.style.display = 'none'; // Hide Excluir when empty
                 }
             }
         }
@@ -265,10 +265,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (fileInput) fileInput.value = '';
                 window.updateDocUI(id);
             }
-        } else {
-            // Cancel selected file
-            if (fileInput) fileInput.value = '';
-            window.updateDocUI(id);
         }
     };
 
