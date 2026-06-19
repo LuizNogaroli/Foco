@@ -17,6 +17,25 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ6ZG1uenV
 
 
 
+project url
+https://rzdmnzuweyzhilfcungl.supabase.co
+
+
+
+https://vercel.com/luiz-nogaroli/sistema
+
+
+
+
+2c537b4b-c473cde3
+110e2c41-417263f4
+6d6b407b-2ee1a223
+997675ca-cfee4a1c
+f0efd95e-bd52a7fa
+c94bfcd7-b40e4b31
+
+
+
 
 
 

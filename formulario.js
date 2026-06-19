@@ -324,7 +324,14 @@ window.gerarResumoDosDados = function(dataObj, titulo, despacho) {
         </html>
     `;
 
-    if (perfilValue) localStorage.setItem('foco_report_' + perfilValue, reportHtml);
+    if (perfilValue) {
+        const rootWindow = window.parent?.parent || window.parent || window;
+        if (rootWindow.saveReportToDB) {
+            rootWindow.saveReportToDB(perfilValue, reportHtml);
+        } else {
+            localStorage.setItem('foco_report_' + perfilValue, reportHtml);
+        }
+    }
 
     const win = window.open('', 'ResumoFOCO', 'width=1100,height=850');
     if (win) {

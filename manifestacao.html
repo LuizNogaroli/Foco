@@ -207,9 +207,17 @@
             <span class="text">${niveis[i].label}</span>
           `;
           
-          btn.onclick = () => {
-              // Sempre abre o arquivo estático correspondente para permitir personalização manual
-              abrirPopupCentrado(niveis[i].resumo, 1100, 850);
+          btn.onclick = async () => {
+              const rootWindow = window.parent || window;
+              const savedReport = rootWindow.loadReportFromDB ? await rootWindow.loadReportFromDB(niveis[i].id) : null;
+              if (savedReport) {
+                  const win = window.open('', '_blank', 'width=1100,height=850');
+                  win.document.write(savedReport);
+                  win.document.close();
+              } else {
+                  // Sempre abre o arquivo estático correspondente para permitir personalização manual
+                  abrirPopupCentrado(niveis[i].resumo, 1100, 850);
+              }
           };
           gridHist.appendChild(btn);
         }

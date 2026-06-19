@@ -72,14 +72,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const textoDaOpcaoSelecionada = lastRadio ? 
                 (lastRadio.closest('label')?.querySelector('.opcao-texto')?.textContent || 
                  lastRadio.closest('label')?.textContent || lastRadio.value).replace(/\s\s+/g, ' ').trim() : '';
-
-            // Salva no localStorage para o resumo
+            // Salva no estado central (Supabase) para o resumo
             const profileData = {
                 manifestacao: textoDaOpcaoSelecionada,
                 detalhes: detalhesManifestacao,
                 observacoes: userObs
             };
-            localStorage.setItem('foco_data_' + currentProfileKey, JSON.stringify(profileData));
+            if (window.parent && window.parent.parent && typeof window.parent.parent.updateField === 'function') {
+                window.parent.parent.updateField('foco_data_' + currentProfileKey, profileData);
+            }
 
             // 4. Coleta dados MANUALMENTE (apenas inputs e selects, ignorando textareas já capturados)
             const data = {};
