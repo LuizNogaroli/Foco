@@ -223,6 +223,35 @@
         }
     };
 
+    window.visualizarDoc = function(id) {
+        const hiddenInput = document.getElementById('val_' + id);
+        if (hiddenInput && hiddenInput.value) {
+            const dataUrl = hiddenInput.value;
+            try {
+                const newWindow = window.open('', '_blank');
+                if (newWindow) {
+                    newWindow.document.write(`
+                        <html>
+                        <head>
+                            <title>Visualizar Documento</title>
+                            <style>body,html{margin:0;padding:0;width:100%;height:100%;overflow:hidden;}</style>
+                        </head>
+                        <body>
+                            <iframe src="${dataUrl}" width="100%" height="100%" style="border:none;"></iframe>
+                        </body>
+                        </html>
+                    `);
+                    newWindow.document.close();
+                } else {
+                    alert('Bloqueador de popup ativo. Por favor, permita popups.');
+                }
+            } catch (err) {
+                console.error('Erro ao abrir documento:', err);
+                alert('Erro ao abrir o arquivo para visualização.');
+            }
+        }
+    };
+
     window.updateDocUI = function(id) {
         const hiddenInput = document.getElementById('val_' + id);
         const fileInput = document.getElementById('file_' + id);
@@ -232,6 +261,7 @@
         if (!actionsDiv) return;
         const btnUpload = actionsDiv.querySelector('.btn-upload');
         const btnRemover = actionsDiv.querySelector('.btn-remove');
+        const btnVisualizar = actionsDiv.querySelector('.btn-view');
         const spanFilename = document.getElementById('filename_' + id);
         
         if (hasFile) {
@@ -245,7 +275,19 @@
                 const filenameInput = document.getElementById('val_filename_' + id);
                 spanFilename.textContent = (filenameInput && filenameInput.value) ? filenameInput.value : 'Arquivo carregado';
                 spanFilename.style.display = 'inline-block';
+                
+                // Estilo de link clicável para visualização
+                spanFilename.style.color = '#0056b3';
+                spanFilename.style.textDecoration = 'underline';
+                spanFilename.style.cursor = 'pointer';
+                spanFilename.title = 'Clique para visualizar o arquivo';
+                
+                // Adiciona o click handler apenas uma vez
+                if (!spanFilename.onclick) {
+                    spanFilename.onclick = () => window.visualizarDoc(id);
+                }
             }
+            if (btnVisualizar) btnVisualizar.style.display = 'inline-block';
             if (btnRemover) btnRemover.style.display = 'inline-block';
         } else {
             // State A (Vazio)
@@ -259,7 +301,9 @@
             if (spanFilename) {
                 spanFilename.textContent = '';
                 spanFilename.style.display = 'none';
+                spanFilename.onclick = null;
             }
+            if (btnVisualizar) btnVisualizar.style.display = 'none';
             if (btnRemover) btnRemover.style.display = 'none';
         }
     };
