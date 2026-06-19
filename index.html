@@ -3,61 +3,266 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Gestão SPU - FOCO</title>
-    <link rel="stylesheet" href="index.css">
+    <title>SPUnet - Módulo de Gestão</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <!-- SDK do Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="db.js"></script>
 </head>
-
 <body>
 
-<header class="menu">
-    <div class="buttons-flow-line"></div>
-    <div class="buttons-container">
-        <div class="button-wrapper">
-            <button class="circle-btn" data-url="foco-01.html">1</button>
-            <span class="legend">Dados do Requerimento</span>
+    <!-- BARRA DE NAVEGAÇÃO -->
+    <header class="navbar">
+        <div class="navbar-brand">
+            <span style="font-size: 20px; color: #1e3a5f; cursor: pointer;">☰</span>
+            <!-- Logo SPUnet mockado ou texto estilizado -->
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 20px; font-weight: 800; color: #1e3a5f; letter-spacing: -1px;">SPU<span style="color: #2e7d32;">net</span></span>
+                <div style="width: 1.5px; height: 24px; background-color: #cbd5e1;"></div>
+                <div class="navbar-title">
+                    <h1>Módulo de Gestão</h1>
+                    <span>Secretaria do Patrimônio da União</span>
+                </div>
+            </div>
         </div>
 
-        <div class="button-wrapper">
-            <button class="circle-btn" data-url="foco-02.html">2</button>
-            <span class="legend">Dados do Imóvel</span>
+        <div class="navbar-actions">
+            <button class="nav-icon-btn" title="Histórico">📂</button>
+            <button class="nav-icon-btn" title="Notificações">🔔</button>
+            <button class="nav-icon-btn" title="Ajuda">❓</button>
+            <div class="user-avatar" title="Usuário SPU">J</div>
+        </div>
+    </header>
+
+    <!-- BREADCRUMBS -->
+    <nav class="breadcrumbs">
+        <span style="font-size: 14px;">🏠</span>
+        <span>&rsaquo;</span>
+        <a href="#">Programa Imóvel da Gente</a>
+        <span>&rsaquo;</span>
+        <span style="color: #64748b; font-weight: 500;">Imóveis</span>
+    </nav>
+
+    <main class="main-container">
+
+        <!-- PAINEL DE FILTROS -->
+        <section class="filters-card">
+            <div class="filters-header" onclick="toggleFilters()">
+                <h2>
+                    <span>▼</span> Filtros
+                </h2>
+            </div>
+            <div class="filters-body" id="filtersBody">
+                <div class="filter-group">
+                    <label for="filterUF">UF</label>
+                    <select id="filterUF" onchange="applyFilters()">
+                        <option value="">Todas</option>
+                        <option value="SE">SE - Sergipe</option>
+                        <option value="RS">RS - Rio Grande do Sul</option>
+                        <option value="PR">PR - Paraná</option>
+                        <option value="DF">DF - Distrito Federal</option>
+                        <option value="SP">SP - São Paulo</option>
+                        <option value="RJ">RJ - Rio de Janeiro</option>
+                        <option value="BA">BA - Bahia</option>
+                        <option value="MG">MG - Minas Gerais</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filterMunicipio">Município</label>
+                    <input type="text" id="filterMunicipio" placeholder="Digite o município..." oninput="applyFilters()">
+                </div>
+                <div class="filter-group">
+                    <label for="filterStatus">Status</label>
+                    <select id="filterStatus" onchange="applyFilters()">
+                        <option value="">Todos</option>
+                        <option value="RASCUNHO">Rascunho</option>
+                        <option value="CADASTRADO">Cadastrado</option>
+                        <option value="DESTINADO">Destinado</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <!-- TOOLBAR DE AÇÕES -->
+        <div class="toolbar">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchQuery" placeholder="Pesquisar por denominação ou RIP..." oninput="applyFilters()">
+            </div>
+            
         </div>
 
-        <div class="button-wrapper">
-            <button class="circle-btn" data-url="foco-03.html">3</button>
-            <span class="legend">Geolocalização</span>
+        <!-- TABELA DE PROCESSOS -->
+        <div class="table-container">
+            <table class="data-table" id="processesTable">
+                <thead>
+                    <tr>
+                        <th style="width: 80px;">#</th>
+                        <th style="width: 80px;">UF</th>
+                        <th style="width: 150px;">Município</th>
+                        <th>Denominação</th>
+                        <th style="width: 100px;">Área (m²)</th>
+                        <th style="width: 120px;">Categoria</th>
+                        <th style="width: 180px;">Linha do Programa</th>
+                        <th style="width: 180px;">Utilização Específica</th>
+                        <th style="width: 120px;">Status</th>
+                        <th style="width: 100px; text-align: center;">Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <tr>
+                        <td colspan="10" class="empty-state">Carregando processos do banco de dados...</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
 
-        <div class="button-wrapper">
-            <button class="circle-btn" data-url="foco-04.html">4</button>
-            <span class="legend">Análise do Imóvel</span>
-        </div>
+    </main>
 
-        <div class="button-wrapper">
-            <button class="circle-btn" data-url="foco-05.html">5</button>
-            <span class="legend">Análise do Destinatário</span>
-        </div>
+    <script>
+        let allProcesses = [];
 
-        <div class="button-wrapper">
-            <button class="circle-btn" data-url="foco-06.html">6</button>
-            <span class="legend">Proposta de Destinação</span>
-        </div>
+        // Alterna abertura do painel de filtros
+        function toggleFilters() {
+            const body = document.getElementById('filtersBody');
+            body.style.display = body.style.display === 'none' ? 'grid' : 'none';
+        }
 
-        <div class="button-wrapper">
-            <button class="circle-btn" data-url="manifestacao.html">7</button>
-            <span class="legend">Resumo e Deliberações</span>
-        </div>
-    </div>
-    
-    <button id="btnReturnEdit" class="return-edit-btn" style="display: none;">✏️ Visão da edição dos formulários</button>
-</header>
+        // Carrega dados da tabela ao iniciar
+        async function fetchProcesses() {
+            const tableBody = document.getElementById('tableBody');
+            
+            // Aguarda o carregamento do cliente supabase do db.js
+            let retries = 0;
+            while (!window.supabaseClient && retries < 15) {
+                await new Promise(r => setTimeout(r, 200));
+                retries++;
+            }
 
-<main>
-    <iframe id="frame" src="foco-01.html" title="Conteúdo da etapa selecionada"></iframe>
-</main>
+            if (!window.supabaseClient) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="10" class="empty-state">
+                            ⚠️ Banco de dados Supabase não configurado localmente. 
+                            Configure as chaves no arquivo <b>db.js</b> para carregar os processos.
+                        </td>
+                    </tr>`;
+                return;
+            }
 
-<script src="index.js"></script>
+            try {
+                const { data, error } = await window.supabaseClient
+                    .from('foco_drafts')
+                    .select('*')
+                    .order('updated_at', { ascending: false });
 
+                if (error) {
+                    console.error("Erro ao carregar dados do Supabase:", error);
+                    tableBody.innerHTML = `<tr><td colspan="10" class="empty-state">Erro ao buscar processos do banco.</td></tr>`;
+                    return;
+                }
+
+                allProcesses = data.map(item => {
+                    const fd = item.form_data || {};
+                    return {
+                        id: item.process_id,
+                        uf: fd.uf || '-',
+                        municipio: fd.municipio || '-',
+                        denominacao: fd.denominacao || 'Sem Denominação',
+                        area: fd.area || '-',
+                        categoria: fd.categoria || '-',
+                        linha_programa: fd.linha_programa || 'Não informado',
+                        utilizacao_especifica: fd.utilizacao_especifica || 'Não informado',
+                        status: fd.status || 'RASCUNHO',
+                        origem: fd.origem || 'Portal de Serviços'
+                    };
+                });
+
+                renderTable(allProcesses);
+            } catch (err) {
+                console.error("Erro inesperado:", err);
+                tableBody.innerHTML = `<tr><td colspan="10" class="empty-state">Erro ao conectar com o banco.</td></tr>`;
+            }
+        }
+
+        // Renderiza as linhas na tabela
+        function renderTable(list) {
+            const tableBody = document.getElementById('tableBody');
+            tableBody.innerHTML = '';
+
+            if (list.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="10" class="empty-state">Nenhum processo encontrado.</td></tr>`;
+                return;
+            }
+
+            list.forEach(proc => {
+                const tr = document.createElement('tr');
+                
+                // Formatação do status badge
+                let badgeClass = 'badge-rascunho';
+                if (proc.status === 'CADASTRADO') badgeClass = 'badge-cadastrado';
+                if (proc.status === 'DESTINADO') badgeClass = 'badge-destinado';
+
+                // Formatação da origem
+                let dotClass = 'origem-portal';
+                if (proc.origem === 'Datalake') dotClass = 'origem-datalake';
+                if (proc.origem === 'Cadastro SPUnet') dotClass = 'origem-cadastro';
+
+                tr.innerHTML = `
+                    <td><b>${proc.id}</b></td>
+                    <td>${proc.uf}</td>
+                    <td>${proc.municipio}</td>
+                    <td>
+                        <div style="font-weight: 600;">${proc.denominacao}</div>
+                        <div class="origem-indicator">
+                            <span class="origem-dot ${dotClass}"></span>
+                            Origem: ${proc.origem}
+                        </div>
+                    </td>
+                    <td>${proc.area}</td>
+                    <td>${proc.categoria}</td>
+                    <td>${proc.linha_programa}</td>
+                    <td>${proc.utilizacao_especifica}</td>
+                    <td><span class="badge ${badgeClass}">${proc.status}</span></td>
+                    <td style="text-align: center;">
+                        <div class="action-buttons">
+                            <button class="btn-action" title="Visualizar (Somente Leitura)" onclick="openProcess('${proc.id}', true)">👁️</button>
+                            <button class="btn-action" title="Editar Processo" onclick="openProcess('${proc.id}', false)">✏️</button>
+                        </div>
+                    </td>
+                `;
+                tableBody.appendChild(tr);
+            });
+        }
+
+        // Filtra a tabela localmente
+        function applyFilters() {
+            const uf = document.getElementById('filterUF').value;
+            const municipio = document.getElementById('filterMunicipio').value.toLowerCase().trim();
+            const status = document.getElementById('filterStatus').value;
+            const query = document.getElementById('searchQuery').value.toLowerCase().trim();
+
+            const filtered = allProcesses.filter(proc => {
+                const matchUf = !uf || proc.uf === uf;
+                const matchMuni = !municipio || proc.municipio.toLowerCase().includes(municipio);
+                const matchStatus = !status || proc.status === status;
+                const matchQuery = !query || 
+                                   proc.id.toLowerCase().includes(query) || 
+                                   proc.denominacao.toLowerCase().includes(query);
+
+                return matchUf && matchMuni && matchStatus && matchQuery;
+            });
+
+            renderTable(filtered);
+        }
+
+        // Navega para a tela do formulário do processo selecionado
+        function openProcess(id, readonly) {
+            window.location.href = `processo.html?process_id=${id}${readonly ? '&readonly=true' : ''}`;
+        }
+
+        // Executa o Seeding de dados no banco de dados Supabase
+        document.addEventListener('DOMContentLoaded', fetchProcesses);
+    </script>
 </body>
 </html>

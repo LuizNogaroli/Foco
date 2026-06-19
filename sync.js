@@ -47,7 +47,30 @@
                 }
             });
 
-            // 3. Caso especial: foco-03.html (Leaflet GeoJSON)
+            // 3. Caso de Somente Leitura (Readonly)
+            try {
+                const parentParams = new URLSearchParams(window.parent.location.search);
+                const isReadonly = parentParams.get('readonly') === 'true';
+                if (isReadonly) {
+                    inputs.forEach(input => {
+                        input.disabled = true;
+                    });
+                    
+                    const buttons = document.querySelectorAll('button, input[type="submit"], input[type="button"], .btn-remove-imovel, .btn-remove-rip');
+                    buttons.forEach(btn => {
+                        if (btn.id !== 'expand-map' && btn.id !== 'btnImprimir') {
+                            btn.disabled = true;
+                            btn.style.opacity = '0.5';
+                            btn.style.cursor = 'not-allowed';
+                            btn.onclick = null;
+                        }
+                    });
+                }
+            } catch (err) {
+                console.error("Erro ao aplicar somente leitura:", err);
+            }
+
+            // 4. Caso especial: foco-03.html (Leaflet GeoJSON)
             if (window.location.pathname.includes('foco-03.html')) {
                 restoreFoco03MapLayers(state);
             }

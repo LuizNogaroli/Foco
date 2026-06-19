@@ -53,10 +53,18 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.hash = url.replace('.html', '');
     }
 
+    const btnBackToDashboard = document.getElementById('btnBackToDashboard');
+    if (btnBackToDashboard) {
+        btnBackToDashboard.addEventListener('click', () => {
+            window.location.href = 'index.html';
+        });
+    }
+
     if (btnReturnEdit) {
         btnReturnEdit.addEventListener('click', () => {
-            // Recarrega a aplicação no estado inicial (Edit Mode)
-            window.location.href = 'index.html';
+            const urlParams = new URLSearchParams(window.location.search);
+            const processId = urlParams.get('process_id') || '';
+            window.location.href = `processo.html${processId ? '?process_id=' + processId : ''}`;
         });
     }
 
