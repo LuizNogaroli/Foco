@@ -52,6 +52,23 @@ document.addEventListener('DOMContentLoaded', function () {
     // ── Envio / Validação ──────────────────────────────────────────────
     form.addEventListener('submit', function (e) {
         e.preventDefault();
+
+        // Validação da regra de negócio para RIPs baseados na Conceituação
+        const conceituacoes = Array.from(document.querySelectorAll('input[name="conceituacao[]"]:checked')).map(el => el.value);
+        
+        const exigeRIP = conceituacoes.some(val => 
+            val === 'terreno/acrescido de marinha' || 
+            val === 'terreno/acrescido marginal' || 
+            val === 'nacional interior'
+        );
+        
+        const ripCount = window.ripsPesquisados ? Object.keys(window.ripsPesquisados).length : 0;
+        
+        if (exigeRIP && ripCount === 0) {
+            alert('⚠️ Regra de Negócio SPU:\nCom a conceituação de imóvel selecionada (terreno de marinha/marginal/interior), é obrigatório cadastrar pelo menos um RIP!');
+            return;
+        }
+
         if (form.checkValidity()) {
             alert('✅ Rascunho salvo com sucesso!\n📄 O resumo do processo foi atualizado e está disponível para visualização.');
         } else {

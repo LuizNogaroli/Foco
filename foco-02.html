@@ -61,11 +61,44 @@
 <body>
     <div class="form-container">
 
-        <h2>Dados do Imóvel</h2>
-
         <h4 class="aviso">Alterações nos dados do imóvel devem ser feitas no módulo cadastro do SPUNET</h4>
 
         <form id="form0203" novalidate>
+
+            <!-- ========== CONCEITUAÇÃO DO IMÓVEL (NOVO) ========== -->
+            <div class="form-group editavel" style="margin-bottom: 25px;">
+                <label>Conceituação do imóvel a ser destinado (selecione uma ou mais opções):</label>
+                <div class="checkbox-group" style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="conceituacao[]" value="terreno/acrescido de marinha">
+                        Terreno / acrescido de marinha (Exige RIP)
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="conceituacao[]" value="terreno/acrescido marginal">
+                        Terreno / acrescido marginal (Exige RIP)
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="conceituacao[]" value="nacional interior">
+                        Nacional interior (Exige RIP)
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="conceituacao[]" value="espelho d’água">
+                        Espelho d’água (Dispensado de RIP)
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="conceituacao[]" value="cavidades naturais">
+                        Cavidades naturais (Dispensado de RIP)
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="conceituacao[]" value="mangue">
+                        Mangue (Dispensado de RIP)
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="conceituacao[]" value="praia">
+                        Praia (Dispensado de RIP)
+                    </label>
+                </div>
+            </div>
 
             <!-- ========== PESQUISA DE RIP ========== -->
             <div class="form-group" style="text-align: center; margin-top: 30px;">
@@ -143,8 +176,8 @@
         // ================================================================
         // ESTADO
         // ================================================================
-        let imovelCount = 0;
-        let ripsPesquisados = {};
+        var imovelCount = 0;
+        var ripsPesquisados = {};
 
         // ================================================================
         // PESQUISA DE RIP

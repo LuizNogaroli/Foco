@@ -10,44 +10,10 @@
 
 <body>
   <div class="form-container">
-    <h2>Análise do Imóvel</h2>
-
     <form id="form04" novalidate>
       <div id="imoveis-container">
 
         <section class="imovel-block" data-index="0">
-
-          <!-- ==================== OUTROS INTERESSADOS ==================== -->
-          <h4 style="margin: 0 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 8px;">
-            Outros interessados
-          </h4>
-
-          <div class="form-group editavel">
-            <label>Imóvel objeto de outras demandas?</label>
-            <div class="radio-group">
-              <label class="radio-option">
-                <input type="radio" name="imoveis[0][imovel_em_disputa]" value="Sim" />
-                Sim
-              </label>
-              <label class="radio-option">
-                <input type="radio" name="imoveis[0][imovel_em_disputa]" value="Não" checked />
-                Não
-              </label>
-              <label class="radio-option">
-                <input type="radio" name="imoveis[0][imovel_em_disputa]" value="Não há informação" />
-                Não há informação
-              </label>
-            </div>
-
-            <div id="bloco-obs-disputa_0" style="display: none; flex-direction: column; gap: 6px; margin-top: 8px;">
-              <label for="obs-disputa_0">Observações sobre a demanda:</label>
-              <textarea
-                id="obs-disputa_0"
-                name="imoveis[0][obs_disputa]"
-                placeholder="Descreva os outros interessados ou detalhes da disputa..."
-              ></textarea>
-            </div>
-          </div>
 
           <!-- ==================== OCUPAÇÃO ==================== -->
           <h4 style="margin: 24px 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 8px;">
@@ -144,6 +110,33 @@
 
           </div>
 
+          <!-- ==================== CARACTERIZAÇÃO ADICIONAL (NOVO) ==================== -->
+          <div class="form-group editavel">
+            <label for="campo-condicao-urbanizacao_0">Condição da urbanização:</label>
+            <select id="campo-condicao-urbanizacao_0" name="imoveis[0][condicao_urbanizacao]">
+              <option value="">Selecione...</option>
+              <option value="urbanizado">Urbanizado</option>
+              <option value="urbanização parcial/precária">Urbanização parcial/precária</option>
+              <option value="não urbanizado">Não urbanizado</option>
+              <option value="sem informação">Sem informação</option>
+            </select>
+          </div>
+
+          <div class="form-group editavel">
+            <label for="campo-tipo-imovel_0">Tipo de imóvel:</label>
+            <select id="campo-tipo-imovel_0" name="imoveis[0][tipo_imovel]">
+              <option value="">Selecione...</option>
+              <option value="casa">Casa</option>
+              <option value="conjunto habitacional">Conjunto habitacional</option>
+              <option value="galpão">Galpão</option>
+              <option value="garagem">Garagem</option>
+              <option value="prédio">Prédio</option>
+              <option value="sala/conjunto">Sala/conjunto</option>
+              <option value="terreno">Terreno</option>
+              <option value="não se aplica">Não se aplica</option>
+            </select>
+          </div>
+
           <!-- ==================== INCIDÊNCIA AMBIENTAL ==================== -->
           <div class="form-group editavel">
             <label>Incidência ambiental:</label>
@@ -234,34 +227,6 @@
                 name="imoveis[0][obs_incidencia_ambiental]"
                 placeholder="Descreva a incidência ambiental..."
               ></textarea>
-            </div>
-          </div>
-
-          <!-- ==================== CUSTOS SPU ==================== -->
-          <div class="form-group editavel">
-            <label>Há custos de manutenção para a SPU?</label>
-
-            <div class="radio-group">
-              <label class="radio-option">
-                <input type="radio" name="imoveis[0][custos_manutencao]" value="Sim" />
-                Sim
-              </label>
-
-              <label class="radio-option">
-                <input type="radio" name="imoveis[0][custos_manutencao]" value="Não" checked />
-                Não
-              </label>
-            </div>
-
-            <div id="bloco-obs37_0" style="display: none; flex-direction: column; gap: 6px; margin-top: 8px;">
-              <label for="campo37_0">Estimativa de custos anuais — R$:</label>
-              <input
-                type="text"
-                id="campo37_0"
-                name="imoveis[0][estimativa_custos]"
-                class="mask-moeda"
-                placeholder="R$ 0,00"
-              />
             </div>
           </div>
 
@@ -396,26 +361,6 @@
               </label>
 
               <label class="checkbox-option">
-                <input type="checkbox" name="imoveis[0][restricoes][]" value="Poligonal de Porto Organizado" />
-                Poligonal de Porto Organizado
-              </label>
-
-              <label class="checkbox-option">
-                <input type="checkbox" name="imoveis[0][restricoes][]" value="Área de regularização fundiária" />
-                Área de regularização fundiária
-              </label>
-
-              <label class="checkbox-option">
-                <input type="checkbox" name="imoveis[0][restricoes][]" value="Possui PDISP" />
-                Possui PDISP
-              </label>
-
-              <label class="checkbox-option">
-                <input type="checkbox" name="imoveis[0][restricoes][]" value="Área operacional da RFFSA" />
-                Área operacional da RFFSA
-              </label>
-
-              <label class="checkbox-option">
                 <input type="checkbox" name="imoveis[0][restricoes][]" value="Zona/Área de Interesse Social (ZEIS)" />
                 Zona/Área de Interesse Social — ZEIS
               </label>
@@ -441,13 +386,13 @@
               </label>
 
               <label class="checkbox-option">
-                <input type="checkbox" name="imoveis[0][restricoes][]" value="Conflitos fundiários/sociais" />
-                Conflitos fundiários/sociais
+                <input type="checkbox" name="imoveis[0][restricoes][]" value="Poligonal de Porto Organizado" />
+                Poligonal de Porto Organizado
               </label>
 
               <label class="checkbox-option">
-                <input type="checkbox" name="imoveis[0][restricoes][]" value="Termo Gestão Praias/PGI" />
-                Termo Gestão Praias/PGI
+                <input type="checkbox" name="imoveis[0][restricoes][]" value="Área operacional da RFFSA" />
+                Área operacional da RFFSA
               </label>
 
               <label class="checkbox-option">
@@ -486,65 +431,12 @@
             </div>
           </div>
 
-          <!-- ==================== AÇÕES JUDICIAIS OU ÓRGÃOS DE CONTROLE ==================== -->
-          <h4 style="margin: 24px 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 8px;">
-            Ações judiciais ou de órgãos de controle
-          </h4>
-
-          <div class="form-group inline">
-            <label for="acao-nup-sei_0">NUP SEI:</label>
-            <input
-              type="text"
-              id="acao-nup-sei_0"
-              name="imoveis[0][acoes_judiciais_controle][nup_sei]"
-              value="19739.000123/2026-45"
-              readonly
-            />
-            
+          <div class="dynamic-list-wrapper">
+            <button type="button" class="btn-add" id="btnAdicionarImagemIdent_0">
+              ＋ Adicionar link/documento
+            </button>
+            <div id="imagens-list-ident_0"></div>
           </div>
-
-          <div class="form-group inline">
-            <label for="acao-tipo-processo_0">Tipo de Processo:</label>
-            <input
-              type="text"
-              id="acao-tipo-processo_0"
-              name="imoveis[0][acoes_judiciais_controle][tipo_processo]"
-              value="Processo administrativo"
-              readonly
-            />
-            
-          </div>
-
-          <div class="form-group inline">
-            <label for="acao-resumo_0">Resumo:</label>
-            <input
-              type="text"
-              id="acao-resumo_0"
-              name="imoveis[0][acoes_judiciais_controle][resumo]"
-              value="Apuração administrativa sobre a situação dominial e ocupacional do imóvel."
-              readonly
-            />
-            
-          </div>
-
-          <div class="form-group editavel">
-            <label for="acao-descricao_0">Descrição:</label>
-            <textarea
-              id="acao-descricao_0"
-              name="imoveis[0][acoes_judiciais_controle][descricao]"
-              placeholder="Descreva as principais informações relacionadas à ação, processo ou demanda de controle."
-            >Processo fictício instaurado para análise da regularidade da ocupação, verificação de eventuais restrições administrativas e avaliação da necessidade de manifestação técnica da SPU quanto à destinação do imóvel.</textarea>
-          </div>
-
-          <!-- ==================== LINKS/DOCUMENTOS COMPLEMENTARES ==================== -->
-          <!-- div class="form-group editavel" -->
-            <div class="dynamic-list-wrapper">
-              <button type="button" class="btn-add" id="btnAdicionarImagemIdent_0">
-                ＋ Adicionar link/documento
-              </button>
-              <div id="imagens-list-ident_0"></div>
-            </div>
-          <!-- /div -->
 
         </section>
       </div>
@@ -561,6 +453,6 @@
   <script src="formulario.js"></script>
   <script src="hints.js"></script>
   <script src="foco-04.js"></script>
-    <script src="sync.js"></script>
+  <script src="sync.js"></script>
 </body>
 </html>

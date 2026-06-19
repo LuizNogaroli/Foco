@@ -93,25 +93,28 @@
         </div>
 
         <!-- TABELA DE PROCESSOS -->
-        <div class="table-container">
+        <div class="table-container" style="overflow-x: auto;">
             <table class="data-table" id="processesTable">
                 <thead>
                     <tr>
-                        <th style="width: 80px;">#</th>
-                        <th style="width: 80px;">UF</th>
-                        <th style="width: 150px;">Município</th>
-                        <th>Denominação</th>
-                        <th style="width: 100px;">Área (m²)</th>
-                        <th style="width: 120px;">Categoria</th>
-                        <th style="width: 180px;">Linha do Programa</th>
-                        <th style="width: 180px;">Utilização Específica</th>
-                        <th style="width: 120px;">Status</th>
-                        <th style="width: 100px; text-align: center;">Ações</th>
+                        <th style="width: 130px;">Nº Requerimento</th>
+                        <th style="width: 100px;">Data Req.</th>
+                        <th style="width: 60px;">UF</th>
+                        <th style="width: 140px;">Município</th>
+                        <th>Interessado</th>
+                        <th style="width: 150px;">Natureza Jurídica</th>
+                        <th style="width: 160px;">Processo SEI</th>
+                        <th style="width: 180px;">Tipo de Uso</th>
+                        <th style="width: 130px;">Procedimento</th>
+                        <th style="width: 110px;">Valor</th>
+                        <th style="width: 110px;">Área a Destinar</th>
+                        <th style="width: 110px;">Status</th>
+                        <th style="width: 80px; text-align: center;">Ações</th>
                     </tr>
                 </thead>
                 <tbody id="tableBody">
                     <tr>
-                        <td colspan="10" class="empty-state">Carregando processos do banco de dados...</td>
+                        <td colspan="13" class="empty-state">Carregando processos do banco de dados...</td>
                     </tr>
                 </tbody>
             </table>
@@ -142,7 +145,7 @@
             if (!window.supabaseClient) {
                 tableBody.innerHTML = `
                     <tr>
-                        <td colspan="10" class="empty-state">
+                        <td colspan="13" class="empty-state">
                             ⚠️ Banco de dados Supabase não configurado localmente. 
                             Configure as chaves no arquivo <b>db.js</b> para carregar os processos.
                         </td>
@@ -158,7 +161,7 @@
 
                 if (error) {
                     console.error("Erro ao carregar dados do Supabase:", error);
-                    tableBody.innerHTML = `<tr><td colspan="10" class="empty-state">Erro ao buscar processos do banco.</td></tr>`;
+                    tableBody.innerHTML = `<tr><td colspan="13" class="empty-state">Erro ao buscar processos do banco.</td></tr>`;
                     return;
                 }
 
@@ -166,13 +169,17 @@
                     const fd = item.form_data || {};
                     return {
                         id: item.process_id,
+                        requerimento: fd.campo11 || '-',
+                        data_req: fd.campo12 || '-',
                         uf: fd.uf || '-',
                         municipio: fd.municipio || '-',
-                        denominacao: fd.denominacao || 'Sem Denominação',
-                        area: fd.area || '-',
-                        categoria: fd.categoria || '-',
-                        linha_programa: fd.linha_programa || 'Não informado',
-                        utilizacao_especifica: fd.utilizacao_especifica || 'Não informado',
+                        interessado: fd.campo15 || '-',
+                        natureza: fd.campo16 || '-',
+                        sei: fd.campo13 || '-',
+                        tipo_uso: fd.tipo_uso_atual_desc || fd.linha_programa || 'Não informado',
+                        procedimento: fd.tipo_procedimento || 'Cessão de Uso',
+                        valor: fd.valor_total || fd.valor || '-',
+                        area_destinar: fd.area_destinada || fd.area || '-',
                         status: fd.status || 'RASCUNHO',
                         origem: fd.origem || 'Portal de Serviços'
                     };
@@ -181,7 +188,7 @@
                 renderTable(allProcesses);
             } catch (err) {
                 console.error("Erro inesperado:", err);
-                tableBody.innerHTML = `<tr><td colspan="10" class="empty-state">Erro ao conectar com o banco.</td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="13" class="empty-state">Erro ao conectar com o banco.</td></tr>`;
             }
         }
 
@@ -191,7 +198,7 @@
             tableBody.innerHTML = '';
 
             if (list.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="10" class="empty-state">Nenhum processo encontrado.</td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="13" class="empty-state">Nenhum processo encontrado.</td></tr>`;
                 return;
             }
 
@@ -209,20 +216,23 @@
                 if (proc.origem === 'Cadastro SPUnet') dotClass = 'origem-cadastro';
 
                 tr.innerHTML = `
-                    <td><b>${proc.id}</b></td>
+                    <td><b>${proc.requerimento}</b></td>
+                    <td>${proc.data_req}</td>
                     <td>${proc.uf}</td>
                     <td>${proc.municipio}</td>
                     <td>
-                        <div style="font-weight: 600;">${proc.denominacao}</div>
+                        <div style="font-weight: 600;">${proc.interessado}</div>
                         <div class="origem-indicator">
                             <span class="origem-dot ${dotClass}"></span>
                             Origem: ${proc.origem}
                         </div>
                     </td>
-                    <td>${proc.area}</td>
-                    <td>${proc.categoria}</td>
-                    <td>${proc.linha_programa}</td>
-                    <td>${proc.utilizacao_especifica}</td>
+                    <td>${proc.natureza}</td>
+                    <td><span style="font-family: monospace; font-size:11.5px;">${proc.sei}</span></td>
+                    <td>${proc.tipo_uso}</td>
+                    <td>${proc.procedimento}</td>
+                    <td>${proc.valor}</td>
+                    <td>${proc.area_destinar} m²</td>
                     <td><span class="badge ${badgeClass}">${proc.status}</span></td>
                     <td style="text-align: center;">
                         <div class="action-buttons">
@@ -248,7 +258,9 @@
                 const matchStatus = !status || proc.status === status;
                 const matchQuery = !query || 
                                    proc.id.toLowerCase().includes(query) || 
-                                   proc.denominacao.toLowerCase().includes(query);
+                                   proc.interessado.toLowerCase().includes(query) || 
+                                   proc.sei.toLowerCase().includes(query) || 
+                                   proc.requerimento.toLowerCase().includes(query);
 
                 return matchUf && matchMuni && matchStatus && matchQuery;
             });
