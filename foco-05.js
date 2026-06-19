@@ -179,26 +179,46 @@ document.addEventListener('DOMContentLoaded', function () {
     // Exposição global das funções de upload para botões no HTML
     window.triggerUpload = function(id) {
         const fileInput = document.getElementById('file_' + id);
-        const hiddenInput = document.getElementById('val_' + id);
-        
-        if (!hiddenInput.value && fileInput.files && fileInput.files.length > 0) {
-            // State B -> Clicked "Enviar arquivo"
-            const file = fileInput.files[0];
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                hiddenInput.value = e.target.result; // Base64 Data URL
-                hiddenInput.dispatchEvent(new Event('change', { bubbles: true })); // Trigger sync.js save
-                window.updateDocUI(id);
-            };
-            reader.readAsDataURL(file);
-        } else {
-            // State A -> Clicked "Carregar arquivo"
-            if (fileInput) fileInput.click();
+        if (fileInput) {
+            fileInput.click();
         }
     };
 
     window.handleFileUpload = function(id) {
-        window.updateDocUI(id);
+        const fileInput = document.getElementById('file_' + id);
+        const hiddenInput = document.getElementById('val_' + id);
+        const filenameInput = document.getElementById('val_filename_' + id);
+        const btnUpload = document.querySelector(`#actions_${id} .btn-upload`);
+        
+        if (fileInput && fileInput.files && fileInput.files[0]) {
+            const file = fileInput.files[0];
+            
+            // Feedback visual de carregamento
+            if (btnUpload) {
+                btnUpload.innerHTML = '⌛ Carregando...';
+                btnUpload.disabled = true;
+                btnUpload.style.opacity = '0.7';
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                hiddenInput.value = e.target.result; // Base64 Data URL
+                
+                // Salva o nome do arquivo no input correspondente
+                if (filenameInput) {
+                    filenameInput.value = file.name;
+                    filenameInput.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+                
+                hiddenInput.dispatchEvent(new Event('change', { bubbles: true })); // Trigger sync.js save
+                window.updateDocUI(id);
+            };
+            reader.onerror = function() {
+                alert('Erro ao carregar o arquivo.');
+                window.updateDocUI(id);
+            };
+            reader.readAsDataURL(file);
+        }
     };
 
     window.updateDocUI = function(id) {
@@ -213,41 +233,32 @@ document.addEventListener('DOMContentLoaded', function () {
         const spanFilename = document.getElementById('filename_' + id);
         
         if (hasFile) {
-            // State C
-            if (btnUpload) btnUpload.style.display = 'none';
-            if (spanFilename) spanFilename.style.display = 'none';
+            // State C (Arquivo Carregado)
+            if (btnUpload) {
+                btnUpload.style.display = 'none';
+                btnUpload.disabled = false;
+                btnUpload.style.opacity = '1';
+            }
+            if (spanFilename) {
+                const filenameInput = document.getElementById('val_filename_' + id);
+                spanFilename.textContent = (filenameInput && filenameInput.value) ? filenameInput.value : 'Arquivo carregado';
+                spanFilename.style.display = 'inline-block';
+            }
             if (btnRemover) btnRemover.style.display = 'inline-block';
         } else {
-            const hasSelected = !!(fileInput && fileInput.files && fileInput.files.length > 0);
-            if (hasSelected) {
-                // State B
-                if (btnUpload) {
-                    btnUpload.innerHTML = '📤 Enviar arquivo';
-                    btnUpload.style.backgroundColor = '#1e3a5f';
-                    btnUpload.style.display = 'inline-block';
-                }
-                if (spanFilename) {
-                    spanFilename.textContent = fileInput.files[0].name;
-                    spanFilename.style.display = 'inline-block';
-                }
-                if (btnRemover) {
-                    btnRemover.style.display = 'none'; // Hide Excluir during upload phase
-                }
-            } else {
-                // State A
-                if (btnUpload) {
-                    btnUpload.innerHTML = '📂 Carregar arquivo';
-                    btnUpload.style.backgroundColor = '#2e7d32';
-                    btnUpload.style.display = 'inline-block';
-                }
-                if (spanFilename) {
-                    spanFilename.textContent = '';
-                    spanFilename.style.display = 'none';
-                }
-                if (btnRemover) {
-                    btnRemover.style.display = 'none'; // Hide Excluir when empty
-                }
+            // State A (Vazio)
+            if (btnUpload) {
+                btnUpload.innerHTML = '📂 Carregar arquivo';
+                btnUpload.style.backgroundColor = '#2e7d32';
+                btnUpload.style.display = 'inline-block';
+                btnUpload.disabled = false;
+                btnUpload.style.opacity = '1';
             }
+            if (spanFilename) {
+                spanFilename.textContent = '';
+                spanFilename.style.display = 'none';
+            }
+            if (btnRemover) btnRemover.style.display = 'none';
         }
     };
 
@@ -262,6 +273,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     hiddenInput.value = '';
                     hiddenInput.dispatchEvent(new Event('change', { bubbles: true })); // Trigger sync.js save
                 }
+                
+                // Limpa o nome do arquivo
+                const filenameInput = document.getElementById('val_filename_' + id);
+                if (filenameInput) {
+                    filenameInput.value = '';
+                    filenameInput.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+                
                 if (fileInput) fileInput.value = '';
                 window.updateDocUI(id);
             }
@@ -270,13 +289,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Restaura o estado visual da certidão da matrícula
     const hiddenMatricula = document.getElementById('val_anexo_matricula');
+    const filenameMatricula = document.getElementById('val_filename_anexo_matricula');
+    
     if (hiddenMatricula) {
         hiddenMatricula.addEventListener('change', () => {
             window.updateDocUI('anexo_matricula');
         });
-        // Estado inicial
-        setTimeout(() => {
-            window.updateDocUI('anexo_matricula');
-        }, 500);
     }
+    if (filenameMatricula) {
+        filenameMatricula.addEventListener('change', () => {
+            window.updateDocUI('anexo_matricula');
+        });
+    }
+    
+    // Estado inicial
+    setTimeout(() => {
+        window.updateDocUI('anexo_matricula');
+    }, 400);
 });

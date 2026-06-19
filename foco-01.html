@@ -138,6 +138,7 @@
                                     </td>
                                     <td class="coluna-acao" style="text-align: right; padding: 10px 8px;">
                                         <input type="hidden" name="doc_req_inicial" id="val_doc_req_inicial">
+                                        <input type="hidden" name="filename_doc_req_inicial" id="val_filename_doc_req_inicial">
                                         <input type="file" id="file_doc_req_inicial" style="display:none;" onchange="handleFileSelect('doc_req_inicial')">
                                         <div id="actions_doc_req_inicial" style="display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
                                             <span id="filename_doc_req_inicial" style="display:none; font-size: 0.85em; color: #475569; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></span>
@@ -158,6 +159,7 @@
                                     </td>
                                     <td class="coluna-acao" style="text-align: right; padding: 10px 8px;">
                                         <input type="hidden" name="doc_contrato_social" id="val_doc_contrato_social">
+                                        <input type="hidden" name="filename_doc_contrato_social" id="val_filename_doc_contrato_social">
                                         <input type="file" id="file_doc_contrato_social" style="display:none;" onchange="handleFileSelect('doc_contrato_social')">
                                         <div id="actions_doc_contrato_social" style="display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
                                             <span id="filename_doc_contrato_social" style="display:none; font-size: 0.85em; color: #475569; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></span>
@@ -178,6 +180,7 @@
                                     </td>
                                     <td class="coluna-acao" style="text-align: right; padding: 10px 8px;">
                                         <input type="hidden" name="doc_id_representante" id="val_doc_id_representante">
+                                        <input type="hidden" name="filename_doc_id_representante" id="val_filename_doc_id_representante">
                                         <input type="file" id="file_doc_id_representante" style="display:none;" onchange="handleFileSelect('doc_id_representante')">
                                         <div id="actions_doc_id_representante" style="display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
                                             <span id="filename_doc_id_representante" style="display:none; font-size: 0.85em; color: #475569; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></span>
@@ -198,6 +201,7 @@
                                     </td>
                                     <td class="coluna-acao" style="text-align: right; padding: 10px 8px;">
                                         <input type="hidden" name="doc_procuracao" id="val_doc_procuracao">
+                                        <input type="hidden" name="filename_doc_procuracao" id="val_filename_doc_procuracao">
                                         <input type="file" id="file_doc_procuracao" style="display:none;" onchange="handleFileSelect('doc_procuracao')">
                                         <div id="actions_doc_procuracao" style="display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
                                             <span id="filename_doc_procuracao" style="display:none; font-size: 0.85em; color: #475569; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></span>
@@ -218,6 +222,7 @@
                                     </td>
                                     <td class="coluna-acao" style="text-align: right; padding: 10px 8px;">
                                         <input type="hidden" name="doc_comprovante_cadastral" id="val_doc_comprovante_cadastral">
+                                        <input type="hidden" name="filename_doc_comprovante_cadastral" id="val_filename_doc_comprovante_cadastral">
                                         <input type="file" id="file_doc_comprovante_cadastral" style="display:none;" onchange="handleFileSelect('doc_comprovante_cadastral')">
                                         <div id="actions_doc_comprovante_cadastral" style="display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
                                             <span id="filename_doc_comprovante_cadastral" style="display:none; font-size: 0.85em; color: #475569; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></span>
@@ -266,32 +271,55 @@
 
     <script>
         // ================================================================
-        // OPERAÇÕES DE UPLOAD DE ARQUIVOS (BASE64)
+        // OPERAÇÕES DE UPLOAD DE ARQUIVOS (BASE64) - FLUXO AUTOMÁTICO E DIRETO
         // ================================================================
+        
+        // Dispara o seletor de arquivos ao clicar em "Carregar arquivo"
         function handleButtonClick(id) {
             const fileInput = document.getElementById('file_' + id);
-            const hiddenInput = document.getElementById('val_' + id);
-            
-            if (!hiddenInput.value && fileInput.files && fileInput.files.length > 0) {
-                // State B -> Clicked "Enviar arquivo"
-                const file = fileInput.files[0];
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    hiddenInput.value = e.target.result; // Base64 Data URL
-                    hiddenInput.dispatchEvent(new Event('change', { bubbles: true })); // Trigger sync.js
-                    updateDocUI(id);
-                };
-                reader.readAsDataURL(file);
-            } else {
-                // State A -> Clicked "Carregar arquivo"
+            if (fileInput) {
                 fileInput.click();
             }
         }
 
+        // Executado assim que o usuário seleciona um arquivo no input type="file"
         function handleFileSelect(id) {
-            updateDocUI(id);
+            const fileInput = document.getElementById('file_' + id);
+            const hiddenInput = document.getElementById('val_' + id);
+            const filenameInput = document.getElementById('val_filename_' + id);
+            const btnUpload = document.querySelector(`#actions_${id} .btn-upload`);
+            
+            if (fileInput && fileInput.files && fileInput.files[0]) {
+                const file = fileInput.files[0];
+                
+                // Feedback visual de carregamento
+                if (btnUpload) {
+                    btnUpload.innerHTML = '⌛ Carregando...';
+                    btnUpload.disabled = true;
+                    btnUpload.style.opacity = '0.7';
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    hiddenInput.value = e.target.result; // Salva o Base64
+                    
+                    if (filenameInput) {
+                        filenameInput.value = file.name; // Salva o nome original
+                        filenameInput.dispatchEvent(new Event('change', { bubbles: true }));
+                    }
+                    
+                    hiddenInput.dispatchEvent(new Event('change', { bubbles: true })); // Dispara sync.js
+                    updateDocUI(id);
+                };
+                reader.onerror = function() {
+                    alert('Erro ao carregar o arquivo.');
+                    updateDocUI(id);
+                };
+                reader.readAsDataURL(file);
+            }
         }
 
+        // Atualiza a visualização com base na presença do arquivo
         function updateDocUI(id) {
             const hiddenInput = document.getElementById('val_' + id);
             const fileInput = document.getElementById('file_' + id);
@@ -304,44 +332,36 @@
             const spanFilename = document.getElementById('filename_' + id);
             
             if (hasFile) {
-                // State C
-                if (btnUpload) btnUpload.style.display = 'none';
-                if (spanFilename) spanFilename.style.display = 'none';
+                // State C (Arquivo Carregado/Salvo)
+                if (btnUpload) {
+                    btnUpload.style.display = 'none';
+                    btnUpload.disabled = false;
+                    btnUpload.style.opacity = '1';
+                }
+                if (spanFilename) {
+                    const filenameInput = document.getElementById('val_filename_' + id);
+                    spanFilename.textContent = (filenameInput && filenameInput.value) ? filenameInput.value : 'Arquivo carregado';
+                    spanFilename.style.display = 'inline-block';
+                }
                 if (btnRemover) btnRemover.style.display = 'inline-block';
             } else {
-                const hasSelected = !!(fileInput && fileInput.files && fileInput.files.length > 0);
-                if (hasSelected) {
-                    // State B
-                    if (btnUpload) {
-                        btnUpload.innerHTML = '📤 Enviar arquivo';
-                        btnUpload.style.backgroundColor = '#1e3a5f';
-                        btnUpload.style.display = 'inline-block';
-                    }
-                    if (spanFilename) {
-                        spanFilename.textContent = fileInput.files[0].name;
-                        spanFilename.style.display = 'inline-block';
-                    }
-                    if (btnRemover) {
-                        btnRemover.style.display = 'none'; // Hide Excluir during upload phase
-                    }
-                } else {
-                    // State A
-                    if (btnUpload) {
-                        btnUpload.innerHTML = '📂 Carregar arquivo';
-                        btnUpload.style.backgroundColor = '#2e7d32';
-                        btnUpload.style.display = 'inline-block';
-                    }
-                    if (spanFilename) {
-                        spanFilename.textContent = '';
-                        spanFilename.style.display = 'none';
-                    }
-                    if (btnRemover) {
-                        btnRemover.style.display = 'none'; // Hide Excluir when empty
-                    }
+                // State A (Vazio)
+                if (btnUpload) {
+                    btnUpload.innerHTML = '📂 Carregar arquivo';
+                    btnUpload.style.backgroundColor = '#2e7d32';
+                    btnUpload.style.display = 'inline-block';
+                    btnUpload.disabled = false;
+                    btnUpload.style.opacity = '1';
                 }
+                if (spanFilename) {
+                    spanFilename.textContent = '';
+                    spanFilename.style.display = 'none';
+                }
+                if (btnRemover) btnRemover.style.display = 'none';
             }
         }
 
+        // Remove o arquivo do banco de dados e limpa a tela
         function removerDoc(id) {
             const hiddenInput = document.getElementById('val_' + id);
             const fileInput = document.getElementById('file_' + id);
@@ -350,28 +370,34 @@
             if (hasFile) {
                 if (confirm('Deseja realmente remover este arquivo?')) {
                     hiddenInput.value = '';
-                    hiddenInput.dispatchEvent(new Event('change', { bubbles: true })); // Trigger sync.js
+                    hiddenInput.dispatchEvent(new Event('change', { bubbles: true })); // Dispara sync.js
+                    
+                    const filenameInput = document.getElementById('val_filename_' + id);
+                    if (filenameInput) {
+                        filenameInput.value = '';
+                        filenameInput.dispatchEvent(new Event('change', { bubbles: true }));
+                    }
+                    
                     if (fileInput) fileInput.value = '';
                     updateDocUI(id);
                 }
             }
         }
 
-        // On page load, setup change listeners for hidden fields to restore UI state
+        // Configura ouvintes de alteração para atualização reativa
         document.addEventListener('DOMContentLoaded', () => {
             const docIds = ['doc_req_inicial', 'doc_contrato_social', 'doc_id_representante', 'doc_procuracao', 'doc_comprovante_cadastral'];
             docIds.forEach(id => {
                 const hiddenInput = document.getElementById('val_' + id);
                 if (hiddenInput) {
-                    // Escuta eventos change
-                    hiddenInput.addEventListener('change', () => {
-                        updateDocUI(id);
-                    });
-                    // Estado inicial
-                    setTimeout(() => {
-                        updateDocUI(id);
-                    }, 500);
+                    hiddenInput.addEventListener('change', () => updateDocUI(id));
                 }
+                const filenameInput = document.getElementById('val_filename_' + id);
+                if (filenameInput) {
+                    filenameInput.addEventListener('change', () => updateDocUI(id));
+                }
+                // Executa estado inicial com um pequeno delay para garantir que o sync.js já preencheu
+                setTimeout(() => updateDocUI(id), 400);
             });
         });
 
@@ -385,7 +411,7 @@
             if (!btn || !list) return;
 
             btn.addEventListener('click', function () {
-                const idx = Date.now() + Math.random().toString(36).substr(2, 5); // unique key
+                const idx = Date.now() + Math.random().toString(36).substr(2, 5); // chave única
                 recreateCustomRow(idx, '', '');
             });
 
@@ -441,8 +467,6 @@
                 <input type="hidden" name="docs_custom_files_${idx}" id="val_custom_${idx}" value="${valFile}">
                 <input type="file" id="file_custom_${idx}" style="display:none;">
                 
-                <span class="custom-filename" style="display:none; margin-right: 8px; font-size: 0.85em; color: #475569; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: middle;"></span>
-                
                 <button type="button" class="btn-link-doc btn-upload" style="background-color: #2e7d32; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">📂 Carregar arquivo</button>
                 
                 <button type="button" class="btn-link-doc btn-remove" title="Remover" style="background-color: #dc2626; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">🗑️ Excluir</button>
@@ -454,79 +478,67 @@
             const txtInput = item.querySelector('input[type="text"]');
             const btnUpload = item.querySelector('.btn-upload');
             const btnRemove = item.querySelector('.btn-remove');
-            const spanFilename = item.querySelector('.custom-filename');
 
             function updateUI() {
                 const hasFile = !!hiddenInput.value;
                 if (hasFile) {
-                    // State C (Uploaded)
+                    // State C (Arquivo Carregado)
                     btnUpload.style.display = 'none';
-                    spanFilename.style.display = 'none';
+                    btnUpload.disabled = false;
+                    btnUpload.style.opacity = '1';
                     btnRemove.style.display = 'inline-block';
                     txtInput.readOnly = true;
                 } else {
-                    const hasSelected = fileInput.files && fileInput.files.length > 0;
-                    if (hasSelected) {
-                        // State B (Selected but not uploaded)
-                        btnUpload.innerHTML = '📤 Enviar arquivo';
-                        btnUpload.style.backgroundColor = '#1e3a5f';
-                        btnUpload.style.display = 'inline-block';
-                        spanFilename.textContent = fileInput.files[0].name;
-                        spanFilename.style.display = 'inline-block';
-                        btnRemove.style.display = 'none'; // Hide Excluir during upload phase
-                    } else {
-                        // State A (Empty)
-                        btnUpload.innerHTML = '📂 Carregar arquivo';
-                        btnUpload.style.backgroundColor = '#2e7d32';
-                        btnUpload.style.display = 'inline-block';
-                        spanFilename.textContent = '';
-                        spanFilename.style.display = 'none';
-                        btnRemove.style.display = 'inline-block';
-                        txtInput.readOnly = false;
-                    }
+                    // State A (Vazio)
+                    btnUpload.innerHTML = '📂 Carregar arquivo';
+                    btnUpload.style.backgroundColor = '#2e7d32';
+                    btnUpload.style.display = 'inline-block';
+                    btnUpload.disabled = false;
+                    btnUpload.style.opacity = '1';
+                    btnRemove.style.display = 'inline-block';
+                    txtInput.readOnly = false;
                 }
             }
 
-            // Click handler on upload button
+            // Click handler on upload button -> just clicks the file input
             btnUpload.addEventListener('click', () => {
-                const hasFile = !!hiddenInput.value;
-                const hasSelected = fileInput.files && fileInput.files.length > 0;
-                
-                if (!hasFile && hasSelected) {
-                    // State B -> Upload the file
+                fileInput.click();
+            });
+
+            // Change handler on file input -> uploads immediately
+            fileInput.addEventListener('change', () => {
+                if (fileInput.files && fileInput.files[0]) {
                     const file = fileInput.files[0];
+                    
+                    // Feedback visual
+                    btnUpload.innerHTML = '⌛ Carregando...';
+                    btnUpload.disabled = true;
+                    btnUpload.style.opacity = '0.7';
+                    
                     const reader = new FileReader();
                     reader.onload = function(e) {
                         hiddenInput.value = e.target.result; // Base64
                         txtInput.value = file.name;
                         txtInput.readOnly = true;
+                        
                         // Trigger sync.js save
                         hiddenInput.dispatchEvent(new Event('change', { bubbles: true }));
                         txtInput.dispatchEvent(new Event('change', { bubbles: true }));
                         updateUI();
                     };
+                    reader.onerror = function() {
+                        alert('Erro ao carregar o arquivo.');
+                        updateUI();
+                    };
                     reader.readAsDataURL(file);
-                } else {
-                    // State A -> Click to select file
-                    fileInput.click();
                 }
-            });
-
-            // Change handler on file input
-            fileInput.addEventListener('change', () => {
-                if (fileInput.files && fileInput.files[0]) {
-                    // Pre-fill text input with file name in State B
-                    txtInput.value = fileInput.files[0].name;
-                }
-                updateUI();
             });
 
             // Click handler on remove button
             btnRemove.addEventListener('click', () => {
                 const hasFile = !!hiddenInput.value;
                 if (hasFile) {
-                    // State C -> Confirm remove from DB & delete row
-                    if (confirm('Deseja realmente remover este arquivo/link?')) {
+                    if (confirm('Deseja realmente remover este arquivo?')) {
                         hiddenInput.value = '';
                         txtInput.value = '';
                         hiddenInput.dispatchEvent(new Event('change', { bubbles: true }));
@@ -534,12 +546,12 @@
                         item.remove();
                     }
                 } else {
-                    // State A -> Just delete empty custom row
+                    // Se estiver vazio (só digitou link ou adicionou linha vazia), apenas remove a linha
                     item.remove();
                 }
             });
 
-            // Initial UI update
+            // Inicializa a UI
             updateUI();
         }
     </script>
