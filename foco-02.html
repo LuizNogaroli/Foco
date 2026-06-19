@@ -192,14 +192,19 @@
         // PESQUISA DE RIP
         // ================================================================
         function pesquisarRIP() {
+            console.log("🚩 [foco-02.html] pesquisarRIP chamado.");
             const rip = document.getElementById('inputRIP').value.trim();
+            console.log("🚩 [foco-02.html] RIP digitado:", rip);
 
             if (!rip) {
+                console.log("🚩 [foco-02.html] Erro: Campo de busca vazio.");
                 alert('Por favor, informe o nº RIP do imóvel.');
                 return;
             }
 
+            console.log("🚩 [foco-02.html] Rips já pesquisados/inseridos:", ripsPesquisados);
             if (ripsPesquisados[rip]) {
+                console.log(`🚩 [foco-02.html] RIP ${rip} já foi associado.`);
                 alert(`O RIP ${rip} já foi inserido.`);
                 return;
             }
@@ -216,13 +221,20 @@
                 tipoImovel: 'Gleba/Terreno/Lote com edificação',
                 benfeitorias: 'Sim'
             };
+            console.log("🚩 [foco-02.html] Dados mock criados para o RIP pesquisado:", dadosMock);
 
             exibirResultadoRIP(dadosMock);
         }
 
         function exibirResultadoRIP(dados) {
+            console.log("🚩 [foco-02.html] exibirResultadoRIP chamado com dados:", dados);
             const container = document.getElementById('resultadoRIP');
             const dadosDiv  = document.getElementById('dadosImovel');
+
+            if (!container || !dadosDiv) {
+                console.log("🚩 [foco-02.html] Erro: Container de resultado ou div de dados não encontrados no DOM.");
+                return;
+            }
 
             container.dataset.ripTemp = dados.rip;
 
@@ -235,19 +247,29 @@
             `;
 
             container.style.display = 'block';
+            console.log("🚩 [foco-02.html] Container de resultado exibido (style.display = 'block').");
             ripsPesquisados[dados.rip] = dados;
         }
 
         function inserirRIP() {
+            console.log("🚩 [foco-02.html] inserirRIP chamado.");
             const container = document.getElementById('resultadoRIP');
             const rip = container.dataset.ripTemp;
+            console.log("🚩 [foco-02.html] RIP temporário no container:", rip);
 
-            if (!rip) return;
+            if (!rip) {
+                console.log("🚩 [foco-02.html] Erro: Sem RIP temporário para inserir.");
+                return;
+            }
 
             const dados = ripsPesquisados[rip];
+            console.log("🚩 [foco-02.html] Dados associados ao RIP:", dados);
 
+            console.log("🚩 [foco-02.html] Chamando adicionarTagRIP...");
             adicionarTagRIP(rip, dados);
+            console.log("🚩 [foco-02.html] Chamando criarBlocoImovel...");
             criarBlocoImovel(rip, dados);
+            console.log("🚩 [foco-02.html] Chamando cancelarRIP para limpar pesquisa...");
             cancelarRIP();
         }
 

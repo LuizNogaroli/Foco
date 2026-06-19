@@ -4,13 +4,19 @@
 (function() {
     "use strict";
 
+    console.log("🚩 [sync.js] Script carregado e executando.");
+
     // Aguarda o DOM estar pronto
     document.addEventListener('DOMContentLoaded', () => {
+        console.log("🚩 [sync.js] DOMContentLoaded disparado.");
+
         // Verifica se o parent tem as funções e estado do banco de dados
         if (!window.parent || !window.parent.formDataState) {
             console.log("ℹ️ db.js não encontrado no parent window. Sincronização inativa.");
             return;
         }
+
+        console.log("🚩 [sync.js] Parent window e formDataState detectados. Estado atual:", window.parent.formDataState);
 
         // Injeta estilos CSS necessários para o carregamento e campos automatizados
         const style = document.createElement('style');
@@ -64,6 +70,7 @@
             }
         `;
         document.head.appendChild(style);
+        console.log("🚩 [sync.js] Estilos CSS injetados.");
 
         // Cria e injeta o overlay de "Carregando dados..."
         const loader = document.createElement('div');
@@ -95,6 +102,7 @@
             </div>
         `;
         document.body.appendChild(loader);
+        console.log("🚩 [sync.js] Overlay de carregamento inserido.");
 
         // Estado inicial do banco e controle de carregamento
         let dbState = window.parent.formDataState || null;
@@ -126,9 +134,12 @@
         }
 
         // Configura o visual de carregamento inicial para todos os campos auto-carregados estáticos
+        console.log("🚩 [sync.js] Inicializando visual de carregamento nos campos estáticos...");
         const allInputs = document.querySelectorAll('input, select, textarea');
+        let loadingFieldsCount = 0;
         allInputs.forEach(input => {
             if (isAutoLoadedInput(input)) {
+                loadingFieldsCount++;
                 input.classList.add('field-loading');
                 input.disabled = true;
                 
@@ -160,17 +171,21 @@
                 }
             }
         });
+        console.log(`🚩 [sync.js] ${loadingFieldsCount} campos estáticos colocados em estado de carregamento.`);
 
         // Função para preencher os campos do formulário atual com o estado central
         function populateForm(state) {
+            console.log("🚩 [sync.js] populateForm chamado. Estado:", state);
             if (!state) return;
 
             // 1. Caso especial: foco-02.html (Imóveis dinâmicos)
             if (window.location.pathname.includes('foco-02.html')) {
+                console.log("🚩 [sync.js] foco-02.html detectado. Restaurando blocos dinâmicos.");
                 restoreFoco02DynamicBlocks(state);
             }
 
             // 2. Preenche todos os inputs normais do formulário
+            console.log("🚩 [sync.js] Populando valores nos campos do formulário...");
             const inputs = document.querySelectorAll('input, select, textarea');
             inputs.forEach(input => {
                 if (!input.name || input.type === 'submit' || input.type === 'button') return;
@@ -188,6 +203,7 @@
 
                 const value = state[input.name];
                 if (value !== undefined) {
+                    console.log(`🚩 [sync.js] Populando campo: id="${input.id}", name="${input.name}" com valor:`, value);
                     if (input.type === 'checkbox') {
                         if (input.name.endsWith('[]')) {
                             input.checked = Array.isArray(value) && value.includes(input.value);
@@ -237,6 +253,7 @@
                 const parentParams = new URLSearchParams(window.parent.location.search);
                 const isReadonly = parentParams.get('readonly') === 'true';
                 if (isReadonly) {
+                    console.log("🚩 [sync.js] Modo Somente Leitura ativado.");
                     inputs.forEach(input => {
                         input.disabled = true;
                     });
@@ -257,6 +274,7 @@
 
             // 4. Caso especial: foco-03.html (Leaflet GeoJSON)
             if (window.location.pathname.includes('foco-03.html')) {
+                console.log("🚩 [sync.js] foco-03.html detectado. Restaurando poligonais do mapa.");
                 restoreFoco03MapLayers(state);
             }
         }
@@ -264,6 +282,7 @@
         // Restaura blocos dinâmicos do foco-02.html
         function restoreFoco02DynamicBlocks(state) {
             const savedRips = state['_ripsPesquisados'];
+            console.log("🚩 [sync.js] RIPs recuperados do estado central:", savedRips);
             if (savedRips && typeof window.criarBlocoImovel === 'function' && typeof window.adicionarTagRIP === 'function') {
                 const container = document.getElementById('imoveis-container');
                 const listaTags = document.getElementById('listaRIPsAssociados');
@@ -280,9 +299,12 @@
 
                 for (let rip in savedRips) {
                     const dados = savedRips[rip];
+                    console.log("🚩 [sync.js] Recriando bloco para RIP:", rip);
                     window.adicionarTagRIP(rip, dados);
                     window.criarBlocoImovel(rip, dados);
                 }
+            } else {
+                console.log("🚩 [sync.js] Nenhuma função de criação de bloco disponível ou nenhum RIP salvo.");
             }
         }
 
@@ -315,7 +337,9 @@
         }
 
         // Remove o loader após simular 1.2 segundos de busca de dados
+        console.log("🚩 [sync.js] Iniciando temporizador de 1.2 segundos...");
         setTimeout(() => {
+            console.log("🚩 [sync.js] Temporizador esgotado. Populando formulário e ocultando overlay.");
             isSimulatedLoadFinished = true;
             populateForm(dbState);
 
@@ -323,6 +347,7 @@
             setTimeout(() => {
                 if (loader.parentNode) {
                     loader.remove();
+                    console.log("🚩 [sync.js] Overlay removido do DOM.");
                 }
             }, 400);
         }, 1200);
@@ -330,6 +355,7 @@
         // Escuta evento de atualização do banco (caso os dados cheguem depois do carregamento da página)
         window.addEventListener('message', (event) => {
             if (event.data && event.data.type === 'DATABASE_LOADED') {
+                console.log("🚩 [sync.js] Mensagem DATABASE_LOADED recebida.", event.data.data);
                 dbState = event.data.data;
                 if (isSimulatedLoadFinished) {
                     populateForm(dbState);
@@ -354,6 +380,7 @@
 
         // Salva o valor de um elemento no estado central
         function saveField(element) {
+            console.log(`🚩 [sync.js] Salvando campo: name="${element.name}"`);
             if (element.type === 'checkbox') {
                 if (element.name.endsWith('[]')) {
                     const checkedElements = document.querySelectorAll(`input[name="${CSS.escape(element.name)}"]:checked`);
@@ -380,6 +407,7 @@
             const originalRemoverRIP = window.removerRIP;
             if (typeof originalRemoverRIP === 'function') {
                 window.removerRIP = function(rip) {
+                    console.log("🚩 [sync.js] removerRIP chamado para RIP:", rip);
                     originalRemoverRIP(rip);
                     window.parent.updateField('_ripsPesquisados', window.ripsPesquisados);
                 };
