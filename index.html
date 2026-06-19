@@ -8,8 +8,40 @@
     <!-- SDK do Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="db.js"></script>
+    <style>
+        #dashboard-loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.4s ease;
+        }
+        @keyframes dashboard-spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 <body>
+
+    <!-- Loader de Inicialização do Painel -->
+    <div id="dashboard-loading-overlay">
+        <div style="width: 50px; height: 50px; border: 4px solid #f1f5f9; border-top-color: #1e3a5f; border-left-color: #2e7d32; border-radius: 50%; animation: dashboard-spin 1s cubic-bezier(0.4, 0, 0.2, 1) infinite; margin-bottom: 20px;"></div>
+        <div style="font-weight: 800; color: #1e3a5f; font-size: 1.25rem; letter-spacing: -0.025em; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+            Carregando dados...
+        </div>
+        <div style="font-size: 0.88rem; color: #64748b; margin-top: 8px; font-weight: 500; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; text-align: center; max-width: 360px; line-height: 1.4; padding: 0 20px;">
+            Sincronizando processos do <strong>Portal de Serviços SPU</strong> e bases de dados externas.
+        </div>
+    </div>
 
     <!-- BARRA DE NAVEGAÇÃO -->
     <header class="navbar">
@@ -133,8 +165,24 @@
 
         // Carrega dados da tabela ao iniciar
         async function fetchProcesses() {
+            const startTime = Date.now();
             const tableBody = document.getElementById('tableBody');
             
+            // Função para remover o loader após tempo mínimo de 1.5s
+            function hideLoader() {
+                const elapsedTime = Date.now() - startTime;
+                const remainingTime = Math.max(0, 1500 - elapsedTime);
+                setTimeout(() => {
+                    const loader = document.getElementById('dashboard-loading-overlay');
+                    if (loader) {
+                        loader.style.opacity = '0';
+                        setTimeout(() => {
+                            loader.remove();
+                        }, 400);
+                    }
+                }, remainingTime);
+            }
+
             // Aguarda o carregamento do cliente supabase do db.js
             let retries = 0;
             while (!window.supabaseClient && retries < 15) {
@@ -150,6 +198,7 @@
                             Configure as chaves no arquivo <b>db.js</b> para carregar os processos.
                         </td>
                     </tr>`;
+                hideLoader();
                 return;
             }
 
@@ -162,6 +211,7 @@
                 if (error) {
                     console.error("Erro ao carregar dados do Supabase:", error);
                     tableBody.innerHTML = `<tr><td colspan="13" class="empty-state">Erro ao buscar processos do banco.</td></tr>`;
+                    hideLoader();
                     return;
                 }
 
@@ -189,6 +239,8 @@
             } catch (err) {
                 console.error("Erro inesperado:", err);
                 tableBody.innerHTML = `<tr><td colspan="13" class="empty-state">Erro ao conectar com o banco.</td></tr>`;
+            } finally {
+                hideLoader();
             }
         }
 

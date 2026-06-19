@@ -12,6 +12,141 @@
             return;
         }
 
+        // Injeta estilos CSS necessários para o carregamento e campos automatizados
+        const style = document.createElement('style');
+        style.textContent = `
+            .auto-loaded-field,
+            .auto-loaded-field:disabled {
+                background-color: #f1f5f9 !important;
+                border: 1px solid #cbd5e1 !important;
+                color: #334155 !important;
+                border-radius: 4px !important;
+                padding: 4px 8px !important;
+                font-weight: 500 !important;
+                cursor: not-allowed !important;
+                opacity: 1 !important;
+                transition: background-color 0.3s ease, border-color 0.3s ease;
+            }
+            @keyframes sync-pulse {
+                0%, 100% { background-color: #f1f5f9; }
+                50% { background-color: #cbd5e1; }
+            }
+            .field-loading {
+                background-color: #f1f5f9 !important;
+                color: transparent !important;
+                animation: sync-pulse 1.2s infinite ease-in-out !important;
+                cursor: wait !important;
+            }
+            .badge-auto-load {
+                display: inline-block;
+                font-size: 0.7rem;
+                font-weight: 700;
+                padding: 2px 6px;
+                border-radius: 4px;
+                margin-left: 8px;
+                vertical-align: middle;
+                text-transform: uppercase;
+                letter-spacing: 0.03em;
+                transition: all 0.3s ease;
+            }
+            .badge-auto-load.loading {
+                background-color: #f1f5f9;
+                color: #64748b;
+                border: 1px dashed #cbd5e1;
+            }
+            .badge-auto-load.loaded {
+                background-color: #dcfce7;
+                color: #15803d;
+                border: 1px solid #bbf7d0;
+            }
+            @keyframes sync-spin {
+                to { transform: rotate(360deg); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Cria e injeta o overlay de "Carregando dados..."
+        const loader = document.createElement('div');
+        loader.id = 'sync-loading-overlay';
+        loader.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            transition: opacity 0.4s ease;
+        `;
+        loader.innerHTML = `
+            <div style="width: 50px; height: 50px; border: 4px solid #f1f5f9; border-top-color: #1e3a5f; border-left-color: #2e7d32; border-radius: 50%; animation: sync-spin 1s cubic-bezier(0.4, 0, 0.2, 1) infinite; margin-bottom: 20px;"></div>
+            <div style="font-weight: 800; color: #1e3a5f; font-size: 1.25rem; letter-spacing: -0.025em; display: flex; align-items: center; gap: 8px;">
+                Carregando dados...
+            </div>
+            <div style="font-size: 0.88rem; color: #64748b; margin-top: 8px; font-weight: 500; text-align: center; max-width: 320px; line-height: 1.4;">
+                Buscando e conferindo informações nas bases integradas do <strong>SPUnet</strong>
+            </div>
+        `;
+        document.body.appendChild(loader);
+
+        // Estado inicial do banco e controle de carregamento
+        let dbState = window.parent.formDataState || null;
+        let isSimulatedLoadFinished = false;
+
+        // Helper para identificar se um campo é de carregamento automático
+        function isAutoLoadedInput(input) {
+            if (!input.name || input.type === 'submit' || input.type === 'button' || input.type === 'hidden' || input.type === 'file') {
+                return false;
+            }
+            return input.closest('.editavel') === null;
+        }
+
+        // Helper para encontrar a label correspondente a um campo
+        function findLabelForInput(input) {
+            if (input.id) {
+                const label = document.querySelector(`label[for="${CSS.escape(input.id)}"]`);
+                if (label) return label;
+            }
+            const parentLabel = input.closest('label');
+            if (parentLabel) return parentLabel;
+            
+            const parent = input.parentNode;
+            if (parent) {
+                const label = parent.querySelector('label');
+                if (label) return label;
+            }
+            return null;
+        }
+
+        // Configura o visual de carregamento inicial para todos os campos auto-carregados estáticos
+        const allInputs = document.querySelectorAll('input, select, textarea');
+        allInputs.forEach(input => {
+            if (isAutoLoadedInput(input)) {
+                input.classList.add('field-loading');
+                input.disabled = true;
+                
+                // Adiciona o badge "Sincronizando..." no label
+                const label = findLabelForInput(input);
+                if (label) {
+                    const existingBadge = label.querySelector('.badge-auto-load');
+                    if (existingBadge) existingBadge.remove();
+
+                    const badge = document.createElement('span');
+                    badge.className = 'badge-auto-load loading';
+                    badge.id = 'badge-' + (input.id || input.name).replace(/[\[\]]/g, '-');
+                    badge.innerHTML = '⏳ Sincronizando...';
+                    label.appendChild(badge);
+                }
+            }
+        });
+
         // Função para preencher os campos do formulário atual com o estado central
         function populateForm(state) {
             if (!state) return;
@@ -24,14 +159,12 @@
             // 2. Preenche todos os inputs normais do formulário
             const inputs = document.querySelectorAll('input, select, textarea');
             inputs.forEach(input => {
-                // Ignora inputs sem nome ou botões
                 if (!input.name || input.type === 'submit' || input.type === 'button') return;
 
                 const value = state[input.name];
                 if (value !== undefined) {
                     if (input.type === 'checkbox') {
                         if (input.name.endsWith('[]')) {
-                            // Se for array, verifica se o valor está no array
                             input.checked = Array.isArray(value) && value.includes(input.value);
                         } else {
                             input.checked = (value === 'true' || value === true || value === input.value);
@@ -42,12 +175,39 @@
                         input.value = value;
                     }
 
-                    // Dispara o evento change para rodar lógicas internas da tela (ex: mostrar/ocultar blocos condicionais)
+                    // Dispara o evento change para rodar lógicas internas da tela
                     input.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+
+                // Configura estilo final pós-carregamento para campos auto-carregados (inclusive dinâmicos)
+                if (isAutoLoadedInput(input)) {
+                    input.classList.remove('field-loading');
+                    input.classList.add('auto-loaded-field');
+                    
+                    // Bloqueia edição manual
+                    if (input.tagName === 'SELECT' || input.type === 'radio' || input.type === 'checkbox') {
+                        input.disabled = true;
+                    } else {
+                        input.readOnly = true;
+                        input.disabled = false;
+                    }
+
+                    // Atualiza o badge para "Sincronizado"
+                    const label = findLabelForInput(input);
+                    if (label) {
+                        let badge = label.querySelector('.badge-auto-load');
+                        if (!badge) {
+                            badge = document.createElement('span');
+                            badge.id = 'badge-' + (input.id || input.name).replace(/[\[\]]/g, '-');
+                            label.appendChild(badge);
+                        }
+                        badge.className = 'badge-auto-load loaded';
+                        badge.innerHTML = '✓ Integrado SPUnet';
+                    }
                 }
             });
 
-            // 3. Caso de Somente Leitura (Readonly)
+            // 3. Caso de Somente Leitura Global (Readonly)
             try {
                 const parentParams = new URLSearchParams(window.parent.location.search);
                 const isReadonly = parentParams.get('readonly') === 'true';
@@ -78,7 +238,6 @@
 
         // Restaura blocos dinâmicos do foco-02.html
         function restoreFoco02DynamicBlocks(state) {
-            // Recupera os RIPs que foram pesquisados e salvos
             const savedRips = state['_ripsPesquisados'];
             if (savedRips && typeof window.criarBlocoImovel === 'function' && typeof window.adicionarTagRIP === 'function') {
                 const container = document.getElementById('imoveis-container');
@@ -89,14 +248,11 @@
                     listaTags.style.display = 'none';
                 }
 
-                // Restaura os objetos globais na página do iframe
                 if (typeof window.ripsPesquisados !== 'undefined') {
-                    // Limpa e atualiza com os dados salvos
                     for (let key in window.ripsPesquisados) delete window.ripsPesquisados[key];
                     Object.assign(window.ripsPesquisados, savedRips);
                 }
 
-                // Cria cada bloco novamente
                 for (let rip in savedRips) {
                     const dados = savedRips[rip];
                     window.adicionarTagRIP(rip, dados);
@@ -111,22 +267,18 @@
             if (geojsonStr && typeof window.map !== 'undefined' && typeof window.drawnItems !== 'undefined') {
                 try {
                     const geojson = JSON.parse(geojsonStr);
-                    // Limpa camadas existentes para evitar duplicações
                     window.drawnItems.clearLayers();
                     
-                    // Adiciona os itens ao grupo de desenho
                     L.geoJSON(geojson, {
                         onEachFeature: function(feature, layer) {
                             window.drawnItems.addLayer(layer);
                         }
                     });
                     
-                    // Atualiza a interface do mapa (listagem de geometrias, etc.)
                     if (typeof window.atualizarInterface === 'function') {
                         window.atualizarInterface();
                     }
 
-                    // Ajusta o zoom do mapa para enquadrar os elementos desenhados
                     const bounds = window.drawnItems.getBounds();
                     if (bounds.isValid()) {
                         window.map.fitBounds(bounds);
@@ -137,13 +289,26 @@
             }
         }
 
-        // Preenche com o estado atual imediatamente disponível
-        populateForm(window.parent.formDataState);
+        // Remove o loader após simular 1.2 segundos de busca de dados
+        setTimeout(() => {
+            isSimulatedLoadFinished = true;
+            populateForm(dbState);
+
+            loader.style.opacity = '0';
+            setTimeout(() => {
+                if (loader.parentNode) {
+                    loader.remove();
+                }
+            }, 400);
+        }, 1200);
 
         // Escuta evento de atualização do banco (caso os dados cheguem depois do carregamento da página)
         window.addEventListener('message', (event) => {
             if (event.data && event.data.type === 'DATABASE_LOADED') {
-                populateForm(event.data.data);
+                dbState = event.data.data;
+                if (isSimulatedLoadFinished) {
+                    populateForm(dbState);
+                }
             }
         });
 
@@ -166,7 +331,6 @@
         function saveField(element) {
             if (element.type === 'checkbox') {
                 if (element.name.endsWith('[]')) {
-                    // Para grupos de checkbox com mesmo nome (ex: incidencia_ambiental)
                     const checkedElements = document.querySelectorAll(`input[name="${CSS.escape(element.name)}"]:checked`);
                     const values = Array.from(checkedElements).map(el => el.value);
                     window.parent.updateField(element.name, values);
@@ -181,7 +345,6 @@
                 window.parent.updateField(element.name, element.value);
             }
 
-            // Caso especial de foco-02.html: salvar também o estado de ripsPesquisados
             if (window.location.pathname.includes('foco-02.html') && typeof window.ripsPesquisados !== 'undefined') {
                 window.parent.updateField('_ripsPesquisados', window.ripsPesquisados);
             }
@@ -193,7 +356,6 @@
             if (typeof originalRemoverRIP === 'function') {
                 window.removerRIP = function(rip) {
                     originalRemoverRIP(rip);
-                    // Salva o estado atualizado de ripsPesquisados no parent
                     window.parent.updateField('_ripsPesquisados', window.ripsPesquisados);
                 };
             }
