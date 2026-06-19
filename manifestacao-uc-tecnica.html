@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UC-Equipe-Técnica</title>
+    <link rel="stylesheet" href="manifestacao-styles.css">
+</head>
+<body>
+    <div class="container">
+        <section class="card etapa-card">
+            <header class="card-header etapa-header">
+                <div class="titulo">
+                    <span class="icone">📋</span>
+                    <span>Equipe C.G.</span>
+                </div>
+                <div class="acoes">
+                    <span class="status status-pendente">⏳ Pendente</span>
+                    <span class="seta">▲</span>
+                </div>
+            </header>
+
+            <div class="card-body etapa-body">
+                <h2 style="font-size: 20px; color: #0054a6; margin-bottom: 25px;">Análise da Proposta de Destinação</h2>
+                
+                <div class="pergunta">O interesse público da destinação foi demonstrado de forma suficiente?</div>
+                <div class="opcoes radio-group">
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="interesse_publico" value="demonstrado" />
+                            <span class="opcao-texto">Demonstrado.</span>
+                        </label>
+                        <!-- <span class="opcao-descricao">[Detalhes sobre a suficiência da demonstração do interesse público.]</span> -->
+                    </div>
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="interesse_publico" value="demonstrado_complementacao" />
+                            <span class="opcao-texto">Demonstrado, com ressalvas</span>
+                        </label>
+                        <!-- <span class="opcao-descricao">[Detalhes sobre a necessidade de complementação do interesse público.]</span> -->
+                    </div>
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="interesse_publico" value="nao_demonstrado" />
+                            <span class="opcao-texto">Não suficientemente demonstrado</span>
+                        </label>
+                        <!-- <span class="opcao-descricao">[Detalhes sobre a insuficiência da demonstração do interesse público.]</span> -->
+                    </div>
+                </div>
+
+                <div class="pergunta">A escolha do destinatário foi devidamente justificada?</div>
+                <div class="opcoes radio-group">
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="escolha_destinatario" value="justificada" />
+                            <span class="opcao-texto">Justificada.</span>
+                        </label>
+                        <!-- <span class="opcao-descricao">[Detalhes sobre a justificativa da escolha do destinatário.]</span> -->
+                    </div>
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="escolha_destinatario" value="justificada_complementacao" />
+                            <span class="opcao-texto">Justificada, mas com necessidade de complementação</span>
+                        </label>
+                        <!-- <span class="opcao-descricao">[Detalhes sobre a necessidade de complementação da justificativa do destinatário.]</span> -->
+                    </div>
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="escolha_destinatario" value="nao_justificada" />
+                            <span class="opcao-texto">Não suficientemente justificada</span>
+                        </label>
+                        <!-- <span class="opcao-descricao">[Detalhes sobre a insuficiência da justificativa do destinatário.]</span> -->
+                    </div>
+                </div>
+
+                <div class="pergunta">Foram indicados impactos sociais, territoriais ou ambientais relevantes?</div>
+                <div class="opcoes radio-group">
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="impactos_relevantes" value="sim" />
+                            <span class="opcao-texto">Sim</span>
+                        </label>
+                        <!-- <span class="opcao-descricao">[Detalhes: Esta opção aciona os campos de Classificação e Justificativa de Impactos.]</span> -->
+                    </div>
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="impactos_relevantes" value="nao" />
+                            <span class="opcao-texto">Não</span>
+                        </label>
+                        <!-- <span class="opcao-descricao">[Detalhes: Esta opção oculta os campos de Classificação e Justificativa de Impactos.]</span> -->
+                    </div>
+                </div>
+
+                <div class="pergunta">Regime de destinação</div>
+                <div class="origem info-origem" style="margin-bottom: 20px;">
+                    ℹ Regime proposto pela superintendência: Cessão de uso gratuita
+                </div>
+                <div class="opcoes radio-group">
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="regime_compativel" value="sim" />
+                            <span class="opcao-texto">Sim, o regime proposto é compatível</span>
+                        </label>
+                        <!-- <span class="opcao-descricao">[Detalhes]</span> -->
+                    </div>
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="regime_compativel" value="nao" />
+                            <span class="opcao-texto">Não, o regime proposto deve ser ajustado</span>
+                        </label>
+                        <!-- <span class="opcao-descricao">[Detalhes: Aciona campos de regime sugerido e justificativa.]</span> -->
+                    </div>
+                </div>
+
+                <div class="pergunta">Conclusão da análise:</div>
+                <div class="opcoes radio-group">
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="conclusao_analise" value="apta_cde" />
+                            <span class="opcao-texto">A proposta está apta para apreciação pela Comissão de Destinações Especiais (CDE).</span>
+                        </label>
+                        <!-- <span class="opcao-descricao">[Detalhes sobre a aptidão para a CDE.]</span> -->
+                    </div>
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="conclusao_analise" value="nao_apta_retornar" />
+                            <span class="opcao-texto">A proposta não está apta para apreciação pela CDE.</span>
+                        </label>
+                        <!-- <span class="opcao-descricao">[Detalhes sobre o retorno para complementação.]</span> -->
+                    </div>
+                </div>
+
+                <div class="campo-observacoes">
+                    <label for="obs">Observações, ressalvas ou condicionantes</label>
+                    <textarea id="obs" placeholder="Registre eventuais ressalvas, condicionantes ou orientações."></textarea>
+                </div>
+
+                <button class="botao-concluir" type="button" disabled>
+                    ✍ Concluir manifestação
+                </button>
+            </div>
+        </section>
+    </div>
+    <script src="manifestacao-scripts.js"></script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UF-Coordenação</title>
+    <link rel="stylesheet" href="manifestacao-styles.css">
+</head>
+<body>
+    <div class="container">
+        <section class="card etapa-card">
+            <header class="card-header etapa-header">
+                <div class="titulo">
+                    <span class="icone">📋</span>
+                    <span>Coordenação SPU/UF</span>
+                </div>
+                <div class="acoes">
+                    <span class="status status-pendente">⏳ Pendente</span>
+                    <span class="seta">▲</span>
+                </div>
+            </header>
+
+            <div class="card-body etapa-body">
+                <div class="origem info-origem">
+                    Origem: <span style="font-weight: bold;">Chefia de Divisão</span>, em <span style="font-weight: bold;">25/05/2026 11:30</span>
+                </div>
+                
+                <div class="pergunta">Declaro que:</div>
+
+                <div class="opcoes radio-group">
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="declaracao" value="suficiente" />
+                            <span class="opcao-texto">
+                                Os elementos constantes do formulário são suficientes para apreciação dos aspectos de mérito da destinação proposta.
+                            </span>
+                        </label>
+                        <!-- <span class="opcao-descricao">
+                            Destino: [Próximo perfil], Status na Origem: [Status Atual], Status no Destino: [Status no Próximo perfil]
+                            <br>Ações: O processo seguirá para avaliação da Superintendência.
+                        </span> -->
+                    </div>
+
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="declaracao" value="insuficiente" />
+                            <span class="opcao-texto">
+                                NÃO há elementos suficientes para apreciação dos aspectos de mérito da destinação proposta, sendo necessária a complementação das informações.
+                            </span>
+                        </label>
+                        <!-- <span class="opcao-descricao">
+                            Destino: UF-Equipe-Técnica, Status na Origem: Pendente, Status no Destino: Em Complementação
+                            <br>Ações: O processo será devolvido à UF-Equipe-Técnica para complementação das informações.
+                        </span> -->
+                    </div>
+                </div>
+
+                <div class="campo-observacoes">
+                    <label for="observacoes">Observações:</label>
+                    <textarea id="observacoes" placeholder="Registre eventuais ressalvas, condicionantes, inconsistências identificadas ou orientações para complementação da proposta."></textarea>
+                </div>
+
+                <button class="botao-concluir" type="button" disabled>
+                    ✍ Concluir manifestação
+                </button>
+            </div>
+        </section>
+    </div>
+    <script src="manifestacao-scripts.js"></script>
+</body>
+</html>

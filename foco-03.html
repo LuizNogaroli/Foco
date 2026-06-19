@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3: Geolocalização - Maquete SPU</title>
+    
+    <!-- Leaflet & Draw CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-draw@1.0.4/dist/leaflet.draw.css" />
+    
+    <!-- Estilos Globais da Maquete -->
+    <link rel="stylesheet" href="styles-forms.css">
+    <link rel="stylesheet" href="hints.css">
+
+    <style>
+        #map {
+            height: 500px;
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin: 10px 0;
+            z-index: 1; /* Garante que hints/popups fiquem sobre o mapa */
+        }
+        
+        .cep-row {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+        
+        #cep-info {
+            margin-top: 5px;
+            font-size: 0.85em;
+            min-height: 1.2em;
+        }
+        .cep-info-ok { color: #28a745; font-weight: bold; }
+        .cep-info-erro { color: #dc3545; font-weight: bold; }
+        
+        /* Ajuste do botão dentro da linha de CEP para combinar com o tema */
+        .btn-search {
+            padding: 10px 15px;
+            height: 42px;
+            white-space: nowrap;
+        }
+
+        .lista-geo {
+            list-style: none;
+            padding: 0;
+            margin-top: 15px;
+        }
+
+        .lista-geo li {
+            background: #f8f9fa;
+            border: 1px solid #e2e8f0;
+            padding: 10px 15px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>Geolocalização</h2>
+
+        <form id="form03">
+            
+            <!-- Busca por CEP -->
+            <div class="form-group editavel">
+                <label for="cep">Localizar por CEP:</label>
+                <div class="cep-row">
+                    <input type="text" id="cep" class="mask-cep" placeholder="00000-000" maxlength="9">
+                    <button type="button" id="buscar-cep" class="btn-search">🔍 Buscar</button>
+                </div>
+                <div id="cep-info"></div>
+            </div>
+
+            <!-- Mapa -->
+            <div class="form-group" style="background: transparent; border: none; padding: 0;">
+                <div id="map"></div>
+                <div style="text-align: right; margin-top: -5px;">
+                    <button type="button" id="expand-map" class="btn-secondary" style="padding: 5px 15px; font-size: 12px;">↔ Expandir Mapa</button>
+                </div>
+            </div>
+
+            <!-- Elementos Desenhados -->
+            <div class="form-group">
+                <label>Documentos Geométricos (GeoJSON):</label>
+                <ul id="lista-documentos" class="lista-geo">
+                    <!-- Gerado dinamicamente -->
+                </ul>
+                <input type="hidden" name="geojson" id="geojson">
+            </div>
+
+            <!-- Observações Técnicas -->
+            <div class="form-group editavel">
+                <label for="observacoes">Observações Técnicas:</label>
+                <textarea id="observacoes" name="observacoes" rows="3" placeholder="Detalhes sobre a poligonal, marcos, etc."></textarea>
+            </div>
+
+            <!-- Botões de Ação -->
+            <div class="button-group">
+                <button type="button" class="btn-secondary" onclick="location.reload()">Resetar Mapa</button>
+                <button type="submit">✅ Salvar Geometria</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
+    
+    <!-- Motor da Maquete -->
+    <script src="formulario.js"></script>
+    <script src="hints.js"></script>
+    
+    <script>
+        // --- LÓGICA DO MAPA (IDÊNTICA À ORIGINAL, MAS COM VISUAL NOVO) ---
+        var map = L.map('map').setView([-15.793889, -47.882778], 4); // Brasília como centro inicial
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        var drawnItems = new L.FeatureGroup();
+        map.addLayer(drawnItems);
+
+        var drawControl = new L.Control.Draw({
+            position: 'topright',
+            draw: {
+                polygon: true,
+                polyline: true,
+                marker: true,
+                circle: false,
+                rectangle: true
+            },
+            edit: { featureGroup: drawnItems }
+        });
+        map.addControl(drawControl);
+
+        map.on(L.Draw.Event.CREATED, function (e) {
+            drawnItems.addLayer(e.layer);
+            atualizarInterface();
+        });
+
+        map.on(L.Draw.Event.EDITED, atualizarInterface);
+        map.on(L.Draw.Event.DELETED, atualizarInterface);
+
+        function atualizarInterface() {
+            var geojson = drawnItems.toGeoJSON();
+            document.getElementById('geojson').value = JSON.stringify(geojson);
+            
+            var lista = document.getElementById('lista-documentos');
+            lista.innerHTML = '';
+            
+            drawnItems.eachLayer(function(layer) {
+                var type = layer instanceof L.Polygon ? 'Polígono' : (layer instanceof L.Marker ? 'Ponto' : 'Linha');
+                var li = document.createElement('li');
+                li.innerHTML = `<span><b>${type}</b> (ID: ${layer._leaflet_id})</span>
+                                <button type="button" class="btn-remove-rip" onclick="removerLayer(${layer._leaflet_id})">✕</button>`;
+                lista.appendChild(li);
+            });
+        }
+
+        window.removerLayer = function(id) {
+            var layer = drawnItems.getLayer(id);
+            if (layer) { drawnItems.removeLayer(layer); atualizarInterface(); }
+        };
+
+        // --- BUSCA DE CEP COM ZOOM ---
+        document.getElementById('buscar-cep').addEventListener('click', function() {
+            var cep = document.getElementById('cep').value.replace(/\D/g, '');
+            var info = document.getElementById('cep-info');
+            
+            if (cep.length !== 8) {
+                info.innerHTML = '<span class="cep-info-erro">CEP Inválido</span>';
+                return;
+            }
+
+            info.innerHTML = '<span>Buscando...</span>';
+            
+            fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                .then(r => r.json())
+                .then(data => {
+                    if (data.erro) {
+                        info.innerHTML = '<span class="cep-info-erro">CEP não encontrado</span>';
+                    } else {
+                        var endereco = `${data.logradouro}, ${data.localidade}, ${data.uf}, Brasil`;
+                        info.innerHTML = `<span class="cep-info-ok">📍 ${data.localidade}/${data.uf}</span>`;
+                        
+                        // Geocodificação Simples (Nominatim)
+                        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(endereco)}`)
+                            .then(r => r.json())
+                            .then(geo => {
+                                if (geo.length > 0) {
+                                    map.setView([geo[0].lat, geo[0].lon], 16);
+                                    L.marker([geo[0].lat, geo[0].lon]).addTo(map)
+                                        .bindPopup(`<b>Localização aproximada:</b><br>${data.logradouro}`).openPopup();
+                                }
+                            });
+                    }
+                });
+        });
+
+        // Expansão do Mapa
+        var expanded = false;
+        document.getElementById('expand-map').addEventListener('click', function() {
+            expanded = !expanded;
+            document.getElementById('map').style.height = expanded ? '700px' : '500px';
+            this.textContent = expanded ? '↔ Reduzir Mapa' : '↔ Expandir Mapa';
+            setTimeout(() => map.invalidateSize(), 300);
+        });
+    </script>
+</body>
+</html>

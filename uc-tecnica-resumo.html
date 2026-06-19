@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Resumo - Manifestação Equipe Técnica SPU/UC</title>
+    <link rel="stylesheet" href="report.css">
+</head>
+<body>
+    <div class="report-container">
+        <div class="report-header">
+            <p style="font-weight:bold; margin-top:10px;">Relatório - Equipe C.G.</p>
+        </div>
+        
+        <div class="report-section">
+            <div class="report-section-title">Manifestação</div>
+            <div class="report-value" id="resumo-manifestacao" style="width: 100%; font-size: 1rem; color: #333; display: block;">A proposta está apta para apreciação pela Comissão de Destinações Especiais (CDE).</div>
+        </div>
+
+        <div class="report-section">
+            <div class="report-section-title">Observações</div>
+            <div class="report-value" id="resumo-observacoes"></div>
+        </div>
+
+        <div style="margin-top: 40px; padding: 15px; border: 1px solid #ddd; border-left: 6px solid #1a7a4a; background: #fdfdfd; width: 100%; box-sizing: border-box; font-size: 0.85rem; color: #444; font-family: sans-serif;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                <div>
+                    Responsável: <span style="color:#1a4e8a; font-weight:bold;">João Silva (Analista Técnico SPU/UF)</span><br>
+                    Status: <span style="color:#1a7a4a; font-weight:bold;">CONSOLIDADO</span>
+                </div>
+                <div style="text-align: right;">
+                    <strong>Data/Hora:</strong> 26/05/2026 08:30:00<br>
+                    <strong>ID:</strong> <span style="font-family: monospace;">UC-TEC-4411</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const perfil = window.location.pathname.split('/').pop().replace('-resumo.html', '');
+            const savedData = localStorage.getItem('foco_data_' + perfil);
+            
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                const manifestacaoEl = document.getElementById('resumo-manifestacao');
+                const observacoesEl = document.getElementById('resumo-observacoes');
+
+                if (data.detalhes && data.detalhes.length > 1) {
+                    // Se houver múltiplas perguntas, gera uma lista detalhada
+                    let html = '<div style="display: grid; grid-template-columns: 1fr; gap: 15px;">';
+                    data.detalhes.forEach(item => {
+                        html += `
+                            <div style="border-bottom: 1px solid #eee; padding-bottom: 8px;">
+                                <div style="font-size: 0.85rem; color: #64748b; font-weight: 600; margin-bottom: 4px;">${item.pergunta}</div>
+                                <div style="font-weight: 500; color: #1e3a5f;">${item.resposta}</div>
+                            </div>
+                        `;
+                    });
+                    html += '</div>';
+                    manifestacaoEl.innerHTML = html;
+                } else if (data.manifestacao && manifestacaoEl) {
+                    manifestacaoEl.textContent = data.manifestacao;
+                }
+
+                if (data.observacoes && observacoesEl) {
+                    observacoesEl.textContent = data.observacoes;
+                }
+            }
+        });
+    </script>
+</body>
+</html>

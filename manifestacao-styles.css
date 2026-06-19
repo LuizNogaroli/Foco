@@ -1,0 +1,18 @@
+/* manifestacao-styles.css - Versão simplificada no root */
+body { margin: 0; padding: 20px; background: #f3f6fa; font-family: sans-serif; }
+.container { max-width: 800px; margin: 0 auto; }
+.card { background: #fff; border: 1px solid #cbd5e1; border-radius: 8px; overflow: hidden; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+.card-header { background: #1f3f67; color: #fff; padding: 12px 18px; display: flex; justify-content: space-between; align-items: center; font-weight: bold; }
+.status { padding: 4px 10px; border-radius: 20px; font-size: 12px; background: #fff3c4; color: #7c2d12; border: 1px solid #facc15; }
+.card-body { padding: 20px; }
+.pergunta { font-weight: bold; margin-bottom: 15px; color: #1e3a5f; }
+.radio-group, .checkbox-group { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+.radio-option, .checkbox-option { display: flex; align-items: flex-start; gap: 10px; padding: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; }
+.radio-option:hover { background: #f1f7ff; }
+.opcao-texto { font-size: 14px; font-weight: 600; }
+.campo-observacoes { margin-top: 20px; margin-bottom: 20px; }
+.campo-observacoes label { display: block; margin-bottom: 8px; font-weight: bold; font-size: 14px; }
+textarea { width: 100%; min-height: 80px; padding: 10px; border: 1px solid #c5d2e3; border-radius: 4px; font-family: inherit; }
+.botao-concluir { background: #007bff; color: #fff; border: none; padding: 10px 20px; border-radius: 4px; font-weight: bold; cursor: pointer; }
+.botao-concluir:disabled { background: #94a3b8; cursor: not-allowed; }
+.info-origem { background: #f1f7ff; border-left: 4px solid #2563eb; padding: 10px; font-size: 13px; margin-bottom: 20px; }

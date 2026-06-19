@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FOCO-02 — Identificação, Ocupação e Restrições</title>
+    <link rel="stylesheet" href="styles-forms.css">
+    <link rel="stylesheet" href="hints.css">
+    <style>
+        .aviso {
+            font-size: 18px;
+            font-weight: 600;
+            color: darkred;
+            text-transform: normal;
+            letter-spacing: 0px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        /* ── Lista de RIPs associados ── */
+        #listaRIPsAssociados {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            margin: 14px auto 0 auto;
+            max-width: 500px;
+        }
+
+        .rip-tag {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #e8f5e9;
+            border: 1px solid #a5d6a7;
+            border-radius: 6px;
+            padding: 8px 14px;
+            font-size: 0.93em;
+            color: #1b5e20;
+        }
+
+        .rip-tag span {
+            font-weight: 600;
+        }
+
+        .rip-tag button {
+            background: none;
+            border: none;
+            color: #c62828;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            padding: 0 4px;
+            line-height: 1;
+        }
+
+        .rip-tag button:hover {
+            color: #7f0000;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+
+        <h2>Dados do Imóvel</h2>
+
+        <h4 class="aviso">Alterações nos dados do imóvel devem ser feitas no módulo cadastro do SPUNET</h4>
+
+        <form id="form0203" novalidate>
+
+            <!-- ========== PESQUISA DE RIP ========== -->
+            <div class="form-group" style="text-align: center; margin-top: 30px;">
+
+                <!-- Campo + botão pesquisar -->
+                <div id="searchRIPContainer" style="display: flex; justify-content: center; align-items: center; gap: 10px; flex-wrap: wrap;">
+                    <input
+                        type="text"
+                        id="inputRIP"
+                        placeholder="Digite o nº RIP do imóvel"
+                        maxlength="18"
+                        autocomplete="off"
+                        style="font-size: 1em; padding: 10px 14px; border: 1px solid #ccc; border-radius: 6px; width: 260px; outline: none;"
+                    />
+                    <button
+                        type="button"
+                        class="btn-add"
+                        id="btnPesquisarRIP"
+                        style="font-size: 1em; padding: 10px 20px;"
+                        onclick="pesquisarRIP()"
+                    >
+                        🔍 Pesquisar RIP
+                    </button>
+                </div>
+
+                <!-- Resultado da pesquisa -->
+                <div id="resultadoRIP" style="display: none; margin-top: 20px; padding: 16px; border: 1px solid #d0d0d0; border-radius: 8px; background: #f9f9f9; max-width: 500px; margin-left: auto; margin-right: auto;">
+                    <div id="dadosImovel" style="text-align: left; font-size: 0.95em; color: #333;"></div>
+                    <div style="display: flex; justify-content: center; gap: 12px; margin-top: 16px;">
+                        <button
+                            type="button"
+                            id="btnInserirRIP"
+                            style="font-size: 0.95em; padding: 8px 18px; background-color: #2e7d32; color: white; border: none; border-radius: 6px; cursor: pointer;"
+                            onclick="inserirRIP()"
+                        >
+                            ✅ Inserir RIP
+                        </button>
+                        <button
+                            type="button"
+                            id="btnCancelarRIP"
+                            style="font-size: 0.95em; padding: 8px 18px; background-color: #c62828; color: white; border: none; border-radius: 6px; cursor: pointer;"
+                            onclick="cancelarRIP()"
+                        >
+                            ❌ Cancelar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- RIPs associados empilhados -->
+                <div id="listaRIPsAssociados"></div>
+
+            </div>
+            <!-- ========== FIM PESQUISA DE RIP ========== -->
+
+            <div id="imoveis-container">
+                <!-- Os blocos de imóveis são gerados dinamicamente ao inserir um RIP -->
+            </div>
+
+            <!-- Botões -->
+            <div class="button-group">
+                <button type="button" class="btn-secondary" id="btnLimpar">🗑️ Limpar</button>
+                <button type="button" id="btnImprimir" onclick="window.print()">🖨️ Imprimir</button>
+                <button type="submit" id="btnEnviar">✅ Salvar rascunho</button>
+            </div>
+
+        </form>
+    </div>
+
+    <script src="formulario.js"></script>
+    <script src="hints.js"></script>
+    <script src="foco-02.js"></script>
+
+    <script>
+
+        // ================================================================
+        // ESTADO
+        // ================================================================
+        let imovelCount = 0;
+        let ripsPesquisados = {};
+
+        // ================================================================
+        // PESQUISA DE RIP
+        // ================================================================
+        function pesquisarRIP() {
+            const rip = document.getElementById('inputRIP').value.trim();
+
+            if (!rip) {
+                alert('Por favor, informe o nº RIP do imóvel.');
+                return;
+            }
+
+            if (ripsPesquisados[rip]) {
+                alert(`O RIP ${rip} já foi inserido.`);
+                return;
+            }
+
+            // Simulação de busca — substitua pela sua lógica real (fetch/API/etc.)
+            const dadosMock = {
+                rip: rip,
+                descricao: 'Terreno/Acrescido de marinha',
+                logradouro: 'Praça da Sé, s/n',
+                municipio: 'São Paulo / SP',
+                uf: 'SP',
+                situacao: 'Aforado',
+                natureza: 'Urbano',
+                tipoImovel: 'Gleba/Terreno/Lote com edificação',
+                benfeitorias: 'Sim'
+            };
+
+            exibirResultadoRIP(dadosMock);
+        }
+
+        function exibirResultadoRIP(dados) {
+            const container = document.getElementById('resultadoRIP');
+            const dadosDiv  = document.getElementById('dadosImovel');
+
+            container.dataset.ripTemp = dados.rip;
+
+            dadosDiv.innerHTML = `
+                <p style="margin: 4px 0;"><strong>RIP:</strong> ${dados.rip}</p>
+                <p style="margin: 4px 0;"><strong>Descrição:</strong> ${dados.descricao}</p>
+                <p style="margin: 4px 0;"><strong>Logradouro:</strong> ${dados.logradouro}</p>
+                <p style="margin: 4px 0;"><strong>Município:</strong> ${dados.municipio}</p>
+                <p style="margin: 4px 0;"><strong>Situação:</strong> ${dados.situacao}</p>
+            `;
+
+            container.style.display = 'block';
+            ripsPesquisados[dados.rip] = dados;
+        }
+
+        function inserirRIP() {
+            const container = document.getElementById('resultadoRIP');
+            const rip = container.dataset.ripTemp;
+
+            if (!rip) return;
+
+            const dados = ripsPesquisados[rip];
+
+            adicionarTagRIP(rip, dados);
+            criarBlocoImovel(rip, dados);
+            cancelarRIP();
+        }
+
+        function cancelarRIP() {
+            const container = document.getElementById('resultadoRIP');
+            const rip = container.dataset.ripTemp;
+
+            if (rip && !document.querySelector(`.rip-tag[data-rip="${rip}"]`)) {
+                delete ripsPesquisados[rip];
+            }
+
+            document.getElementById('inputRIP').value = '';
+            container.style.display = 'none';
+            container.dataset.ripTemp = '';
+        }
+
+        // ================================================================
+        // EMPILHAMENTO — adiciona tag de RIP associado
+        // ================================================================
+        function adicionarTagRIP(rip, dados) {
+            const lista = document.getElementById('listaRIPsAssociados');
+            lista.style.display = 'flex';
+
+            const tag = document.createElement('div');
+            tag.className = 'rip-tag';
+            tag.dataset.rip = rip;
+
+            tag.innerHTML = `
+                <span>📌 RIP: ${rip}</span>
+                <span style="font-weight: normal; color: #2e7d32;">${dados.descricao} — ${dados.municipio}</span>
+                <button type="button" title="Remover RIP" onclick="removerRIP('${rip}')">✕</button>
+            `;
+
+            lista.appendChild(tag);
+        }
+
+        function removerRIP(rip) {
+            const tag = document.querySelector(`.rip-tag[data-rip="${rip}"]`);
+            if (tag) tag.remove();
+
+            const bloco = document.querySelector(`.imovel-block[data-rip="${rip}"]`);
+            if (bloco) bloco.remove();
+
+            delete ripsPesquisados[rip];
+
+            const lista = document.getElementById('listaRIPsAssociados');
+            if (!lista.querySelector('.rip-tag')) {
+                lista.style.display = 'none';
+            }
+        }
+
+        // ================================================================
+        // CRIAÇÃO DO BLOCO SANFONA
+        // ================================================================
+        function criarBlocoImovel(rip, dados) {
+            const idx = imovelCount++;
+            const container = document.getElementById('imoveis-container');
+
+            const div = document.createElement('div');
+            div.className = 'imovel-block';
+            div.dataset.index = idx;
+            div.dataset.rip = rip;
+            div.id = 'imovel_' + idx;
+
+            div.innerHTML = `
+                <div class="imovel-header accordion-header" onclick="toggleAccordion('imovel_${idx}')">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span class="accordion-icon open">▼</span>
+                        <h3 style="margin: 0; color: #0056b3;" class="imovel-title">RIP: ${rip}</h3>
+                    </div>
+                    <button type="button" class="btn-remove-imovel"
+                        style="background: #dc3545; color: white; border: none; border-radius: 4px; padding: 6px 12px; cursor: pointer;"
+                        onclick="event.stopPropagation(); removerRIP('${rip}')">
+                        ✕ Remover
+                    </button>
+                </div>
+
+                <div class="imovel-content accordion-content open" id="content_imovel_${idx}">
+
+                    <h4 style="margin: 0 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 8px;">Identificação do Imóvel</h4>
+
+                    <div class="form-group inline">
+                        <label>RIP:</label>
+                        <input type="text" id="campo-rip_${idx}" name="imoveis[${idx}][rip]" value="${rip}" autocomplete="off" class="rip-input" required>
+                    </div>
+
+                    <div class="form-group inline">
+                        <label>Conceituação do Imóvel:</label>
+                        <input type="text" id="campo216_${idx}" name="imoveis[${idx}][conceituacao]" value="${dados.descricao}">
+                    </div>
+
+                    <div class="form-group inline">
+                        <label>Natureza do Imóvel:</label>
+                        <input type="text" id="campo221_${idx}" name="imoveis[${idx}][tipologia]" value="${dados.natureza}">
+                    </div>
+
+                    <div class="form-group inline">
+                        <label>Tipo de Imóvel:</label>
+                        <input type="text" id="campo217_${idx}" name="imoveis[${idx}][categoria]" value="${dados.tipoImovel}">
+                    </div>
+
+                    <div class="form-group inline">
+                        <label>CEP:</label>
+                        <input type="text" id="campo21_${idx}" name="imoveis[${idx}][cep]" placeholder="Ex: 00000-000" maxlength="9" autocomplete="off" value="01001-000">
+                    </div>
+
+                    <div class="form-group inline">
+                        <label>UF:</label>
+                        <input type="text" id="campo22_${idx}" name="imoveis[${idx}][uf]" value="${dados.uf}">
+                    </div>
+
+                    <div class="form-group inline">
+                        <label>Município:</label>
+                        <input type="text" id="campo23_${idx}" name="imoveis[${idx}][municipio]" value="${dados.municipio}" autocomplete="off" required>
+                    </div>
+
+                    <div class="form-group inline">
+                        <label>Endereço:</label>
+                        <input type="text" id="campo24_${idx}" name="imoveis[${idx}][endereco]" value="${dados.logradouro}" autocomplete="off" required>
+                    </div>
+
+                    <div class="form-group inline">
+                        <label>Área total (m²):</label>
+                        <input type="text" id="campo27_${idx}" name="imoveis[${idx}][area_total]" placeholder="0,00" min="0" step="0.01" value="12.000,00">
+                    </div>
+
+                    <div class="form-group inline">
+                        <label>Área da União (m²):</label>
+                        <input type="text" id="campo28_${idx}" name="imoveis[${idx}][area_uniao]" placeholder="0,00" min="0" step="0.01"  value="12.000,00">
+                    </div>
+
+                    <div class="form-group inline" id="grupo-benfeitorias_${idx}">
+                        <label>Há benfeitorias?</label>
+                        <input type="text" id="campo29_${idx}" name="imoveis[${idx}][benfeitorias]" value="${dados.benfeitorias}" value="Sim">
+                    </div>
+
+                    <div class="form-group inline" id="grupo-area_construida_total_${idx}">
+                        <label>Área construída total (m²):</label>
+                        <input type="text" id="campo210_${idx}" name="imoveis[${idx}][area_construida_total]" placeholder="0,00" min="0" step="0.01" value="2.400,00">
+                    </div>
+
+                    <div class="form-group inline" id="grupo-area_construida_proposta_${idx}">
+                         <label>Área de terreno disponível para destinação (m²):</label>
+                         <input type="text" id="campo211_${idx}" name="imoveis[${idx}][area_construida_proposta]" value="2.400,00">
+                    </div>
+
+                    <div class="form-group inline" id="grupo-area_construida_destinacao_${idx}">
+                         <label>Área construída disponível para destinação (m²):</label>
+                         <input type="text" id="campo211_${idx}" name="imoveis[${idx}][area_construida_destinacao]" value="2.400,00">
+                    </div>
+
+                    <div class="form-group inline">
+                        <label>Valor avaliado (R$):</label>
+                        <input type="text" id="campo213_${idx}" name="imoveis[${idx}][valor_imovel]" placeholder="R$ 0,00" value="1.000.000,00">
+                    </div>
+
+                    <div class="form-group inline">
+                        <label>Data da avaliação:</label>
+                        <input type="text" id="campo214_${idx}" name="imoveis[${idx}][data_avaliacao]" value="13/05/2026">
+                    </div>
+
+                    <div class="form-group inline">
+                        <label>Instrumento de avaliação:</label>
+                        <input type="text" id="campo215_${idx}" name="imoveis[${idx}][instrumento_avaliacao]" placeholder="Ex: Laudo de avaliação..." value="Laudo Técnico SPU">
+                    </div>
+
+                    <div class="form-group inline">
+                        <label>Situação da Incorporação:</label>
+                        <input type="text" id="campo223_${idx}" name="imoveis[${idx}][situacao_dominial]" value="Em processo de incorporação">
+                    </div>
+
+                    <div class="form-group inline" id="bloco219_${idx}">
+                        <label>LPM/1831 ou LMEO homologadas?</label>
+                        <input type="text" name="imoveis[${idx}][lpm_lmeo]" value="Sim">
+                    </div>
+
+                    <div class="form-group inline">
+                        <label>Processo de incorporação?</label>
+                        <input type="text" name="imoveis[${idx}][incorporacao]" value="Sim">
+                    </div>
+
+                    <div class="form-group inline">
+                        <label>Número do Processo:</label>
+                        <input type="text" name="imoveis[${idx}][num_processo]" value="1234.56790/2026-00">
+                    </div>
+
+                    <div class="form-group inline">
+                        <label>Matrícula:</label>
+                        <input type="text" id="campo224_${idx}" name="imoveis[${idx}][matriculas]" value="123.456 - 1ª CRI SP">
+                    </div>
+
+                    <div class="form-group editavel">
+                        <label>Observações:</label>
+                        <textarea id="obs224_${idx}" name="imoveis[${idx}][obs_geral_ident]" placeholder=""></textarea>
+
+                        <div class="dynamic-list-wrapper" style="flex: 1; display: flex; flex-direction: column; gap: 8px;">
+                            <button type="button" class="btn-add" id="btnAdicionarImagemIdent_${idx}" style="align-self: flex-start;">＋ Adicionar link/documento</button>
+                            <div id="imagens-list-ident_${idx}"></div>
+                        </div>
+                    </div>
+
+                </div>
+            `;
+
+            container.appendChild(div);
+
+            if (typeof initImovelToggle === 'function') {
+                initImovelToggle(idx);
+            }
+        }
+
+        // ================================================================
+        // ACCORDION TOGGLE
+        // ================================================================
+        function toggleAccordion(imovelId) {
+            const bloco   = document.getElementById(imovelId);
+            const content = bloco.querySelector('.accordion-content');
+            const icon    = bloco.querySelector('.accordion-icon');
+            const isOpen  = content.classList.contains('open');
+
+            content.classList.toggle('open', !isOpen);
+            content.style.display = isOpen ? 'none' : '';
+
+            if (icon) {
+                icon.textContent = isOpen ? '▶' : '▼';
+                icon.classList.toggle('open', !isOpen);
+            }
+        }
+
+        // ================================================================
+        // UTILITÁRIO: mostrar/ocultar bloco pelo ID
+        // ================================================================
+        function setBlocoVisivel(blocoId, visivel) {
+            const bloco = document.getElementById(blocoId);
+            if (!bloco) return;
+            bloco.style.display = visivel ? 'flex' : 'none';
+        }
+
+        // ================================================================
+        // SELECT TOGGLE
+        // ================================================================
+        function initSelectToggle(selectEl, blocoId) {
+            if (!selectEl) return;
+
+            const atualizar = () => setBlocoVisivel(blocoId, selectEl.value !== '');
+
+            atualizar();
+            selectEl.addEventListener('change', atualizar);
+        }
+
+        // ================================================================
+        // RADIO TOGGLE — modo "somente Sim"
+        // ================================================================
+        function initRadioToggleSim(radioName, blocoId, scope) {
+            scope = scope || document;
+
+            const radios = scope.querySelectorAll('input[type="radio"][name="' + radioName + '"]');
+
+            if (!radios.length) return;
+
+            const atualizar = () => {
+                const bloco = document.getElementById(blocoId);
+                if (!bloco) return;
+
+                const simMarcado = Array.from(radios).some(r => r.value === 'Sim' && r.checked);
+                bloco.style.display = simMarcado ? 'block' : 'none';
+            };
+
+            atualizar();
+            radios.forEach(r => r.addEventListener('change', atualizar));
+        }
+
+        // ================================================================
+        // LISTA DINÂMICA DE DOCUMENTOS
+        // ================================================================
+        function initDynamicList(btnId, listId) {
+            const btn  = document.getElementById(btnId);
+            const list = document.getElementById(listId);
+
+            if (!btn || !list) return;
+
+            list.innerHTML = '';
+
+            const newBtn = btn.cloneNode(true);
+            btn.parentNode.replaceChild(newBtn, btn);
+
+            newBtn.addEventListener('click', () => {
+                const nameMap = {
+                    'ident': 'imagens_ident',
+                    'ocup' : 'imagens_ocup',
+                    'rest' : 'imagens_rest'
+                };
+
+                const matchSuffix = listId.match(/imagens-list-(\w+)_(\d+)/);
+
+                let inputName = '';
+
+                if (matchSuffix) {
+                    const section = matchSuffix[1];
+                    const idx     = matchSuffix[2];
+                    const field   = nameMap[section] || ('imagens_' + section);
+
+                    inputName = `imoveis[${idx}][${field}][]`;
+                }
+
+                const item = document.createElement('div');
+                item.className = 'imagem-item';
+                item.style.cssText = 'display:flex; gap:8px; align-items:center; margin-top:6px;';
+
+                item.innerHTML = `
+                    <input type="text" name="${inputName}" placeholder="Link/Documento Anexado"
+                           autocomplete="off" class="imagem-input" style="flex: 1;">
+                    <button type="button" class="btn-remove-imagem" title="Remover">✕</button>
+                `;
+
+                list.appendChild(item);
+
+                item.querySelector('input').focus();
+
+                item.querySelector('.btn-remove-imagem')
+                    .addEventListener('click', () => item.remove());
+            });
+        }
+
+        // ================================================================
+        // INICIALIZAÇÃO DE UM BLOCO DE IMÓVEL — por índice
+        // ================================================================
+        function initImovelToggle(idx) {
+            const scope = document.getElementById('imovel_' + idx) || document;
+
+            initSelectToggle(scope.querySelector('#campo221_' + idx), 'bloco-obs221_' + idx);
+            initSelectToggle(scope.querySelector('#campo223_' + idx), 'bloco-obs223_' + idx);
+            initDynamicList('btnAdicionarImagemIdent_' + idx, 'imagens-list-ident_' + idx);
+
+            initRadioToggleSim('imoveis[' + idx + '][benfeitorias]', 'bloco210_' + idx, scope);
+
+            initSelectToggle(scope.querySelector('#campo31_' + idx),  'bloco-obs31_'  + idx);
+            initSelectToggle(scope.querySelector('#campo35_' + idx),  'bloco-obs35_'  + idx);
+
+            initRadioToggleSim('imoveis[' + idx + '][custos_manutencao]', 'bloco-obs37_' + idx, scope);
+
+            initDynamicList('btnAdicionarImagemOcup_' + idx, 'imagens-list-ocup_' + idx);
+
+            initRadioToggleSim('imoveis[' + idx + '][risco_invasao]',        'bloco-desc38_'  + idx, scope);
+            initRadioToggleSim('imoveis[' + idx + '][risco_coletividade]',   'bloco-desc39_'  + idx, scope);
+            initRadioToggleSim('imoveis[' + idx + '][acoes]',                'bloco-obs310_'  + idx, scope);
+            initRadioToggleSim('imoveis[' + idx + '][tombado]',              'bloco-obs311_'  + idx, scope);
+            initRadioToggleSim('imoveis[' + idx + '][conflitos_fundiarios]', 'bloco-obs312_'  + idx, scope);
+            initRadioToggleSim('imoveis[' + idx + '][gestao_praias]',        'bloco-obs313_'  + idx, scope);
+
+            initDynamicList('btnAdicionarImagemRest_' + idx, 'imagens-list-rest_' + idx);
+        }
+
+        // HOOK GLOBAL para foco-02.js
+        window.initImovelToggle = initImovelToggle;
+
+    </script>
+
+</body>
+</html>

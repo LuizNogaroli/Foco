@@ -1,0 +1,23 @@
+AQ.Ab8RN6LxTO4BiqcPjJ5AgDmvyCAtPMFZutIwp15kI9NgxDEQUg
+chave api do gemini na conta nogaroli.pppro
+
+
+
+
+Publishable key
+This key is safe to use in a browser if you have enabled Row Level Security (RLS) for your tables and configured policies.
+sb_publishable_jiyIK5o1crj_uMTAG7o91g_9XDt70Lf
+
+
+
+
+
+API key anon public (uma chave longa que começa com eyJ...)
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ6ZG1uenV3ZXl6aGlsZmN1bmdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE4NTk5NTcsImV4cCI6MjA5NzQzNTk1N30.IqRxw3n2c-zNCccbgOUfh7wLy8eNnOVKJzwa8AsoSnU
+
+
+
+
+
+
+

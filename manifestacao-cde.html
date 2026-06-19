@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CDE – Deliberação</title>
+    <link rel="stylesheet" href="manifestacao-styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="titulo-pagina" style="font-size: 18px; color: #1e3a5f; margin-bottom: 20px;">CDE - Comissão de Destinações Especiais</h1>
+
+        <!-- Premissas da Deliberação -->
+        <section class="card etapa-card">
+            <header class="card-header etapa-header">
+                <div class="titulo">
+                    <span class="icone">📋</span>
+                    <span>Premissas da Deliberação</span>
+                </div>
+                <div class="acoes">
+                    <span class="seta">▲</span>
+                </div>
+            </header>
+            <div class="card-body etapa-body">
+                <ol style="padding-left: 20px; margin: 0; font-size: 13px; line-height: 1.5; color: #475569;">
+                    <li>A presente deliberação é proferida com base nas informações prestadas no formulário eletrônico.</li>
+                    <li>Os dados cadastrais e ambientais são de responsabilidade da unidade de origem.</li>
+                    <li>A decisão considera a vinculação do uso pretendido às políticas públicas indicadas.</li>
+                    <li>O regime jurídico adotado é considerado instrumento adequado à finalidade pública.</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- ANÁLISE DA COMISSÃO -->
+        <section class="card etapa-card" style="margin-top: 20px;">
+            <header class="card-header etapa-header">
+                <div class="titulo">
+                    <span class="icone">📋</span>
+                    <span>ANÁLISE DA COMISSÃO</span>
+                </div>
+                <div class="acoes">
+                    <span class="status status-pendente">⏳ Pendente</span>
+                    <span class="seta">▲</span>
+                </div>
+            </header>
+            <div class="card-body etapa-body">
+                <div class="pergunta">Aspectos de Interesse Público</div>
+                <div class="opcoes radio-group">
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="aspectos_interesse_publico" value="consistente" />
+                            <span class="opcao-texto">Evidenciado de forma consistente</span>
+                        </label>
+                    </div>
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="aspectos_interesse_publico" value="nao" />
+                            <span class="opcao-texto">Não suficientemente demonstrado</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="pergunta">Escolha do Destinatário</div>
+                <div class="opcoes radio-group">
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="escolha_destinatario" value="consistente" />
+                            <span class="opcao-texto">Fundamentação consistente</span>
+                        </label>
+                    </div>
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="escolha_destinatario" value="insuficiente" />
+                            <span class="opcao-texto">Fundamentação insuficiente</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="pergunta">Regime de Destinação</div>
+                <div class="opcoes radio-group">
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="regime_destinacao_cde" value="manter" />
+                            <span class="opcao-texto">Manter regime proposto</span>
+                        </label>
+                    </div>
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="regime_destinacao_cde" value="alterar" />
+                            <span class="opcao-texto">Alterar regime</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="pergunta">Deliberação Final</div>
+                <div class="opcoes radio-group">
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="deliberacao_cde" value="aprovar_proposta" />
+                            <span class="opcao-texto">Aprovar a proposta, nos termos apresentados.</span>
+                        </label>
+                    </div>
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="deliberacao_cde" value="indefiro" />
+                            <span class="opcao-texto">Indeferir a proposta.</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="campo-observacoes">
+                    <label for="observacoes_condicionantes">Observações/Condicionantes:</label>
+                    <textarea id="observacoes_condicionantes" placeholder="Descreva as condicionantes ou ressalvas..."></textarea>
+                </div>
+
+                <div style="margin-top: 20px; text-align: right;">
+                    <button class="botao-concluir" type="button" disabled>✍ Concluir Manifestação</button>
+                </div>
+            </div>
+        </section>
+    </div>
+    <script src="manifestacao-scripts.js"></script>
+</body>
+</html>

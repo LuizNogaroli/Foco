@@ -1,0 +1,112 @@
+/* CSS para select customizado - Regime de Destinação */
+.cs-wrapper {
+    position: relative;
+    width: 100%;
+    font-family: inherit;
+    font-size: 0.95rem;
+}
+
+.cs-display {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background: #fff;
+    cursor: pointer;
+    user-select: none;
+    min-height: 40px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.cs-display:hover,
+.cs-wrapper.open .cs-display {
+    border-color: #1a6bbf;
+    box-shadow: 0 0 0 3px rgba(26, 107, 191, 0.15);
+}
+
+.cs-display .cs-placeholder {
+    color: #888;
+}
+
+.cs-display .cs-selected-text {
+    color: #222;
+    flex: 1;
+}
+
+.cs-arrow {
+    margin-left: 10px;
+    font-size: 0.75rem;
+    color: #555;
+    transition: transform 0.2s;
+}
+
+.cs-wrapper.open .cs-arrow {
+    transform: rotate(180deg);
+}
+
+/* Dropdown */
+.cs-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    max-height: 340px;
+    overflow-y: auto;
+    background: #fff;
+    border: 1px solid #bbb;
+    border-radius: 8px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.13);
+    z-index: 999;
+    padding: 6px 0;
+}
+
+.cs-wrapper.open .cs-dropdown {
+    display: block;
+}
+
+/* Cabeçalhos de grupo */
+.cs-group-header {
+    padding: 10px 14px 4px;
+    font-weight: 700;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #1a6bbf;
+    border-top: 1px solid #e8eef5;
+    margin-top: 4px;
+}
+
+.cs-group-header.first {
+    border-top: none;
+    margin-top: 0;
+}
+
+/* Opções indentadas */
+.cs-option {
+    padding: 8px 16px 8px 28px;
+    cursor: pointer;
+    color: #333;
+    line-height: 1.4;
+    transition: background 0.15s;
+    border-radius: 4px;
+}
+
+.cs-option:hover {
+    background: #eef4fc;
+    color: #1a6bbf;
+}
+
+.cs-option.selected {
+    background: #ddeeff;
+    color: #1a4e8a;
+    font-weight: 600;
+}
+
+/* Validação */
+.cs-wrapper.invalid .cs-display {
+    border-color: #d9534f;
+    box-shadow: 0 0 0 3px rgba(217, 83, 79, 0.15);
+}
