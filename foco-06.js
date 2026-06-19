@@ -168,4 +168,21 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
+
+    // 5. SELETORES COMPLEMENTARES
+    const addSelectToggle = (selectId, blockId) => {
+        const sel = document.getElementById(selectId);
+        const block = document.getElementById(blockId);
+        if (sel && block) {
+            const update = () => { block.style.display = sel.value ? 'block' : 'none'; };
+            sel.addEventListener('change', update);
+            update();
+        }
+    };
+
+    addSelectToggle('campo51', 'bloco51_obs');
+    addSelectToggle('campo55', 'bloco55_obs');
+    addSelectToggle('campo58', 'bloco58_obs');
+    addSelectToggle('campo510', 'bloco510_obs');
+    addSelectToggle('campo511', 'bloco511_obs');
 });

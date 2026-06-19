@@ -132,24 +132,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // 8. Lista Dinâmica de Documentos (Motor Simplificado)
-    const btnAddDoc = document.getElementById('btnAdicionarDocumento05');
-    const listDoc = document.getElementById('documentos-list-05');
 
-    if (btnAddDoc && listDoc) {
-        btnAddDoc.addEventListener('click', () => {
-            const row = document.createElement('div');
-            row.className = 'imagem-item';
-            row.style.cssText = 'display:flex; gap:6px; align-items:center; margin-top:6px;';
-            row.innerHTML = `
-                <input type="text" name="docs_gerais_05[]" placeholder="Link/Documento Anexado" class="imagem-input" style="flex: 1;">
-                <button type="button" class="btn-remove-imagem">✕</button>
-            `;
-            listDoc.appendChild(row);
-            row.querySelector('input').focus();
-            row.querySelector('.btn-remove-imagem').addEventListener('click', () => row.remove());
-        });
-    }
 
     // Submit
     form.addEventListener('submit', (e) => {

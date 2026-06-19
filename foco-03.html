@@ -102,6 +102,15 @@
                 <textarea id="observacoes" name="observacoes" rows="3" placeholder="Detalhes sobre a poligonal, marcos, etc."></textarea>
             </div>
 
+            <!-- Lista de anexos / documentos (Aba 3) -->
+            <div class="form-group editavel" style="margin-top: 25px; border-top: 1px dashed #e2e8f0; padding-top: 15px;">
+                <label style="font-weight: bold;">Documentos e Links Anexados (Aba 3 - Geolocalização):</label>
+                <div class="dynamic-list-wrapper" style="flex: 1; display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
+                    <button type="button" class="btn-add" id="btnAdicionarDocumento03" style="align-self: flex-start;">＋ Adicionar link/documento</button>
+                    <div id="documentos-list-03"></div>
+                </div>
+            </div>
+
             <!-- Botões de Ação -->
             <div class="button-group">
                 <button type="button" class="btn-secondary" onclick="location.reload()">Resetar Mapa</button>
@@ -214,6 +223,9 @@
             this.textContent = expanded ? '↔ Reduzir Mapa' : '↔ Expandir Mapa';
             setTimeout(() => map.invalidateSize(), 300);
         });
+
+        // Inicializa a lista dinâmica de documentos customizados (Aba 3)
+        window.inicializarListaDocumentosDinamica('aba3', 'btnAdicionarDocumento03', 'documentos-list-03');
     </script>
     <script src="sync.js"></script>
 </body>

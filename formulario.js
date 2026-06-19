@@ -358,6 +358,218 @@
         });
     }
 
+    /**
+     * Inicializa a lista dinâmica de documentos/links para uma aba específica.
+     * @param {string} abaId - Identificador da aba (ex: "aba1", "aba2", etc.)
+     * @param {string} btnId - ID do botão de adicionar (ex: "btnAdicionarDocumento02")
+     * @param {string} listId - ID do container da lista (ex: "documentos-list-02")
+     */
+    window.inicializarListaDocumentosDinamica = function(abaId, btnId, listId) {
+        const list = document.getElementById(listId);
+        const btnAdd = document.getElementById(btnId);
+        let docCounter = 0;
+
+        if (!list || !btnAdd) return;
+
+        btnAdd.addEventListener('click', () => {
+            docCounter++;
+            recreateCustomRow(docCounter, '', '');
+        });
+
+        // Aguarda carregar o estado
+        const checkStateInterval = setInterval(() => {
+            if (window.parent && window.parent.formDataState) {
+                clearInterval(checkStateInterval);
+                restoreCustomRows(window.parent.formDataState);
+            }
+        }, 300);
+
+        function restoreCustomRows(state) {
+            if (!state) return;
+            const isAba1 = abaId === 'aba1';
+            if (list.children.length === 0) {
+                for (let key in state) {
+                    const prefix = isAba1 ? 'docs_custom_links_' : `docs_custom_links_${abaId}_`;
+                    if (key.startsWith(prefix)) {
+                        if (isAba1 && key.includes('_aba')) continue;
+                        const idx = key.replace(prefix, '');
+                        const valLink = state[key];
+                        const valFile = state[(isAba1 ? 'docs_custom_files_' : `docs_custom_files_${abaId}_`) + idx] || '';
+                        
+                        const numIdx = parseInt(idx, 10);
+                        if (!isNaN(numIdx) && numIdx > docCounter) {
+                            docCounter = numIdx;
+                        }
+                        
+                        recreateCustomRow(idx, valLink, valFile);
+                    }
+                }
+            }
+        }
+
+        function recreateCustomRow(idx, valLink, valFile) {
+            const item = document.createElement('div');
+            item.className = 'imagem-item';
+            item.style.cssText = 'display:flex; gap:8px; align-items:center; margin-top:6px;';
+            
+            const isAba1 = abaId === 'aba1';
+            const linkName = isAba1 ? `docs_custom_links_${idx}` : `docs_custom_links_${abaId}_${idx}`;
+            const fileName = isAba1 ? `docs_custom_files_${idx}` : `docs_custom_files_${abaId}_${idx}`;
+            const hiddenId = isAba1 ? `val_custom_${idx}` : `val_custom_${abaId}_${idx}`;
+            const fileId = isAba1 ? `file_custom_${idx}` : `file_custom_${abaId}_${idx}`;
+
+            item.innerHTML = `
+                <input
+                    type="text"
+                    name="${linkName}"
+                    value="${valLink}"
+                    placeholder="Link do Documento (ou faça upload)"
+                    autocomplete="off"
+                    class="imagem-input"
+                    style="flex: 1;"
+                    ${valFile ? 'readonly' : ''}
+                >
+                <input type="hidden" name="${fileName}" id="${hiddenId}" value="${valFile}">
+                <input type="file" id="${fileId}" style="display:none;">
+                
+                <button type="button" class="btn-link-doc btn-upload" style="background-color: #2e7d32; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">📂 Carregar arquivo</button>
+                <button type="button" class="btn-link-doc btn-view" style="display:none; background-color: #0284c7; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;" title="Visualizar">👁️ Visualizar</button>
+                <button type="button" class="btn-link-doc btn-remove" title="Remover" style="background-color: #dc2626; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">🗑️ Excluir</button>
+            `;
+            list.appendChild(item);
+
+            const hiddenInput = item.querySelector('#' + hiddenId);
+            const fileInput = item.querySelector('#' + fileId);
+            const txtInput = item.querySelector('input[type="text"]');
+            const btnUpload = item.querySelector('.btn-upload');
+            const btnView = item.querySelector('.btn-view');
+            const btnRemove = item.querySelector('.btn-remove');
+
+            function updateUI() {
+                const hasFile = !!hiddenInput.value;
+                const hasLink = txtInput.value && (txtInput.value.startsWith('http://') || txtInput.value.startsWith('https://'));
+                
+                if (hasFile) {
+                    btnUpload.style.display = 'none';
+                    btnUpload.disabled = false;
+                    btnUpload.style.opacity = '1';
+                    btnView.style.display = 'inline-block';
+                    btnRemove.style.display = 'inline-block';
+                    txtInput.readOnly = true;
+                    txtInput.style.color = '#0056b3';
+                    txtInput.style.textDecoration = 'underline';
+                    txtInput.style.cursor = 'pointer';
+                    txtInput.title = 'Clique para visualizar o arquivo';
+                } else {
+                    btnUpload.innerHTML = '📂 Carregar arquivo';
+                    btnUpload.style.backgroundColor = '#2e7d32';
+                    btnUpload.style.display = 'inline-block';
+                    btnUpload.disabled = false;
+                    btnUpload.style.opacity = '1';
+                    
+                    if (hasLink) {
+                        btnView.style.display = 'inline-block';
+                        txtInput.style.color = '#0056b3';
+                        txtInput.style.textDecoration = 'underline';
+                        txtInput.style.cursor = 'pointer';
+                        txtInput.title = 'Clique para abrir o link';
+                    } else {
+                        btnView.style.display = 'none';
+                        txtInput.style.color = '';
+                        txtInput.style.textDecoration = '';
+                        txtInput.style.cursor = '';
+                        txtInput.title = '';
+                    }
+                    btnRemove.style.display = 'inline-block';
+                    txtInput.readOnly = false;
+                }
+            }
+
+            txtInput.addEventListener('input', updateUI);
+
+            function performView() {
+                const hasFile = !!hiddenInput.value;
+                if (hasFile) {
+                    try {
+                        const newWindow = window.open('', '_blank');
+                        if (newWindow) {
+                            newWindow.document.write(`
+                                <html>
+                                <head>
+                                    <title>Visualizar Documento</title>
+                                    <style>body,html{margin:0;padding:0;width:100%;height:100%;overflow:hidden;}</style>
+                                </head>
+                                <body>
+                                    <iframe src="${hiddenInput.value}" width="100%" height="100%" style="border:none;"></iframe>
+                                </body>
+                                </html>
+                            `);
+                            newWindow.document.close();
+                        } else {
+                            alert('Bloqueador de popup ativo. Por favor, permita popups.');
+                        }
+                    } catch (err) {
+                        console.error('Erro ao abrir documento:', err);
+                        alert('Erro ao abrir o arquivo para visualização.');
+                    }
+                } else if (txtInput.value && (txtInput.value.startsWith('http://') || txtInput.value.startsWith('https://'))) {
+                    window.open(txtInput.value, '_blank');
+                }
+            }
+
+            txtInput.addEventListener('click', performView);
+            btnView.addEventListener('click', performView);
+
+            btnUpload.addEventListener('click', () => {
+                fileInput.click();
+            });
+
+            fileInput.addEventListener('change', () => {
+                if (fileInput.files && fileInput.files[0]) {
+                    const file = fileInput.files[0];
+                    btnUpload.innerHTML = '⌛ Carregando...';
+                    btnUpload.disabled = true;
+                    btnUpload.style.opacity = '0.7';
+                    
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        hiddenInput.value = e.target.result;
+                        txtInput.value = file.name;
+                        txtInput.readOnly = true;
+                        
+                        hiddenInput.dispatchEvent(new Event('change', { bubbles: true }));
+                        txtInput.dispatchEvent(new Event('change', { bubbles: true }));
+                        updateUI();
+                    };
+                    reader.onerror = function() {
+                        alert('Erro ao carregar o arquivo.');
+                        updateUI();
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            btnRemove.addEventListener('click', () => {
+                const hasFile = !!hiddenInput.value;
+                if (hasFile) {
+                    if (confirm('Deseja realmente remover este arquivo?')) {
+                        hiddenInput.value = '';
+                        txtInput.value = '';
+                        hiddenInput.dispatchEvent(new Event('change', { bubbles: true }));
+                        txtInput.dispatchEvent(new Event('change', { bubbles: true }));
+                        updateUI();
+                    }
+                } else {
+                    item.remove();
+                    window.parent.updateField(linkName, undefined);
+                    window.parent.updateField(fileName, undefined);
+                }
+            });
+
+            updateUI();
+        }
+    };
+
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', function () {
             initHints();

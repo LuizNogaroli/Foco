@@ -441,6 +441,15 @@
         </section>
       </div>
 
+      <!-- Lista de anexos / documentos (Aba 4) -->
+      <div class="form-group editavel" style="margin-top: 25px; border-top: 1px dashed #e2e8f0; padding-top: 15px;">
+          <label style="font-weight: bold;">Documentos e Links Anexados (Aba 4 - Setor de Caracterização):</label>
+          <div class="dynamic-list-wrapper" style="flex: 1; display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
+              <button type="button" class="btn-add" id="btnAdicionarDocumento04" style="align-self: flex-start;">＋ Adicionar link/documento</button>
+              <div id="documentos-list-04"></div>
+          </div>
+      </div>
+
       <!-- Botões -->
       <div class="button-group">
         <button type="button" class="btn-secondary" id="btnLimpar">🗑️ Limpar</button>
@@ -453,6 +462,9 @@
   <script src="formulario.js"></script>
   <script src="hints.js"></script>
   <script src="foco-04.js"></script>
+  <script>
+      window.inicializarListaDocumentosDinamica('aba4', 'btnAdicionarDocumento04', 'documentos-list-04');
+  </script>
   <script src="sync.js"></script>
 </body>
 </html>
