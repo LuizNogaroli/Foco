@@ -73,64 +73,6 @@ document.addEventListener('DOMContentLoaded', function () {
     handleRadioToggle('campo58_radio', 'group-campo58');
     handleRadioToggle('campo510_radio', 'group-campo510');
 
-    // 3. ACORDEÃO E ASSINATURA (PADRÃO FOCO-07)
-    const accHeader = document.getElementById('header-declaracao');
-    const accWrapper = document.getElementById('acordeao-declaracao');
-    const btnAssinar = document.getElementById('btn-assinar');
-    const btnLimparDec = document.getElementById('btn-limpar-decl');
-    const chkDec = document.getElementById('decl-check1');
-    const badge = document.getElementById('badge-ok');
-    const badgePend = document.getElementById('pendente-ok');
-    const status = document.getElementById('status-assinado');
-    const overlay = document.getElementById('overlay-assinado');
-    const conteudoDec = document.getElementById('conteudo-declaracao');
-    const flag = document.getElementById('flag-assinado');
-
-    if (accHeader) {
-        accHeader.addEventListener('click', () => accWrapper.classList.toggle('aberto'));
-    }
-
-    if (chkDec) {
-        chkDec.addEventListener('change', () => btnAssinar.disabled = !chkDec.checked);
-    }
-
-    if (btnAssinar) {
-        btnAssinar.addEventListener('click', () => {
-            flag.value = "1";
-            badge.classList.add('visivel');
-            if (badgePend) badgePend.classList.add('oculto');
-            status.classList.add('visivel');
-            overlay.classList.add('visivel');
-            btnAssinar.style.display = 'none';
-            btnLimparDec.style.display = 'inline-block';
-            
-            // Bloqueia conteúdo (Padrão FOCO-07)
-            if (conteudoDec) {
-                conteudoDec.classList.add('decl-conteudo-bloqueado');
-                conteudoDec.querySelectorAll('input').forEach(i => i.disabled = true);
-            }
-        });
-    }
-
-    if (btnLimparDec) {
-        btnLimparDec.addEventListener('click', () => {
-            flag.value = "0";
-            badge.classList.remove('visivel');
-            if (badgePend) badgePend.classList.remove('oculto');
-            status.classList.remove('visivel');
-            overlay.classList.remove('visivel');
-            btnAssinar.style.display = 'inline-block';
-            btnLimparDec.style.display = 'none';
-            
-            if (conteudoDec) {
-                conteudoDec.classList.remove('decl-conteudo-bloqueado');
-                chkDec.disabled = false;
-                chkDec.checked = false;
-                btnAssinar.disabled = true;
-            }
-        });
-    }
-
     // 4. SUBMIT E MODAL
     const modal = document.getElementById('modalEnvio');
     const btnFecharModal = document.getElementById('btnFecharModal');
@@ -145,11 +87,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     document.getElementById('btnEnviarSPU').addEventListener('click', () => {
-        if(flag.value !== "1") {
-            alert('⚠️ Você precisa concluir a Manifestação do Técnico antes de enviar.');
-            if(!accWrapper.classList.contains('aberto')) accWrapper.classList.add('aberto');
-            return;
-        }
         if (modal) modal.style.display = 'flex';
     });
 
