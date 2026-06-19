@@ -177,10 +177,151 @@
         });
     };
 
+    /**
+     * UPLOAD DE ARQUIVOS (BASE64) - REUTILIZÁVEL E GLOBAL
+     */
+    window.triggerUpload = function(id) {
+        const fileInput = document.getElementById('file_' + id);
+        if (fileInput) {
+            fileInput.click();
+        }
+    };
+
+    window.handleFileUpload = function(id) {
+        const fileInput = document.getElementById('file_' + id);
+        const hiddenInput = document.getElementById('val_' + id);
+        const filenameInput = document.getElementById('val_filename_' + id);
+        const btnUpload = document.querySelector(`#actions_${id} .btn-upload`);
+        
+        if (fileInput && fileInput.files && fileInput.files[0]) {
+            const file = fileInput.files[0];
+            
+            // Feedback visual de carregamento
+            if (btnUpload) {
+                btnUpload.innerHTML = '⌛ Carregando...';
+                btnUpload.disabled = true;
+                btnUpload.style.opacity = '0.7';
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                hiddenInput.value = e.target.result; // Salva o Base64
+                
+                if (filenameInput) {
+                    filenameInput.value = file.name; // Salva o nome original
+                    filenameInput.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+                
+                hiddenInput.dispatchEvent(new Event('change', { bubbles: true })); // Dispara sync.js
+                window.updateDocUI(id);
+            };
+            reader.onerror = function() {
+                alert('Erro ao carregar o arquivo.');
+                window.updateDocUI(id);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    window.updateDocUI = function(id) {
+        const hiddenInput = document.getElementById('val_' + id);
+        const fileInput = document.getElementById('file_' + id);
+        const hasFile = !!(hiddenInput && hiddenInput.value);
+        
+        const actionsDiv = document.getElementById('actions_' + id);
+        if (!actionsDiv) return;
+        const btnUpload = actionsDiv.querySelector('.btn-upload');
+        const btnRemover = actionsDiv.querySelector('.btn-remove');
+        const spanFilename = document.getElementById('filename_' + id);
+        
+        if (hasFile) {
+            // State C (Arquivo Carregado/Salvo)
+            if (btnUpload) {
+                btnUpload.style.display = 'none';
+                btnUpload.disabled = false;
+                btnUpload.style.opacity = '1';
+            }
+            if (spanFilename) {
+                const filenameInput = document.getElementById('val_filename_' + id);
+                spanFilename.textContent = (filenameInput && filenameInput.value) ? filenameInput.value : 'Arquivo carregado';
+                spanFilename.style.display = 'inline-block';
+            }
+            if (btnRemover) btnRemover.style.display = 'inline-block';
+        } else {
+            // State A (Vazio)
+            if (btnUpload) {
+                btnUpload.innerHTML = '📂 Carregar arquivo';
+                btnUpload.style.backgroundColor = '#2e7d32';
+                btnUpload.style.display = 'inline-block';
+                btnUpload.disabled = false;
+                btnUpload.style.opacity = '1';
+            }
+            if (spanFilename) {
+                spanFilename.textContent = '';
+                spanFilename.style.display = 'none';
+            }
+            if (btnRemover) btnRemover.style.display = 'none';
+        }
+    };
+
+    window.removerDoc = function(id) {
+        const hiddenInput = document.getElementById('val_' + id);
+        const fileInput = document.getElementById('file_' + id);
+        const hasFile = !!(hiddenInput && hiddenInput.value);
+        
+        if (hasFile) {
+            if (confirm('Deseja realmente remover este arquivo?')) {
+                hiddenInput.value = '';
+                hiddenInput.dispatchEvent(new Event('change', { bubbles: true })); // Dispara sync.js
+                
+                const filenameInput = document.getElementById('val_filename_' + id);
+                if (filenameInput) {
+                    filenameInput.value = '';
+                    filenameInput.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+                
+                if (fileInput) fileInput.value = '';
+                window.updateDocUI(id);
+            }
+        }
+    };
+
+    // Auto-inicialização dos campos de upload estáticos
+    function initFileUploads() {
+        const fileInputs = document.querySelectorAll('input[type="file"]');
+        fileInputs.forEach(fileInput => {
+            // Ignora campos dinâmicos da lista customizada
+            if (fileInput.id.startsWith('file_custom_')) return;
+            
+            const id = fileInput.id.replace('file_', '');
+            const hiddenInput = document.getElementById('val_' + id);
+            if (hiddenInput) {
+                hiddenInput.addEventListener('change', () => window.updateDocUI(id));
+                
+                const filenameInput = document.getElementById('val_filename_' + id);
+                if (filenameInput) {
+                    filenameInput.addEventListener('change', () => window.updateDocUI(id));
+                }
+                
+                // Adiciona o listener change para o input do arquivo se não estiver no HTML
+                if (!fileInput.getAttribute('onchange')) {
+                    fileInput.addEventListener('change', () => window.handleFileUpload(id));
+                }
+                
+                // Estado inicial
+                setTimeout(() => window.updateDocUI(id), 400);
+            }
+        });
+    }
+
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initHints);
+        document.addEventListener('DOMContentLoaded', function () {
+            initHints();
+            initFileUploads();
+        });
     } else {
         initHints();
+        initFileUploads();
     }
 
 })();
