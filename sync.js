@@ -132,6 +132,20 @@
                 input.classList.add('field-loading');
                 input.disabled = true;
                 
+                // Exibe "Carregando dados..." dentro do campo
+                if (input.tagName === 'INPUT' && (input.type === 'text' || input.type === 'number' || input.type === 'tel' || !input.type)) {
+                    input.value = "Carregando dados...";
+                } else if (input.tagName === 'TEXTAREA') {
+                    input.value = "Carregando dados...";
+                } else if (input.tagName === 'SELECT') {
+                    const opt = document.createElement('option');
+                    opt.className = 'temp-loading-option';
+                    opt.value = '';
+                    opt.text = 'Carregando dados...';
+                    opt.selected = true;
+                    input.insertBefore(opt, input.firstChild);
+                }
+
                 // Adiciona o badge "Sincronizando..." no label
                 const label = findLabelForInput(input);
                 if (label) {
@@ -160,6 +174,17 @@
             const inputs = document.querySelectorAll('input, select, textarea');
             inputs.forEach(input => {
                 if (!input.name || input.type === 'submit' || input.type === 'button') return;
+
+                // Limpa o estado temporário de "Carregando dados..."
+                if (isAutoLoadedInput(input)) {
+                    if (input.value === 'Carregando dados...') {
+                        input.value = '';
+                    }
+                    if (input.tagName === 'SELECT') {
+                        const tempOpt = input.querySelector('.temp-loading-option');
+                        if (tempOpt) tempOpt.remove();
+                    }
+                }
 
                 const value = state[input.name];
                 if (value !== undefined) {
