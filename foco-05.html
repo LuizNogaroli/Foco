@@ -219,8 +219,14 @@
 
             <!-- ── Certidão atualizada da matrícula ────────────────────── -->
             <div class="form-group editavel">
-                <label for="anexo_matricula">Certidão atualizada da matrícula (não superior a 12 meses):</label>
-                <input type="file" id="anexo_matricula" name="anexo_matricula" accept=".pdf,.doc,.docx,.jpg,.png">
+                <label for="val_anexo_matricula">Certidão atualizada da matrícula (não superior a 12 meses):</label>
+                <input type="hidden" name="anexo_matricula" id="val_anexo_matricula">
+                <input type="file" id="file_anexo_matricula" style="display:none;" onchange="handleFileUpload('anexo_matricula')" accept=".pdf,.doc,.docx,.jpg,.png">
+                <div id="actions_anexo_matricula" style="margin-top: 8px;">
+                    <button type="button" class="btn-link-doc btn-upload" onclick="triggerUpload('anexo_matricula')" style="background-color: #2e7d32; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">📤 Enviar Arquivo</button>
+                    <button type="button" class="btn-link-doc btn-abrir" style="display:none; background-color: #1e3a5f; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;" onclick="abrirDoc('anexo_matricula')">👁️ Abrir</button>
+                    <button type="button" class="btn-remove-imagem btn-remove" style="display:none; margin-left: 8px; background: none; border: none; color: #dc2626; cursor: pointer; font-weight: bold;" onclick="removerDoc('anexo_matricula')" title="Remover">✕</button>
+                </div>
             </div>
 
             <!-- ── Capacidade orçamentária/financeira demonstrada ───────────── -->

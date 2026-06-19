@@ -110,101 +110,127 @@
             </div>
 
             <!-- 1.11 Documentos anexados ao requerimento -->
-            <section class="documentos-linkados-section" aria-labelledby="titulo-documentos-linkados">
-
-                <details class="documentos-expansivel">
-                    <summary class="documentos-expansivel-header">
-                        <span id="titulo-documentos-linkados">Documentos anexados ao requerimento</span>
-                        <span class="documentos-linkados-badge">5 documentos</span>
+            <section class="documentos-linkados-section" aria-labelledby="titulo-documentos-linkados" style="margin-bottom: 25px;">
+                <details class="documentos-expansivel" open>
+                    <summary class="documentos-expansivel-header" style="cursor: pointer; padding: 12px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
+                        <span id="titulo-documentos-linkados" style="font-weight: 600; color: #1e3a5f;">Documentos anexados ao requerimento</span>
+                        <span class="documentos-linkados-badge" style="background: #e2e8f0; padding: 3px 8px; border-radius: 12px; font-size: 11px; font-weight: bold; color: #475569;">Documentos Digitais</span>
                     </summary>
 
-                    <div class="documentos-linkados-card">
-                        <table class="documentos-linkados-table documentos-table-simplificada">
+                    <div class="documentos-linkados-card" style="border: 1px solid #cbd5e1; border-top: none; border-radius: 0 0 6px 6px; padding: 15px; background: #ffffff;">
+                        <table class="documentos-linkados-table documentos-table-simplificada" style="width: 100%; border-collapse: collapse;">
                             <thead>
-                                <tr>
-                                    <th>Nome do Documento</th>
-                                    <th class="coluna-acao">Acesso</th>
+                                <tr style="border-bottom: 2px solid #e2e8f0; text-align: left; font-size: 12px; color: #64748b;">
+                                    <th style="padding: 8px;">Nome do Documento</th>
+                                    <th class="coluna-acao" style="text-align: right; padding: 8px;">Acesso / Ação</th>
                                 </tr>
                             </thead>
 
                             <tbody>
-                                <tr>
-                                    <td>
-                                        <div class="doc-nome">
+                                <tr style="border-bottom: 1px solid #e2e8f0;">
+                                    <td style="padding: 10px 8px;">
+                                        <div class="doc-nome" style="display: flex; align-items: center; gap: 8px;">
                                             <span class="doc-icon">📄</span>
                                             <div>
                                                 <strong>Requerimento inicial</strong>
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="coluna-acao">
-                                        <button type="button" class="btn-link-doc btn-simular-doc">Abrir</button>
+                                    <td class="coluna-acao" style="text-align: right; padding: 10px 8px;">
+                                        <input type="hidden" name="doc_req_inicial" id="val_doc_req_inicial">
+                                        <input type="file" id="file_doc_req_inicial" style="display:none;" onchange="handleFileUpload('doc_req_inicial')">
+                                        <div id="actions_doc_req_inicial">
+                                            <button type="button" class="btn-link-doc btn-upload" onclick="triggerUpload('doc_req_inicial')" style="background-color: #2e7d32; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">📤 Enviar</button>
+                                            <button type="button" class="btn-link-doc btn-abrir" style="display:none; background-color: #1e3a5f; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;" onclick="abrirDoc('doc_req_inicial')">👁️ Abrir</button>
+                                            <button type="button" class="btn-remove-imagem btn-remove" style="display:none; margin-left: 8px; background: none; border: none; color: #dc2626; cursor: pointer; font-weight: bold;" onclick="removerDoc('doc_req_inicial')" title="Remover">✕</button>
+                                        </div>
                                     </td>
                                 </tr>
 
-                                <tr>
-                                    <td>
-                                        <div class="doc-nome">
+                                <tr style="border-bottom: 1px solid #e2e8f0;">
+                                    <td style="padding: 10px 8px;">
+                                        <div class="doc-nome" style="display: flex; align-items: center; gap: 8px;">
                                             <span class="doc-icon">🏢</span>
                                             <div>
                                                 <strong>Contrato social / Estatuto</strong>
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="coluna-acao">
-                                        <button type="button" class="btn-link-doc btn-simular-doc">Abrir</button>
+                                    <td class="coluna-acao" style="text-align: right; padding: 10px 8px;">
+                                        <input type="hidden" name="doc_contrato_social" id="val_doc_contrato_social">
+                                        <input type="file" id="file_doc_contrato_social" style="display:none;" onchange="handleFileUpload('doc_contrato_social')">
+                                        <div id="actions_doc_contrato_social">
+                                            <button type="button" class="btn-link-doc btn-upload" onclick="triggerUpload('doc_contrato_social')" style="background-color: #2e7d32; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">📤 Enviar</button>
+                                            <button type="button" class="btn-link-doc btn-abrir" style="display:none; background-color: #1e3a5f; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;" onclick="abrirDoc('doc_contrato_social')">👁️ Abrir</button>
+                                            <button type="button" class="btn-remove-imagem btn-remove" style="display:none; margin-left: 8px; background: none; border: none; color: #dc2626; cursor: pointer; font-weight: bold;" onclick="removerDoc('doc_contrato_social')" title="Remover">✕</button>
+                                        </div>
                                     </td>
                                 </tr>
 
-                                <tr>
-                                    <td>
-                                        <div class="doc-nome">
+                                <tr style="border-bottom: 1px solid #e2e8f0;">
+                                    <td style="padding: 10px 8px;">
+                                        <div class="doc-nome" style="display: flex; align-items: center; gap: 8px;">
                                             <span class="doc-icon">🪪</span>
                                             <div>
                                                 <strong>Identificação do representante</strong>
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="coluna-acao">
-                                        <button type="button" class="btn-link-doc btn-simular-doc">Abrir</button>
+                                    <td class="coluna-acao" style="text-align: right; padding: 10px 8px;">
+                                        <input type="hidden" name="doc_id_representante" id="val_doc_id_representante">
+                                        <input type="file" id="file_doc_id_representante" style="display:none;" onchange="handleFileUpload('doc_id_representante')">
+                                        <div id="actions_doc_id_representante">
+                                            <button type="button" class="btn-link-doc btn-upload" onclick="triggerUpload('doc_id_representante')" style="background-color: #2e7d32; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">📤 Enviar</button>
+                                            <button type="button" class="btn-link-doc btn-abrir" style="display:none; background-color: #1e3a5f; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;" onclick="abrirDoc('doc_id_representante')">👁️ Abrir</button>
+                                            <button type="button" class="btn-remove-imagem btn-remove" style="display:none; margin-left: 8px; background: none; border: none; color: #dc2626; cursor: pointer; font-weight: bold;" onclick="removerDoc('doc_id_representante')" title="Remover">✕</button>
+                                        </div>
                                     </td>
                                 </tr>
 
-                                <tr>
-                                    <td>
-                                        <div class="doc-nome">
+                                <tr style="border-bottom: 1px solid #e2e8f0;">
+                                    <td style="padding: 10px 8px;">
+                                        <div class="doc-nome" style="display: flex; align-items: center; gap: 8px;">
                                             <span class="doc-icon">📝</span>
                                             <div>
                                                 <strong>Procuração</strong>
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="coluna-acao">
-                                        <button type="button" class="btn-link-doc btn-simular-doc">Abrir</button>
+                                    <td class="coluna-acao" style="text-align: right; padding: 10px 8px;">
+                                        <input type="hidden" name="doc_procuracao" id="val_doc_procuracao">
+                                        <input type="file" id="file_doc_procuracao" style="display:none;" onchange="handleFileUpload('doc_procuracao')">
+                                        <div id="actions_doc_procuracao">
+                                            <button type="button" class="btn-link-doc btn-upload" onclick="triggerUpload('doc_procuracao')" style="background-color: #2e7d32; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">📤 Enviar</button>
+                                            <button type="button" class="btn-link-doc btn-abrir" style="display:none; background-color: #1e3a5f; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;" onclick="abrirDoc('doc_procuracao')">👁️ Abrir</button>
+                                            <button type="button" class="btn-remove-imagem btn-remove" style="display:none; margin-left: 8px; background: none; border: none; color: #dc2626; cursor: pointer; font-weight: bold;" onclick="removerDoc('doc_procuracao')" title="Remover">✕</button>
+                                        </div>
                                     </td>
                                 </tr>
 
-                                <tr>
-                                    <td>
-                                        <div class="doc-nome">
+                                <tr style="border-bottom: none;">
+                                    <td style="padding: 10px 8px;">
+                                        <div class="doc-nome" style="display: flex; align-items: center; gap: 8px;">
                                             <span class="doc-icon">🔎</span>
                                             <div>
                                                 <strong>Comprovante de situação cadastral</strong>
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="coluna-acao">
-                                        <button type="button" class="btn-link-doc btn-simular-doc">Abrir</button>
+                                    <td class="coluna-acao" style="text-align: right; padding: 10px 8px;">
+                                        <input type="hidden" name="doc_comprovante_cadastral" id="val_doc_comprovante_cadastral">
+                                        <input type="file" id="file_doc_comprovante_cadastral" style="display:none;" onchange="handleFileUpload('doc_comprovante_cadastral')">
+                                        <div id="actions_doc_comprovante_cadastral">
+                                            <button type="button" class="btn-link-doc btn-upload" onclick="triggerUpload('doc_comprovante_cadastral')" style="background-color: #2e7d32; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">📤 Enviar</button>
+                                            <button type="button" class="btn-link-doc btn-abrir" style="display:none; background-color: #1e3a5f; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;" onclick="abrirDoc('doc_comprovante_cadastral')">👁️ Abrir</button>
+                                            <button type="button" class="btn-remove-imagem btn-remove" style="display:none; margin-left: 8px; background: none; border: none; color: #dc2626; cursor: pointer; font-weight: bold;" onclick="removerDoc('doc_comprovante_cadastral')" title="Remover">✕</button>
+                                        </div>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </details>
-
             </section>
-
-            <!-- Observações / Upload -->
             <div class="form-group editavel">
                 <label for="obs_geral_01">Observações:</label>
                 <textarea id="obs_geral_01" name="obs_geral_01" placeholder=""></textarea>
@@ -240,7 +266,85 @@
 
     <script>
         // ================================================================
-        // LISTA DINÂMICA DE DOCUMENTOS — foco-01
+        // OPERAÇÕES DE UPLOAD DE ARQUIVOS (BASE64)
+        // ================================================================
+        function triggerUpload(id) {
+            document.getElementById('file_' + id).click();
+        }
+
+        function handleFileUpload(id) {
+            const fileInput = document.getElementById('file_' + id);
+            const hiddenInput = document.getElementById('val_' + id);
+            if (fileInput.files && fileInput.files[0]) {
+                const file = fileInput.files[0];
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    hiddenInput.value = e.target.result; // Base64 Data URL
+                    hiddenInput.dispatchEvent(new Event('change', { bubbles: true })); // Trigger sync.js save
+                    updateDocUI(id, true);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function updateDocUI(id, hasFile) {
+            const actionsDiv = document.getElementById('actions_' + id);
+            if (!actionsDiv) return;
+            const btnUpload = actionsDiv.querySelector('.btn-upload');
+            const btnAbrir = actionsDiv.querySelector('.btn-abrir');
+            const btnRemover = actionsDiv.querySelector('.btn-remove');
+            
+            if (hasFile) {
+                if (btnUpload) btnUpload.style.display = 'none';
+                if (btnAbrir) btnAbrir.style.display = 'inline-block';
+                if (btnRemover) btnRemover.style.display = 'inline-block';
+            } else {
+                if (btnUpload) btnUpload.style.display = 'inline-block';
+                if (btnAbrir) btnAbrir.style.display = 'none';
+                if (btnRemover) btnRemover.style.display = 'none';
+            }
+        }
+
+        function abrirDoc(id) {
+            const hiddenInput = document.getElementById('val_' + id);
+            const dataUrl = hiddenInput.value;
+            if (dataUrl) {
+                const newTab = window.open();
+                newTab.document.write('<iframe src="' + dataUrl  + '" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;" allowfullscreen></iframe>');
+            }
+        }
+
+        function removerDoc(id) {
+            if (confirm('Deseja realmente remover este arquivo?')) {
+                const hiddenInput = document.getElementById('val_' + id);
+                hiddenInput.value = '';
+                hiddenInput.dispatchEvent(new Event('change', { bubbles: true })); // Trigger sync.js save
+                const fileInput = document.getElementById('file_' + id);
+                if (fileInput) fileInput.value = '';
+                updateDocUI(id, false);
+            }
+        }
+
+        // On page load, setup change listeners for hidden fields to restore UI state
+        document.addEventListener('DOMContentLoaded', () => {
+            const docIds = ['doc_req_inicial', 'doc_contrato_social', 'doc_id_representante', 'doc_procuracao', 'doc_comprovante_cadastral'];
+            docIds.forEach(id => {
+                const hiddenInput = document.getElementById('val_' + id);
+                if (hiddenInput) {
+                    // Escuta eventos change
+                    hiddenInput.addEventListener('change', () => {
+                        updateDocUI(id, !!hiddenInput.value);
+                    });
+                    // Estado inicial
+                    setTimeout(() => {
+                        updateDocUI(id, !!hiddenInput.value);
+                    }, 500);
+                }
+            });
+        });
+
+        // ================================================================
+        // LISTA DINÂMICA DE DOCUMENTOS CUSTOMIZADOS (BASE64)
         // ================================================================
         (function () {
             const btn  = document.getElementById('btnAdicionarDocumento01');
@@ -248,31 +352,126 @@
 
             if (!btn || !list) return;
 
-            list.innerHTML = '';
-
             btn.addEventListener('click', function () {
-                const item = document.createElement('div');
-                item.className = 'imagem-item';
-                item.style.cssText = 'display:flex; gap:8px; align-items:center; margin-top:6px;';
-                item.innerHTML = `
-                    <input
-                        type="text"
-                        name="docs_gerais_01[]"
-                        placeholder="Link/Documento Anexado"
-                        autocomplete="off"
-                        class="imagem-input"
-                        style="flex: 1;"
-                    >
-                    <button type="button" class="btn-remove-imagem" title="Remover">✕</button>
-                `;
-                list.appendChild(item);
-                item.querySelector('input').focus();
-                item.querySelector('.btn-remove-imagem')
-                    .addEventListener('click', () => item.remove());
+                const idx = Date.now() + Math.random().toString(36).substr(2, 5); // unique key
+                recreateCustomRow(idx, '', '');
             });
+
+            // Restaura as linhas customizadas salvas ao carregar do banco de dados
+            window.addEventListener('message', (event) => {
+                if (event.data && event.data.type === 'DATABASE_LOADED') {
+                    const state = event.data.data;
+                    restoreCustomRows(state);
+                }
+            });
+
+            // Tenta restaurar do parent diretamente caso já carregado
+            setTimeout(() => {
+                if (window.parent && window.parent.formDataState) {
+                    restoreCustomRows(window.parent.formDataState);
+                }
+            }, 300);
+
+            function restoreCustomRows(state) {
+                if (!state) return;
+                // Evita duplicar
+                if (list.children.length === 0) {
+                    for (let key in state) {
+                        if (key.startsWith('docs_custom_links_')) {
+                            const idx = key.replace('docs_custom_links_', '');
+                            const valLink = state[key];
+                            const valFile = state['docs_custom_files_' + idx] || '';
+                            recreateCustomRow(idx, valLink, valFile);
+                        }
+                    }
+                }
+            }
         })();
+
+        function recreateCustomRow(idx, valLink, valFile) {
+            const list = document.getElementById('documentos-list-01');
+            if (!list) return;
+
+            const item = document.createElement('div');
+            item.className = 'imagem-item';
+            item.style.cssText = 'display:flex; gap:8px; align-items:center; margin-top:6px;';
+            item.innerHTML = `
+                <input
+                    type="text"
+                    name="docs_custom_links_${idx}"
+                    value="${valLink}"
+                    placeholder="Link do Documento (ou faça upload)"
+                    autocomplete="off"
+                    class="imagem-input"
+                    style="flex: 1;"
+                    ${valFile ? 'readonly' : ''}
+                >
+                <input type="hidden" name="docs_custom_files_${idx}" id="val_custom_${idx}" value="${valFile}">
+                <input type="file" id="file_custom_${idx}" style="display:none;">
+                
+                <button type="button" class="btn-link-doc btn-upload" style="display:${valFile ? 'none' : 'inline-block'}; background-color: #2e7d32; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">📤 Enviar</button>
+                <button type="button" class="btn-link-doc btn-abrir" style="display:${valFile ? 'inline-block' : 'none'}; background-color: #1e3a5f; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;" onclick="abrirCustomDoc('${idx}')">👁️ Abrir</button>
+                
+                <button type="button" class="btn-remove-imagem" title="Remover" onclick="removerCustomDoc('${idx}', this)" style="background: none; border: none; color: #dc2626; cursor: pointer; font-weight: bold;">✕</button>
+            `;
+            list.appendChild(item);
+
+            // Add change listener for hidden input
+            const hiddenInput = item.querySelector('#val_custom_' + idx);
+            hiddenInput.addEventListener('change', () => {
+                const hasFile = !!hiddenInput.value;
+                item.querySelector('.btn-upload').style.display = hasFile ? 'none' : 'inline-block';
+                item.querySelector('.btn-abrir').style.display = hasFile ? 'inline-block' : 'none';
+            });
+
+            // Set up file input trigger
+            item.querySelector('.btn-upload').addEventListener('click', () => {
+                item.querySelector('#file_custom_' + idx).click();
+            });
+
+            // Set up file input change handler
+            const fileInput = item.querySelector('#file_custom_' + idx);
+            fileInput.addEventListener('change', () => {
+                if (fileInput.files && fileInput.files[0]) {
+                    const file = fileInput.files[0];
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        hiddenInput.value = e.target.result; // Base64
+                        const txtInput = item.querySelector('input[type="text"]');
+                        txtInput.value = file.name;
+                        txtInput.readOnly = true;
+                        // Trigger sync.js save
+                        hiddenInput.dispatchEvent(new Event('change', { bubbles: true }));
+                        txtInput.dispatchEvent(new Event('change', { bubbles: true }));
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        function abrirCustomDoc(idx) {
+            const val = document.getElementById('val_custom_' + idx).value;
+            if (val) {
+                const newTab = window.open();
+                newTab.document.write('<iframe src="' + val + '" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;" allowfullscreen></iframe>');
+            }
+        }
+
+        function removerCustomDoc(idx, btnEl) {
+            const item = btnEl.closest('.imagem-item');
+            if (item) {
+                // Clear inputs to let sync.js delete them from Supabase state
+                const hidden = item.querySelector('#val_custom_' + idx);
+                const txt = item.querySelector('input[type="text"]');
+                hidden.value = '';
+                txt.value = '';
+                hidden.dispatchEvent(new Event('change', { bubbles: true }));
+                txt.dispatchEvent(new Event('change', { bubbles: true }));
+                
+                item.remove();
+            }
+        }
     </script>
 
     <script src="sync.js"></script>
-</body>
 </html>

@@ -173,6 +173,76 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (blocoPendObs) blocoPendObs.style.display = 'none';
                 if (listDoc) listDoc.innerHTML = '';
             }
+    // Exposição global das funções de upload para botões no HTML
+    window.triggerUpload = function(id) {
+        const fileInput = document.getElementById('file_' + id);
+        if (fileInput) fileInput.click();
+    };
+
+    window.handleFileUpload = function(id) {
+        const fileInput = document.getElementById('file_' + id);
+        const hiddenInput = document.getElementById('val_' + id);
+        if (fileInput && fileInput.files && fileInput.files[0]) {
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                hiddenInput.value = e.target.result; // Base64 Data URL
+                hiddenInput.dispatchEvent(new Event('change', { bubbles: true })); // Trigger sync.js save
+                window.updateDocUI(id, true);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    window.updateDocUI = function(id, hasFile) {
+        const actionsDiv = document.getElementById('actions_' + id);
+        if (!actionsDiv) return;
+        const btnUpload = actionsDiv.querySelector('.btn-upload');
+        const btnAbrir = actionsDiv.querySelector('.btn-abrir');
+        const btnRemover = actionsDiv.querySelector('.btn-remove');
+        
+        if (hasFile) {
+            if (btnUpload) btnUpload.style.display = 'none';
+            if (btnAbrir) btnAbrir.style.display = 'inline-block';
+            if (btnRemover) btnRemover.style.display = 'inline-block';
+        } else {
+            if (btnUpload) btnUpload.style.display = 'inline-block';
+            if (btnAbrir) btnAbrir.style.display = 'none';
+            if (btnRemover) btnRemover.style.display = 'none';
+        }
+    };
+
+    window.abrirDoc = function(id) {
+        const hiddenInput = document.getElementById('val_' + id);
+        const dataUrl = hiddenInput ? hiddenInput.value : '';
+        if (dataUrl) {
+            const newTab = window.open();
+            newTab.document.write('<iframe src="' + dataUrl  + '" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;" allowfullscreen></iframe>');
+        }
+    };
+
+    window.removerDoc = function(id) {
+        if (confirm('Deseja realmente remover este arquivo?')) {
+            const hiddenInput = document.getElementById('val_' + id);
+            if (hiddenInput) {
+                hiddenInput.value = '';
+                hiddenInput.dispatchEvent(new Event('change', { bubbles: true })); // Trigger sync.js save
+            }
+            const fileInput = document.getElementById('file_' + id);
+            if (fileInput) fileInput.value = '';
+            window.updateDocUI(id, false);
+        }
+    };
+
+    // Restaura o estado visual da certidão da matrícula
+    const hiddenMatricula = document.getElementById('val_anexo_matricula');
+    if (hiddenMatricula) {
+        hiddenMatricula.addEventListener('change', () => {
+            window.updateDocUI('anexo_matricula', !!hiddenMatricula.value);
         });
+        // Estado inicial
+        setTimeout(() => {
+            window.updateDocUI('anexo_matricula', !!hiddenMatricula.value);
+        }, 500);
     }
 });
