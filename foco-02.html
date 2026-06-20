@@ -353,7 +353,7 @@
 
                     <div class="form-group inline">
                         <label>RIP:</label>
-                        <input type="text" id="campo-rip_${idx}" name="imoveis[${idx}][rip]" value="${rip}" autocomplete="off" class="rip-input" required>
+                        <input type="text" id="campo-rip_${idx}" name="imoveis[${idx}][rip]" value="${rip}" autocomplete="off" class="rip-input" required readonly>
                     </div>
 
                     <div class="form-group inline" style="margin-top: -8px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
@@ -365,117 +365,112 @@
 
                     <div class="form-group inline">
                         <label>Conceituação do Imóvel:</label>
-                        <input type="text" id="campo216_${idx}" name="imoveis[${idx}][conceituacao]" value="${dados.descricao}">
+                        <input type="text" id="campo216_${idx}" name="imoveis[${idx}][conceituacao]" value="${dados.descricao}" readonly>
                     </div>
 
                     <div class="form-group inline">
                         <label>Natureza do Imóvel:</label>
-                        <input type="text" id="campo221_${idx}" name="imoveis[${idx}][tipologia]" value="${dados.natureza}">
+                        <input type="text" id="campo221_${idx}" name="imoveis[${idx}][tipologia]" value="${dados.natureza}" readonly>
                     </div>
 
                     <div class="form-group inline">
                         <label>Tipo de Imóvel:</label>
-                        <input type="text" id="campo217_${idx}" name="imoveis[${idx}][categoria]" value="${dados.tipoImovel}">
+                        <input type="text" id="campo217_${idx}" name="imoveis[${idx}][categoria]" value="${dados.tipoImovel}" readonly>
                     </div>
 
                     <div class="form-group inline">
                         <label>CEP:</label>
-                        <input type="text" id="campo21_${idx}" name="imoveis[${idx}][cep]" placeholder="Ex: 00000-000" maxlength="9" autocomplete="off" value="01001-000">
+                        <input type="text" id="campo-cep_${idx}" name="imoveis[${idx}][cep]" placeholder="Ex: 00000-000" maxlength="9" autocomplete="off" value="${dados.cep || '01001-000'}" readonly>
                     </div>
 
                     <div class="form-group inline">
                         <label>UF:</label>
-                        <input type="text" id="campo22_${idx}" name="imoveis[${idx}][uf]" value="${dados.uf}">
+                        <input type="text" id="campo22_${idx}" name="imoveis[${idx}][uf]" value="${dados.uf}" readonly>
                     </div>
 
                     <div class="form-group inline">
                         <label>Município:</label>
-                        <input type="text" id="campo23_${idx}" name="imoveis[${idx}][municipio]" value="${dados.municipio}" autocomplete="off" required>
+                        <input type="text" id="campo23_${idx}" name="imoveis[${idx}][municipio]" value="${dados.municipio}" autocomplete="off" required readonly>
                     </div>
 
                     <div class="form-group inline">
                         <label>Endereço:</label>
-                        <input type="text" id="campo24_${idx}" name="imoveis[${idx}][endereco]" value="${dados.logradouro}" autocomplete="off" required>
+                        <input type="text" id="campo24_${idx}" name="imoveis[${idx}][endereco]" value="${dados.logradouro}" autocomplete="off" required readonly>
                     </div>
 
                     <div class="form-group inline">
                         <label>Área total (m²):</label>
-                        <input type="text" id="campo27_${idx}" name="imoveis[${idx}][area_total]" placeholder="0,00" min="0" step="0.01" value="12.000,00">
+                        <input type="text" id="campo27_${idx}" name="imoveis[${idx}][area_total]" placeholder="0,00" min="0" step="0.01" value="${dados.area_total || '12.000,00'}" readonly>
                     </div>
 
                     <div class="form-group inline">
                         <label>Área da União (m²):</label>
-                        <input type="text" id="campo28_${idx}" name="imoveis[${idx}][area_uniao]" placeholder="0,00" min="0" step="0.01"  value="12.000,00">
+                        <input type="text" id="campo28_${idx}" name="imoveis[${idx}][area_uniao]" placeholder="0,00" min="0" step="0.01"  value="${dados.area_uniao || dados.area_total || '12.000,00'}" readonly>
                     </div>
 
                     <div class="form-group inline" id="grupo-benfeitorias_${idx}">
                         <label>Há benfeitorias?</label>
-                        <input type="text" id="campo29_${idx}" name="imoveis[${idx}][benfeitorias]" value="${dados.benfeitorias}" value="Sim">
+                        <input type="text" id="campo29_${idx}" name="imoveis[${idx}][benfeitorias]" value="${dados.benfeitorias || 'Sim'}" readonly>
                     </div>
 
                     <div class="form-group inline" id="grupo-area_construida_total_${idx}">
                         <label>Área construída total (m²):</label>
-                        <input type="text" id="campo210_${idx}" name="imoveis[${idx}][area_construida_total]" placeholder="0,00" min="0" step="0.01" value="2.400,00">
+                        <input type="text" id="campo210_${idx}" name="imoveis[${idx}][area_construida_total]" placeholder="0,00" min="0" step="0.01" value="${dados.area_construida_total || '2.400,00'}" readonly>
                     </div>
 
                     <div class="form-group inline" id="grupo-area_construida_proposta_${idx}">
                          <label>Área de terreno disponível para destinação (m²):</label>
-                         <input type="text" id="campo211_${idx}" name="imoveis[${idx}][area_construida_proposta]" value="2.400,00">
+                         <input type="text" id="campo211_${idx}" name="imoveis[${idx}][area_construida_proposta]" value="${dados.area_construida_proposta || '2.400,00'}" readonly>
                     </div>
 
                     <div class="form-group inline" id="grupo-area_construida_destinacao_${idx}">
                          <label>Área construída disponível para destinação (m²):</label>
-                         <input type="text" id="campo211_${idx}" name="imoveis[${idx}][area_construida_destinacao]" value="2.400,00">
+                         <input type="text" id="campo211_${idx}" name="imoveis[${idx}][area_construida_destinacao]" value="${dados.area_construida_destinacao || '2.400,00'}" readonly>
                     </div>
 
                     <div class="form-group inline">
                         <label>Valor avaliado (R$):</label>
-                        <input type="text" id="campo213_${idx}" name="imoveis[${idx}][valor_imovel]" placeholder="R$ 0,00" value="1.000.000,00">
+                        <input type="text" id="campo213_${idx}" name="imoveis[${idx}][valor_imovel]" placeholder="R$ 0,00" value="${dados.valor_imovel || '1.000.000,00'}" readonly>
                     </div>
 
                     <div class="form-group inline">
                         <label>Data da avaliação:</label>
-                        <input type="text" id="campo214_${idx}" name="imoveis[${idx}][data_avaliacao]" value="13/05/2026">
+                        <input type="text" id="campo214_${idx}" name="imoveis[${idx}][data_avaliacao]" value="${dados.data_avaliacao || '13/05/2026'}" readonly>
                     </div>
 
                     <div class="form-group inline">
                         <label>Instrumento de avaliação:</label>
-                        <input type="text" id="campo215_${idx}" name="imoveis[${idx}][instrumento_avaliacao]" placeholder="Ex: Laudo de avaliação..." value="Laudo Técnico SPU">
+                        <input type="text" id="campo215_${idx}" name="imoveis[${idx}][instrumento_avaliacao]" placeholder="Ex: Laudo de avaliação..." value="${dados.instrumento_avaliacao || 'Laudo Técnico SPU'}" readonly>
                     </div>
 
                     <div class="form-group inline">
                         <label>Situação da Incorporação:</label>
-                        <input type="text" id="campo223_${idx}" name="imoveis[${idx}][situacao_dominial]" value="Em processo de incorporação">
+                        <input type="text" id="campo223_${idx}" name="imoveis[${idx}][situacao_dominial]" value="${dados.situacao_dominial || 'Em processo de incorporação'}" readonly>
                     </div>
 
                     <div class="form-group inline" id="bloco219_${idx}">
                         <label>LPM/1831 ou LMEO homologadas?</label>
-                        <input type="text" name="imoveis[${idx}][lpm_lmeo]" value="Sim">
+                        <input type="text" name="imoveis[${idx}][lpm_lmeo]" value="${dados.lpm_lmeo || 'Sim'}" readonly>
                     </div>
 
                     <div class="form-group inline">
                         <label>Processo de incorporação?</label>
-                        <input type="text" name="imoveis[${idx}][incorporacao]" value="Sim">
+                        <input type="text" name="imoveis[${idx}][incorporacao]" value="${dados.incorporacao || 'Sim'}" readonly>
                     </div>
 
                     <div class="form-group inline">
                         <label>Número do Processo:</label>
-                        <input type="text" name="imoveis[${idx}][num_processo]" value="1234.56790/2026-00">
+                        <input type="text" name="imoveis[${idx}][num_processo]" value="${dados.num_processo || '1234.56790/2026-00'}" readonly>
                     </div>
 
                     <div class="form-group inline">
                         <label>Matrícula:</label>
-                        <input type="text" id="campo224_${idx}" name="imoveis[${idx}][matriculas]" value="123.456 - 1ª CRI SP">
+                        <input type="text" id="campo224_${idx}" name="imoveis[${idx}][matriculas]" value="${dados.matriculas || '123.456 - 1ª CRI SP'}" readonly>
                     </div>
 
                     <div class="form-group editavel">
                         <label>Observações:</label>
                         <textarea id="obs224_${idx}" name="imoveis[${idx}][obs_geral_ident]" placeholder=""></textarea>
-
-                        <div class="dynamic-list-wrapper" style="flex: 1; display: flex; flex-direction: column; gap: 8px;">
-                            <button type="button" class="btn-add" id="btnAdicionarImagemIdent_${idx}" style="align-self: flex-start;">＋ Adicionar link/documento</button>
-                            <div id="imagens-list-ident_${idx}"></div>
-                        </div>
                     </div>
 
                 </div>
@@ -601,210 +596,11 @@
             });
         }
 
-        // ================================================================
-        // INICIALIZAÇÃO DE UM BLOCO DE IMÓVEL — por índice
-        // ================================================================
         function initImovelToggle(idx) {
             const scope = document.getElementById('imovel_' + idx) || document;
 
             initSelectToggle(scope.querySelector('#campo221_' + idx), 'bloco-obs221_' + idx);
             initSelectToggle(scope.querySelector('#campo223_' + idx), 'bloco-obs223_' + idx);
-            initDynamicList('btnAdicionarImagemIdent_' + idx, 'imagens-list-ident_' + idx);
-
-            initRadioToggleSim('imoveis[' + idx + '][benfeitorias]', 'bloco210_' + idx, scope);
-
-            initSelectToggle(scope.querySelector('#campo31_' + idx),  'bloco-obs31_'  + idx);
-            initSelectToggle(scope.querySelector('#campo35_' + idx),  'bloco-obs35_'  + idx);
-
-            initRadioToggleSim('imoveis[' + idx + '][custos_manutencao]', 'bloco-obs37_' + idx, scope);
-
-            initDynamicList('btnAdicionarImagemOcup_' + idx, 'imagens-list-ocup_' + idx);
-
-            initRadioToggleSim('imoveis[' + idx + '][risco_invasao]',        'bloco-desc38_'  + idx, scope);
-            initRadioToggleSim('imoveis[' + idx + '][risco_coletividade]',   'bloco-desc39_'  + idx, scope);
-            initRadioToggleSim('imoveis[' + idx + '][acoes]',                'bloco-obs310_'  + idx, scope);
-            initRadioToggleSim('imoveis[' + idx + '][tombado]',              'bloco-obs311_'  + idx, scope);
-            initRadioToggleSim('imoveis[' + idx + '][conflitos_fundiarios]', 'bloco-obs312_'  + idx, scope);
-                        <input type="text" id="campo213_${idx}" name="imoveis[${idx}][valor_imovel]" placeholder="R$ 0,00" value="1.000.000,00">
-                    </div>
-
-                    <div class="form-group inline">
-                        <label>Data da avaliação:</label>
-                        <input type="text" id="campo214_${idx}" name="imoveis[${idx}][data_avaliacao]" value="13/05/2026">
-                    </div>
-
-                    <div class="form-group inline">
-                        <label>Instrumento de avaliação:</label>
-                        <input type="text" id="campo215_${idx}" name="imoveis[${idx}][instrumento_avaliacao]" placeholder="Ex: Laudo de avaliação..." value="Laudo Técnico SPU">
-                    </div>
-
-                    <div class="form-group inline">
-                        <label>Situação da Incorporação:</label>
-                        <input type="text" id="campo223_${idx}" name="imoveis[${idx}][situacao_dominial]" value="Em processo de incorporação">
-                    </div>
-
-                    <div class="form-group inline" id="bloco219_${idx}">
-                        <label>LPM/1831 ou LMEO homologadas?</label>
-                        <input type="text" name="imoveis[${idx}][lpm_lmeo]" value="Sim">
-                    </div>
-
-                    <div class="form-group inline">
-                        <label>Processo de incorporação?</label>
-                        <input type="text" name="imoveis[${idx}][incorporacao]" value="Sim">
-                    </div>
-
-                    <div class="form-group inline">
-                        <label>Número do Processo:</label>
-                        <input type="text" name="imoveis[${idx}][num_processo]" value="1234.56790/2026-00">
-                    </div>
-
-                    <div class="form-group inline">
-                        <label>Matrícula:</label>
-                        <input type="text" id="campo224_${idx}" name="imoveis[${idx}][matriculas]" value="123.456 - 1ª CRI SP">
-                    </div>
-
-                    <div class="form-group editavel">
-                        <label>Observações:</label>
-                        <textarea id="obs224_${idx}" name="imoveis[${idx}][obs_geral_ident]" placeholder=""></textarea>
-
-                        <div class="dynamic-list-wrapper" style="flex: 1; display: flex; flex-direction: column; gap: 8px;">
-                            <button type="button" class="btn-add" id="btnAdicionarImagemIdent_${idx}" style="align-self: flex-start;">＋ Adicionar link/documento</button>
-                            <div id="imagens-list-ident_${idx}"></div>
-                        </div>
-                    </div>
-
-                </div>
-            `;
-
-            container.appendChild(div);
-
-            if (typeof initImovelToggle === 'function') {
-                initImovelToggle(idx);
-            }
-        }
-
-        // ================================================================
-        // ACCORDION TOGGLE
-        // ================================================================
-        function toggleAccordion(imovelId) {
-            const bloco   = document.getElementById(imovelId);
-            const content = bloco.querySelector('.accordion-content');
-            const icon    = bloco.querySelector('.accordion-icon');
-            const isOpen  = content.classList.contains('open');
-
-            content.classList.toggle('open', !isOpen);
-            content.style.display = isOpen ? 'none' : '';
-
-            if (icon) {
-                icon.textContent = isOpen ? '▶' : '▼';
-                icon.classList.toggle('open', !isOpen);
-            }
-        }
-
-        // ================================================================
-        // UTILITÁRIO: mostrar/ocultar bloco pelo ID
-        // ================================================================
-        function setBlocoVisivel(blocoId, visivel) {
-            const bloco = document.getElementById(blocoId);
-            if (!bloco) return;
-            bloco.style.display = visivel ? 'flex' : 'none';
-        }
-
-        // ================================================================
-        // SELECT TOGGLE
-        // ================================================================
-        function initSelectToggle(selectEl, blocoId) {
-            if (!selectEl) return;
-
-            const atualizar = () => setBlocoVisivel(blocoId, selectEl.value !== '');
-
-            atualizar();
-            selectEl.addEventListener('change', atualizar);
-        }
-
-        // ================================================================
-        // RADIO TOGGLE — modo "somente Sim"
-        // ================================================================
-        function initRadioToggleSim(radioName, blocoId, scope) {
-            scope = scope || document;
-
-            const radios = scope.querySelectorAll('input[type="radio"][name="' + radioName + '"]');
-
-            if (!radios.length) return;
-
-            const atualizar = () => {
-                const bloco = document.getElementById(blocoId);
-                if (!bloco) return;
-
-                const simMarcado = Array.from(radios).some(r => r.value === 'Sim' && r.checked);
-                bloco.style.display = simMarcado ? 'block' : 'none';
-            };
-
-            atualizar();
-            radios.forEach(r => r.addEventListener('change', atualizar));
-        }
-
-        // ================================================================
-        // LISTA DINÂMICA DE DOCUMENTOS
-        // ================================================================
-        function initDynamicList(btnId, listId) {
-            const btn  = document.getElementById(btnId);
-            const list = document.getElementById(listId);
-
-            if (!btn || !list) return;
-
-            list.innerHTML = '';
-
-            const newBtn = btn.cloneNode(true);
-            btn.parentNode.replaceChild(newBtn, btn);
-
-            newBtn.addEventListener('click', () => {
-                const nameMap = {
-                    'ident': 'imagens_ident',
-                    'ocup' : 'imagens_ocup',
-                    'rest' : 'imagens_rest'
-                };
-
-                const matchSuffix = listId.match(/imagens-list-(\w+)_(\d+)/);
-
-                let inputName = '';
-
-                if (matchSuffix) {
-                    const section = matchSuffix[1];
-                    const idx     = matchSuffix[2];
-                    const field   = nameMap[section] || ('imagens_' + section);
-
-                    inputName = `imoveis[${idx}][${field}][]`;
-                }
-
-                const item = document.createElement('div');
-                item.className = 'imagem-item';
-                item.style.cssText = 'display:flex; gap:8px; align-items:center; margin-top:6px;';
-
-                item.innerHTML = `
-                    <input type="text" name="${inputName}" placeholder="Link/Documento Anexado"
-                           autocomplete="off" class="imagem-input" style="flex: 1;">
-                    <button type="button" class="btn-remove-imagem" title="Remover">✕</button>
-                `;
-
-                list.appendChild(item);
-
-                item.querySelector('input').focus();
-
-                item.querySelector('.btn-remove-imagem')
-                    .addEventListener('click', () => item.remove());
-            });
-        }
-
-        // ================================================================
-        // INICIALIZAÇÃO DE UM BLOCO DE IMÓVEL — por índice
-        // ================================================================
-        function initImovelToggle(idx) {
-            const scope = document.getElementById('imovel_' + idx) || document;
-
-            initSelectToggle(scope.querySelector('#campo221_' + idx), 'bloco-obs221_' + idx);
-            initSelectToggle(scope.querySelector('#campo223_' + idx), 'bloco-obs223_' + idx);
-            initDynamicList('btnAdicionarImagemIdent_' + idx, 'imagens-list-ident_' + idx);
 
             initRadioToggleSim('imoveis[' + idx + '][benfeitorias]', 'bloco210_' + idx, scope);
 

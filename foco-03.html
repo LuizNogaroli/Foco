@@ -73,10 +73,24 @@
             <div class="form-group editavel">
                 <label for="cep">Localizar por CEP:</label>
                 <div class="cep-row">
-                    <input type="text" id="cep" class="mask-cep" placeholder="00000-000" maxlength="9">
+                    <input type="text" id="cep" name="cep" class="mask-cep" placeholder="00000-000" maxlength="9">
                     <button type="button" id="buscar-cep" class="btn-search">🔍 Buscar</button>
                 </div>
                 <div id="cep-info"></div>
+            </div>
+
+            <!-- Coordenadas Geográficas -->
+            <div class="form-group editavel">
+                <div class="cep-row">
+                    <div style="flex: 1;">
+                        <label for="latitude" style="font-weight: bold; font-size: 0.9em; display: block; margin-bottom: 5px;">Latitude:</label>
+                        <input type="text" id="latitude" name="latitude" placeholder="-15.793889" style="width: 100%;">
+                    </div>
+                    <div style="flex: 1;">
+                        <label for="longitude" style="font-weight: bold; font-size: 0.9em; display: block; margin-bottom: 5px;">Longitude:</label>
+                        <input type="text" id="longitude" name="longitude" placeholder="-47.882778" style="width: 100%;">
+                    </div>
+                </div>
             </div>
 
             <!-- Mapa -->
@@ -159,6 +173,34 @@
         map.on(L.Draw.Event.EDITED, atualizarInterface);
         map.on(L.Draw.Event.DELETED, atualizarInterface);
 
+        function obterCentroDasGeometrias() {
+            if (drawnItems.getLayers().length === 0) return null;
+            
+            // Se houver algum marcador desenhado, preferir a coordenada do marcador
+            var markerLayer = null;
+            drawnItems.eachLayer(function(layer) {
+                if (layer instanceof L.Marker) {
+                    markerLayer = layer;
+                }
+            });
+            
+            if (markerLayer) {
+                return markerLayer.getLatLng();
+            }
+            
+            // Caso contrário, pegar o centro dos limites de todas as geometrias desenhadas
+            try {
+                var bounds = drawnItems.getBounds();
+                if (bounds.isValid()) {
+                    return bounds.getCenter();
+                }
+            } catch (e) {
+                console.error("Erro ao obter centro das geometrias:", e);
+            }
+            
+            return null;
+        }
+
         function atualizarInterface() {
             var geojson = drawnItems.toGeoJSON();
             document.getElementById('geojson').value = JSON.stringify(geojson);
@@ -173,6 +215,19 @@
                                 <button type="button" class="btn-remove-rip" onclick="removerLayer(${layer._leaflet_id})">✕</button>`;
                 lista.appendChild(li);
             });
+
+            // Atualiza campos de Latitude e Longitude a partir das geometrias desenhadas
+            var centro = obterCentroDasGeometrias();
+            if (centro) {
+                var latEl = document.getElementById('latitude');
+                var lonEl = document.getElementById('longitude');
+                if (latEl && lonEl) {
+                    latEl.value = centro.lat.toFixed(6);
+                    lonEl.value = centro.lng.toFixed(6);
+                    latEl.dispatchEvent(new Event('change', { bubbles: true }));
+                    lonEl.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+            }
         }
 
         window.removerLayer = function(id) {
@@ -198,21 +253,82 @@
                     if (data.erro) {
                         info.innerHTML = '<span class="cep-info-erro">CEP não encontrado</span>';
                     } else {
-                        var endereco = `${data.logradouro}, ${data.localidade}, ${data.uf}, Brasil`;
-                        info.innerHTML = `<span class="cep-info-ok">📍 ${data.localidade}/${data.uf}</span>`;
+                        var endereco = `${data.logradouro || ''}, ${data.localidade}, ${data.uf}, Brasil`;
                         
-                        // Geocodificação Simples (Nominatim)
-                        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(endereco)}`)
-                            .then(r => r.json())
+                        const buscarCoordenadas = (query) => {
+                            return fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`)
+                                .then(r => r.json());
+                        };
+
+                        buscarCoordenadas(endereco)
                             .then(geo => {
-                                if (geo.length > 0) {
-                                    map.setView([geo[0].lat, geo[0].lon], 16);
-                                    L.marker([geo[0].lat, geo[0].lon]).addTo(map)
-                                        .bindPopup(`<b>Localização aproximada:</b><br>${data.logradouro}`).openPopup();
+                                if (geo.length === 0) {
+                                    // Fallback para cidade/estado se a rua não for encontrada
+                                    return buscarCoordenadas(`${data.localidade}, ${data.uf}, Brasil`);
                                 }
+                                return geo;
+                            })
+                            .then(geo => {
+                                if (geo && geo.length > 0) {
+                                    const lat = parseFloat(geo[0].lat).toFixed(6);
+                                    const lon = parseFloat(geo[0].lon).toFixed(6);
+                                    
+                                    map.setView([geo[0].lat, geo[0].lon], 16);
+                                    
+                                    // Limpar marcadores anteriores do CEP
+                                    if (window.cepMarker) {
+                                        map.removeLayer(window.cepMarker);
+                                    }
+                                    
+                                    window.cepMarker = L.marker([geo[0].lat, geo[0].lon]).addTo(map);
+                                    
+                                    const popupContent = `
+                                        <div style="font-family: sans-serif; font-size: 13px; line-height: 1.4;">
+                                            <b style="color: #1e3a5f;">📍 Localização do CEP:</b><br>
+                                            ${data.logradouro ? data.logradouro + '<br>' : ''}
+                                            ${data.bairro ? data.bairro + ' - ' : ''}${data.localidade}/${data.uf}<br>
+                                            <hr style="margin: 5px 0; border: 0; border-top: 1px solid #ddd;">
+                                            <b>Lat:</b> ${lat}<br>
+                                            <b>Lon:</b> ${lon}
+                                        </div>
+                                    `;
+                                    window.cepMarker.bindPopup(popupContent).openPopup();
+                                    
+                                    info.innerHTML = `<span class="cep-info-ok">📍 ${data.localidade}/${data.uf} | Lat: ${lat}, Lon: ${lon}</span>`;
+
+                                    // Preenche os campos de Latitude e Longitude da Aba 3
+                                    var latEl = document.getElementById('latitude');
+                                    var lonEl = document.getElementById('longitude');
+                                    if (latEl && lonEl) {
+                                        latEl.value = lat;
+                                        lonEl.value = lon;
+                                        latEl.dispatchEvent(new Event('change', { bubbles: true }));
+                                        lonEl.dispatchEvent(new Event('change', { bubbles: true }));
+                                    }
+                                } else {
+                                    info.innerHTML = `<span class="cep-info-ok">📍 ${data.localidade}/${data.uf} (Coordenadas não encontradas)</span>`;
+                                }
+                            })
+                            .catch(err => {
+                                console.error("Erro na geocodificação:", err);
+                                info.innerHTML = `<span class="cep-info-erro">Erro ao obter coordenadas</span>`;
                             });
                     }
+                })
+                .catch(err => {
+                    console.error("Erro ao buscar CEP:", err);
+                    info.innerHTML = '<span class="cep-info-erro">Erro de conexão</span>';
                 });
+        });
+
+        // Executa busca automática do CEP quando o campo é preenchido/alterado (ex: pelo sync.js)
+        document.getElementById('cep').addEventListener('change', function() {
+            var cep = this.value.replace(/\D/g, '');
+            if (cep.length === 8) {
+                setTimeout(() => {
+                    document.getElementById('buscar-cep').click();
+                }, 150);
+            }
         });
 
         // Expansão do Mapa
@@ -222,6 +338,24 @@
             document.getElementById('map').style.height = expanded ? '700px' : '500px';
             this.textContent = expanded ? '↔ Reduzir Mapa' : '↔ Expandir Mapa';
             setTimeout(() => map.invalidateSize(), 300);
+        });
+
+        // Trata o envio do formulário de geometria (evita recarregamento de página e salva explicitamente)
+        document.getElementById('form03').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            var geojson = drawnItems.toGeoJSON();
+            var geojsonStr = JSON.stringify(geojson);
+            document.getElementById('geojson').value = geojsonStr;
+            
+            if (window.parent && typeof window.parent.updateField === 'function') {
+                window.parent.updateField('geojson', geojsonStr);
+                window.parent.updateField('latitude', document.getElementById('latitude').value);
+                window.parent.updateField('longitude', document.getElementById('longitude').value);
+                window.parent.updateField('observacoes', document.getElementById('observacoes').value);
+            }
+            
+            alert('✅ Geometria e coordenadas salvas com sucesso!\n📄 O resumo do processo foi atualizado e está disponível para visualização.');
         });
 
         // Inicializa a lista dinâmica de documentos customizados (Aba 3)

@@ -163,6 +163,27 @@ window.loadReportFromDB = async function(perfilValue) {
 // =========================================================================
 window.seedDatabase = async function() {
     if (!window.supabaseClient) return false;
+
+    // Helper to complete RIP data structures in mock data
+    function completeMockRIPs(form_data) {
+        if (!form_data._ripsPesquisados) return;
+        for (let rip in form_data._ripsPesquisados) {
+            const r = form_data._ripsPesquisados[rip];
+            r.rip = r.rip || rip;
+            r.descricao = r.descricao || form_data.denominacao || "Imóvel Patrimonial SPU";
+            r.municipio = r.municipio || form_data.municipio || "Brasília/DF";
+            r.uf = r.uf || form_data.uf || r.municipio.split('/')[1] || "DF";
+            r.origem = r.origem || form_data.origem || "Portal de Serviços";
+            r.cep = r.cep || (form_data.uf === "SE" ? "49001-000" : form_data.uf === "SP" ? "01001-000" : "70040-010");
+            r.area_total = r.area_total || form_data.area || "1.200,00";
+            r.valor_imovel = r.valor_imovel || form_data.valor || "500.000,00";
+            r.logradouro = r.logradouro || "Endereço do Imóvel SPU, s/n";
+            r.natureza = r.natureza || "Urbano";
+            r.tipoImovel = r.tipoImovel || form_data.categoria || "Gleba/Terreno/Lote com edificação";
+            r.benfeitorias = r.benfeitorias || "Sim";
+        }
+    }
+
     try {
         const mockProcesses = [
             {
@@ -174,7 +195,8 @@ window.seedDatabase = async function() {
                     origem: "Datalake", campo11: "DF04594/2026", campo12: "10/05/2026",
                     campo13: "10480.002494/2026-11", campo14: "00.123.456/0001-99", campo15: "Associação de Moradores Itatá",
                     _ripsPesquisados: {
-                        "78945612": { rip: "78945612", descricao: "Rancho Menezes, Gleba Itatá", municipio: "ARACAJU/SE", origem: "Datalake" }
+                        "78945612": { rip: "78945612", descricao: "Rancho Menezes, Gleba Itatá A", municipio: "ARACAJU/SE", origem: "Datalake" },
+                        "78945613": { rip: "78945613", descricao: "Rancho Menezes, Gleba Itatá B", municipio: "ARACAJU/SE", origem: "Datalake" }
                     }
                 }
             },
@@ -264,7 +286,8 @@ window.seedDatabase = async function() {
                     linha_programa: "Linha 2 - Regularização Fundiária", utilizacao_especifica: "24.2 Regularização fundiária",
                     origem: "Datalake", campo11: "DF04403/2026", campo12: "15/01/2026",
                     _ripsPesquisados: {
-                        "33334444": { rip: "33334444", descricao: "Porto Maravilha Gleba A", municipio: "RIO DE JANEIRO/RJ", origem: "Datalake" }
+                        "33334444": { rip: "33334444", descricao: "Porto Maravilha Gleba A", municipio: "RIO DE JANEIRO/RJ", origem: "Datalake" },
+                        "33334445": { rip: "33334445", descricao: "Porto Maravilha Gleba B", municipio: "RIO DE JANEIRO/RJ", origem: "Datalake" }
                     }
                 }
             },
@@ -299,9 +322,7 @@ window.seedDatabase = async function() {
                     denominacao: "Gleba Praia do Saco", area: "45000.00", categoria: "Terreno",
                     linha_programa: "Linha 3 - Políticas públicas e programas estratégicos", utilizacao_especifica: "14.1 Ecoturismo/Lazer",
                     origem: "Datalake", campo11: "DF04406/2026", campo12: "01/02/2026",
-                    _ripsPesquisados: {
-                        "66667777": { rip: "66667777", descricao: "Gleba Praia do Saco", municipio: "ESTÂNCIA/SE", origem: "Datalake" }
-                    }
+
                 }
             },
             {
@@ -371,9 +392,7 @@ window.seedDatabase = async function() {
                     denominacao: "Prédio Antigo INSS SPU", area: "2400.00", categoria: "Prédio",
                     linha_programa: "Linha 3 - Políticas públicas e programas estratégicos", utilizacao_especifica: "2.1 Sede/Unidade administrativa",
                     origem: "Portal de Serviços", campo11: "DF04412/2026", campo12: "25/02/2026",
-                    _ripsPesquisados: {
-                        "30303030": { rip: "30303030", descricao: "Prédio Antigo INSS", municipio: "FEIRA DE SANTANA/BA", origem: "Portal de Serviços" }
-                    }
+
                 }
             },
             {
@@ -415,6 +434,39 @@ window.seedDatabase = async function() {
         ];
 
         for (let proc of mockProcesses) {
+            // Garante que todo processo tem processo SEI (campo13)
+            proc.form_data.campo13 = proc.form_data.campo13 || `10480.00${proc.process_id}/2026-${proc.process_id.substring(proc.process_id.length - 2)}`;
+            // Garante dados completos nos Rips
+            completeMockRIPs(proc.form_data);
+
+            // Garante dados fictícios da proposta de destinação (Aba 6)
+            const rips = proc.form_data._ripsPesquisados;
+            let areaTotalStr = "1.200,00";
+            let valorTotalStr = "500.000,00";
+            
+            if (rips && Object.keys(rips).length > 0) {
+                const firstRip = rips[Object.keys(rips)[0]];
+                areaTotalStr = firstRip.area_total || "1.200,00";
+                valorTotalStr = firstRip.valor_imovel || "500.000,00";
+            } else if (proc.form_data.area) {
+                areaTotalStr = parseFloat(proc.form_data.area).toFixed(2).replace('.', ',');
+            }
+            
+            proc.form_data.area_total_imovel = proc.form_data.area_total_imovel || areaTotalStr;
+            proc.form_data.valor_total_imovel = proc.form_data.valor_total_imovel || valorTotalStr;
+            
+            // Valores fictícios proporcionais para a área destinada
+            const areaNum = parseFloat(proc.form_data.area_total_imovel.replace(/\./g, '').replace(',', '.')) || 1200;
+            const valorNum = parseFloat(proc.form_data.valor_total_imovel.replace(/\./g, '').replace(',', '.')) || 500000;
+            
+            const areaDestTerreno = (areaNum * 0.75).toFixed(2).replace('.', ',');
+            const areaDestConstruida = (areaNum * 0.50).toFixed(2).replace('.', ',');
+            const valorDest = (valorNum * 0.72).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            
+            proc.form_data.area_terreno_destinada = proc.form_data.area_terreno_destinada || areaDestTerreno;
+            proc.form_data.area_construida_destinada = proc.form_data.area_construida_destinada || areaDestConstruida;
+            proc.form_data.valor_area_destinada = proc.form_data.valor_area_destinada || valorDest;
+
             const { error } = await window.supabaseClient
                 .from('foco_drafts')
                 .upsert({

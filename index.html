@@ -136,17 +136,18 @@
                         <th>Interessado</th>
                         <th style="width: 150px;">Natureza Jurídica</th>
                         <th style="width: 160px;">Processo SEI</th>
+                        <th style="width: 130px;">RIP Associado</th>
                         <th style="width: 180px;">Tipo de Uso</th>
                         <th style="width: 130px;">Procedimento</th>
                         <th style="width: 110px;">Valor</th>
                         <th style="width: 110px;">Área a Destinar</th>
                         <th style="width: 110px;">Status</th>
-                        <th style="width: 80px; text-align: center;">Ações</th>
+                        <th style="width: 80px; text-align: center;">Ação</th>
                     </tr>
                 </thead>
                 <tbody id="tableBody">
                     <tr>
-                        <td colspan="13" class="empty-state">Carregando processos do banco de dados...</td>
+                        <td colspan="14" class="empty-state">Carregando processos do banco de dados...</td>
                     </tr>
                 </tbody>
             </table>
@@ -210,7 +211,7 @@
 
                 if (error) {
                     console.error("Erro ao carregar dados do Supabase:", error);
-                    tableBody.innerHTML = `<tr><td colspan="13" class="empty-state">Erro ao buscar processos do banco.</td></tr>`;
+                    tableBody.innerHTML = `<tr><td colspan="14" class="empty-state">Erro ao buscar processos do banco.</td></tr>`;
                     hideLoader();
                     return;
                 }
@@ -226,10 +227,11 @@
                         interessado: fd.campo15 || '-',
                         natureza: fd.campo16 || '-',
                         sei: fd.campo13 || '-',
+                        rips: fd._ripsPesquisados || {},
                         tipo_uso: fd.tipo_uso_atual_desc || fd.linha_programa || 'Não informado',
                         procedimento: fd.tipo_procedimento || 'Cessão de Uso',
-                        valor: fd.valor_total || fd.valor || '-',
-                        area_destinar: fd.area_destinada || fd.area || '-',
+                        valor: fd.valor_area_destinada || fd.valor_total || fd.valor || '-',
+                        area_destinar: fd.area_terreno_destinada || fd.area_destinada || fd.area || '-',
                         status: fd.status || 'RASCUNHO',
                         origem: fd.origem || 'Portal de Serviços'
                     };
@@ -238,7 +240,7 @@
                 renderTable(allProcesses);
             } catch (err) {
                 console.error("Erro inesperado:", err);
-                tableBody.innerHTML = `<tr><td colspan="13" class="empty-state">Erro ao conectar com o banco.</td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="14" class="empty-state">Erro ao conectar com o banco.</td></tr>`;
             } finally {
                 hideLoader();
             }
@@ -250,7 +252,7 @@
             tableBody.innerHTML = '';
 
             if (list.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="13" class="empty-state">Nenhum processo encontrado.</td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="14" class="empty-state">Nenhum processo encontrado.</td></tr>`;
                 return;
             }
 
@@ -262,10 +264,18 @@
                 if (proc.status === 'CADASTRADO') badgeClass = 'badge-cadastrado';
                 if (proc.status === 'DESTINADO') badgeClass = 'badge-destinado';
 
-                // Formatação da origem
-                let dotClass = 'origem-portal';
-                if (proc.origem === 'Datalake') dotClass = 'origem-datalake';
-                if (proc.origem === 'Cadastro SPUnet') dotClass = 'origem-cadastro';
+                const ripKeys = Object.keys(proc.rips);
+                const ripText = ripKeys.map(r => `<code style="background: #e2e8f0; padding: 2px 5px; border-radius: 4px; font-family: monospace; font-size: 11px; font-weight: bold; color: #1e293b;">${r}</code>`).join(', ') || '<span style="color:#94a3b8; font-size:12px;">Sem RIP</span>';
+
+                let valorText = proc.valor;
+                if (valorText && valorText !== '-' && !valorText.includes('R$')) {
+                    valorText = 'R$ ' + valorText;
+                }
+                
+                let areaText = proc.area_destinar;
+                if (areaText && areaText !== '-' && !areaText.includes('m²')) {
+                    areaText = areaText + ' m²';
+                }
 
                 tr.innerHTML = `
                     <td><b>${proc.requerimento}</b></td>
@@ -274,22 +284,18 @@
                     <td>${proc.municipio}</td>
                     <td>
                         <div style="font-weight: 600;">${proc.interessado}</div>
-                        <div class="origem-indicator">
-                            <span class="origem-dot ${dotClass}"></span>
-                            Origem: ${proc.origem}
-                        </div>
                     </td>
                     <td>${proc.natureza}</td>
                     <td><span style="font-family: monospace; font-size:11.5px;">${proc.sei}</span></td>
+                    <td>${ripText}</td>
                     <td>${proc.tipo_uso}</td>
                     <td>${proc.procedimento}</td>
-                    <td>${proc.valor}</td>
-                    <td>${proc.area_destinar} m²</td>
+                    <td>${valorText}</td>
+                    <td>${areaText}</td>
                     <td><span class="badge ${badgeClass}">${proc.status}</span></td>
                     <td style="text-align: center;">
-                        <div class="action-buttons">
-                            <button class="btn-action" title="Visualizar (Somente Leitura)" onclick="openProcess('${proc.id}', true)">👁️</button>
-                            <button class="btn-action" title="Editar Processo" onclick="openProcess('${proc.id}', false)">✏️</button>
+                        <div class="action-buttons" style="justify-content: center;">
+                            <button class="btn-action" title="Analisar Processo" onclick="openProcess('${proc.id}', false)">🔎</button>
                         </div>
                     </td>
                 `;
@@ -308,10 +314,13 @@
                 const matchUf = !uf || proc.uf === uf;
                 const matchMuni = !municipio || proc.municipio.toLowerCase().includes(municipio);
                 const matchStatus = !status || proc.status === status;
+                
+                const ripKeys = Object.keys(proc.rips).join(' ');
                 const matchQuery = !query || 
                                    proc.id.toLowerCase().includes(query) || 
                                    proc.interessado.toLowerCase().includes(query) || 
                                    proc.sei.toLowerCase().includes(query) || 
+                                   ripKeys.includes(query) ||
                                    proc.requerimento.toLowerCase().includes(query);
 
                 return matchUf && matchMuni && matchStatus && matchQuery;

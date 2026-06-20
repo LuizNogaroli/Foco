@@ -22,7 +22,12 @@
         const style = document.createElement('style');
         style.textContent = `
             .auto-loaded-field,
-            .auto-loaded-field:disabled {
+            .auto-loaded-field:disabled,
+            input[readonly],
+            textarea[readonly],
+            input[disabled],
+            select[disabled],
+            textarea[disabled] {
                 background-color: #f1f5f9 !important;
                 border: 1px solid #cbd5e1 !important;
                 color: #334155 !important;
@@ -233,17 +238,13 @@
                         input.disabled = false;
                     }
 
-                    // Atualiza o badge para "Sincronizado"
+                    // Remove o badge de sincronização após carregado
                     const label = findLabelForInput(input);
                     if (label) {
-                        let badge = label.querySelector('.badge-auto-load');
-                        if (!badge) {
-                            badge = document.createElement('span');
-                            badge.id = 'badge-' + (input.id || input.name).replace(/[\[\]]/g, '-');
-                            label.appendChild(badge);
+                        const badge = label.querySelector('.badge-auto-load');
+                        if (badge) {
+                            badge.remove();
                         }
-                        badge.className = 'badge-auto-load loaded';
-                        badge.innerHTML = '✓ Integrado SPUnet';
                     }
                 }
             });
@@ -272,10 +273,46 @@
                 console.error("Erro ao aplicar somente leitura:", err);
             }
 
-            // 4. Caso especial: foco-03.html (Leaflet GeoJSON)
+            // 4. Caso especial: foco-03.html (Leaflet GeoJSON e CEP de RIP)
             if (window.location.pathname.includes('foco-03.html')) {
                 console.log("🚩 [sync.js] foco-03.html detectado. Restaurando poligonais do mapa.");
                 restoreFoco03MapLayers(state);
+                
+                const cepInput = document.getElementById('cep');
+                if (cepInput && !cepInput.value) {
+                    const savedRips = state['_ripsPesquisados'];
+                    if (savedRips) {
+                        const firstRipKey = Object.keys(savedRips)[0];
+                        if (firstRipKey && savedRips[firstRipKey].cep) {
+                            console.log("🚩 [sync.js] Preenchendo CEP da Aba 3 a partir do RIP:", savedRips[firstRipKey].cep);
+                            cepInput.value = savedRips[firstRipKey].cep;
+                            cepInput.dispatchEvent(new Event('change', { bubbles: true }));
+                        }
+                    }
+                }
+            }
+
+            // 5. Caso especial: foco-06.html (Área e Valor total do imóvel vindos do RIP)
+            if (window.location.pathname.includes('foco-06.html')) {
+                const areaInput = document.getElementById('area_total_imovel');
+                const valorInput = document.getElementById('valor_total_imovel');
+                const savedRips = state['_ripsPesquisados'];
+                if (savedRips) {
+                    const firstRipKey = Object.keys(savedRips)[0];
+                    if (firstRipKey) {
+                        const ripData = savedRips[firstRipKey];
+                        if (areaInput && !areaInput.value && ripData.area_total) {
+                            console.log("🚩 [sync.js] Preenchendo Área total da Aba 6 a partir do RIP:", ripData.area_total);
+                            areaInput.value = ripData.area_total;
+                            areaInput.dispatchEvent(new Event('change', { bubbles: true }));
+                        }
+                        if (valorInput && !valorInput.value && ripData.valor_imovel) {
+                            console.log("🚩 [sync.js] Preenchendo Valor total da Aba 6 a partir do RIP:", ripData.valor_imovel);
+                            valorInput.value = ripData.valor_imovel;
+                            valorInput.dispatchEvent(new Event('change', { bubbles: true }));
+                        }
+                    }
+                }
             }
         }
 
