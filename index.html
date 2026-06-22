@@ -129,25 +129,22 @@
             <table class="data-table" id="processesTable">
                 <thead>
                     <tr>
-                        <th style="width: 130px;">Nº Requerimento</th>
-                        <th style="width: 100px;">Data Req.</th>
+                        <th style="width: 160px;">Nº Requerimento</th>
+                        <th style="width: 110px;">Data Req.</th>
                         <th style="width: 60px;">UF</th>
-                        <th style="width: 140px;">Município</th>
+                        <th style="width: 170px;">Município</th>
                         <th>Interessado</th>
-                        <th style="width: 150px;">Natureza Jurídica</th>
-                        <th style="width: 160px;">Processo SEI</th>
-                        <th style="width: 130px;">RIP Associado</th>
-                        <th style="width: 180px;">Tipo de Uso</th>
-                        <th style="width: 130px;">Procedimento</th>
-                        <th style="width: 110px;">Valor</th>
-                        <th style="width: 110px;">Área a Destinar</th>
+                        <th style="width: 200px;">Processo SEI</th>
+                        <th style="width: 160px;">RIP Associado</th>
+                        <th style="width: 240px;">Tipo de Uso</th>
+                        <th style="width: 190px;">Regime Requerido</th>
                         <th style="width: 110px;">Status</th>
                         <th style="width: 80px; text-align: center;">Ação</th>
                     </tr>
                 </thead>
                 <tbody id="tableBody">
                     <tr>
-                        <td colspan="14" class="empty-state">Carregando processos do banco de dados...</td>
+                        <td colspan="11" class="empty-state">Carregando processos do banco de dados...</td>
                     </tr>
                 </tbody>
             </table>
@@ -194,7 +191,7 @@
             if (!window.supabaseClient) {
                 tableBody.innerHTML = `
                     <tr>
-                        <td colspan="13" class="empty-state">
+                        <td colspan="11" class="empty-state">
                             ⚠️ Banco de dados Supabase não configurado localmente. 
                             Configure as chaves no arquivo <b>db.js</b> para carregar os processos.
                         </td>
@@ -211,7 +208,7 @@
 
                 if (error) {
                     console.error("Erro ao carregar dados do Supabase:", error);
-                    tableBody.innerHTML = `<tr><td colspan="14" class="empty-state">Erro ao buscar processos do banco.</td></tr>`;
+                    tableBody.innerHTML = `<tr><td colspan="11" class="empty-state">Erro ao buscar processos do banco.</td></tr>`;
                     hideLoader();
                     return;
                 }
@@ -240,7 +237,7 @@
                 renderTable(allProcesses);
             } catch (err) {
                 console.error("Erro inesperado:", err);
-                tableBody.innerHTML = `<tr><td colspan="14" class="empty-state">Erro ao conectar com o banco.</td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="11" class="empty-state">Erro ao conectar com o banco.</td></tr>`;
             } finally {
                 hideLoader();
             }
@@ -252,7 +249,7 @@
             tableBody.innerHTML = '';
 
             if (list.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="14" class="empty-state">Nenhum processo encontrado.</td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="11" class="empty-state">Nenhum processo encontrado.</td></tr>`;
                 return;
             }
 
@@ -285,13 +282,10 @@
                     <td>
                         <div style="font-weight: 600;">${proc.interessado}</div>
                     </td>
-                    <td>${proc.natureza}</td>
                     <td><span style="font-family: monospace; font-size:11.5px;">${proc.sei}</span></td>
                     <td>${ripText}</td>
                     <td>${proc.tipo_uso}</td>
                     <td>${proc.procedimento}</td>
-                    <td>${valorText}</td>
-                    <td>${areaText}</td>
                     <td><span class="badge ${badgeClass}">${proc.status}</span></td>
                     <td style="text-align: center;">
                         <div class="action-buttons" style="justify-content: center;">

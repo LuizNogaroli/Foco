@@ -285,6 +285,7 @@ window.seedDatabase = async function() {
                     denominacao: "Área Adjacente Porto Maravilha", area: "8500.00", categoria: "Terreno",
                     linha_programa: "Linha 2 - Regularização Fundiária", utilizacao_especifica: "24.2 Regularização fundiária",
                     origem: "Datalake", campo11: "DF04403/2026", campo12: "15/01/2026",
+                    campo14: "42.345.678/0001-90", campo15: "CDURP - Região Portuária do Rio de Janeiro",
                     _ripsPesquisados: {
                         "33334444": { rip: "33334444", descricao: "Porto Maravilha Gleba A", municipio: "RIO DE JANEIRO/RJ", origem: "Datalake" },
                         "33334445": { rip: "33334445", descricao: "Porto Maravilha Gleba B", municipio: "RIO DE JANEIRO/RJ", origem: "Datalake" }
@@ -298,6 +299,7 @@ window.seedDatabase = async function() {
                     denominacao: "Terreno Marinha - Bairro Comércio", area: "3100.00", categoria: "Terreno",
                     linha_programa: "Linha 2 - Regularização Fundiária", utilizacao_especifica: "24.2 Regularização fundiária",
                     origem: "Cadastro SPUnet", campo11: "DF04404/2026", campo12: "20/01/2026",
+                    campo14: "13.456.789/0001-02", campo15: "Secretaria de Desenvolvimento Urbano da Bahia - SEDUR",
                     _ripsPesquisados: {
                         "44445555": { rip: "44445555", descricao: "Terreno Marinha Comércio", municipio: "SALVADOR/BA", origem: "Cadastro SPUnet" }
                     }
@@ -310,6 +312,7 @@ window.seedDatabase = async function() {
                     denominacao: "Antiga Estação Ferroviária Leste", area: "15000.00", categoria: "Prédio",
                     linha_programa: "Linha 3 - Políticas públicas e programas estratégicos", utilizacao_especifica: "24.4 Equipamento comunitário/cultural",
                     origem: "Portal de Serviços", campo11: "DF04405/2026", campo12: "25/01/2026",
+                    campo14: "00.375.442/0001-20", campo15: "Instituto Cultural Memorial de Minas Gerais",
                     _ripsPesquisados: {
                         "55556666": { rip: "55556666", descricao: "Estação Ferroviária Leste", municipio: "BELO HORIZONTE/MG", origem: "Portal de Serviços" }
                     }
@@ -322,7 +325,7 @@ window.seedDatabase = async function() {
                     denominacao: "Gleba Praia do Saco", area: "45000.00", categoria: "Terreno",
                     linha_programa: "Linha 3 - Políticas públicas e programas estratégicos", utilizacao_especifica: "14.1 Ecoturismo/Lazer",
                     origem: "Datalake", campo11: "DF04406/2026", campo12: "01/02/2026",
-
+                    campo14: "13.113.882/0001-44", campo15: "Associação de Ecoturismo da Praia do Saco"
                 }
             },
             {
@@ -332,6 +335,7 @@ window.seedDatabase = async function() {
                     denominacao: "Galpão Docas do Cais do Porto", area: "6200.00", categoria: "Galpão",
                     linha_programa: "Linha 3 - Políticas públicas e programas estratégicos", utilizacao_especifica: "3.1 Unidade de atendimento",
                     origem: "Portal de Serviços", campo11: "DF04407/2026", campo12: "05/02/2026",
+                    campo14: "92.758.123/0001-50", campo15: "Superintendência Portuária do Rio Grande do Sul",
                     _ripsPesquisados: {
                         "77778888": { rip: "77778888", descricao: "Galpão Docas Cais Porto", municipio: "PORTO ALEGRE/RS", origem: "Portal de Serviços" }
                     }
@@ -344,6 +348,7 @@ window.seedDatabase = async function() {
                     denominacao: "Terreno Bacacheri SPU", area: "890.00", categoria: "Terreno",
                     linha_programa: "Linha 1 - Habitação de Interesse Social", utilizacao_especifica: "24.1 Provisão habitacional",
                     origem: "Cadastro SPUnet", campo11: "DF04408/2026", campo12: "10/02/2026",
+                    campo14: "76.102.345/0001-06", campo15: "Companhia de Habitação Popular de Curitiba - COHAB",
                     _ripsPesquisados: {
                         "88889999": { rip: "88889999", descricao: "Terreno Bacacheri", municipio: "CURITIBA/PR", origem: "Cadastro SPUnet" }
                     }
@@ -356,6 +361,7 @@ window.seedDatabase = async function() {
                     denominacao: "Área Retroportuária Saboó", area: "35000.00", categoria: "Terreno",
                     linha_programa: "Linha 3 - Políticas públicas e programas estratégicos", utilizacao_especifica: "12.1 Logística/Transportes",
                     origem: "Datalake", campo11: "DF04409/2026", campo12: "15/02/2026",
+                    campo14: "44.852.963/0001-11", campo15: "Autoridade Portuária de Santos - APS",
                     _ripsPesquisados: {
                         "99990000": { rip: "99990000", descricao: "Área Retroportuária Saboó", municipio: "SANTOS/SP", origem: "Datalake" }
                     }
@@ -368,6 +374,7 @@ window.seedDatabase = async function() {
                     denominacao: "Forte Gragoatá Gleba SPU", area: "12000.00", categoria: "Outros",
                     linha_programa: "Linha 3 - Políticas públicas e programas estratégicos", utilizacao_especifica: "24.4 Equipamento comunitário/cultural",
                     origem: "Portal de Serviços", campo11: "DF04410/2026", campo12: "20/02/2026",
+                    campo14: "28.521.902/0001-80", campo15: "Universidade Federal Fluminense - UFF",
                     _ripsPesquisados: {
                         "10101010": { rip: "10101010", descricao: "Forte Gragoatá Gleba", municipio: "NITERÓI/RJ", origem: "Portal de Serviços" }
                     }
@@ -380,6 +387,7 @@ window.seedDatabase = async function() {
                     denominacao: "Gleba Reurb Setor de Chácaras", area: "75000.00", categoria: "Terreno",
                     linha_programa: "Linha 2 - Regularização Fundiária", utilizacao_especifica: "24.2 Regularização fundiária",
                     origem: "Cadastro SPUnet", campo11: "DF04411/2026", campo12: "22/02/2026",
+                    campo14: "12.345.678/0001-90", campo15: "CODHAB - Companhia de Desenvolvimento Habitacional do DF",
                     _ripsPesquisados: {
                         "20202020": { rip: "20202020", descricao: "Gleba Reurb Setor Chácaras", municipio: "SOBRADINHO/DF", origem: "Cadastro SPUnet" }
                     }
@@ -392,7 +400,7 @@ window.seedDatabase = async function() {
                     denominacao: "Prédio Antigo INSS SPU", area: "2400.00", categoria: "Prédio",
                     linha_programa: "Linha 3 - Políticas públicas e programas estratégicos", utilizacao_especifica: "2.1 Sede/Unidade administrativa",
                     origem: "Portal de Serviços", campo11: "DF04412/2026", campo12: "25/02/2026",
-
+                    campo14: "29.979.036/0001-40", campo15: "Instituto Nacional do Seguro Social - INSS"
                 }
             },
             {
@@ -402,6 +410,7 @@ window.seedDatabase = async function() {
                     denominacao: "Gleba Industrial SPU Juiz de Fora", area: "18500.00", categoria: "Terreno",
                     linha_programa: "Linha 3 - Políticas públicas e programas estratégicos", utilizacao_especifica: "12.2 Indústria/Comércio",
                     origem: "Datalake", campo11: "DF04413/2026", campo12: "01/03/2026",
+                    campo14: "18.324.900/0001-55", campo15: "Prefeitura Municipal de Juiz de Fora",
                     _ripsPesquisados: {
                         "40404040": { rip: "40404040", descricao: "Gleba Industrial Juiz de Fora", municipio: "JUIZ DE FORA/MG", origem: "Datalake" }
                     }
@@ -414,6 +423,7 @@ window.seedDatabase = async function() {
                     denominacao: "Gleba Margem Rio São Francisco", area: "900.00", categoria: "Terreno",
                     linha_programa: "Linha 2 - Regularização Fundiária", utilizacao_especifica: "24.2 Regularização fundiária",
                     origem: "Cadastro SPUnet", campo11: "DF04414/2026", campo12: "05/03/2026",
+                    campo14: "00.325.904/0001-77", campo15: "CODEVASF - Regional Sergipe",
                     _ripsPesquisados: {
                         "50505050": { rip: "50505050", descricao: "Gleba Margem Rio S. Francisco", municipio: "PROPRIÁ/SE", origem: "Cadastro SPUnet" }
                     }
@@ -426,6 +436,7 @@ window.seedDatabase = async function() {
                     denominacao: "Sede SPU Bloco C Esplanada", area: "14500.00", categoria: "Prédio",
                     linha_programa: "Linha 3 - Políticas públicas e programas estratégicos", utilizacao_especifica: "2.1 Sede/Unidade administrativa",
                     origem: "Portal de Serviços", campo11: "DF04415/2026", campo12: "10/03/2026",
+                    campo14: "00.489.828/0001-33", campo15: "Ministério da Gestão e da Inovação em Serviços Públicos - MGI",
                     _ripsPesquisados: {
                         "60606060": { rip: "60606060", descricao: "Sede SPU Bloco C", municipio: "BRASÍLIA/DF", origem: "Portal de Serviços" }
                     }
