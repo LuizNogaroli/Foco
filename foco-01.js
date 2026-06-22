@@ -61,6 +61,15 @@ document.addEventListener('DOMContentLoaded', function () {
     form01.addEventListener('submit', function (e) {
         e.preventDefault();
         if (form01.checkValidity()) {
+            const rootWindow = window.parent?.parent || window.parent || window;
+            const seletorPerfil = document.getElementById('perfilSeletor') || rootWindow.document?.getElementById('perfilSeletor');
+            
+            if (seletorPerfil && seletorPerfil.value === 'uf-tecnica') {
+                if (rootWindow.updateField) {
+                    rootWindow.updateField('status', 'Em análise de admissibilidade');
+                }
+            }
+
             alert('✅ Rascunho salvo com sucesso!\n📄 O resumo do processo foi atualizado e está disponível para visualização.');
         } else {
             form01.reportValidity();

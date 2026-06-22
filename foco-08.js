@@ -38,6 +38,19 @@ document.addEventListener('DOMContentLoaded', function () {
             els.btnLimpar.style.display = 'inline-block';
             els.conteudo.classList.add('decl-conteudo-bloqueado');
             els.conteudo.querySelectorAll('input, textarea').forEach(i => i.disabled = true);
+
+            // --- REGRA DE NEGÓCIO: Mudança de Status (Devolução) ---
+            const rootWindow = window.parent?.parent || window.parent || window;
+            if (rootWindow.updateField) {
+                const checkedRadio = els.conteudo.querySelector('input[type="radio"]:checked');
+                if (checkedRadio) {
+                    const v = checkedRadio.value.toLowerCase();
+                    const requiresReturn = v.includes('complementacao') || v.includes('insuficiente') || v.includes('retornar') || v.includes('diligencia') || v.includes('nao_apta') || v.includes('devolver') || v.includes('restituir') || v === 'restituo';
+                    if (requiresReturn) {
+                        rootWindow.updateField('status', 'Devolvido para complementação');
+                    }
+                }
+            }
         });
 
         els.btnLimpar.addEventListener('click', () => {

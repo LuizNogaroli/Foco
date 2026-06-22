@@ -9,14 +9,17 @@
     --spu-border: #e2e8f0;
     
     /* Cores de Status */
-    --status-rascunho-bg: #e2e8f0;
-    --status-rascunho-text: #475569;
+    --status-aguardando-bg: #e0f2fe;
+    --status-aguardando-text: #0369a1;
     
-    --status-cadastrado-bg: #e0e7ff;
-    --status-cadastrado-text: #3730a3;
+    --status-analise-bg: #dcfce7;
+    --status-analise-text: #14532d;
     
-    --status-destinado-bg: #dcfce7;
-    --status-destinado-text: #166534;
+    --status-devolvido-bg: #ef4444;
+    --status-devolvido-text: #ffffff;
+
+    --status-confirmada-bg: #16a34a;
+    --status-confirmada-text: #ffffff;
 }
 
 body {
@@ -316,19 +319,48 @@ body {
     letter-spacing: 0.5px;
 }
 
-.badge-rascunho {
-    background-color: var(--status-rascunho-bg);
-    color: var(--status-rascunho-text);
+.badge-aguardando {
+    background-color: var(--status-aguardando-bg);
+    color: var(--status-aguardando-text);
+    border: 1px solid #bae6fd;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    border-radius: 6px;
+    padding: 5px 12px;
 }
 
-.badge-cadastrado {
-    background-color: var(--status-cadastrado-bg);
-    color: var(--status-cadastrado-text);
+.badge-analise {
+    background-color: var(--status-analise-bg);
+    color: var(--status-analise-text);
+    border: 1px solid #86efac;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    border-radius: 6px;
+    padding: 5px 12px;
 }
 
-.badge-destinado {
-    background-color: var(--status-destinado-bg);
-    color: var(--status-destinado-text);
+.badge-devolvido {
+    background-color: var(--status-devolvido-bg);
+    color: var(--status-devolvido-text);
+    border: 1px solid #b91c1c;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    border-radius: 6px;
+    padding: 5px 12px;
+}
+
+.badge-confirmada {
+    background-color: var(--status-confirmada-bg);
+    color: var(--status-confirmada-text);
+    border: 1px solid #15803d;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    border-radius: 6px;
+    padding: 5px 12px;
+}
+
+/* --- PRIORIDADE HIGHLIGHT --- */
+.row-prioridade {
+    background-color: #fff7ed !important;
+}
+.row-prioridade:hover {
+    background-color: #ffedd5 !important;
 }
 
 /* --- ORIGEM BADGES --- */

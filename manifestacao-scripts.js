@@ -80,6 +80,22 @@ document.addEventListener('DOMContentLoaded', () => {
             };
             if (window.parent && window.parent.parent && typeof window.parent.parent.updateField === 'function') {
                 window.parent.parent.updateField('foco_data_' + currentProfileKey, profileData);
+                
+                // --- REGRA DE NEGÓCIO: Mudança de Status ---
+                const v = lastRadio ? lastRadio.value.toLowerCase() : '';
+                if (currentProfileKey === 'cde') {
+                    if (v === 'aprovar_proposta') {
+                        window.parent.parent.updateField('status', 'Admissibilidade confirmada');
+                    } else {
+                        // A outra opção "Devolvido complementação" cai na regra 3) -> "Devolvido para complementação"
+                        window.parent.parent.updateField('status', 'Devolvido para complementação');
+                    }
+                } else {
+                    const requiresReturn = v.includes('complementacao') || v.includes('insuficiente') || v.includes('retornar') || v.includes('diligencia') || v.includes('nao_apta') || v.includes('devolver') || v.includes('restituir') || v === 'indefiro';
+                    if (requiresReturn) {
+                        window.parent.parent.updateField('status', 'Devolvido para complementação');
+                    }
+                }
             }
 
             // 4. Coleta dados MANUALMENTE (apenas inputs e selects, ignorando textareas já capturados)

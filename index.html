@@ -107,9 +107,10 @@
                     <label for="filterStatus">Status</label>
                     <select id="filterStatus" onchange="applyFilters()">
                         <option value="">Todos</option>
-                        <option value="RASCUNHO">Rascunho</option>
-                        <option value="CADASTRADO">Cadastrado</option>
-                        <option value="DESTINADO">Destinado</option>
+                        <option value="Aguardando análise de admissibilidade">Aguardando análise</option>
+                        <option value="Em análise de admissibilidade">Em análise</option>
+                        <option value="Devolvido para complementação">Devolvido</option>
+                        <option value="Admissibilidade confirmada">Confirmada</option>
                     </select>
                 </div>
             </div>
@@ -230,10 +231,12 @@
                         valor: fd.valor_area_destinada || fd.valor_total || fd.valor || '-',
                         area_destinar: fd.area_terreno_destinada || fd.area_destinada || fd.area || '-',
                         status: fd.status || 'RASCUNHO',
-                        origem: fd.origem || 'Portal de Serviços'
+                        origem: fd.origem || 'Portal de Serviços',
+                        prioridade: fd.prioridade_legal || '-'
                     };
                 });
 
+                sortProcesses(allProcesses);
                 renderTable(allProcesses);
             } catch (err) {
                 console.error("Erro inesperado:", err);
@@ -241,6 +244,39 @@
             } finally {
                 hideLoader();
             }
+        }
+
+        // Helper para ordenar a tabela
+        function parseDateBR(dateStr) {
+            if (!dateStr || dateStr === '-') return new Date(9999, 11, 31).getTime(); // sem data fica no final
+            const parts = dateStr.split('/');
+            if (parts.length === 3) {
+                return new Date(parts[2], parts[1] - 1, parts[0]).getTime();
+            }
+            return new Date(dateStr).getTime() || new Date(9999, 11, 31).getTime();
+        }
+
+        function sortProcesses(processes) {
+            processes.sort((a, b) => {
+                const aDevolvido = a.status === 'Devolvido para complementação';
+                const bDevolvido = b.status === 'Devolvido para complementação';
+                
+                // Regra 1: Devolvidos primeiro
+                if (aDevolvido && !bDevolvido) return -1;
+                if (!aDevolvido && bDevolvido) return 1;
+                
+                // Regra 2: Prioritário logo após Devolvidos
+                const aPrio = a.prioridade && a.prioridade !== '-' && a.prioridade !== 'Não se aplica' && a.prioridade !== 'Não';
+                const bPrio = b.prioridade && b.prioridade !== '-' && b.prioridade !== 'Não se aplica' && b.prioridade !== 'Não';
+                
+                if (aPrio && !bPrio) return -1;
+                if (!aPrio && bPrio) return 1;
+
+                // Regra 3: Data do requerimento (mais antigo vem antes)
+                const dateA = parseDateBR(a.data_req);
+                const dateB = parseDateBR(b.data_req);
+                return dateA - dateB;
+            });
         }
 
         // Renderiza as linhas na tabela
@@ -256,10 +292,16 @@
             list.forEach(proc => {
                 const tr = document.createElement('tr');
                 
+                if (proc.prioridade && proc.prioridade !== '-' && proc.prioridade !== 'Não se aplica' && proc.prioridade !== 'Não') {
+                    tr.className = 'row-prioridade';
+                    tr.title = 'Prioridade: ' + proc.prioridade;
+                }
+
                 // Formatação do status badge
-                let badgeClass = 'badge-rascunho';
-                if (proc.status === 'CADASTRADO') badgeClass = 'badge-cadastrado';
-                if (proc.status === 'DESTINADO') badgeClass = 'badge-destinado';
+                let badgeClass = 'badge-aguardando';
+                if (proc.status === 'Em análise de admissibilidade') badgeClass = 'badge-analise';
+                if (proc.status === 'Devolvido para complementação') badgeClass = 'badge-devolvido';
+                if (proc.status === 'Admissibilidade confirmada') badgeClass = 'badge-confirmada';
 
                 const ripKeys = Object.keys(proc.rips);
                 const ripText = ripKeys.map(r => `<code style="background: #e2e8f0; padding: 2px 5px; border-radius: 4px; font-family: monospace; font-size: 11px; font-weight: bold; color: #1e293b;">${r}</code>`).join(', ') || '<span style="color:#94a3b8; font-size:12px;">Sem RIP</span>';
@@ -320,6 +362,7 @@
                 return matchUf && matchMuni && matchStatus && matchQuery;
             });
 
+            sortProcesses(filtered);
             renderTable(filtered);
         }
 

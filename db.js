@@ -189,7 +189,7 @@ window.seedDatabase = async function() {
             {
                 process_id: "2494",
                 form_data: {
-                    status: "RASCUNHO", uf: "SE", municipio: "ARACAJU/SE",
+                    status: "Devolvido para complementação", uf: "SE", municipio: "ARACAJU/SE",
                     denominacao: "Rancho Menezes, Gleba Itatá", area: "840.00", categoria: "Terreno",
                     linha_programa: "Linha 2 - Regularização Fundiária", utilizacao_especifica: "24.2 Regularização fundiária",
                     origem: "Datalake", campo11: "DF04594/2026", campo12: "10/05/2026",
@@ -203,11 +203,12 @@ window.seedDatabase = async function() {
             {
                 process_id: "2493",
                 form_data: {
-                    status: "RASCUNHO", uf: "PA", municipio: "TUCURUÍ/PA",
+                    status: "Aguardando análise de admissibilidade", uf: "PA", municipio: "TUCURUÍ/PA",
+                    nup: "10154.654321/2026-22", interessado: "Maria de Lourdes (Idosa)", prioridade_legal: "Sim (Estatuto do Idoso)",
                     denominacao: "Rio Tocantins - UHE DE TUCURUI", area: "12500.00", categoria: "Terreno",
                     linha_programa: "Linha 3 - Políticas públicas e programas estratégicos", utilizacao_especifica: "Não informado",
                     origem: "Portal de Serviços", campo11: "DF04593/2026", campo12: "12/05/2026",
-                    campo13: "10480.002493/2026-22", campo14: "00.654.321/0001-88", campo15: "Centrais Elétricas do Norte",
+                    campo13: "10154.654321/2026-22", campo14: "00.654.321/0001-88", campo15: "Maria de Lourdes (Idosa)",
                     _ripsPesquisados: {
                         "45612378": { rip: "45612378", descricao: "Rio Tocantins - Margem Esquerda", municipio: "TUCURUÍ/PA", origem: "Portal de Serviços" }
                     }
@@ -216,7 +217,7 @@ window.seedDatabase = async function() {
             {
                 process_id: "2437",
                 form_data: {
-                    status: "DESTINADO", uf: "SE", municipio: "ARACAJU/SE",
+                    status: "Admissibilidade confirmada", uf: "SE", municipio: "ARACAJU/SE",
                     denominacao: "ACT Reurb Bairros Centro, Fátima, Pema e Beira Mar", area: "603.62", categoria: "Terreno",
                     linha_programa: "Linha 2 - Regularização Fundiária", utilizacao_especifica: "24.2 Regularização fundiária",
                     origem: "Cadastro SPUnet", campo11: "DF04437/2026", campo12: "01/04/2026",
@@ -229,7 +230,7 @@ window.seedDatabase = async function() {
             {
                 process_id: "2492",
                 form_data: {
-                    status: "CADASTRADO", uf: "RS", municipio: "PELOTAS/RS",
+                    status: "Em análise de admissibilidade", uf: "RS", municipio: "PELOTAS/RS",
                     denominacao: "Pelotas, Salgado Filho, 902", area: "20000.00", categoria: "Terreno",
                     linha_programa: "Linha 1 - Habitação de Interesse Social", utilizacao_especifica: "24.1 Provisão habitacional",
                     origem: "Datalake", campo11: "DF04592/2026", campo12: "14/05/2026",
@@ -242,7 +243,7 @@ window.seedDatabase = async function() {
             {
                 process_id: "2453",
                 form_data: {
-                    status: "RASCUNHO", uf: "PR", municipio: "CAMPO MOURÃO/PR",
+                    status: "Aguardando análise de admissibilidade", uf: "PR", municipio: "CAMPO MOURÃO/PR",
                     denominacao: "Unidade da Secretaria Municipal de Saúde daquele Município", area: "1900.00", categoria: "Casa",
                     linha_programa: "Linha 3 - Políticas públicas e programas estratégicos", utilizacao_especifica: "2.1 Sede/Unidade administrativa",
                     origem: "Portal de Serviços", campo11: "DF04453/2026", campo12: "20/04/2026",
@@ -255,7 +256,7 @@ window.seedDatabase = async function() {
             {
                 process_id: "2401",
                 form_data: {
-                    status: "DESTINADO", uf: "DF", municipio: "BRASÍLIA/DF",
+                    status: "Admissibilidade confirmada", uf: "DF", municipio: "BRASÍLIA/DF",
                     denominacao: "Gleba de Terra - Park Way Qd 5", area: "5000.00", categoria: "Terreno",
                     linha_programa: "Linha 1 - Habitação de Interesse Social", utilizacao_especifica: "24.1 Provisão habitacional",
                     origem: "Cadastro SPUnet", campo11: "DF04401/2026", campo12: "05/01/2026",
@@ -268,7 +269,7 @@ window.seedDatabase = async function() {
             {
                 process_id: "2402",
                 form_data: {
-                    status: "CADASTRADO", uf: "SP", municipio: "SÃO PAULO/SP",
+                    status: "Em análise de admissibilidade", uf: "SP", municipio: "SÃO PAULO/SP",
                     denominacao: "Edifício Centro Histórico SPU", area: "1200.50", categoria: "Prédio",
                     linha_programa: "Linha 3 - Políticas públicas e programas estratégicos", utilizacao_especifica: "2.1 Sede/Unidade administrativa",
                     origem: "Portal de Serviços", campo11: "DF04402/2026", campo12: "10/01/2026",
@@ -281,7 +282,7 @@ window.seedDatabase = async function() {
             {
                 process_id: "2403",
                 form_data: {
-                    status: "RASCUNHO", uf: "RJ", municipio: "RIO DE JANEIRO/RJ",
+                    status: "Aguardando análise de admissibilidade", uf: "RJ", municipio: "RIO DE JANEIRO/RJ",
                     denominacao: "Área Adjacente Porto Maravilha", area: "8500.00", categoria: "Terreno",
                     linha_programa: "Linha 2 - Regularização Fundiária", utilizacao_especifica: "24.2 Regularização fundiária",
                     origem: "Datalake", campo11: "DF04403/2026", campo12: "15/01/2026",
@@ -295,7 +296,7 @@ window.seedDatabase = async function() {
             {
                 process_id: "2404",
                 form_data: {
-                    status: "DESTINADO", uf: "BA", municipio: "SALVADOR/BA",
+                    status: "Admissibilidade confirmada", uf: "BA", municipio: "SALVADOR/BA",
                     denominacao: "Terreno Marinha - Bairro Comércio", area: "3100.00", categoria: "Terreno",
                     linha_programa: "Linha 2 - Regularização Fundiária", utilizacao_especifica: "24.2 Regularização fundiária",
                     origem: "Cadastro SPUnet", campo11: "DF04404/2026", campo12: "20/01/2026",
@@ -308,7 +309,7 @@ window.seedDatabase = async function() {
             {
                 process_id: "2405",
                 form_data: {
-                    status: "CADASTRADO", uf: "MG", municipio: "BELO HORIZONTE/MG",
+                    status: "Em análise de admissibilidade", uf: "MG", municipio: "BELO HORIZONTE/MG",
                     denominacao: "Antiga Estação Ferroviária Leste", area: "15000.00", categoria: "Prédio",
                     linha_programa: "Linha 3 - Políticas públicas e programas estratégicos", utilizacao_especifica: "24.4 Equipamento comunitário/cultural",
                     origem: "Portal de Serviços", campo11: "DF04405/2026", campo12: "25/01/2026",
@@ -321,7 +322,7 @@ window.seedDatabase = async function() {
             {
                 process_id: "2406",
                 form_data: {
-                    status: "RASCUNHO", uf: "SE", municipio: "ESTÂNCIA/SE",
+                    status: "Aguardando análise de admissibilidade", uf: "SE", municipio: "ESTÂNCIA/SE",
                     denominacao: "Gleba Praia do Saco", area: "45000.00", categoria: "Terreno",
                     linha_programa: "Linha 3 - Políticas públicas e programas estratégicos", utilizacao_especifica: "14.1 Ecoturismo/Lazer",
                     origem: "Datalake", campo11: "DF04406/2026", campo12: "01/02/2026",
@@ -331,7 +332,7 @@ window.seedDatabase = async function() {
             {
                 process_id: "2407",
                 form_data: {
-                    status: "CADASTRADO", uf: "RS", municipio: "PORTO ALEGRE/RS",
+                    status: "Em análise de admissibilidade", uf: "RS", municipio: "PORTO ALEGRE/RS",
                     denominacao: "Galpão Docas do Cais do Porto", area: "6200.00", categoria: "Galpão",
                     linha_programa: "Linha 3 - Políticas públicas e programas estratégicos", utilizacao_especifica: "3.1 Unidade de atendimento",
                     origem: "Portal de Serviços", campo11: "DF04407/2026", campo12: "05/02/2026",
@@ -344,7 +345,7 @@ window.seedDatabase = async function() {
             {
                 process_id: "2408",
                 form_data: {
-                    status: "RASCUNHO", uf: "PR", municipio: "CURITIBA/PR",
+                    status: "Aguardando análise de admissibilidade", uf: "PR", municipio: "CURITIBA/PR",
                     denominacao: "Terreno Bacacheri SPU", area: "890.00", categoria: "Terreno",
                     linha_programa: "Linha 1 - Habitação de Interesse Social", utilizacao_especifica: "24.1 Provisão habitacional",
                     origem: "Cadastro SPUnet", campo11: "DF04408/2026", campo12: "10/02/2026",
@@ -357,7 +358,7 @@ window.seedDatabase = async function() {
             {
                 process_id: "2409",
                 form_data: {
-                    status: "DESTINADO", uf: "SP", municipio: "SANTOS/SP",
+                    status: "Admissibilidade confirmada", uf: "SP", municipio: "SANTOS/SP",
                     denominacao: "Área Retroportuária Saboó", area: "35000.00", categoria: "Terreno",
                     linha_programa: "Linha 3 - Políticas públicas e programas estratégicos", utilizacao_especifica: "12.1 Logística/Transportes",
                     origem: "Datalake", campo11: "DF04409/2026", campo12: "15/02/2026",
@@ -370,7 +371,7 @@ window.seedDatabase = async function() {
             {
                 process_id: "2410",
                 form_data: {
-                    status: "CADASTRADO", uf: "RJ", municipio: "NITERÓI/RJ",
+                    status: "Em análise de admissibilidade", uf: "RJ", municipio: "NITERÓI/RJ",
                     denominacao: "Forte Gragoatá Gleba SPU", area: "12000.00", categoria: "Outros",
                     linha_programa: "Linha 3 - Políticas públicas e programas estratégicos", utilizacao_especifica: "24.4 Equipamento comunitário/cultural",
                     origem: "Portal de Serviços", campo11: "DF04410/2026", campo12: "20/02/2026",
@@ -383,7 +384,7 @@ window.seedDatabase = async function() {
             {
                 process_id: "2411",
                 form_data: {
-                    status: "DESTINADO", uf: "DF", municipio: "SOBRADINHO/DF",
+                    status: "Admissibilidade confirmada", uf: "DF", municipio: "SOBRADINHO/DF",
                     denominacao: "Gleba Reurb Setor de Chácaras", area: "75000.00", categoria: "Terreno",
                     linha_programa: "Linha 2 - Regularização Fundiária", utilizacao_especifica: "24.2 Regularização fundiária",
                     origem: "Cadastro SPUnet", campo11: "DF04411/2026", campo12: "22/02/2026",
@@ -396,7 +397,7 @@ window.seedDatabase = async function() {
             {
                 process_id: "2412",
                 form_data: {
-                    status: "RASCUNHO", uf: "BA", municipio: "FEIRA DE SANTANA/BA",
+                    status: "Aguardando análise de admissibilidade", uf: "BA", municipio: "FEIRA DE SANTANA/BA",
                     denominacao: "Prédio Antigo INSS SPU", area: "2400.00", categoria: "Prédio",
                     linha_programa: "Linha 3 - Políticas públicas e programas estratégicos", utilizacao_especifica: "2.1 Sede/Unidade administrativa",
                     origem: "Portal de Serviços", campo11: "DF04412/2026", campo12: "25/02/2026",
@@ -406,7 +407,7 @@ window.seedDatabase = async function() {
             {
                 process_id: "2413",
                 form_data: {
-                    status: "CADASTRADO", uf: "MG", municipio: "JUIZ DE FORA/MG",
+                    status: "Em análise de admissibilidade", uf: "MG", municipio: "JUIZ DE FORA/MG",
                     denominacao: "Gleba Industrial SPU Juiz de Fora", area: "18500.00", categoria: "Terreno",
                     linha_programa: "Linha 3 - Políticas públicas e programas estratégicos", utilizacao_especifica: "12.2 Indústria/Comércio",
                     origem: "Datalake", campo11: "DF04413/2026", campo12: "01/03/2026",
@@ -419,7 +420,7 @@ window.seedDatabase = async function() {
             {
                 process_id: "2414",
                 form_data: {
-                    status: "RASCUNHO", uf: "SE", municipio: "PROPRIÁ/SE",
+                    status: "Aguardando análise de admissibilidade", uf: "SE", municipio: "PROPRIÁ/SE",
                     denominacao: "Gleba Margem Rio São Francisco", area: "900.00", categoria: "Terreno",
                     linha_programa: "Linha 2 - Regularização Fundiária", utilizacao_especifica: "24.2 Regularização fundiária",
                     origem: "Cadastro SPUnet", campo11: "DF04414/2026", campo12: "05/03/2026",
@@ -432,7 +433,7 @@ window.seedDatabase = async function() {
             {
                 process_id: "2415",
                 form_data: {
-                    status: "DESTINADO", uf: "DF", municipio: "BRASÍLIA/DF",
+                    status: "Admissibilidade confirmada", uf: "DF", municipio: "BRASÍLIA/DF",
                     denominacao: "Sede SPU Bloco C Esplanada", area: "14500.00", categoria: "Prédio",
                     linha_programa: "Linha 3 - Políticas públicas e programas estratégicos", utilizacao_especifica: "2.1 Sede/Unidade administrativa",
                     origem: "Portal de Serviços", campo11: "DF04415/2026", campo12: "10/03/2026",

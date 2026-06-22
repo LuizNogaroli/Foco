@@ -150,6 +150,18 @@ document.addEventListener('DOMContentLoaded', function () {
             const assinado = document.getElementById('badge-ok-presidente').classList.contains('visivel');
             if(!assinado) return alert('⚠️ A assinatura do Presidente é obrigatória.');
             modal.style.display = 'flex';
+
+            // --- REGRA DE NEGÓCIO: Mudança de Status do CDE ---
+            const rootWindow = window.parent?.parent || window.parent || window;
+            if (rootWindow.updateField) {
+                const selectedRadio = form.querySelector('input[name="deliberacao"]:checked');
+                const v = selectedRadio ? selectedRadio.value : '';
+                if (v === 'aprovar' || v === 'aprovar_cond') {
+                    rootWindow.updateField('status', 'Admissibilidade confirmada');
+                } else if (v === 'diligencia' || v === 'indeferir') {
+                    rootWindow.updateField('status', 'Devolvido para complementação');
+                }
+            }
         });
     }
 

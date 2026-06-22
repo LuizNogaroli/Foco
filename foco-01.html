@@ -97,6 +97,51 @@
                 >
             </div>
 
+
+
+            <!-- 1.4 CPF/CNPJ -->
+            <div class="form-group inline">
+                <label for="campo14">CPF/CNPJ:</label>
+                <input
+                    type="text"
+                    id="campo14"
+                    name="campo14"
+                    class="mask-cpf-cnpj"
+                    maxlength="18"
+                    value="12.345.678/0001-90"
+                    autocomplete="off"
+                    required
+                >
+            </div>
+
+            <!-- 1.5 Nome do Requerente -->
+            <div class="form-group inline">
+                <label for="campo15">Nome do requerente:</label>
+                <input
+                    type="text"
+                    id="campo15"
+                    name="campo15"
+                    value="Empresa Exemplo S/A"
+                    autocomplete="off"
+                    required
+                >
+            </div>
+
+            <!-- 1.9 Telefone celular -->
+            <div class="form-group inline">
+                <label for="campo19">Telefone celular:</label>
+                <input
+                    type="text"
+                    id="campo19"
+                    name="campo19"
+                    placeholder="(99) 99999-9999"
+                    maxlength="15"
+                    value="(11) 98765-4321"
+                    autocomplete="off"
+                    required
+                >
+            </div>
+
             <!-- 1.7 Pessoa Estrangeira (Movido e atualizado) -->
             <div class="form-group inline">
                 <label for="campo17">Pessoa estrangeira:</label>
@@ -106,7 +151,7 @@
             <!-- 1.10 Prioridade Legal -->
             <div class="form-group inline">
                 <label>Prioridade Legal:</label>
-                <span style="color: #333;">Não se aplica</span>
+                <input type="text" id="prioridade_legal" name="prioridade_legal" value="Não se aplica" readonly style="color: #ea580c; font-weight: bold; background: transparent; border: none; outline: none; padding: 0; width: auto; font-size: 14px;">
             </div>
 
             <!-- 1.11 Documentos anexados ao requerimento -->

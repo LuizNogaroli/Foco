@@ -1,0 +1,44 @@
+Crie na base de dados, os seguintes status:
+1) Aguardando análise de admissibilidade;
+2) Em análise de admissibilidade;
+3) Devolvido para complementação;
+4) Admissibilidade confirmada.
+
+Em seguida, vou te passar a regra de negócios para as mudanças de status.
+
+
+
+Regras de negócios
+Tema: Mudança de status do processo.
+
+1) "Aguardando análise de admissibilidade" é quando o processo ainda não foi manipulado pelo técnico na SPU/UF.
+
+2) De "Aguardando análise de admissibilidade" para "Em análise de admissibilidade"; Trigger: quando o perfil "Equipe Técnica SPU/UF" salvar a aba 1.
+
+3) De "Em análise de admissibilidade" para "Devolvido para complementação". Trigger: quando qualquer perfil de usuário devolver o processo para uma instância inferior (geralmente é devolvido para o perfil Equipe Técnica na SPU/UF (ainda vamos fechar essa regra de negócio))
+
+4) De "Em análise de admissibilidade" para "Admissibilidade confirmada". Trigger: quando o perfil "CDE" aprovar o requerimento com ou sem ressalvas. A outra opção "Devolvido complementação" cai na regra 3).
+
+
+
+
+Detalhes de layout:
+
+"Aguardando análise" -> aparece com estilo de botão, conforme versão anterior, na cor azul claro
+
+"Em análise de admissibilidade" -> botão na cor verde claro
+
+"Admissibilidade confirmada" -> botão na cor verde vivo
+
+"Devolvido para complementação" -> botão na cor vermelho vivo
+
+
+
+
+
+Ordenação dos requerimentos no painel
+
+Regra 1)
+Os processos com status "Devolvido para complementação" devem vir primeiro na ordenação do painel;
+Regra 2)
+Os processos devem ser ordenados pela data do requerimento (sendo que os mais antigos vem antes dos mais recentes)

@@ -162,6 +162,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
     form.addEventListener('submit', (e) => {
         e.preventDefault();
+        
+        const rootWindow = window.parent?.parent || window.parent || window;
+        const selectedRadio = form.querySelector('input[type="radio"]:checked');
+        const v = selectedRadio ? selectedRadio.value.toLowerCase() : '';
+        const requiresReturn = v.includes('complementacao') || v.includes('insuficiente') || v.includes('retornar') || v.includes('diligencia') || v.includes('nao_apta') || v.includes('devolver');
+        
+        if (requiresReturn && rootWindow.updateField) {
+            rootWindow.updateField('status', 'Devolvido para complementação');
+        }
+
         alert('✅ Rascunho salvo!');
     });
 });
