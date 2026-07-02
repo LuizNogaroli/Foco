@@ -10,13 +10,15 @@
     document.addEventListener('DOMContentLoaded', () => {
         console.log("🚩 [sync.js] DOMContentLoaded disparado.");
 
-        // Verifica se o parent tem as funções e estado do banco de dados
-        if (!window.parent || !window.parent.formDataState) {
-            console.log("ℹ️ db.js não encontrado no parent window. Sincronização inativa.");
-            return;
+        // Estado inicial do banco e controle de carregamento
+        let dbState = {};
+        if (window.parent && window.parent.formDataState) {
+            console.log("🌱 [sync.js] Estado encontrado imediatamente:", window.parent.formDataState);
+            dbState = window.parent.formDataState;
+        } else {
+            console.log("🌱 [sync.js] Estado ainda não disponível, aguardando DATABASE_LOADED.");
         }
-
-        console.log("🚩 [sync.js] Parent window e formDataState detectados. Estado atual:", window.parent.formDataState);
+        let isSimulatedLoadFinished = false;
 
         // Injeta estilos CSS necessários para o carregamento e campos automatizados
         const style = document.createElement('style');
@@ -109,9 +111,7 @@
         document.body.appendChild(loader);
         console.log("🚩 [sync.js] Overlay de carregamento inserido.");
 
-        // Estado inicial do banco e controle de carregamento
-        let dbState = window.parent.formDataState || null;
-        let isSimulatedLoadFinished = false;
+        // dbState e isSimulatedLoadFinished já foram declarados no início.
 
         // Helper para identificar se um campo é de carregamento automático
         function isAutoLoadedInput(input) {
@@ -150,8 +150,10 @@
                 
                 // Exibe "Carregando dados..." dentro do campo
                 if (input.tagName === 'INPUT' && (input.type === 'text' || input.type === 'number' || input.type === 'tel' || !input.type)) {
+                    input.setAttribute('data-default-value', input.value || '');
                     input.value = "Carregando dados...";
                 } else if (input.tagName === 'TEXTAREA') {
+                    input.setAttribute('data-default-value', input.value || '');
                     input.value = "Carregando dados...";
                 } else if (input.tagName === 'SELECT') {
                     const opt = document.createElement('option');
@@ -198,7 +200,7 @@
                 // Limpa o estado temporário de "Carregando dados..."
                 if (isAutoLoadedInput(input)) {
                     if (input.value === 'Carregando dados...') {
-                        input.value = '';
+                        input.value = input.getAttribute('data-default-value') || '';
                     }
                     if (input.tagName === 'SELECT') {
                         const tempOpt = input.querySelector('.temp-loading-option');
@@ -248,6 +250,11 @@
                     }
                 }
             });
+
+            // Força atualização da visibilidade dos blocos após popular
+            if (typeof window.verificarConceituacao === 'function') {
+                window.verificarConceituacao();
+            }
 
             // 3. Caso de Somente Leitura Global (Readonly)
             try {
@@ -412,6 +419,36 @@
             const target = e.target;
             if (target.name) {
                 saveField(target);
+            }
+        });
+
+        // Força salvar TODOS os campos ao submeter o formulário (garante que campos intocados com value padrão sejam salvos)
+        document.addEventListener('submit', () => {
+            console.log("🔄 [sync.js] Form submetido. Forçando salvamento de todos os campos.");
+            const inputs = document.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                if (input.name && input.type !== 'submit' && input.type !== 'button') {
+                    saveField(input);
+                }
+            });
+            
+            // Regras de transição de status_flow de acordo com a aba
+            if (window.parent && window.parent.formDataState) {
+                const uf = window.parent.formDataState.uf || '-';
+                const basePrefix = uf !== '-' ? 'SPU/' + uf : 'SPU/BR';
+                
+                if (window.location.pathname.includes('foco-01.html')) {
+                    window.parent.updateField('status_flow', basePrefix + ' - Caracterização');
+                } else if (window.location.pathname.includes('foco-02.html')) {
+                    window.parent.updateField('status_flow', basePrefix + ' - Destinação');
+                } else if (window.location.pathname.includes('foco-03.html')) {
+                    window.parent.updateField('status_flow', basePrefix + ' - Superintendência');
+                }
+            }
+
+            // Força o envio pro banco imediatamente após o sweep
+            if (window.parent && typeof window.parent.forceSaveDraft === 'function') {
+                window.parent.forceSaveDraft();
             }
         });
 

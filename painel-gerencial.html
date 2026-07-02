@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Gerencial SPUnet</title>
+    <!-- Chart.js via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js?v=1782355313469"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="painel-gerencial.css?v=1782355313469">
+</head>
+<body>
+    <header class="navbar">
+        <div class="navbar-brand">
+            <button class="nav-icon-btn" title="Voltar ao Painel" onclick="window.location.href='index.html'" style="margin-right: 15px;">⬅️</button>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 20px; font-weight: 800; color: #1e3a5f; letter-spacing: -1px;">SPU<span style="color: #2e7d32;">net</span></span>
+                <div style="width: 1.5px; height: 24px; background-color: #cbd5e1;"></div>
+                <div class="navbar-title">
+                    <h1>Painel Gerencial Estratégico</h1>
+                    <span>Monitoramento de Destinações</span>
+                </div>
+            </div>
+        </div>
+        <div class="navbar-actions" style="display: flex; gap: 15px; align-items: center;">
+            <button class="nav-icon-btn" title="Configurações de Usuário" onclick="window.location.href='configuracoes.html'" style="background: none; border: none; font-size: 18px; cursor: pointer;">⚙️</button>
+            <div class="user-avatar" title="Usuário Direção">D</div>
+        </div>
+    </header>
+
+    <main class="dashboard-container">
+        <!-- HEADER TEXT -->
+        <div class="page-header">
+            <div>
+                <h2 style="margin: 0; font-size: 24px; color: #1e293b;">Visão Geral do Portfólio</h2>
+                <p style="margin: 5px 0 0 0; color: #64748b; font-size: 14px;">Métricas e SLAs de tramitação dos processos de destinação.</p>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn-refresh" onclick="carregarDados()">🔄 Atualizar Dados</button>
+            </div>
+        </div>
+
+        <!-- KPI CARDS -->
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-title">Total de Requerimentos</div>
+                <div class="kpi-value" id="kpi-total">-</div>
+                <div class="kpi-subtitle">Ativos no sistema</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-title">Tempo Médio de Tramitação</div>
+                <div class="kpi-value" id="kpi-sla-global" style="color: #b45309;">-</div>
+                <div class="kpi-subtitle">SLA médio (em dias úteis)</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-title">Viabilidades Confirmadas</div>
+                <div class="kpi-value" id="kpi-confirmadas" style="color: #15803d;">-</div>
+                <div class="kpi-subtitle">Taxa de sucesso: <span id="kpi-taxa-sucesso">-%</span></div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-title">Processos Retidos (Direção/CDE)</div>
+                <div class="kpi-value" id="kpi-retidos" style="color: #be123c;">-</div>
+                <div class="kpi-subtitle">Aguardando deliberação superior</div>
+            </div>
+        </div>
+
+        <!-- CHARTS GRID -->
+        <div class="charts-grid">
+            <div class="chart-card">
+                <h3>Distribuição por UF (Superintendências)</h3>
+                <div class="chart-wrapper">
+                    <canvas id="chartUF"></canvas>
+                </div>
+            </div>
+            <div class="chart-card">
+                <h3>Volume por Tipo de Destinação</h3>
+                <div class="chart-wrapper">
+                    <canvas id="chartTipo"></canvas>
+                </div>
+            </div>
+            <div class="chart-card full-width">
+                <h3>Tempo Médio de Tramitação por Checkpoint (SLA em dias)</h3>
+                <div class="chart-wrapper" style="height: 280px;">
+                    <canvas id="chartCheckpoint"></canvas>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Supabase e Script -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="db.js?v=1782355313469"></script>
+    <script src="painel-gerencial.js?v=1782355313469"></script>
+</body>
+</html>
