@@ -1,366 +1,172 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3: Geolocalização - Maquete SPU</title>
-    
-    <!-- Leaflet & Draw CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-draw@1.0.4/dist/leaflet.draw.css" />
-    
-    <!-- Estilos Globais da Maquete -->
-    <link rel="stylesheet" href="styles-forms.css">
-    <link rel="stylesheet" href="hints.css">
 
-    <style>
-        #map {
-            height: 500px;
-            width: 100%;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            margin: 10px 0;
-            z-index: 1; /* Garante que hints/popups fiquem sobre o mapa */
-        }
-        
-        .cep-row {
-            display: flex;
-            gap: 10px;
-            align-items: flex-start;
-        }
-        
-        #cep-info {
-            margin-top: 5px;
-            font-size: 0.85em;
-            min-height: 1.2em;
-        }
-        .cep-info-ok { color: #28a745; font-weight: bold; }
-        .cep-info-erro { color: #dc3545; font-weight: bold; }
-        
-        /* Ajuste do botão dentro da linha de CEP para combinar com o tema */
-        .btn-search {
-            padding: 10px 15px;
-            height: 42px;
-            white-space: nowrap;
-        }
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
 
-        .lista-geo {
-            list-style: none;
-            padding: 0;
-            margin-top: 15px;
-        }
-
-        .lista-geo li {
-            background: #f8f9fa;
-            border: 1px solid #e2e8f0;
-            padding: 10px 15px;
-            margin-bottom: 8px;
-            border-radius: 6px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FOCO-03 — Análise e Proposta de Destinação</title>
+  <link rel="stylesheet" href="styles-forms.css?v=1782355313469" />
+  <link rel="stylesheet" href="hints.css?v=1782355313469" />
+  <link rel="stylesheet" href="custom-select.css?v=1782355313469" />
+  <style>
+      .consolidated-box { background-color: #f1f5f9; border-left: 4px solid #0056b3; padding: 15px; border-radius: 4px; margin-bottom: 20px; }
+      .consolidated-box h4 { margin-top: 0; color: #1e3a5f; font-size: 1.1em; }
+      .consolidated-box p { margin: 5px 0; font-size: 0.95em; color: #475569; }
+      h4.section-title { margin: 24px 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 8px; }
+  </style>
 </head>
 <body>
+  <div class="form-container">
+    <h2>Análise e Proposta de Destinação</h2>
+    <form id="form03" novalidate>
+      
+      <!-- Dados do Destinatário -->
+      <h4 class="section-title">Análise do Destinatário</h4>
+      <div class="form-group editavel">
+          <label>CPF/CNPJ regular?</label>
+          <div class="radio-group">
+              <label class="radio-option"><input type="radio" name="cpf_cnpj_regular" value="Sim" required> Sim</label>
+              <label class="radio-option"><input type="radio" name="cpf_cnpj_regular" value="Não"> Não</label>
+              <label class="radio-option"><input type="radio" name="cpf_cnpj_regular" value="Não se aplica"> Não se aplica</label>
+          </div>
+      </div>
+      <div class="form-group editavel">
+          <label for="natureza_juridica">Natureza Jurídica do Destinatário:</label>
+          <select id="natureza_juridica" name="natureza_juridica">
+              <option value="">Selecione a Natureza Jurídica...</option>
+              <option value="101-5">101-5 - Órgão Público do Poder Executivo Federal</option>
+              <option value="206-2">206-2 - Sociedade Empresária Limitada</option>
+              <option value="399-9">399-9 - Associação Privada</option>
+          </select>
+      </div>
 
-    <div class="form-container">
-        <h2>Geolocalização</h2>
+      <!-- Pendências e Capacidade -->
+      <h4 class="section-title">Pendências e Capacidade Financeira</h4>
+      <div class="form-group editavel">
+          <label>Pendências contratuais identificadas:</label>
+          <div class="checkbox-group">
+              <label class="checkbox-option"><input type="checkbox" name="pendencias[]" value="Nenhuma identificada" checked> Nenhuma identificada</label>
+              <label class="checkbox-option"><input type="checkbox" name="pendencias[]" value="Inadimplência financeira"> Inadimplência financeira</label>
+          </div>
+      </div>
+      <div class="form-group editavel">
+          <label for="capacidade_fin">Capacidade orçamentária/financeira demonstrada:</label>
+          <select id="capacidade_fin" name="capacidade_fin" required>
+              <option value="">Selecione...</option>
+              <option value="demonstrada">Demonstrada formalmente</option>
+              <option value="não demonstrada">Não demonstrada</option>
+              <option value="não se aplica">Não se aplica</option>
+          </select>
+      </div>
 
-        <form id="form03">
-            
-            <!-- Busca por CEP -->
-            <div class="form-group editavel">
-                <label for="cep">Localizar por CEP:</label>
-                <div class="cep-row">
-                    <input type="text" id="cep" name="cep" class="mask-cep" placeholder="00000-000" maxlength="9">
-                    <button type="button" id="buscar-cep" class="btn-search">🔍 Buscar</button>
-                </div>
-                <div id="cep-info"></div>
+      <!-- Outros Fatores -->
+      <h4 class="section-title">Ações, Custos e Interessados</h4>
+      <div class="form-group editavel">
+          <label for="acao_jud">Ações judiciais ou órgãos de controle associados:</label>
+          <textarea id="acao_jud" name="acao_jud" placeholder="Descreva as principais informações..."></textarea>
+      </div>
+      <div class="form-group editavel">
+          <label>Imóvel gera custos de manutenção para a SPU?</label>
+          <div class="radio-group">
+              <label class="radio-option"><input type="radio" name="custos_manutencao" value="Sim" onclick="document.getElementById('custos_valor').style.display='block'"> Sim</label>
+              <label class="radio-option"><input type="radio" name="custos_manutencao" value="Não" checked onclick="document.getElementById('custos_valor').style.display='none'"> Não</label>
+          </div>
+          <input type="text" id="custos_valor" name="custos_valor" class="mask-moeda" placeholder="Valor Anual R$ 0,00" style="display:none; margin-top: 10px;">
+      </div>
+      <div class="form-group editavel">
+          <label>Há outros interessados no imóvel?</label>
+          <div class="radio-group">
+              <label class="radio-option"><input type="radio" name="outros_interessados" value="Sim"> Sim</label>
+              <label class="radio-option"><input type="radio" name="outros_interessados" value="Não" checked> Não</label>
+          </div>
+      </div>
+
+      <!-- Proposta de Destinação -->
+      <h4 class="section-title">Proposta de Destinação</h4>
+      <div class="form-group editavel">
+          <label for="tipo_procedimento">Tipo de procedimento pretendido:</label>
+          <select id="tipo_procedimento" name="tipo_procedimento" required>
+              <option value="" selected>Selecione...</option>
+              <option value="Nova destinação">Nova destinação</option>
+              <option value="Renovação">Renovação</option>
+              <option value="Alteração">Alteração</option>
+              <option value="Regularização">Regularização</option>
+          </select>
+      </div>
+
+      <div class="form-group editavel">
+          <label for="tipo_uso_imob">Tipo de uso imobiliário pretendido:</label>
+          <select id="tipo_uso_imob" name="tipo_uso_imob" required>
+              <option value="">Selecione...</option>
+              <option value="0101">01.01 Uso administrativo e representativo</option>
+              <option value="0106">01.06 Uso habitacional</option>
+          </select>
+      </div>
+
+      <div class="form-group editavel">
+          <label for="regime_destinacao">Regime de destinação proposto:</label>
+          <select id="regime_destinacao" name="regime_destinacao" required>
+              <option value="">Selecione...</option>
+              <option value="02.01.01.01.02">Doação</option>
+              <option value="02.02.02.01">Cessão de Uso Gratuita</option>
+              <option value="02.02.02.02">Cessão de Uso Onerosa</option>
+          </select>
+      </div>
+      
+      <!-- Contrapartida -->
+      <h4 class="section-title">Contrapartida e Impactos</h4>
+      <div class="form-group editavel" id="secao-contrapartida">
+          <label>Haverá contrapartida vinculada à destinação?</label>
+          <div class="radio-group">
+              <label class="radio-option"><input type="radio" name="tem_contrapartida" value="Sim" onclick="document.getElementById('bloco-contrapartida').style.display='flex'"> Sim</label>
+              <label class="radio-option"><input type="radio" name="tem_contrapartida" value="Não" checked onclick="document.getElementById('bloco-contrapartida').style.display='none'"> Não</label>
+          </div>
+          <div id="bloco-contrapartida" style="display:none; margin-top: 10px; flex-direction: column; gap: 8px;">
+              <label for="desc_contrapartida">Descrição da Contrapartida / Encargos:</label>
+              <textarea id="desc_contrapartida" name="desc_contrapartida" placeholder="Descreva os encargos, obras ou melhorias assumidas pelo destinatário..."></textarea>
+          </div>
+      </div>
+
+      <!-- Botões -->
+                  <!-- Botões -->
+            <div class="button-group" style="margin-top: 40px; display: flex; justify-content: flex-end; gap: 15px; border-top: 1px solid #ccc; padding-top: 20px;">
+                <button type="button" class="btn-secondary" id="btnLimpar" style="font-size: 1.1em; padding: 12px 24px; border-radius: 6px;">🗑️ Limpar</button>
+                <button type="button" id="btnImprimir" style="font-size: 1.1em; padding: 12px 24px; border-radius: 6px; background-color: #0284c7; color: white; border: none; cursor: pointer;" onclick="window.print()">🖨️ Imprimir</button>
+                <button type="submit" id="btnEnviar" class="btn-action" style="font-size: 1.1em; padding: 12px 24px; background-color: #28a745; border: none; border-radius: 6px; color: white; cursor: pointer; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">💾 Salvar e Avançar ➡</button>
             </div>
+</form>
+  </div>
 
-            <!-- Coordenadas Geográficas -->
-            <div class="form-group editavel">
-                <div class="cep-row">
-                    <div style="flex: 1;">
-                        <label for="latitude" style="font-weight: bold; font-size: 0.9em; display: block; margin-bottom: 5px;">Latitude:</label>
-                        <input type="text" id="latitude" name="latitude" placeholder="-15.793889" style="width: 100%;">
-                    </div>
-                    <div style="flex: 1;">
-                        <label for="longitude" style="font-weight: bold; font-size: 0.9em; display: block; margin-bottom: 5px;">Longitude:</label>
-                        <input type="text" id="longitude" name="longitude" placeholder="-47.882778" style="width: 100%;">
-                    </div>
-                </div>
-            </div>
-
-            <!-- Mapa -->
-            <div class="form-group" style="background: transparent; border: none; padding: 0;">
-                <div id="map"></div>
-                <div style="text-align: right; margin-top: -5px;">
-                    <button type="button" id="expand-map" class="btn-secondary" style="padding: 5px 15px; font-size: 12px;">↔ Expandir Mapa</button>
-                </div>
-            </div>
-
-            <!-- Elementos Desenhados -->
-            <div class="form-group">
-                <label>Documentos Geométricos (GeoJSON):</label>
-                <ul id="lista-documentos" class="lista-geo">
-                    <!-- Gerado dinamicamente -->
-                </ul>
-                <input type="hidden" name="geojson" id="geojson">
-            </div>
-
-            <!-- Observações Técnicas -->
-            <div class="form-group editavel">
-                <label for="observacoes">Observações Técnicas:</label>
-                <textarea id="observacoes" name="observacoes" rows="3" placeholder="Detalhes sobre a poligonal, marcos, etc."></textarea>
-            </div>
-
-            <!-- Lista de anexos / documentos (Aba 3) -->
-            <div class="form-group editavel" style="margin-top: 25px; border-top: 1px dashed #e2e8f0; padding-top: 15px;">
-                <label style="font-weight: bold;">Documentos e Links Anexados (Aba 3 - Geolocalização):</label>
-                <div class="dynamic-list-wrapper" style="flex: 1; display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
-                    <button type="button" class="btn-add" id="btnAdicionarDocumento03" style="align-self: flex-start;">＋ Adicionar link/documento</button>
-                    <div id="documentos-list-03"></div>
-                </div>
-            </div>
-
-            <!-- Botões de Ação -->
-            <div class="button-group">
-                <button type="button" class="btn-secondary" onclick="location.reload()">Resetar Mapa</button>
-                <button type="submit">✅ Salvar Geometria</button>
-            </div>
-        </form>
-    </div>
-
-    <!-- Scripts -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
-    
-    <!-- Motor da Maquete -->
-    <script src="formulario.js"></script>
-    <script src="hints.js"></script>
-    
-    <script>
-        // --- LÓGICA DO MAPA (IDÊNTICA À ORIGINAL, MAS COM VISUAL NOVO) ---
-        var map = L.map('map').setView([-15.793889, -47.882778], 4); // Brasília como centro inicial
-        
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap contributors'
-        }).addTo(map);
-
-        var drawnItems = new L.FeatureGroup();
-        map.addLayer(drawnItems);
-
-        var drawControl = new L.Control.Draw({
-            position: 'topright',
-            draw: {
-                polygon: true,
-                polyline: true,
-                marker: true,
-                circle: false,
-                rectangle: true
-            },
-            edit: { featureGroup: drawnItems }
-        });
-        map.addControl(drawControl);
-
-        map.on(L.Draw.Event.CREATED, function (e) {
-            drawnItems.addLayer(e.layer);
-            atualizarInterface();
-        });
-
-        map.on(L.Draw.Event.EDITED, atualizarInterface);
-        map.on(L.Draw.Event.DELETED, atualizarInterface);
-
-        function obterCentroDasGeometrias() {
-            if (drawnItems.getLayers().length === 0) return null;
-            
-            // Se houver algum marcador desenhado, preferir a coordenada do marcador
-            var markerLayer = null;
-            drawnItems.eachLayer(function(layer) {
-                if (layer instanceof L.Marker) {
-                    markerLayer = layer;
-                }
-            });
-            
-            if (markerLayer) {
-                return markerLayer.getLatLng();
-            }
-            
-            // Caso contrário, pegar o centro dos limites de todas as geometrias desenhadas
-            try {
-                var bounds = drawnItems.getBounds();
-                if (bounds.isValid()) {
-                    return bounds.getCenter();
-                }
-            } catch (e) {
-                console.error("Erro ao obter centro das geometrias:", e);
-            }
-            
-            return null;
-        }
-
-        function atualizarInterface() {
-            var geojson = drawnItems.toGeoJSON();
-            document.getElementById('geojson').value = JSON.stringify(geojson);
-            
-            var lista = document.getElementById('lista-documentos');
-            lista.innerHTML = '';
-            
-            drawnItems.eachLayer(function(layer) {
-                var type = layer instanceof L.Polygon ? 'Polígono' : (layer instanceof L.Marker ? 'Ponto' : 'Linha');
-                var li = document.createElement('li');
-                li.innerHTML = `<span><b>${type}</b> (ID: ${layer._leaflet_id})</span>
-                                <button type="button" class="btn-remove-rip" onclick="removerLayer(${layer._leaflet_id})">✕</button>`;
-                lista.appendChild(li);
-            });
-
-            // Atualiza campos de Latitude e Longitude a partir das geometrias desenhadas
-            var centro = obterCentroDasGeometrias();
-            if (centro) {
-                var latEl = document.getElementById('latitude');
-                var lonEl = document.getElementById('longitude');
-                if (latEl && lonEl) {
-                    latEl.value = centro.lat.toFixed(6);
-                    lonEl.value = centro.lng.toFixed(6);
-                    latEl.dispatchEvent(new Event('change', { bubbles: true }));
-                    lonEl.dispatchEvent(new Event('change', { bubbles: true }));
-                }
-            }
-        }
-
-        window.removerLayer = function(id) {
-            var layer = drawnItems.getLayer(id);
-            if (layer) { drawnItems.removeLayer(layer); atualizarInterface(); }
-        };
-
-        // --- BUSCA DE CEP COM ZOOM ---
-        document.getElementById('buscar-cep').addEventListener('click', function() {
-            var cep = document.getElementById('cep').value.replace(/\D/g, '');
-            var info = document.getElementById('cep-info');
-            
-            if (cep.length !== 8) {
-                info.innerHTML = '<span class="cep-info-erro">CEP Inválido</span>';
-                return;
-            }
-
-            info.innerHTML = '<span>Buscando...</span>';
-            
-            fetch(`https://viacep.com.br/ws/${cep}/json/`)
-                .then(r => r.json())
-                .then(data => {
-                    if (data.erro) {
-                        info.innerHTML = '<span class="cep-info-erro">CEP não encontrado</span>';
-                    } else {
-                        var endereco = `${data.logradouro || ''}, ${data.localidade}, ${data.uf}, Brasil`;
-                        
-                        const buscarCoordenadas = (query) => {
-                            return fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`)
-                                .then(r => r.json());
-                        };
-
-                        buscarCoordenadas(endereco)
-                            .then(geo => {
-                                if (geo.length === 0) {
-                                    // Fallback para cidade/estado se a rua não for encontrada
-                                    return buscarCoordenadas(`${data.localidade}, ${data.uf}, Brasil`);
-                                }
-                                return geo;
-                            })
-                            .then(geo => {
-                                if (geo && geo.length > 0) {
-                                    const lat = parseFloat(geo[0].lat).toFixed(6);
-                                    const lon = parseFloat(geo[0].lon).toFixed(6);
-                                    
-                                    map.setView([geo[0].lat, geo[0].lon], 16);
-                                    
-                                    // Limpar marcadores anteriores do CEP
-                                    if (window.cepMarker) {
-                                        map.removeLayer(window.cepMarker);
-                                    }
-                                    
-                                    window.cepMarker = L.marker([geo[0].lat, geo[0].lon]).addTo(map);
-                                    
-                                    const popupContent = `
-                                        <div style="font-family: sans-serif; font-size: 13px; line-height: 1.4;">
-                                            <b style="color: #1e3a5f;">📍 Localização do CEP:</b><br>
-                                            ${data.logradouro ? data.logradouro + '<br>' : ''}
-                                            ${data.bairro ? data.bairro + ' - ' : ''}${data.localidade}/${data.uf}<br>
-                                            <hr style="margin: 5px 0; border: 0; border-top: 1px solid #ddd;">
-                                            <b>Lat:</b> ${lat}<br>
-                                            <b>Lon:</b> ${lon}
-                                        </div>
-                                    `;
-                                    window.cepMarker.bindPopup(popupContent).openPopup();
-                                    
-                                    info.innerHTML = `<span class="cep-info-ok">📍 ${data.localidade}/${data.uf} | Lat: ${lat}, Lon: ${lon}</span>`;
-
-                                    // Preenche os campos de Latitude e Longitude da Aba 3
-                                    var latEl = document.getElementById('latitude');
-                                    var lonEl = document.getElementById('longitude');
-                                    if (latEl && lonEl) {
-                                        latEl.value = lat;
-                                        lonEl.value = lon;
-                                        latEl.dispatchEvent(new Event('change', { bubbles: true }));
-                                        lonEl.dispatchEvent(new Event('change', { bubbles: true }));
-                                    }
-                                } else {
-                                    info.innerHTML = `<span class="cep-info-ok">📍 ${data.localidade}/${data.uf} (Coordenadas não encontradas)</span>`;
-                                }
-                            })
-                            .catch(err => {
-                                console.error("Erro na geocodificação:", err);
-                                info.innerHTML = `<span class="cep-info-erro">Erro ao obter coordenadas</span>`;
-                            });
-                    }
-                })
-                .catch(err => {
-                    console.error("Erro ao buscar CEP:", err);
-                    info.innerHTML = '<span class="cep-info-erro">Erro de conexão</span>';
-                });
-        });
-
-        // Executa busca automática do CEP quando o campo é preenchido/alterado (ex: pelo sync.js)
-        document.getElementById('cep').addEventListener('change', function() {
-            var cep = this.value.replace(/\D/g, '');
-            if (cep.length === 8) {
-                setTimeout(() => {
-                    document.getElementById('buscar-cep').click();
-                }, 150);
-            }
-        });
-
-        // Expansão do Mapa
-        var expanded = false;
-        document.getElementById('expand-map').addEventListener('click', function() {
-            expanded = !expanded;
-            document.getElementById('map').style.height = expanded ? '700px' : '500px';
-            this.textContent = expanded ? '↔ Reduzir Mapa' : '↔ Expandir Mapa';
-            setTimeout(() => map.invalidateSize(), 300);
-        });
-
-        // Trata o envio do formulário de geometria (evita recarregamento de página e salva explicitamente)
-        document.getElementById('form03').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            var geojson = drawnItems.toGeoJSON();
-            var geojsonStr = JSON.stringify(geojson);
-            document.getElementById('geojson').value = geojsonStr;
-            
-            if (window.parent && typeof window.parent.updateField === 'function') {
-                window.parent.updateField('geojson', geojsonStr);
-                window.parent.updateField('latitude', document.getElementById('latitude').value);
-                window.parent.updateField('longitude', document.getElementById('longitude').value);
-                window.parent.updateField('observacoes', document.getElementById('observacoes').value);
-            }
-            
-            alert('✅ Geometria e coordenadas salvas com sucesso!\n📄 O resumo do processo foi atualizado e está disponível para visualização.');
-        });
-
-        // Inicializa a lista dinâmica de documentos customizados (Aba 3)
-        window.inicializarListaDocumentosDinamica('aba3', 'btnAdicionarDocumento03', 'documentos-list-03');
-    </script>
-    <script src="sync.js"></script>
+  <script src="formulario.js?v=1782355313469"></script>
+  <script src="hints.js?v=1782355313469"></script>
+  <script>
+      document.getElementById('form03').addEventListener('submit', function(e) {
+          e.preventDefault();
+          const form = e.target;
+          if (form.checkValidity()) {
+              const rootWindow = window.parent?.parent || window.parent || window;
+              if (rootWindow.saveToFinal) {
+                  rootWindow.saveToFinal().then(res => {
+                      if (res) {
+                          alert('✅ Aba validada e salva na tabela definitiva com sucesso! Avançando para a próxima etapa...');
+                          const btnTabNext = rootWindow.document?.querySelector('button[data-url="deliberacao-spu-uf.html"]');
+                          if (btnTabNext) btnTabNext.click();
+                      }
+                  });
+              } else {
+                  alert('✅ Aba validada com sucesso! (Avançando em modo local...)');
+                  const btnTabNext = rootWindow.document?.querySelector('button[data-url="deliberacao-spu-uf.html"]');
+                  if (btnTabNext) btnTabNext.click();
+              }
+          } else {
+              form.reportValidity();
+          }
+      });
+  </script>
+  <script src="sync.js?v=1782355313469"></script>
 </body>
 </html>

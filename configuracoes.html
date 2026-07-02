@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações - SPUnet</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="configuracoes.css?v=1782355313469">
+    
+    <!-- SDK do Supabase e Banco de Dados -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="db.js?v=1782355313469"></script>
+</head>
+<body>
+    <header class="navbar">
+        <div class="navbar-brand">
+            <button class="nav-icon-btn" title="Voltar ao Painel" onclick="window.location.href='index.html'" style="margin-right: 15px;">⬅️</button>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 20px; font-weight: 800; color: #1e3a5f; letter-spacing: -1px;">SPU<span style="color: #2e7d32;">net</span></span>
+                <div style="width: 1.5px; height: 24px; background-color: #cbd5e1;"></div>
+                <div class="navbar-title">
+                    <h1>Configurações do Sistema</h1>
+                    <span>Gestão de Acessos e Perfis</span>
+                </div>
+            </div>
+        </div>
+        <div class="navbar-actions">
+            <button class="nav-icon-btn" title="Painel Gerencial" onclick="window.location.href='painel-gerencial.html'">📊</button>
+            <div class="user-avatar" title="Usuário Administrador">A</div>
+        </div>
+    </header>
+
+    <main class="config-container">
+        
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <h3 class="sidebar-title">Selecione a UF</h3>
+            <ul class="uf-list" id="ufList">
+                <!-- Populado via JS -->
+            </ul>
+        </aside>
+
+        <!-- MAIN PANEL -->
+        <section class="content-panel">
+            <div class="panel-header">
+                <h2>Gestão de Equipe: <span id="currentUfLabel" style="color: #1e3a5f;">Selecione uma UF</span></h2>
+                <p>Aloque os servidores nas suas respectivas hierarquias para a Superintendência atual.</p>
+            </div>
+
+            <div class="allocation-grid" id="allocationGrid" style="display: none;">
+                
+                <!-- COLUMN 1: SELECT SERVER -->
+                <div class="card">
+                    <h3>1. Selecione o Servidor</h3>
+                    <div class="search-box">
+                        <input type="text" id="searchServer" placeholder="Buscar Servidor..." oninput="filterServers()">
+                    </div>
+                    <ul class="server-list" id="serverList">
+                        <!-- Servidor A..Z -->
+                    </ul>
+                </div>
+
+                <!-- COLUMN 2: SELECT PROFILE & ASSIGN -->
+                <div class="card">
+                    <h3>2. Atribuir Perfil</h3>
+                    <div class="profile-options" id="profileOptions">
+                        <label class="radio-label">
+                            <input type="radio" name="profile" value="Equipe SPU/UF" checked>
+                            <span class="radio-text">Equipe SPU/UF</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="profile" value="Chefia SPU/UF">
+                            <span class="radio-text">Chefia SPU/UF</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="profile" value="Coordenação SPU/UF">
+                            <span class="radio-text">Coordenação SPU/UF</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="profile" value="Superintendência">
+                            <span class="radio-text">Superintendência</span>
+                        </label>
+                    </div>
+
+                    <!-- TOGGLE PERMISSÃO DE DISTRIBUIÇÃO -->
+                    <div class="toggle-wrapper">
+                        <div class="toggle-text">
+                            Permitir distribuição
+                            <small>Este usuário poderá distribuir processos no painel principal</small>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="chkDistribute">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <button class="btn-primary" onclick="assignProfile()" id="btnAssign" disabled>
+                        Adicionar Servidor ao Perfil
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- RESULT TABLE -->
+            <div class="card mt-20" id="assignmentsCard" style="display: none;">
+                <h3>Quadro de Lotação - <span id="tableUfLabel"></span></h3>
+                <table class="assignments-table">
+                    <thead>
+                        <tr>
+                            <th>Servidor</th>
+                            <th>Perfil Alocado</th>
+                            <th style="width: 80px; text-align: center;">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="assignmentsTableBody">
+                        <tr><td colspan="3" class="empty-state">Nenhum servidor alocado nesta UF.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- SAVE BUTTON -->
+            <div style="text-align: right; margin-top: 20px;" id="saveSection" style="display: none;">
+                <button class="btn-primary" style="background-color: #1e3a5f; width: auto; padding: 14px 40px; font-size: 15px;" onclick="salvarAlteracoes()" id="btnSaveFinal">
+                    💾 Salvar Todas as Configurações
+                </button>
+            </div>
+
+        </section>
+    </main>
+
+    <script src="configuracoes.js?v=1782355313469"></script>
+</body>
+</html>

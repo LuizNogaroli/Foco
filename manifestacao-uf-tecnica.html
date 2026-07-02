@@ -1,10 +1,15 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Equipe SPU/UF</title>
-    <link rel="stylesheet" href="manifestacao-styles.css">
+    <link rel="stylesheet" href="manifestacao-styles.css?v=1782355313469">
 </head>
 <body>
     <div class="container">
@@ -21,6 +26,33 @@
             </header>
 
             <div class="card-body etapa-body">
+
+                <!-- NOVOS CAMPOS: Impacto Social e Ambiental -->
+                <div class="campo-observacoes" style="margin-bottom: 20px;">
+                    <label for="impacto_social" style="font-weight: bold; color: #1e3a5f; margin-bottom: 5px; display: block;">Impacto social esperado:</label>
+                    <select id="impacto_social" name="impacto_social" style="width: 100%; padding: 10px; border-radius: 4px; border: 1px solid #cbd5e1;">
+                        <option value="">Selecione...</option>
+                        <option value="Alto">Alto impacto positivo</option>
+                        <option value="Médio">Médio impacto positivo</option>
+                        <option value="Baixo">Baixo impacto positivo</option>
+                        <option value="Sem impacto">Sem impacto social relevante</option>
+                        <option value="Negativo">Impacto social negativo</option>
+                        <option value="Nao avaliar">Não foi possível avaliar</option>
+                    </select>
+                </div>
+
+                <div class="campo-observacoes" style="margin-bottom: 25px;">
+                    <label for="impacto_ambiental" style="font-weight: bold; color: #1e3a5f; margin-bottom: 5px; display: block;">Impacto ambiental esperado:</label>
+                    <select id="impacto_ambiental" name="impacto_ambiental" style="width: 100%; padding: 10px; border-radius: 4px; border: 1px solid #cbd5e1;">
+                        <option value="">Selecione...</option>
+                        <option value="Positivo">Impacto positivo</option>
+                        <option value="Sem impacto">Sem impacto ambiental relevante</option>
+                        <option value="Negativo mitigavel">Impacto negativo mitigável</option>
+                        <option value="Negativo relevante">Impacto negativo relevante</option>
+                        <option value="Nao avaliar">Não foi possível avaliar</option>
+                    </select>
+                </div>
+
                 <div class="pergunta">Declaração</div>
                 <div class="opcoes checkbox-group">
                     <div>
@@ -30,9 +62,6 @@
                                 Declaro que as informações consignadas neste formulário foram inseridas com base nos dados disponíveis nos sistemas oficiais, nos documentos constantes do processo e nas verificações realizadas no âmbito desta unidade, estando compatíveis com os elementos analisados.
                             </span>
                         </label>
-                        <!-- <span class="opcao-descricao">
-                            [Detalhes sobre a confirmação da UF-Equipe-Técnica. Por exemplo: "Ao confirmar, este processo será marcado como verificado e encaminhado para a próxima etapa."]
-                        </span> -->
                     </div>
                 </div>
 
@@ -47,7 +76,7 @@
             </div>
         </section>
     </div>
-    <script src="manifestacao-scripts.js"></script>
-    <script src="sync.js"></script>
+    <script src="manifestacao-scripts.js?v=1782355313469"></script>
+    <script src="sync.js?v=1782355313469"></script>
 </body>
 </html>

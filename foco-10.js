@@ -157,7 +157,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const selectedRadio = form.querySelector('input[name="deliberacao"]:checked');
                 const v = selectedRadio ? selectedRadio.value : '';
                 if (v === 'aprovar' || v === 'aprovar_cond') {
-                    rootWindow.updateField('status', 'Admissibilidade confirmada');
+                    rootWindow.updateField('status', 'Viabilidade confirmada');
                 } else if (v === 'diligencia' || v === 'indeferir') {
                     rootWindow.updateField('status', 'Devolvido para complementação');
                 }

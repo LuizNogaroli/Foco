@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deliberações CDE</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css?v=1782355313469" />
+  <style>
+    :root {
+      --spu-blue: #1e3a5f;
+      --spu-light-blue: #f1f5f9;
+      --spu-green: #1a7a4a;
+      --sidebar-width: 380px;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: #f8fafc; color: #333333; overflow: hidden; }
+    .page { display: flex; width: 100vw; height: 100vh; }
+    .sidebar-hist { width: var(--sidebar-width); min-width: var(--sidebar-width); background: #f1f5f9; border-right: 1px solid #e2e8f0; display: flex; flex-direction: column; height: 100vh; padding: 20px; overflow-y: auto; overflow-x: hidden; z-index: 10; }
+    .sidebar-footer { padding: 20px; border-top: 1px solid #e2e8f0; background: #f8fafc; margin-top: auto; width: calc(100% + 40px); margin-left: -20px; margin-right: -20px; margin-bottom: -20px; flex-shrink: 0; }
+    .grid-historico { display: flex; flex-direction: column; gap: 12px; margin-top: 10px; }
+    .btn-hist { display: flex; flex-direction: column; align-items: flex-start; padding: 15px; background: #fff; border: 1.5px solid var(--spu-green); border-left-width: 6px; border-radius: 8px; cursor: pointer; transition: all 0.2s; gap: 6px; width: 100%; }
+    .btn-hist:hover { background: #f0fdf4; transform: translateX(5px); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+    .btn-hist .label { font-size: 11px; color: #64748b; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; }
+    .btn-hist .text { font-size: 13.5px; font-weight: 700; color: var(--spu-green); line-height: 1.3; text-align: left; }
+    .main-workspace { flex: 1; display: flex; flex-direction: column; height: 100vh; padding: 0; background: #fff; }
+    #iframeManifestacao { flex: 1; width: 100%; border: none; background: #fff; }
+    h2 { font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px; margin-top: 0; }
+    @media (max-width: 1300px) { :root { --sidebar-ref-width: 260px; --sidebar-hist-width: 260px; } }
+    @keyframes sutilBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+    .info-box-animado { animation: sutilBounce 3s ease-in-out infinite; }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <aside class="sidebar-hist" id="sidebarHistorico">
+        <h2 style="color: var(--spu-green);">Histórico de Aprovações</h2>
+        <div class="grid-historico" id="gridHistorico">
+            <div style="font-size: 11px; color: #94a3b8; text-align: center; margin-top: 30px;">Aguardando manifestações...</div>
+        </div>
+
+        <div class="sidebar-footer" style="margin: auto -15px -15px -15px;">
+            <div class="info-box-animado" style="background: #1a7a4a; color: white; padding: 12px 15px; border-radius: 6px; font-size: 12px; font-weight: 600; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(26, 122, 74, 0.3); line-height: 1.5; display: flex; align-items: flex-start; gap: 10px;">
+                <span style="font-size: 16px;">ℹ️</span>
+                <span>Para trocar a visão que cada perfil terá do sistema, use o seletor abaixo. Cada perfil hierárquico superior deve ser selecionado para verificar a manifestação dos perfis subordinados.</span>
+            </div>
+            <h2 style="margin-top: 0;">Seletor de Perfil</h2>
+            <select id="perfilSeletor" style="width: 100%; padding: 12px; border: 2px solid var(--spu-blue); border-radius: 6px; font-weight: 600; color: var(--spu-blue); font-size: 13.5px; cursor: pointer;">
+                <option value="cde">CDE - Comissão de Destinações Especiais</option>
+            </select>
+        </div>
+    </aside>
+
+    <main class="main-workspace">
+      <iframe id="iframeManifestacao" src="manifestacao-cde.html"></iframe>
+    </main>
+  </div>
+
+  <script src="formulario.js?v=1782355313469"></script>
+  <script>
+    function abrirPopupCentrado(url, w, h) {
+      const left = (screen.width / 2) - (w / 2);
+      const top = (screen.height / 2) - (h / 2);
+      window.open(url, '_blank', `width=${w},height=${h},top=${top},left=${left},scrollbars=yes,resizable=yes`);
+    }
+
+    const niveis = [
+      { id: 'uf-tecnica', label: 'Equipe SPU/UF', resumo: 'uf-tecnica-resumo.html', tela: 'manifestacao-uf-tecnica.html' },
+      { id: 'uf-chefia', label: 'Chefia SPU/UF', resumo: 'uf-chefia-resumo.html', tela: 'manifestacao-uf-chefia.html' },
+      { id: 'uf-coord', label: 'Coordenação SPU/UF', resumo: 'uf-coord-resumo.html', tela: 'manifestacao-uf-coord.html' },
+      { id: 'uf-super', label: 'Superintendência', resumo: 'uf-super-resumo.html', tela: 'manifestacao-uf-super.html' },
+      { id: 'uc-tecnica', label: 'Equipe C.G.', resumo: 'uc-tecnica-resumo.html', tela: 'manifestacao-uc-tecnica.html' },
+      { id: 'uc-coord', label: 'Coordenação-Geral', resumo: 'uc-coord-resumo.html', tela: 'manifestacao-uc-coord.html' },
+      { id: 'uc-diretoria', label: 'Diretoria', resumo: 'uc-diretoria-resumo.html', tela: 'manifestacao-uc-diretoria.html' },
+      { id: 'cde', label: 'CDE', resumo: 'cde-resumo.html', tela: 'manifestacao-cde.html' },
+      { id: 'secretaria', label: 'Secretária / Ministra', resumo: 'secretaria-resumo.html', tela: 'manifestacao-secretaria.html' }
+    ];
+
+    document.getElementById('perfilSeletor').addEventListener('change', function(e) {
+      const perfilId = e.target.value;
+      const gridHist = document.getElementById('gridHistorico');
+      const iframe = document.getElementById('iframeManifestacao');
+
+      gridHist.innerHTML = '';
+      let indexAtual = niveis.findIndex(n => n.id === perfilId);
+
+      iframe.src = niveis[indexAtual].tela;
+      
+      if (indexAtual > 0) {
+        for (let i = 0; i < indexAtual; i++) {
+          const btn = document.createElement('button');
+          btn.className = 'btn-hist';
+          btn.innerHTML = `<span class="text">${niveis[i].label}</span>`;
+          btn.onclick = async () => {
+              const rootWindow = window.parent || window;
+              const savedReport = rootWindow.loadReportFromDB ? await rootWindow.loadReportFromDB(niveis[i].id) : null;
+              if (savedReport) {
+                  const win = window.open('', '_blank', 'width=1100,height=850');
+                  win.document.write(savedReport);
+                  win.document.close();
+              } else {
+                  abrirPopupCentrado(niveis[i].resumo, 1100, 850);
+              }
+          };
+          gridHist.appendChild(btn);
+        }
+      } else {
+        gridHist.innerHTML = '<div style="font-size: 11px; color: #94a3b8; text-align: center; margin-top: 30px;">Aguardando manifestações...</div>';
+      }
+    });
+
+    // Trigger initial load to build correct history and set iframe
+    document.getElementById('perfilSeletor').dispatchEvent(new Event('change'));
+  </script>
+</body>
+</html>

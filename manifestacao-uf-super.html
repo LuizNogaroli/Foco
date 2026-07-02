@@ -1,10 +1,15 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UF-Superintendência</title>
-    <link rel="stylesheet" href="manifestacao-styles.css">
+    <link rel="stylesheet" href="manifestacao-styles.css?v=1782355313469">
 </head>
 <body>
     <div class="container">
@@ -35,21 +40,18 @@
                             <input type="radio" name="aspectos_interesse_publico" value="consistente" />
                             <span class="opcao-texto">Evidenciado de forma consistente</span>
                         </label>
-                        <!-- <span class="opcao-descricao">[Detalhes]</span> -->
                     </div>
                     <div>
                         <label class="opcao radio-option">
                             <input type="radio" name="aspectos_interesse_publico" value="ajustes" />
                             <span class="opcao-texto">Evidenciado com necessidade de ajustes</span>
                         </label>
-                        <!-- <span class="opcao-descricao">[Detalhes]</span> -->
                     </div>
                     <div>
                         <label class="opcao radio-option">
                             <input type="radio" name="aspectos_interesse_publico" value="nao_demonstrado" />
                             <span class="opcao-texto">Não suficientemente demonstrado</span>
                         </label>
-                        <!-- <span class="opcao-descricao">[Detalhes]</span> -->
                     </div>
                 </div>
 
@@ -61,21 +63,18 @@
                             <input type="radio" name="escolha_destinatario" value="consistente" />
                             <span class="opcao-texto">Fundamentação consistente</span>
                         </label>
-                        <!-- <span class="opcao-descricao">[Detalhes]</span> -->
                     </div>
                     <div>
                         <label class="opcao radio-option">
                             <input type="radio" name="escolha_destinatario" value="ressalvas" />
                             <span class="opcao-texto">Fundamentação suficiente com ressalvas</span>
                         </label>
-                        <!-- <span class="opcao-descricao">[Detalhes]</span> -->
                     </div>
                     <div>
                         <label class="opcao radio-option">
                             <input type="radio" name="escolha_destinatario" value="insuficiente" />
                             <span class="opcao-texto">Fundamentação insuficiente</span>
                         </label>
-                        <!-- <span class="opcao-descricao">[Detalhes]</span> -->
                     </div>
                 </div>
 
@@ -87,28 +86,24 @@
                             <input type="radio" name="impactos" value="positivo_relevante" />
                             <span class="opcao-texto">Impacto positivo relevante</span>
                         </label>
-                        <!-- <span class="opcao-descricao">[Detalhes]</span> -->
                     </div>
                     <div>
                         <label class="opcao radio-option">
                             <input type="radio" name="impactos" value="positivo_moderado" />
                             <span class="opcao-texto">Impacto positivo moderado</span>
                         </label>
-                        <!-- <span class="opcao-descricao">[Detalhes]</span> -->
                     </div>
                     <div>
                         <label class="opcao radio-option">
                             <input type="radio" name="impactos" value="neutro" />
                             <span class="opcao-texto">Impacto neutro</span>
                         </label>
-                        <!-- <span class="opcao-descricao">[Detalhes]</span> -->
                     </div>
                     <div>
                         <label class="opcao radio-option">
                             <input type="radio" name="impactos" value="adverso" />
                             <span class="opcao-texto">Impacto potencialmente adverso</span>
                         </label>
-                        <!-- <span class="opcao-descricao">[Detalhes]</span> -->
                     </div>
                 </div>
 
@@ -123,16 +118,12 @@
                             <input type="radio" name="regime_destinacao" value="concordo" />
                             <span class="opcao-texto">Concordo.</span>
                         </label>
-                        <!-- <span class="opcao-descricao">[Detalhes]</span> -->
                     </div>
                     <div>
                         <label class="opcao radio-option">
                             <input type="radio" name="regime_destinacao" value="nao_concordo" />
                             <span class="opcao-texto">Não concordo.</span>
                         </label>
-                        <!-- <span class="opcao-descricao">
-                            [Detalhes: Selecione o regime de destinação desejado]
-                        </span> -->
                     </div>
                 </div>
                 
@@ -154,28 +145,30 @@
                             <input type="radio" name="deliberacao" value="aprovo_proposta" />
                             <span class="opcao-texto">Favorável à proposta.</span>
                         </label>
-                        <!-- <span class="opcao-descricao">[Detalhes]</span> -->
                     </div>
                     <div>
                         <label class="opcao radio-option">
                             <input type="radio" name="deliberacao" value="aprovo_condicionantes" />
                             <span class="opcao-texto">Favorável, com ressalvas.</span>
                         </label>
-                        <!-- <span class="opcao-descricao">[Detalhes]</span> -->
                     </div>
                     <div>
                         <label class="opcao radio-option">
                             <input type="radio" name="deliberacao" value="diligencia" />
                             <span class="opcao-texto">Necessária complementação de informações/documentos.</span>
                         </label>
-                        <!-- <span class="opcao-descricao">[Detalhes]</span> -->
+                    </div>
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="deliberacao" value="devolver_equipe" />
+                            <span class="opcao-texto">Devolver para Equipe SPU/UF.</span>
+                        </label>
                     </div>
                     <div>
                         <label class="opcao radio-option">
                             <input type="radio" name="deliberacao" value="indefiro" />
                             <span class="opcao-texto">Cancelamento.</span>
                         </label>
-                        <!-- <span class="opcao-descricao">[Detalhes]</span> -->
                     </div>
                 </div>
 
@@ -190,7 +183,7 @@
             </div>
         </section>
     </div>
-    <script src="manifestacao-scripts.js"></script>
-    <script src="sync.js"></script>
+    <script src="manifestacao-scripts.js?v=1782355313469"></script>
+    <script src="sync.js?v=1782355313469"></script>
 </body>
 </html>

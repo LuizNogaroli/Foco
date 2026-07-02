@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // 2. EXIBIÇÃO CONDICIONAL
+    // 2. EXIBIé!ÒO CONDICIONAL
     const c51 = document.getElementById('campo51');
     const blocoContratos = document.getElementById('bloco_contratos_anteriores');
 
@@ -80,7 +80,13 @@ document.addEventListener('DOMContentLoaded', function () {
     form.addEventListener('submit', function (e) {
         e.preventDefault();
         if (form.checkValidity()) {
-            alert('✅ Rascunho salvo com sucesso!\n📄 O resumo do processo foi atualizado e está disponível para visualização.');
+            const rootWindow = window.parent?.parent || window.parent || window;
+                        // O motor sync.js cuidará do salvamento na tabela intermediária (foco_drafts)
+            alert('=é Aba validada e salva na tabela intermediária com sucesso! Avançando para a próxima etapa...');
+            const btnTabNext = rootWindow.document?.querySelector('button[data-url="painel-gerencial.html"]');
+            if (btnTabNext) {
+                setTimeout(() => btnTabNext.click(), 100);
+            }
         } else {
             form.reportValidity();
         }

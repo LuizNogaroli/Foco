@@ -1,13 +1,18 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>5: Análise do Destinatário - Maquete SPU</title>
     
     <!-- Estilos Globais -->
-    <link rel="stylesheet" href="styles-forms.css">
-    <link rel="stylesheet" href="hints.css">
+    <link rel="stylesheet" href="styles-forms.css?v=1782355313469">
+    <link rel="stylesheet" href="hints.css?v=1782355313469">
 </head>
 <body>
     <div class="form-container">
@@ -388,22 +393,22 @@
             </div>
 
             <!-- ── Botões ───────────────────────────────────────────────────── -->
-            <div class="button-group">
-                <button type="button" class="btn-secondary" id="btnLimpar">🗑️ Limpar</button>
-                <button type="button" id="btnImprimir" onclick="window.print()">🖨️ Imprimir</button>
-                <button type="submit" id="btnEnviar">✅ Salvar rascunho</button>
+                        <!-- Botões -->
+            <div class="button-group" style="margin-top: 40px; display: flex; justify-content: flex-end; gap: 15px; border-top: 1px solid #ccc; padding-top: 20px;">
+                <button type="button" class="btn-secondary" id="btnLimpar" style="font-size: 1.1em; padding: 12px 24px; border-radius: 6px;">🗑️ Limpar</button>
+                <button type="button" id="btnImprimir" style="font-size: 1.1em; padding: 12px 24px; border-radius: 6px; background-color: #0284c7; color: white; border: none; cursor: pointer;" onclick="window.print()">🖨️ Imprimir</button>
+                <button type="submit" id="btnEnviar" class="btn-action" style="font-size: 1.1em; padding: 12px 24px; background-color: #28a745; border: none; border-radius: 6px; color: white; cursor: pointer; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">💾 Salvar e Avançar ➡</button>
             </div>
-
-        </form>
+</form>
     </div>
 
     <!-- Scripts do Motor -->
-    <script src="formulario.js"></script>
-    <script src="hints.js"></script>
-    <script src="foco-05.js"></script>
+    <script src="formulario.js?v=1782355313469"></script>
+    <script src="hints.js?v=1782355313469"></script>
+    <script src="foco-05.js?v=1782355313469"></script>
     <script>
         window.inicializarListaDocumentosDinamica('aba5', 'btnAdicionarDocumento05', 'documentos-list-05');
     </script>
-    <script src="sync.js"></script>
+    <script src="sync.js?v=1782355313469"></script>
 </body>
 </html>

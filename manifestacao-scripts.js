@@ -85,16 +85,48 @@ document.addEventListener('DOMContentLoaded', () => {
                 const v = lastRadio ? lastRadio.value.toLowerCase() : '';
                 if (currentProfileKey === 'cde') {
                     if (v === 'aprovar_proposta') {
-                        window.parent.parent.updateField('status', 'Admissibilidade confirmada');
+                        window.parent.parent.updateField('status', 'Viabilidade confirmada');
                     } else {
                         // A outra opção "Devolvido complementação" cai na regra 3) -> "Devolvido para complementação"
                         window.parent.parent.updateField('status', 'Devolvido para complementação');
                     }
                 } else {
                     const requiresReturn = v.includes('complementacao') || v.includes('insuficiente') || v.includes('retornar') || v.includes('diligencia') || v.includes('nao_apta') || v.includes('devolver') || v.includes('restituir') || v === 'indefiro';
-                    if (requiresReturn) {
+                    
+                    if (v === 'devolver_equipe' || v === 'restituir' || v === 'nao_apta_retornar' || v === 'necessita_complementacao' || v === 'diligencia') {
+                        // Limpa as manifestações superiores da SPU/UF para forçar o recomeço
+                        window.parent.parent.updateField('foco_data_uf-chefia', null);
+                        window.parent.parent.updateField('foco_data_uf-coord', null);
+                        window.parent.parent.updateField('foco_data_uf-super', null);
+                        window.parent.parent.updateField('manifestacao_uf-chefia', false);
+                        window.parent.parent.updateField('manifestacao_uf-coord', false);
+                        window.parent.parent.updateField('manifestacao_uf-super', false);
+                        
+                        // Se for uma devolução da UC (Órgão Central), limpa também os pareceres da UC
+                        if (['uc-tecnica', 'uc-coord', 'uc-diretoria'].includes(currentProfileKey)) {
+                            window.parent.parent.updateField('foco_data_uc-tecnica', null);
+                            window.parent.parent.updateField('foco_data_uc-coord', null);
+                            window.parent.parent.updateField('foco_data_uc-diretoria', null);
+                            window.parent.parent.updateField('manifestacao_uc-tecnica', false);
+                            window.parent.parent.updateField('manifestacao_uc-coord', false);
+                            window.parent.parent.updateField('manifestacao_uc-diretoria', false);
+                            window.parent.parent.updateField('status', 'Devolvido pelo Órgão Central para SPU/UF');
+                        } else {
+                            window.parent.parent.updateField('status', 'Devolvido para Equipe SPU/UF');
+                        }
+                    } else if (requiresReturn) {
                         window.parent.parent.updateField('status', 'Devolvido para complementação');
                     }
+                }
+                
+                // --- REGRA DE NEGÓCIO: Checkpoint status_flow ---
+                let sf = '';
+                if (['uf-tecnica', 'uf-chefia', 'uf-coord', 'uf-super'].includes(currentProfileKey)) sf = 'SPU/UF';
+                else if (['uc-tecnica', 'uc-coord', 'uc-diretoria'].includes(currentProfileKey)) sf = 'Direção';
+                else if (['cde'].includes(currentProfileKey)) sf = 'CDE';
+                
+                if (sf) {
+                    window.parent.parent.updateField('status_flow', sf);
                 }
             }
 
@@ -127,7 +159,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 despacho: userObs
             }, '*');
 
-            alert('✅ Manifestação concluída!');
+            // Força o salvamento antes do alert para garantir que o BD registre a ação
+            if (window.parent && window.parent.parent && typeof window.parent.parent.forceSaveDraft === 'function') {
+                window.parent.parent.forceSaveDraft().then(() => {
+                    alert('✅ Manifestação concluída!');
+                });
+            } else {
+                alert('✅ Manifestação concluída!');
+            }
         });
     }
 

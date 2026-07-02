@@ -102,7 +102,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  function atualizarSituacaoOcupacional() {
+  function atualizarSituaçãoOcupacional() {
     const selecionado = document.querySelector('input[name="imoveis[0][situacao_ocupacional]"]:checked');
     const valor = selecionado ? selecionado.value : "";
 
@@ -282,7 +282,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   situacaoRadios.forEach(function (radio) {
-    radio.addEventListener("change", atualizarSituacaoOcupacional);
+    radio.addEventListener("change", atualizarSituaçãoOcupacional);
   });
 
   custosRadios.forEach(function (radio) {
@@ -305,20 +305,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
   form.addEventListener("submit", function (event) {
     event.preventDefault(); // Impede o envio real para demonstração
-    atualizarSituacaoOcupacional();
+    atualizarSituaçãoOcupacional();
     atualizarIncidenciaAmbiental();
     atualizarCustos();
     atualizarRiscos();
     atualizarRestricoes();
 
     if (form.checkValidity()) {
-      alert('✅ Rascunho salvo com sucesso!\n📄 O resumo do processo foi atualizado e está disponível para visualização.');
+      const rootWindow = window.parent?.parent || window.parent || window;
+                  // O motor sync.js cuidará do salvamento na tabela intermediária (foco_drafts)
+            alert('=é Aba validada e salva na tabela intermediária com sucesso! Avançando para a próxima etapa...');
+            const btnTabNext = rootWindow.document?.querySelector('button[data-url="foco-05.html"]');
+            if (btnTabNext) {
+                setTimeout(() => btnTabNext.click(), 100);
+            }
     } else {
       form.reportValidity();
     }
   });
 
-  atualizarSituacaoOcupacional();
+  atualizarSituaçãoOcupacional();
   atualizarIncidenciaAmbiental();
   atualizarCustos();
   atualizarRiscos();

@@ -1,100 +1,41 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FOCO-01 — Dados do Requerimento</title>
-    <link rel="stylesheet" href="styles-forms.css">
-    <link rel="stylesheet" href="hints.css">
+    <title>FOCO-01 — Indicação do Imóvel</title>
+    <link rel="stylesheet" href="styles-forms.css?v=1782355313469">
+    <link rel="stylesheet" href="hints.css?v=1782355313469">
+    <link rel="stylesheet" href="custom-select.css?v=1782355313469">
 </head>
 <body>
     <div class="form-container">
-
-        <h2>Solicitar imóvel para uso da Administração Pública e Entidades sem Fins Lucrativos</h2>
-
+        <h2>Indicação do Imóvel</h2>
         <form id="form01" novalidate>
-
+            
+            <h4 style="margin: 0 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 8px;">Dados do Requerimento</h4>
+            
             <!-- 1.1 Número do Requerimento -->
             <div class="form-group inline">
                 <label for="campo11">Número do requerimento:</label>
-                <input
-                    type="text"
-                    id="campo11"
-                    name="campo11"
-                    value="DF04598/2026"
-                    autocomplete="off"
-                    required
-                >
+                <input type="text" id="campo11" name="campo11" value="" autocomplete="off" required>
             </div>
 
             <!-- 1.2 Data de Protocolamento -->
             <div class="form-group inline">
                 <label for="campo12">Data de Requerimento:</label>
-                <input
-                    type="text"
-                    id="campo12"
-                    name="campo12"
-                    value="15/05/2026"
-                    required
-                >
+                <input type="text" id="campo12" name="campo12" value="" required>
             </div>
 
             <!-- 1.3 Número do Processo SEI -->
             <div class="form-group inline">
                 <label for="campo13">Número do processo SEI:</label>
-                <input
-                    type="text"
-                    id="campo13"
-                    name="campo13"
-                    class="mask-sei"
-                    maxlength="20"
-                    value="10480.012345/2024-00"
-                    autocomplete="off"
-                    required
-                >
-            </div>
-
-            <!-- 1.4 CPF/CNPJ -->
-            <div class="form-group inline">
-                <label for="campo14">CPF/CNPJ:</label>
-                <input
-                    type="text"
-                    id="campo14"
-                    name="campo14"
-                    class="mask-cpf-cnpj"
-                    maxlength="18"
-                    value="12.345.678/0001-90"
-                    autocomplete="off"
-                    required
-                >
-            </div>
-
-            <!-- 1.5 Nome do Requerente -->
-            <div class="form-group inline">
-                <label for="campo15">Nome do requerente:</label>
-                <input
-                    type="text"
-                    id="campo15"
-                    name="campo15"
-                    value="Empresa Exemplo S/A"
-                    autocomplete="off"
-                    required
-                >
-            </div>
-
-            <!-- 1.9 Telefone celular -->
-            <div class="form-group inline">
-                <label for="campo19">Telefone celular:</label>
-                <input
-                    type="text"
-                    id="campo19"
-                    name="campo19"
-                    placeholder="(99) 99999-9999"
-                    maxlength="15"
-                    value="(11) 98765-4321"
-                    autocomplete="off"
-                    required
-                >
+                <input type="text" id="campo13" name="campo13" class="mask-sei" maxlength="20" value="" autocomplete="off" required>
             </div>
 
 
@@ -102,50 +43,45 @@
             <!-- 1.4 CPF/CNPJ -->
             <div class="form-group inline">
                 <label for="campo14">CPF/CNPJ:</label>
-                <input
-                    type="text"
-                    id="campo14"
-                    name="campo14"
-                    class="mask-cpf-cnpj"
-                    maxlength="18"
-                    value="12.345.678/0001-90"
-                    autocomplete="off"
-                    required
-                >
+                <input type="text" id="campo14" name="campo14" class="mask-cpf-cnpj" maxlength="18" value="" autocomplete="off" required>
             </div>
 
             <!-- 1.5 Nome do Requerente -->
             <div class="form-group inline">
                 <label for="campo15">Nome do requerente:</label>
-                <input
-                    type="text"
-                    id="campo15"
-                    name="campo15"
-                    value="Empresa Exemplo S/A"
-                    autocomplete="off"
-                    required
-                >
+                <input type="text" id="campo15" name="campo15" value="" autocomplete="off" required>
             </div>
 
             <!-- 1.9 Telefone celular -->
             <div class="form-group inline">
                 <label for="campo19">Telefone celular:</label>
-                <input
-                    type="text"
-                    id="campo19"
-                    name="campo19"
-                    placeholder="(99) 99999-9999"
-                    maxlength="15"
-                    value="(11) 98765-4321"
-                    autocomplete="off"
-                    required
-                >
+                <input type="text" id="campo19" name="campo19" placeholder="(99) 99999-9999" maxlength="15" value="" autocomplete="off" required>
             </div>
 
-            <!-- 1.7 Pessoa Estrangeira (Movido e atualizado) -->
+            <!-- DADOS DO REPRESENTANTE LEGAL (Adicionado com base no espelho do sistema anterior) -->
+            <h4 style="margin: 20px 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 8px;">Dados do Representante Legal</h4>
+            
+            <div class="form-group inline">
+                <label for="campo14_rep">CPF/CNPJ do representante:</label>
+                <input type="text" id="campo14_rep" name="campo14_rep" class="mask-cpf-cnpj" maxlength="18" placeholder="Opcional" autocomplete="off">
+            </div>
+
+            <div class="form-group inline">
+                <label for="campo15_rep">Nome do representante:</label>
+                <input type="text" id="campo15_rep" name="campo15_rep" placeholder="Opcional" autocomplete="off">
+            </div>
+
+            <div class="form-group inline">
+                <label for="campo19_rep">Telefone celular do representante:</label>
+                <input type="text" id="campo19_rep" name="campo19_rep" placeholder="(99) 99999-9999" maxlength="15" autocomplete="off">
+            </div>
+
+            <h4 style="margin: 20px 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 8px;">Informações Adicionais</h4>
+
+            <!-- 1.7 Pessoa Estrangeira -->
             <div class="form-group inline">
                 <label for="campo17">Pessoa estrangeira:</label>
-                <input type="text" id="campo17" name="campo17" value="Não">
+                <input type="text" id="campo17" name="campo17" value="Não" readonly style="background: transparent; border: none; outline: none; padding: 0; width: auto; font-size: 14px;">
             </div>
 
             <!-- 1.10 Prioridade Legal -->
@@ -170,85 +106,60 @@
                                     <th class="coluna-acao" style="text-align: right; padding: 8px;">Acesso / Ação</th>
                                 </tr>
                             </thead>
-
                             <tbody>
                                 <tr style="border-bottom: 1px solid #e2e8f0;">
                                     <td style="padding: 10px 8px;">
                                         <div class="doc-nome" style="display: flex; align-items: center; gap: 8px;">
                                             <span class="doc-icon">📄</span>
-                                            <div>
-                                                <strong>Requerimento inicial</strong>
-                                            </div>
+                                            <div><strong>Requerimento inicial</strong></div>
                                         </div>
                                     </td>
                                     <td class="coluna-acao" style="text-align: right; padding: 10px 8px;">
-                                        <div style="display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
-                                            <button type="button" class="btn-link-doc btn-view" style="background-color: #0284c7; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; display: inline-block;" onclick="window.open('PDF_1_Nononononononono.pdf', '_blank')" title="Visualizar">👁️ Visualizar</button>
-                                        </div>
+                                        <button type="button" class="btn-link-doc btn-view" style="background-color: #0284c7; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; display: inline-block;" onclick="window.open('PDF_1_Nononononononono.pdf', '_blank')" title="Visualizar">👁️ Visualizar</button>
                                     </td>
                                 </tr>
-
                                 <tr style="border-bottom: 1px solid #e2e8f0;">
                                     <td style="padding: 10px 8px;">
                                         <div class="doc-nome" style="display: flex; align-items: center; gap: 8px;">
                                             <span class="doc-icon">🏢</span>
-                                            <div>
-                                                <strong>Contrato social / Estatuto</strong>
-                                            </div>
+                                            <div><strong>Contrato social / Estatuto</strong></div>
                                         </div>
                                     </td>
                                     <td class="coluna-acao" style="text-align: right; padding: 10px 8px;">
-                                        <div style="display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
-                                            <button type="button" class="btn-link-doc btn-view" style="background-color: #0284c7; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; display: inline-block;" onclick="window.open('PDF_2_Nononononononono.pdf', '_blank')" title="Visualizar">👁️ Visualizar</button>
-                                        </div>
+                                        <button type="button" class="btn-link-doc btn-view" style="background-color: #0284c7; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; display: inline-block;" onclick="window.open('PDF_2_Nononononononono.pdf', '_blank')" title="Visualizar">👁️ Visualizar</button>
                                     </td>
                                 </tr>
-
                                 <tr style="border-bottom: 1px solid #e2e8f0;">
                                     <td style="padding: 10px 8px;">
                                         <div class="doc-nome" style="display: flex; align-items: center; gap: 8px;">
                                             <span class="doc-icon">🪪</span>
-                                            <div>
-                                                <strong>Identificação do representante</strong>
-                                            </div>
+                                            <div><strong>Identificação do representante</strong></div>
                                         </div>
                                     </td>
                                     <td class="coluna-acao" style="text-align: right; padding: 10px 8px;">
-                                        <div style="display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
-                                            <button type="button" class="btn-link-doc btn-view" style="background-color: #0284c7; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; display: inline-block;" onclick="window.open('PDF_3_Nononononononono.pdf', '_blank')" title="Visualizar">👁️ Visualizar</button>
-                                        </div>
+                                        <button type="button" class="btn-link-doc btn-view" style="background-color: #0284c7; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; display: inline-block;" onclick="window.open('PDF_3_Nononononononono.pdf', '_blank')" title="Visualizar">👁️ Visualizar</button>
                                     </td>
                                 </tr>
-
                                 <tr style="border-bottom: 1px solid #e2e8f0;">
                                     <td style="padding: 10px 8px;">
                                         <div class="doc-nome" style="display: flex; align-items: center; gap: 8px;">
                                             <span class="doc-icon">📝</span>
-                                            <div>
-                                                <strong>Procuração</strong>
-                                            </div>
+                                            <div><strong>Procuração</strong></div>
                                         </div>
                                     </td>
                                     <td class="coluna-acao" style="text-align: right; padding: 10px 8px;">
-                                        <div style="display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
-                                            <button type="button" class="btn-link-doc btn-view" style="background-color: #0284c7; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; display: inline-block;" onclick="window.open('PDF_4_Nononononononono.pdf', '_blank')" title="Visualizar">👁️ Visualizar</button>
-                                        </div>
+                                        <button type="button" class="btn-link-doc btn-view" style="background-color: #0284c7; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; display: inline-block;" onclick="window.open('PDF_4_Nononononononono.pdf', '_blank')" title="Visualizar">👁️ Visualizar</button>
                                     </td>
                                 </tr>
-
                                 <tr style="border-bottom: none;">
                                     <td style="padding: 10px 8px;">
                                         <div class="doc-nome" style="display: flex; align-items: center; gap: 8px;">
                                             <span class="doc-icon">🔎</span>
-                                            <div>
-                                                <strong>Comprovante de situação cadastral</strong>
-                                            </div>
+                                            <div><strong>Comprovante de situação cadastral</strong></div>
                                         </div>
                                     </td>
                                     <td class="coluna-acao" style="text-align: right; padding: 10px 8px;">
-                                        <div style="display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
-                                            <button type="button" class="btn-link-doc btn-view" style="background-color: #0284c7; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; display: inline-block;" onclick="window.open('PDF_5_Nononononononono.pdf', '_blank')" title="Visualizar">👁️ Visualizar</button>
-                                        </div>
+                                        <button type="button" class="btn-link-doc btn-view" style="background-color: #0284c7; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; display: inline-block;" onclick="window.open('PDF_5_Nononononononono.pdf', '_blank')" title="Visualizar">👁️ Visualizar</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -256,23 +167,122 @@
                     </div>
                 </details>
             </section>
-            <div class="form-group editavel">
-                <label for="obs_geral_01">Observações:</label>
-                <textarea id="obs_geral_01" name="obs_geral_01" placeholder=""></textarea>
-                <div class="dynamic-list-wrapper" style="flex: 1; display: flex; flex-direction: column; gap: 8px;">
-                    <button type="button" class="btn-add" id="btnAdicionarDocumento01" style="align-self: flex-start;">＋ Adicionar link/documento</button>
-                    <div id="documentos-list-01"></div>
+            
+
+
+            <!-- ========== CONCEITUAÇÃO DO IMÓVEL ========== -->
+            <div class="form-group editavel" style="margin-top: 30px; border-top: 1px dashed #e2e8f0; padding-top: 20px;">
+                <label style="font-size: 1.1em; color: #1e3a5f; font-weight: bold;">Conceituação do imóvel</label>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px; background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                    <!-- Coluna Exige RIP -->
+                    <div>
+                        <h5 style="margin: 0 0 10px 0; color: #2563eb; font-size: 0.95em;">Terrenos que Exigem RIP</h5>
+                        <div class="checkbox-group" style="display: flex; flex-direction: column; gap: 8px;">
+                            <label class="checkbox-option"><input type="checkbox" name="conceituacao[]" value="terreno_marinha" onchange="verificarConceituacao()"> Terreno de marinha e acrescido</label>
+                            <label class="checkbox-option"><input type="checkbox" name="conceituacao[]" value="terreno_nacional_interior" onchange="verificarConceituacao()"> Terreno Nacional Interior</label>
+                            <label class="checkbox-option"><input type="checkbox" name="conceituacao[]" value="imovel_dominio_uniao" onchange="verificarConceituacao()"> Imóvel de Domínio da União</label>
+                            <label class="checkbox-option"><input type="checkbox" name="conceituacao[]" value="gleba_assentamento" onchange="verificarConceituacao()"> Gleba destinada a assentamento</label>
+                            <label class="checkbox-option"><input type="checkbox" name="conceituacao[]" value="ilha_oceanica" onchange="verificarConceituacao()"> Ilha oceânica ou costeira</label>
+                            <label class="checkbox-option"><input type="checkbox" name="conceituacao[]" value="ilha_fluvial" onchange="verificarConceituacao()"> Ilha fluvial ou lacustre</label>
+                        </div>
+                    </div>
+                    <!-- Coluna Dispensado de RIP -->
+                    <div>
+                        <h5 style="margin: 0 0 10px 0; color: #ea580c; font-size: 0.95em;">Terrenos Dispensados de RIP</h5>
+                        <div class="checkbox-group" style="display: flex; flex-direction: column; gap: 8px;">
+                            <label class="checkbox-option"><input type="checkbox" name="conceituacao[]" value="espelho_dagua" onchange="verificarConceituacao()"> Espelho d’água</label>
+                            <label class="checkbox-option"><input type="checkbox" name="conceituacao[]" value="cavidades_naturais" onchange="verificarConceituacao()"> Cavidades naturais subterrâneas</label>
+                            <label class="checkbox-option"><input type="checkbox" name="conceituacao[]" value="manguezal" onchange="verificarConceituacao()"> Manguezal</label>
+                            <label class="checkbox-option"><input type="checkbox" name="conceituacao[]" value="praia_mar" onchange="verificarConceituacao()"> Praia marítima</label>
+                            <label class="checkbox-option"><input type="checkbox" name="conceituacao[]" value="praia_rio" onchange="verificarConceituacao()"> Praia fluvial ou lacustre</label>
+                        </div>
+                    </div>
                 </div>
             </div>
 
+            <!-- ========== PESQUISA DE RIP ========== -->
+            <div id="secaoPesquisaRip" style="display: none; margin-top: 30px; padding: 20px; border: 1px solid #cbd5e1; border-radius: 8px; background: #f8fafc;">
+                <h4 style="margin: 0 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 8px;">Pesquisa no Datalake SPUnet</h4>
+                <div class="form-group" style="display: flex; gap: 10px; align-items: flex-end;">
+                    <div style="flex: 1;">
+                        <label for="rip_pesquisa">Consultar RIP:</label>
+                        <input type="text" id="rip_pesquisa" placeholder="Digite o RIP com 7 a 11 dígitos" maxlength="11" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                    </div>
+                    <button type="button" class="btn-action" onclick="pesquisarRip()" style="padding: 12px 24px; border-radius: 6px; background-color: #2563eb; color: white; border: none; cursor: pointer; height: 44px; margin-bottom: 5px;">🔍 Buscar e Adicionar</button>
+                </div>
+
+                <div class="form-group" style="text-align: center; margin-top: 20px;">
+                    <div id="listaRIPsAssociados" style="display: none; flex-direction: column; gap: 6px; margin: 0 auto; max-width: 500px;"></div>
+                </div>
+
+                <input type="hidden" id="hidden_lista_rips" name="lista_rips" value="">
+
+                <div id="imoveis-container"></div>
+            </div>
+            <!-- ========== FIM PESQUISA DE RIP ========== -->
+
+            <!-- ========== CADASTRO MÍNIMO (SEM RIP) ========== -->
+            <div id="secaoCadastroMinimo" style="display: none; margin-top: 30px; padding: 20px; border: 1px solid #cbd5e1; border-radius: 8px; background: #f8fafc;">
+                <h4 style="margin: 0 0 16px 0; color: #ea580c; border-bottom: 2px solid #ddd; padding-bottom: 8px;">Cadastro Mínimo para Áreas sem RIP</h4>
+                
+                <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 15px; margin-bottom: 15px;">
+                    <div class="form-group editavel" style="margin: 0;">
+                        <label for="cep_sem_rip">CEP <span style="color:red">*</span>:</label>
+                        <input type="text" id="cep_sem_rip" name="cep_sem_rip" placeholder="00000-000" onblur="buscarCep(this.value)" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\d{5})(\d{3})/, '$1-$2')" maxlength="9">
+                    </div>
+                    <div class="form-group editavel" style="margin: 0;">
+                        <label for="logradouro_sem_rip">Logradouro:</label>
+                        <input type="text" id="logradouro_sem_rip" name="logradouro_sem_rip" placeholder="Preenchimento automático">
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 15px; margin-bottom: 15px;">
+                    <div class="form-group editavel" style="margin: 0;">
+                        <label for="municipio_sem_rip">Município:</label>
+                        <input type="text" id="municipio_sem_rip" name="municipio_sem_rip" placeholder="Preenchimento automático">
+                    </div>
+                    <div class="form-group editavel" style="margin: 0;">
+                        <label for="uf_sem_rip">UF:</label>
+                        <input type="text" id="uf_sem_rip" name="uf_sem_rip" placeholder="Preenchimento automático">
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 15px; margin-bottom: 15px;">
+                    <div class="form-group editavel" style="margin: 0;">
+                        <label for="numero_sem_rip">Número:</label>
+                        <input type="text" id="numero_sem_rip" name="numero_sem_rip" placeholder="Número">
+                    </div>
+                    <div class="form-group editavel" style="margin: 0;">
+                        <label for="complemento_sem_rip">Complemento:</label>
+                        <input type="text" id="complemento_sem_rip" name="complemento_sem_rip" placeholder="Apto, Bloco, etc.">
+                    </div>
+                </div>
+
+                <div class="form-group editavel" style="margin-bottom: 15px;">
+                    <label for="area_sem_rip">Área a ser destinada (m²) <span style="color:red">*</span>:</label>
+                    <input type="number" id="area_sem_rip" name="area_sem_rip" placeholder="Ex: 5000">
+                </div>
+                
+                <div class="form-group editavel">
+                    <label for="obs_geral_01">Observações:</label>
+                    <textarea id="obs_geral_01" name="obs_geral_01" placeholder=""></textarea>
+                    <div class="dynamic-list-wrapper" style="flex: 1; display: flex; flex-direction: column; gap: 8px;">
+                        <button type="button" class="btn-add" id="btnAdicionarDocumento01" style="align-self: flex-start;">＋ Adicionar link/documento</button>
+                        <div id="documentos-list-01"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- ========== FIM CADASTRO MÍNIMO ========== -->
+
+
             <!-- Botões -->
-            <div class="button-group">
-                <button type="button" class="btn-secondary" id="btnLimpar">🗑️ Limpar</button>
-                <button type="button" id="btnImprimir" onclick="window.print()">🖨️ Imprimir</button>
-                <button type="submit" id="btnEnviar">✅ Salvar rascunho</button>
+            <div class="button-group" style="margin-top: 40px; display: flex; justify-content: flex-end; gap: 15px; border-top: 1px solid #ccc; padding-top: 20px;">
+                <button type="button" class="btn-secondary" id="btnLimpar" style="font-size: 1.1em; padding: 12px 24px; border-radius: 6px;">🗑️ Limpar</button>
+                <button type="button" id="btnImprimir" style="font-size: 1.1em; padding: 12px 24px; border-radius: 6px; background-color: #0284c7; color: white; border: none; cursor: pointer;" onclick="window.print()">🖨️ Imprimir</button>
+                <button type="submit" id="btnEnviar" class="btn-action" style="font-size: 1.1em; padding: 12px 24px; background-color: #28a745; border: none; border-radius: 6px; color: white; cursor: pointer; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">💾 Salvar e Avançar ➡</button>
             </div>
 
-        </form>
+</form>
     </div>
 
     <!-- Modal de Simulação -->
@@ -285,16 +295,53 @@
         </div>
     </div>
 
-    <script src="formulario.js"></script>
-    <script src="hints.js"></script>
-    <script src="foco-01.js"></script>
+    <script src="formulario.js?v=1782355313469"></script>
+    <script src="hints.js?v=1782355313469"></script>
+    <script src="foco-01.js?v=1782355313469"></script>
 
     <script>
+        // ================================================================
+        // ESTADO GLOBAL DO RIP
+        // ================================================================
+        window.imovelCount = 0;
+        window.ripsPesquisados = {};
+
         // ================================================================
         // LISTA DINÂMICA DE DOCUMENTOS CUSTOMIZADOS (BASE64)
         // ================================================================
         window.inicializarListaDocumentosDinamica('aba1', 'btnAdicionarDocumento01', 'documentos-list-01');
+
+        // ================================================================
+        // BUSCA DE CEP
+        // ================================================================
+        async function buscarCep(cep) {
+            const cepLimpo = cep.replace(/\D/g, '');
+            if (cepLimpo.length !== 8) return;
+            try {
+                const response = await fetch(`https://viacep.com.br/ws/${cepLimpo}/json/`);
+                const data = await response.json();
+                if (!data.erro) {
+                    const logradouro = document.getElementById('logradouro_sem_rip');
+                    const municipio = document.getElementById('municipio_sem_rip');
+                    const uf = document.getElementById('uf_sem_rip');
+                    const inputCep = document.getElementById('cep_sem_rip');
+
+                    logradouro.value = data.logradouro || '';
+                    municipio.value = data.localidade || '';
+                    uf.value = data.uf || '';
+
+                    // Notifica o sync.js sobre a mudança via JS
+                    logradouro.dispatchEvent(new Event('change', { bubbles: true }));
+                    municipio.dispatchEvent(new Event('change', { bubbles: true }));
+                    uf.dispatchEvent(new Event('change', { bubbles: true }));
+                    inputCep.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+            } catch (e) {
+                console.error("Erro ao buscar CEP:", e);
+            }
+        }
     </script>
 
-    <script src="sync.js"></script>
+    <script src="sync.js?v=1782355313469"></script>
+</body>
 </html>

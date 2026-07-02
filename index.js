@@ -36,8 +36,9 @@ document.addEventListener('DOMContentLoaded', () => {
             targetUrl = summaryMap[url] || url;
         }
 
-        // Atualiza o iframe
-        iframe.src = targetUrl;
+        // Atualiza o iframe com cache buster
+        const separator = targetUrl.includes('?') ? '&' : '?';
+        iframe.src = targetUrl + separator + 't=' + new Date().getTime();
 
         // Atualiza a classe ativa nos botões
         buttons.forEach(btn => btn.classList.remove('active-btn'));

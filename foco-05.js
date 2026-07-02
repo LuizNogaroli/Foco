@@ -57,9 +57,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // 4. Riscos Verificados (Toggles e Exclusividade)
-    const chkNenhumRisco = document.querySelector('input[name="destinacao_riscos[]"][value="Nenhum risco identificado"]');
-    const chkOutrosRiscos = document.querySelectorAll('input[name="destinacao_riscos[]"]:not([value="Nenhum risco identificado"])');
-    const blocoRiscosObs = document.getElementById('bloco-obs-destinacao-riscos');
+    const chkNenhumRisco = document.querySelector('input[name="destinação_riscos[]"][value="Nenhum risco identificado"]');
+    const chkOutrosRiscos = document.querySelectorAll('input[name="destinação_riscos[]"]:not([value="Nenhum risco identificado"])');
+    const blocoRiscosObs = document.getElementById('bloco-obs-destinação-riscos');
 
     if (chkNenhumRisco && chkOutrosRiscos.length > 0 && blocoRiscosObs) {
         function updateRiscosUI() {
@@ -83,9 +83,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // 5. Restrições (Toggles e Exclusividade)
-    const chkNenhumaRestricao = document.querySelector('input[name="destinacao_restricoes[]"][value="Nenhuma restrição identificada"]');
-    const chkOutrasRestricoes = document.querySelectorAll('input[name="destinacao_restricoes[]"]:not([value="Nenhuma restrição identificada"])');
-    const blocoRestricoesObs = document.getElementById('bloco-obs-destinacao-restricoes');
+    const chkNenhumaRestricao = document.querySelector('input[name="destinação_restricoes[]"][value="Nenhuma restrição identificada"]');
+    const chkOutrasRestricoes = document.querySelectorAll('input[name="destinação_restricoes[]"]:not([value="Nenhuma restrição identificada"])');
+    const blocoRestricoesObs = document.getElementById('bloco-obs-destinação-restricoes');
 
     if (chkNenhumaRestricao && chkOutrasRestricoes.length > 0 && blocoRestricoesObs) {
         function updateRestricoesUI() {
@@ -138,7 +138,13 @@ document.addEventListener('DOMContentLoaded', function () {
     form.addEventListener('submit', (e) => {
         e.preventDefault();
         if (form.checkValidity()) {
-            alert('✅ Rascunho salvo com sucesso!\n📄 O resumo do processo foi atualizado e está disponível para visualização.');
+            const rootWindow = window.parent?.parent || window.parent || window;
+                        // O motor sync.js cuidará do salvamento na tabela intermediária (foco_drafts)
+            alert('=é Aba validada e salva na tabela intermediária com sucesso! Avançando para a próxima etapa...');
+            const btnTabNext = rootWindow.document?.querySelector('button[data-url="foco-06.html"]');
+            if (btnTabNext) {
+                setTimeout(() => btnTabNext.click(), 100);
+            }
         } else {
             form.reportValidity();
         }
