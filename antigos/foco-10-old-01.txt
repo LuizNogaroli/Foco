@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CDE – Comitê de Destinação</title>
+  <link rel="stylesheet" href="styles-forms.css">
+  <link rel="stylesheet" href="hints.css">
+  <link rel="stylesheet" href="custom-select.css">
+  <style>
+    /* Estilos específicos restaurados do layout original CDE */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f4f8; color: #1a2533; padding: 24px; }
+    .formulario-wrapper { max-width: 900px; margin: 0 auto; }
+    
+    .cabecalho-cde { background: linear-gradient(135deg, #1e3a5f 0%, #144272 100%); border-radius: 12px 12px 0 0; padding: 28px 32px 20px; color: #fff; border-bottom: 4px solid #2e86de; }
+    .cabecalho-cde .badge { display: inline-block; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 20px; padding: 3px 14px; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 10px; }
+    .cabecalho-cde h2 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+    .cabecalho-cde p { font-size: 13px; color: rgba(255,255,255,0.75); }
+    
+    .formulario-corpo { background: #fff; border: 1px solid #d1dce8; border-top: none; border-radius: 0 0 12px 12px; padding: 28px 32px; }
+    
+    .secao { margin-bottom: 28px; }
+    .secao-titulo { display: flex; align-items: center; gap: 10px; background: linear-gradient(90deg, #1e3a5f 0%, #144272 100%); color: #fff; padding: 10px 18px; border-radius: 8px; font-size: 13.5px; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 18px; text-transform: uppercase; }
+    
+    .campos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .campo-grupo { display: flex; flex-direction: column; gap: 5px; }
+    .campo-grupo label { font-size: 11.5px; font-weight: 600; color: #4a5568; text-transform: uppercase; letter-spacing: 0.4px; }
+    .campo-grupo input, .campo-grupo select, .campo-grupo textarea { border: 1.5px solid #c9d6e3; border-radius: 6px; padding: 8px 12px; font-size: 13px; background: #f7fafd; }
+    .campo-span2 { grid-column: span 2; }
+    
+    /* ═══════════════════════════════════════════════════
+       BOTÕES DE OPÇÃO (Padrão Etapa 8)
+    ═══════════════════════════════════════════════════ */
+    .decl-opcao-btns { display: flex; flex-direction: column; gap: 8px; margin: 10px 0; }
+    .decl-opcao-btns > input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none; }
+    .decl-opcao-btn-label { display: flex; align-items: flex-start; gap: 12px; padding: 11px 14px; border: 2px solid #cbd5e1; border-radius: 7px; cursor: pointer; background: #f8fafc; transition: 0.18s; font-size: 0.93em; color: #1e293b; line-height: 1.4; }
+    .decl-opcao-btn-label:hover { border-color: #1e3a5f; background: #eff6ff; }
+    .opcao-icone { flex-shrink: 0; width: 20px; height: 20px; border-radius: 50%; border: 2px solid #94a3b8; background: #fff; display: flex; align-items: center; justify-content: center; transition: 0.18s; margin-top: 1px; font-size: 0.75em; color: transparent; }
+    .decl-opcao-btns > input[type="radio"]:checked + .decl-opcao-btn-label { border-color: #1e3a5f; background: #eff6ff; box-shadow: 0 0 0 3px rgba(30,58,95,0.10); font-weight: 500; }
+    .decl-opcao-btns > input[type="radio"]:checked + .decl-opcao-btn-label .opcao-icone { border-color: #1e3a5f; background: #1e3a5f; color: #fff; }
+
+    .analise-bloco { background: #f7fafd; border: 1.5px solid #c9d6e3; border-left: 4px solid #2e86de; border-radius: 0 8px 8px 0; padding: 16px 18px; margin-bottom: 14px; }
+    .analise-bloco h4 { font-size: 13px; font-weight: 700; color: #1e3a5f; margin-bottom: 5px; display: flex; align-items: center; gap: 6px; }
+    
+    .premissas-lista { display: flex; flex-direction: column; gap: 10px; }
+    .premissa-item { display: flex; gap: 12px; background: #f7fafd; border: 1.5px solid #c9d6e3; border-radius: 8px; padding: 12px 16px; font-size: 13px; color: #2d3748; line-height: 1.5; }
+    .premissa-item .num-prem { background: #1e3a5f; color: #fff; border-radius: 50%; width: 24px; height: 24px; min-width: 24px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; }
+
+    .alerta-regime { background: #fffbeb; border: 1.5px solid #fcd34d; border-left: 4px solid #f59e0b; border-radius: 0 8px 8px 0; padding: 12px 16px; font-size: 12.5px; color: #78350f; margin-bottom: 10px; line-height: 1.4; }
+
+    /* Assinaturas */
+    .assinatura-wrapper { border: 1.5px solid #c9d6e3; border-radius: 10px; overflow: hidden; margin-bottom: 10px; box-shadow: 0 1px 4px rgba(30,58,95,0.06); }
+    .assinatura-header { background: linear-gradient(90deg, #1e3a5f 0%, #144272 100%); color: #fff; padding: 13px 18px; cursor: pointer; display: flex; align-items: center; justify-content: flex-start; user-select: none; gap: 10px; }
+    .info-membro { display: flex; align-items: center; gap: 12px; flex: 1; }
+    .assinatura-header .avatar { background: rgba(255,255,255,0.2); border-radius: 50%; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; }
+    .assinatura-header .nome-cargo { display: flex; flex-direction: column; gap: 2px; }
+    .assinatura-header .nome-cargo strong { font-size: 13.5px; }
+    .assinatura-header .nome-cargo span { font-size: 11px; color: rgba(255,255,255,0.7); }
+    
+    .status-badge { display: flex; align-items: center; gap: 8px; margin-right: 50px; }
+    .badge-status { font-size: 11px; padding: 3px 10px; border-radius: 20px; font-weight: 600; }
+    .badge-pendente { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+    .badge-assinado { background: #dcfce7; color: #16a34a; border: 1px solid #86efac; display: none; }
+    .badge-assinado.visivel { display: inline-block; }
+    .badge-pendente.oculto { display: none; }
+
+    .seta-icon { font-size: 12px; transition: transform 0.3s; }
+    .seta-icon.aberto { transform: rotate(180deg); }
+
+    .assinatura-corpo { display: none; background: #fff; padding: 20px 22px; border-top: 1.5px solid #e2eaf3; }
+    .assinatura-corpo.aberto { display: block; }
+
+    .declaracao-box { background: #f0f6ff; border: 1.5px solid #bdd6f5; border-radius: 8px; padding: 14px 18px; margin-bottom: 18px; }
+    .declaracao-box h4 { font-size: 12.5px; font-weight: 700; color: #1e3a5f; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+    .declaracao-opcoes { display: flex; flex-direction: column; gap: 8px; }
+    .decl-opcao { display: flex; align-items: center; gap: 9px; font-size: 13px; color: #2d3748; cursor: pointer; padding: 6px 10px; border-radius: 6px; transition: background 0.15s; }
+    .decl-opcao:hover { background: #dbeafe; }
+    .decl-opcao input { accent-color: #1e3a5f; width: 15px; height: 15px; }
+
+    .assinatura-acoes { display: flex; align-items: center; gap: 12px; margin-top: 6px; flex-wrap: wrap; }
+    .campo-grupo-ass { flex: 1; min-width: 160px; display: flex; flex-direction: column; gap: 4px; }
+    .campo-grupo-ass label { font-size: 11px; font-weight: 600; color: #4a5568; text-transform: uppercase; letter-spacing: 0.4px; }
+    .campo-grupo-ass input { border: 1.5px solid #c9d6e3; border-radius: 6px; padding: 7px 10px; font-size: 13px; background: #f7fafd; width: 100%; }
+    
+    .btn-assinar { background: linear-gradient(135deg, #1e3a5f, #2e86de); color: #fff; border: none; border-radius: 7px; padding: 9px 20px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+    .btn-assinar:disabled { background: #94a3b8; cursor: not-allowed; }
+    .btn-desfazer { background: #fff; color: #ef4444; border: 1.5px solid #ef4444; border-radius: 7px; padding: 8px 16px; font-size: 12.5px; font-weight: 600; cursor: pointer; display: none; }
+
+    .resultado-assinatura { display: none; background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 12px 16px; margin-top: 14px; font-size: 13px; color: #15803d; align-items: center; gap: 10px; }
+    .decl-conteudo-bloqueado { opacity: 0.72; pointer-events: none; }
+  </style>
+</head>
+<body>
+<div class="formulario-wrapper">
+
+  <!-- CABEÇALHO -->
+  <div class="cabecalho-cde">
+    <div class="badge">SPU · Secretaria de Patrimônio da União</div>
+    <h2>Comitê de Destinação de Imóveis — CDE</h2>
+    <p>Formulário de deliberação para análise e aprovação de propostas de destinação de imóveis da União</p>
+  </div>
+
+  <div class="formulario-corpo">
+    <form id="form10" novalidate>
+
+    <!-- SEÇÃO – PREMISSAS (ACORDEÃO) -->
+    <div class="secao">
+      <div class="assinatura-wrapper" id="wrapper-premissas">
+        <div class="assinatura-header" id="header-premissas" role="button" tabindex="0">
+          <div class="info-membro">
+            <div class="nome-cargo"><strong>Premissas da Deliberação</strong><span>Diretrizes fundamentais para a decisão</span></div>
+          </div>
+          <span class="seta-icon" id="seta-premissas">▼</span>
+        </div>
+        <div class="assinatura-corpo" id="corpo-premissas">
+          <div class="premissas-lista">
+            <div class="premissa-item"><div class="num-prem">1</div><div>A presente deliberação é proferida com base nas informações prestadas no formulário eletrônico e nas manifestações técnicas anteriores.</div></div>
+            <div class="premissa-item"><div class="num-prem">2</div><div>Os dados cadastrais, dominiais e ambientais constantes do formulário são de responsabilidade da unidade de origem.</div></div>
+            <div class="premissa-item"><div class="num-prem">3</div><div>A decisão considera a vinculação do uso pretendido às políticas públicas indicadas no processo.</div></div>
+            <div class="premissa-item"><div class="num-prem">4</div><div>A deliberação pressupõe inexistência de fato novo relevante não informado no formulário.</div></div>
+            <div class="premissa-item"><div class="num-prem">5</div><div>A decisão parte do pressuposto de que a situação fática do imóvel permanece conforme descrita.</div></div>
+            <div class="premissa-item"><div class="num-prem">6</div><div>A escolha do destinatário é analisada conforme os fundamentos apresentados.</div></div>
+            <div class="premissa-item"><div class="num-prem">7</div><div>O regime jurídico adotado é considerado instrumento adequado à finalidade pública declarada.</div></div>
+            <div class="premissa-item"><div class="num-prem">8</div><div>Eventual alteração relevante das informações deverá ensejar nova submissão à instância competente.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEÇÃO – ANÁLISE -->
+    <div class="secao">
+      <div class="secao-titulo">Análise do Comitê</div>
+      
+      <!-- Aspectos de Interesse Público -->
+      <div class="analise-bloco">
+        <h4>Aspectos de Interesse Público</h4>
+        <div class="decl-opcao-btns">
+            <input type="radio" name="interesse_pub" id="int-consistente" value="consistente">
+            <label class="decl-opcao-btn-label" for="int-consistente"><span class="opcao-icone">✔</span>Evidenciado de forma consistente</label>
+            
+            <input type="radio" name="interesse_pub" id="int-ajustes" value="ajustes">
+            <label class="decl-opcao-btn-label" for="int-ajustes"><span class="opcao-icone">✔</span>Evidenciado com necessidade de ajustes</label>
+            
+            <input type="radio" name="interesse_pub" id="int-insuficiente" value="insuficiente">
+            <label class="decl-opcao-btn-label" for="int-insuficiente"><span class="opcao-icone">✔</span>Não suficientemente demonstrado</label>
+        </div>
+      </div>
+
+      <!-- Escolha do Destinatário -->
+      <div class="analise-bloco">
+        <h4>Escolha do Destinatário</h4>
+        <div class="decl-opcao-btns">
+            <input type="radio" name="dest_fund" id="dest-consistente" value="consistente">
+            <label class="decl-opcao-btn-label" for="dest-consistente"><span class="opcao-icone">✔</span>Fundamentação consistente</label>
+            
+            <input type="radio" name="dest_fund" id="dest-ressalvas" value="ressalvas">
+            <label class="decl-opcao-btn-label" for="dest-ressalvas"><span class="opcao-icone">✔</span>Fundamentação suficiente com ressalvas</label>
+            
+            <input type="radio" name="dest_fund" id="dest-insuficiente" value="insuficiente">
+            <label class="decl-opcao-btn-label" for="dest-insuficiente"><span class="opcao-icone">✔</span>Fundamentação insuficiente</label>
+        </div>
+      </div>
+
+      <!-- Impactos -->
+      <div class="analise-bloco">
+        <h4>Impactos Sociais, Territoriais e Ambientais</h4>
+        <div class="decl-opcao-btns">
+            <input type="radio" name="impacto" id="imp-pos-relevante" value="pos_relevante">
+            <label class="decl-opcao-btn-label" for="imp-pos-relevante"><span class="opcao-icone">✔</span>Impacto positivo relevante</label>
+            
+            <input type="radio" name="impacto" id="imp-pos-moderado" value="pos_moderado">
+            <label class="decl-opcao-btn-label" for="imp-pos-moderado"><span class="opcao-icone">✔</span>Impacto positivo moderado</label>
+            
+            <input type="radio" name="impacto" id="imp-neutro" value="neutro">
+            <label class="decl-opcao-btn-label" for="imp-neutro"><span class="opcao-icone">✔</span>Impacto neutro</label>
+            
+            <input type="radio" name="impacto" id="imp-adverso" value="adverso">
+            <label class="decl-opcao-btn-label" for="imp-adverso"><span class="opcao-icone">✔</span>Impacto potencialmente adverso</label>
+        </div>
+      </div>
+
+      <!-- Regime de Destinação -->
+      <div class="analise-bloco">
+        <h4>Regime de Destinação</h4>
+        <!-- div class="alerta-regime">O Comitê avaliou o regime como instrumento para concretização do interesse público indicado.</div -->
+        <div class="decl-opcao-btns">
+            <input type="radio" name="regime_dest" id="reg-manter" value="manter">
+            <label class="decl-opcao-btn-label" for="reg-manter"><span class="opcao-icone">✔</span>Manter regime proposto</label>
+            
+            <input type="radio" name="regime_dest" id="reg-alterar" value="alterar">
+            <label class="decl-opcao-btn-label" for="reg-alterar"><span class="opcao-icone">✔</span>Alterar regime</label>
+            
+            <input type="radio" name="regime_dest" id="reg-reavaliar" value="reavaliar">
+            <label class="decl-opcao-btn-label" for="reg-reavaliar"><span class="opcao-icone">✔</span>Determinar reavaliação do regime</label>
+        </div>
+        <div id="campo-regime-alternativo" style="display:none; margin-top:10px;">
+          <label style="font-size:11.5px; font-weight:600; color:#4a5568; text-transform:uppercase; letter-spacing:0.4px; margin-bottom:4px; display:block;">Alterar para</label>
+          <input type="text" placeholder="Informe o novo regime jurídico proposto" />
+        </div>
+      </div>
+    </div>
+
+    <!-- SEÇÃO – DELIBERAÇÃO -->
+    <div class="secao">
+      <div class="secao-titulo">Deliberação</div>
+      <div class="decl-opcao-btns">
+          <input type="radio" name="deliberacao" id="delib-aprovar" value="aprovar">
+          <label class="decl-opcao-btn-label" for="delib-aprovar"><span class="opcao-icone">✔</span>Aprovar a proposta, nos termos apresentados.</label>
+          
+          <input type="radio" name="deliberacao" id="delib-cond" value="aprovar_cond">
+          <label class="decl-opcao-btn-label" for="delib-cond"><span class="opcao-icone">✔</span>Aprovar com condicionantes, conforme abaixo:</label>
+          
+          <input type="radio" name="deliberacao" id="delib-diligencia" value="diligencia">
+          <label class="decl-opcao-btn-label" for="delib-diligencia"><span class="opcao-icone">✔</span>Determinar diligência complementar.</label>
+          
+          <input type="radio" name="deliberacao" id="delib-indeferir" value="indeferir">
+          <label class="decl-opcao-btn-label" for="delib-indeferir"><span class="opcao-icone">✔</span>Indeferir a proposta.</label>
+      </div>
+
+      <div id="bloco-condicionantes" style="display:none; margin-top:16px; background:#f7fafd; border:1.5px solid #bdd6f5; padding:18px; border-radius:8px;">
+        <h4 style="font-size:13px; font-weight:700; color:#1e3a5f; margin-bottom:12px;">Condicionantes da Aprovação</h4>
+        <div class="condicionantes-lista" id="lista-condicionantes">
+          <div class="condicionante-item"><span>Cond. 1</span><input type="text" placeholder="Descreva a condicionante..." /></div>
+        </div>
+        <button class="btn-add-cond" id="btn-add-cond" type="button">＋ Adicionar condicionante</button>
+      </div>
+    </div>
+
+
+    <!-- ASSINATURAS -->
+    <div class="secao">
+      <div class="secao-titulo">✍ Assinaturas dos Membros do CDE</div>
+      <p style="font-size:13px; color:#4a5568; margin-bottom:18px; line-height:1.6;">Cada membro do Comitê deve revisar a declaração, confirmar os itens pertinentes e registrar sua assinatura para validar esta deliberação.</p>
+
+      <div id="assinaturas-container">
+          <!-- PRESIDENTE -->
+          <div class="assinatura-wrapper" id="wrapper-presidente">
+            <div class="assinatura-header" id="header-presidente" role="button" tabindex="0">
+              <div class="info-membro">
+                <div class="avatar">P</div>
+                <div class="nome-cargo"><strong>Presidente do CDE</strong><span>Comitê de Destinação de Imóveis da União</span></div>
+              </div>
+              <div class="status-badge">
+                <span class="badge-status badge-pendente" id="badge-pendente-presidente">⏳ Pendente</span>
+                <span class="badge-status badge-assinado" id="badge-ok-presidente">✔ Assinado</span>
+              </div>
+              <span class="seta-icon" id="seta-presidente">▼</span>
+            </div>
+            <div class="assinatura-corpo" id="corpo-presidente">
+              <div class="declaracao-box">
+                <h4>Declaração do Presidente</h4>
+                <div class="declaracao-opcoes">
+                    <label class="decl-opcao"><input type="checkbox" /> Analisei o processo e confirmo que os aspectos de mérito foram devidamente considerados.</label>
+                    <label class="decl-opcao"><input type="checkbox" /> Confirmo a deliberação registrada no formulário.</label>
+                    <label class="decl-opcao"><input type="checkbox" /> Atesto que as premissas foram observadas.</label>
+                    <label class="decl-opcao"><input type="checkbox" /> Não tenho conhecimento de fato novo relevante não informado.</label>
+                  </div>
+                </div>
+                <div class="assinatura-acoes">
+                  <div class="campo-grupo-ass"><label>Nome completo</label><input type="text" id="nome-presidente" placeholder="Nome do Presidente" /></div>
+                  <div class="campo-grupo-ass" style="max-width:180px;"><label>Matrícula / SIAPE</label><input type="text" id="matricula-presidente" /></div>
+                  <button type="button" class="btn-assinar" id="btn-assinar-presidente">✔ Assinar</button>
+                  <button type="button" class="btn-desfazer" id="btn-desfazer-presidente">✕ Desfazer</button>
+                </div>
+                <div class="resultado-assinatura" id="resultado-presidente"><strong>✅ Manifestação registrada com sucesso.</strong></div>
+              </div>
+            </div>
+            <div id="membros-container"></div>
+        </div>
+      </div>
+
+      <div class="button-group" style="margin-top:30px;">
+        <button type="button" class="btn-secondary" id="btnLimpar">🗑️ Limpar</button>
+        <button type="button" id="btnImprimir" onclick="window.print()">🖨️ Imprimir</button>
+        <button type="button" id="btnFinalizarCDE" style="background:#1a7a4a; color:white;">🏁 Finalizar Trâmite CDE</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal de Conclusão -->
+<div id="modalEnvio" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:2000; align-items:center; justify-content:center;">
+    <div style="background:white; padding:30px; border-radius:12px; max-width:500px; width:90%; box-shadow:0 10px 25px rgba(0,0,0,0.3); text-align:center; position:relative; border-top: 8px solid #1a7a4a;">
+        <div style="font-size:40px; margin-bottom:15px;">🏁</div>
+        <h3 style="color:#1e3a5f; margin-bottom:15px;">Trâmite Finalizado!</h3>
+        <p style="color:#475569; line-height:1.6; font-size:0.95em;">A deliberação do CDE foi registrada com sucesso. O processo seguirá para as providências administrativas finais conforme a decisão do comitê.</p>
+        <button type="button" id="btnFecharModal" class="btn-assinar" style="margin-top:25px; width:100%; background:#1e3a5f;">Concluir Processo</button>
+    </div>
+</div>
+
+<script src="formulario.js"></script>
+<script src="hints.js"></script>
+<script src="foco-10.js"></script>
+</body>
+</html>

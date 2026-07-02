@@ -1,0 +1,732 @@
+// formulario.js
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    // ══════════════════════════════════════════════════════════════════════════
+    // GLOBAIS — Tooltips e Popups (compartilhado por todos os formulários)
+    // ══════════════════════════════════════════════════════════════════════════
+
+    // ── 1. TIPO A: Tooltip hover (só mensagem) ────────────────────────────────
+    let tooltipEl = null;
+
+    document.querySelectorAll('.hint-icon:not(.hint-link):not(.hint-popup)').forEach(function (icon) {
+        icon.addEventListener('mouseenter', function () {
+            const texto = icon.getAttribute('data-hint');
+            if (!texto) return;
+            tooltipEl = document.createElement('div');
+            tooltipEl.className = 'hint-tooltip';
+            tooltipEl.textContent = texto;
+            document.body.appendChild(tooltipEl);
+            const rect = icon.getBoundingClientRect();
+            tooltipEl.style.top  = (rect.bottom + window.scrollY + 6) + 'px';
+            tooltipEl.style.left = (rect.left  + window.scrollX) + 'px';
+        });
+        icon.addEventListener('mouseleave', function () {
+            if (tooltipEl) { tooltipEl.remove(); tooltipEl = null; }
+        });
+    });
+
+    // ── 2. TIPO B: Tooltip hover + clique abre popup ──────────────────────────
+    document.querySelectorAll('.hint-icon.hint-link, .hint-icon.hint-popup').forEach(function (icon) {
+
+        icon.addEventListener('mouseenter', function () {
+            const texto = icon.getAttribute('data-hint');
+            if (!texto) return;
+            tooltipEl = document.createElement('div');
+            tooltipEl.className = 'hint-tooltip';
+            tooltipEl.textContent = texto;
+            document.body.appendChild(tooltipEl);
+            const rect = icon.getBoundingClientRect();
+            tooltipEl.style.top  = (rect.bottom + window.scrollY + 6) + 'px';
+            tooltipEl.style.left = (rect.left  + window.scrollX) + 'px';
+        });
+        icon.addEventListener('mouseleave', function () {
+            if (tooltipEl) { tooltipEl.remove(); tooltipEl = null; }
+        });
+
+        function openPopup() {
+            const url = icon.getAttribute('data-popup');
+            if (!url) return;
+            window.open(
+                url, 'hintPopup',
+                'width=900,height=720,left=' + (screen.width  / 2 - 450) +
+                ',top='                      + (screen.height / 2 - 360)
+            );
+        }
+        icon.addEventListener('click', openPopup);
+        icon.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                openPopup();
+            }
+        });
+    });
+
+
+    // ══════════════════════════════════════════════════════════════════════════
+    // FOCO-01 — Seção 1: Dados do Requerimento
+    // ══════════════════════════════════════════════════════════════════════════
+    if (document.getElementById('form01')) {
+
+        // ── 3. Máscara CPF/CNPJ ───────────────────────────────────────────────
+        const campo14 = document.getElementById('campo14');
+        campo14.addEventListener('input', function () {
+            let v = this.value.replace(/\D/g, '');
+            if (v.length <= 11) {
+                v = v.replace(/(\d{3})(\d)/,        '$1.$2');
+                v = v.replace(/(\d{3})(\d)/,        '$1.$2');
+                v = v.replace(/(\d{3})(\d{1,2})$/,  '$1-$2');
+            } else {
+                v = v.substring(0, 14);
+                v = v.replace(/(\d{2})(\d)/,        '$1.$2');
+                v = v.replace(/(\d{3})(\d)/,        '$1.$2');
+                v = v.replace(/(\d{3})(\d)/,        '$1/$2');
+                v = v.replace(/(\d{4})(\d{1,2})$/,  '$1-$2');
+            }
+            this.value = v;
+        });
+
+        // ── 4. Máscara SEI ────────────────────────────────────────────────────
+        const campo13 = document.getElementById('campo13');
+        campo13.addEventListener('input', function () {
+            let v = this.value.replace(/\D/g, '');
+            v = v.substring(0, 17);
+            if (v.length > 11)     v = v.replace(/(\d{5})(\d{6})(\d{4})(\d{0,2})/, '$1.$2/$3-$4');
+            else if (v.length > 5) v = v.replace(/(\d{5})(\d+)/, '$1.$2');
+            this.value = v;
+        });
+
+        // ── 5. Data máxima = hoje ─────────────────────────────────────────────
+        document.getElementById('campo12').setAttribute('max', new Date().toISOString().split('T')[0]);
+
+        // ── 6. Validação no submit ────────────────────────────────────────────
+        const form01 = document.getElementById('form01');
+
+        const validacoes01 = [
+            { id: 'campo11', erro: 'err11', check: v => v.trim() !== '' },
+            { id: 'campo12', erro: 'err12', check: v => v !== '' },
+            { id: 'campo13', erro: 'err13', check: v => v.trim() !== '' },
+            { id: 'campo14', erro: 'err14', check: v => [11, 14].includes(v.replace(/\D/g, '').length) },
+            { id: 'campo15', erro: 'err15', check: v => v.trim().length >= 3 },
+            { id: 'campo16', erro: 'err16', check: v => v !== '' },
+        ];
+
+        form01.addEventListener('submit', function (e) {
+            e.preventDefault();
+            let valido = true;
+
+            validacoes01.forEach(function (reg) {
+                const campo = document.getElementById(reg.id);
+                const erro  = document.getElementById(reg.erro);
+                const ok    = reg.check(campo.value);
+                erro.style.display      = ok ? 'none'    : 'block';
+                campo.style.borderColor = ok ? '#28a745' : '#dc3545';
+                if (!ok) valido = false;
+            });
+
+            const radioSelecionado = document.querySelector('input[name="campo17"]:checked');
+            const err17 = document.getElementById('err17');
+            err17.style.display = radioSelecionado ? 'none' : 'block';
+            if (!radioSelecionado) valido = false;
+
+            if (valido) alert('✅ Seção 1 enviada com sucesso!');
+        });
+
+        // ── 7. Botão Limpar ───────────────────────────────────────────────────
+        document.getElementById('btnLimpar').addEventListener('click', function () {
+            if (confirm('Deseja limpar todos os campos?')) {
+                form01.reset();
+                document.querySelectorAll('.error-msg').forEach(e => e.style.display = 'none');
+                document.querySelectorAll('input, select').forEach(el => el.style.borderColor = '');
+            }
+        });
+
+    } // fim if form01
+
+
+    // ══════════════════════════════════════════════════════════════════════════
+    // FOCO-02 — Seção 2: Identificação do Imóvel Ofertado/Requerido
+    // ══════════════════════════════════════════════════════════════════════════
+    if (document.getElementById('form02')) {
+
+        // ── 8. Máscara e auto-preenchimento via ViaCEP ───────────────────────
+        const campo21 = document.getElementById('campo21');
+        const campo22 = document.getElementById('campo22');
+        const campo23 = document.getElementById('campo23');
+        const campo24 = document.getElementById('campo24');
+
+        campo21.addEventListener('input', function () {
+            let v = this.value.replace(/\D/g, '').slice(0, 8);
+            this.value = v.length > 5 ? v.slice(0, 5) + '-' + v.slice(5) : v;
+
+            if (v.length === 8) {
+                fetch('https://viacep.com.br/ws/' + v + '/json/')
+                    .then(r => r.json())
+                    .then(function (data) {
+                        if (data.erro) {
+                            document.getElementById('err21').textContent = 'CEP não encontrado.';
+                            document.getElementById('err21').style.display = 'block';
+                            campo21.classList.add('field-error');
+                            campo21.classList.remove('field-valid');
+                            campo22.value = '';
+                            campo23.value = '';
+                            campo24.value = '';
+                            return;
+                        }
+                        document.getElementById('err21').style.display = 'none';
+                        campo21.classList.remove('field-error');
+                        campo21.classList.add('field-valid');
+                        campo22.value = data.uf || '';
+                        campo23.value = data.localidade || '';
+                        campo23.classList.add('field-valid');
+                        const endereco = [data.logradouro, data.bairro].filter(Boolean).join(', ');
+                        campo24.value = endereco || '';
+                        if (endereco) campo24.classList.add('field-valid');
+                    })
+                    .catch(function () {
+                        document.getElementById('err21').textContent = 'Erro ao consultar o CEP. Verifique sua conexão.';
+                        document.getElementById('err21').style.display = 'block';
+                    });
+            }
+        });
+
+        // ── 9. Máscara valor monetário (2.13) ─────────────────────────────────
+        const campo213 = document.getElementById('campo213');
+        campo213.addEventListener('input', function () {
+            let v = this.value.replace(/\D/g, '');
+            if (!v) { this.value = ''; return; }
+            v = (parseInt(v, 10) / 100).toFixed(2);
+            this.value = 'R$ ' + v.replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        });
+
+        // ── 10. Campos condicionais 2.10 e 2.11 (benfeitorias) ───────────────
+        const bloco210 = document.getElementById('bloco210');
+        const bloco211 = document.getElementById('bloco211');
+        const inp210   = document.getElementById('campo210');
+        const inp211   = document.getElementById('campo211');
+
+        function toggleBenfeitorias() {
+            const sel   = document.querySelector('input[name="benfeitorias"]:checked');
+            const isSim = sel && sel.value === 'Sim';
+            bloco210.classList.toggle('visivel', isSim);
+            bloco211.classList.toggle('visivel', isSim);
+            inp210.disabled = !isSim;
+            inp211.disabled = !isSim;
+            if (!isSim) { inp210.value = ''; inp211.value = ''; }
+        }
+
+        inp210.disabled = true;
+        inp211.disabled = true;
+
+        document.querySelectorAll('input[name="benfeitorias"]').forEach(function (r) {
+            r.addEventListener('change', toggleBenfeitorias);
+        });
+
+        // ── 11. Campo condicional 2.19 (LPM/LMEO) ────────────────────────────
+        const campo216  = document.getElementById('campo216');
+        const bloco219  = document.getElementById('bloco219');
+        const lpmInputs = bloco219.querySelectorAll('input[name="lpm_lmeo"]');
+
+        function toggleLPM() {
+            const v     = campo216.value;
+            const exibe = v === 'Terreno/acrescido de marinha' || v === 'Terreno/Acrescido marginal';
+            bloco219.classList.toggle('visivel', exibe);
+            lpmInputs.forEach(i => i.disabled = !exibe);
+            if (!exibe) lpmInputs.forEach(i => i.checked = false);
+        }
+
+        lpmInputs.forEach(i => i.disabled = true);
+        campo216.addEventListener('change', toggleLPM);
+
+        // ── 12. Checkbox "Nenhuma das alternativas" exclusivo (faixas) ────────
+        const faixaNenhuma = document.getElementById('faixa-nenhuma');
+        const faixasOutras = document.querySelectorAll('input[name="faixas[]"]:not(#faixa-nenhuma)');
+
+        faixaNenhuma.addEventListener('change', function () {
+            if (this.checked) faixasOutras.forEach(c => c.checked = false);
+        });
+        faixasOutras.forEach(function (cb) {
+            cb.addEventListener('change', function () {
+                if (this.checked) faixaNenhuma.checked = false;
+            });
+        });
+
+        // ── 13. Adicionar RIP dinamicamente ──────────────────────────────────
+        const ripList = document.getElementById('rip-list');
+
+        document.getElementById('btnAdicionarRip').addEventListener('click', function () {
+            const item = document.createElement('div');
+            item.className = 'rip-item';
+            item.innerHTML = `
+                <input type="text" name="rips[]" placeholder="Ex: 0101000001-00"
+                       autocomplete="off" class="rip-input">
+                <button type="button" class="btn-remove-rip" title="Remover">✕</button>
+            `;
+            item.querySelector('.btn-remove-rip').addEventListener('click', () => item.remove());
+            ripList.appendChild(item);
+        });
+
+        // ── 14. Adicionar imagens/links dinamicamente ─────────────────────────
+        const imagensList = document.getElementById('imagens-list');
+
+        document.getElementById('btnAdicionarImagem').addEventListener('click', function () {
+            const item = document.createElement('div');
+            item.className = 'imagem-item';
+            item.innerHTML = `
+                <input type="url" name="imagens[]" placeholder="https://..."
+                       autocomplete="off" class="imagem-input">
+                <button type="button" class="btn-remove-imagem" title="Remover">✕</button>
+            `;
+            item.querySelector('.btn-remove-imagem').addEventListener('click', () => item.remove());
+            imagensList.appendChild(item);
+        });
+
+        // ── 15. Validação no submit ───────────────────────────────────────────
+        const form02 = document.getElementById('form02');
+
+        const camposF02 = [
+            { id: 'campo21',  erro: 'err21',  check: v => /^\d{5}-\d{3}$/.test(v) },
+            { id: 'campo22',  erro: 'err22',  check: v => v !== '' },
+            { id: 'campo23',  erro: 'err23',  check: v => v.trim().length >= 2 },
+            { id: 'campo24',  erro: 'err24',  check: v => v.trim().length >= 5 },
+            { id: 'campo27',  erro: 'err27',  check: v => v !== '' && parseFloat(v) > 0 },
+            { id: 'campo216', erro: 'err216', check: v => v !== '' },
+            { id: 'campo217', erro: 'err217', check: v => v !== '' },
+            { id: 'campo221', erro: 'err221', check: v => v !== '' },
+            { id: 'campo223', erro: 'err223', check: v => v !== '' },
+        ];
+
+        const gruposF02 = [
+            { name: 'rip_apresentado', groupId: 'group-rip-apresentado', erro: 'err25'  },
+            { name: 'benfeitorias',    groupId: 'group-benfeitorias',    erro: 'err29'  },
+            { name: 'incorporacao',    groupId: 'group-incorporacao',    erro: 'err222' },
+        ];
+
+        form02.addEventListener('submit', function (e) {
+            e.preventDefault();
+            let valido = true;
+
+            camposF02.forEach(function (reg) {
+                const campo = document.getElementById(reg.id);
+                const erro  = document.getElementById(reg.erro);
+                const ok    = reg.check(campo.value);
+                erro.style.display = ok ? 'none' : 'block';
+                campo.classList.toggle('field-error', !ok);
+                campo.classList.toggle('field-valid',  ok);
+                if (!ok) valido = false;
+            });
+
+            gruposF02.forEach(function (grupo) {
+                const sel     = document.querySelector(`input[name="${grupo.name}"]:checked`);
+                const groupEl = document.getElementById(grupo.groupId);
+                const erro    = document.getElementById(grupo.erro);
+                const ok      = !!sel;
+                erro.style.display = ok ? 'none' : 'block';
+                groupEl.classList.toggle('group-error', !ok);
+                if (!ok) valido = false;
+            });
+
+            if (valido) alert('✅ Seção 2 enviada com sucesso!');
+        });
+
+        // ── 16. Botão Limpar ──────────────────────────────────────────────────
+        document.getElementById('btnLimpar').addEventListener('click', function () {
+            if (!confirm('Deseja limpar todos os campos?')) return;
+
+            form02.reset();
+            toggleBenfeitorias();
+            toggleLPM();
+
+            document.querySelectorAll('#form02 .error-msg').forEach(e => e.style.display = 'none');
+            document.querySelectorAll('#form02 .field-error, #form02 .field-valid').forEach(el => {
+                el.classList.remove('field-error', 'field-valid');
+            });
+            document.querySelectorAll('#form02 .group-error').forEach(el => {
+                el.classList.remove('group-error');
+            });
+
+            ripList.querySelectorAll('.rip-item:not(:first-child)').forEach(el => el.remove());
+            ripList.querySelector('.rip-input').value = '';
+            imagensList.innerHTML = '';
+        });
+
+    } // fim if form02
+
+
+    // ══════════════════════════════════════════════════════════════════════════
+    // FOCO-03 — Seção 3: Ocupação e Restrições
+    // ══════════════════════════════════════════════════════════════════════════
+    if (document.getElementById('form03')) {
+
+        // ── 17. Campo condicional 3.7 (custos anuais) ─────────────────────────
+        const bloco37 = document.getElementById('bloco37');
+        const campo37 = document.getElementById('campo37');
+
+        function toggleCustos() {
+            const sel   = document.querySelector('input[name="custos_manutencao"]:checked');
+            const isSim = sel && sel.value === 'Sim';
+            bloco37.classList.toggle('visivel', isSim);
+            campo37.disabled = !isSim;
+            if (!isSim) campo37.value = '';
+        }
+
+        campo37.disabled = true;
+
+        document.querySelectorAll('input[name="custos_manutencao"]').forEach(function (r) {
+            r.addEventListener('change', toggleCustos);
+        });
+
+        // ── 18. Máscara valor monetário (3.7) ─────────────────────────────────
+        campo37.addEventListener('input', function () {
+            let v = this.value.replace(/\D/g, '');
+            if (!v) { this.value = ''; return; }
+            v = (parseInt(v, 10) / 100).toFixed(2);
+            this.value = 'R$ ' + v.replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        });
+
+        // ── 19. Checkboxes exclusivos (3.10 — ações judiciais) ────────────────
+        const acaoNenhuma = document.getElementById('acao-nenhuma');
+        const acaoSemInfo = document.getElementById('acao-sem-info');
+        const acoesOutras = document.querySelectorAll(
+            'input[name="acoes[]"]:not(#acao-nenhuma):not(#acao-sem-info)'
+        );
+
+        acaoNenhuma.addEventListener('change', function () {
+            if (this.checked) {
+                acaoSemInfo.checked = false;
+                acoesOutras.forEach(c => c.checked = false);
+            }
+        });
+        acaoSemInfo.addEventListener('change', function () {
+            if (this.checked) {
+                acaoNenhuma.checked = false;
+                acoesOutras.forEach(c => c.checked = false);
+            }
+        });
+        acoesOutras.forEach(function (cb) {
+            cb.addEventListener('change', function () {
+                if (this.checked) {
+                    acaoNenhuma.checked = false;
+                    acaoSemInfo.checked = false;
+                }
+            });
+        });
+
+        // ── 20. Validação no submit ───────────────────────────────────────────
+        const form03 = document.getElementById('form03');
+
+        const camposF03 = [
+            { id: 'campo31', erro: 'err31', check: v => v !== '' },
+            { id: 'campo35', erro: 'err35', check: v => v !== '' },
+        ];
+
+        const gruposF03 = [
+            { name: 'custos_manutencao',    groupId: 'group-custos',             erro: 'err36'  },
+            { name: 'risco_invasao',        groupId: 'group-invasao',            erro: 'err38'  },
+            { name: 'risco_coletividade',   groupId: 'group-risco-coletividade', erro: 'err39'  },
+            { name: 'tombado',              groupId: 'group-tombado',            erro: 'err311' },
+            { name: 'conflitos_fundiarios', groupId: 'group-conflitos',          erro: 'err312' },
+            { name: 'gestao_praias',        groupId: 'group-gestao-praias',      erro: 'err313' },
+        ];
+
+        form03.addEventListener('submit', function (e) {
+            e.preventDefault();
+            let valido = true;
+
+            camposF03.forEach(function (reg) {
+                const campo = document.getElementById(reg.id);
+                const erro  = document.getElementById(reg.erro);
+                const ok    = reg.check(campo.value);
+                erro.style.display = ok ? 'none' : 'block';
+                campo.classList.toggle('field-error', !ok);
+                campo.classList.toggle('field-valid',  ok);
+                if (!ok) valido = false;
+            });
+
+            gruposF03.forEach(function (grupo) {
+                const sel     = document.querySelector(`input[name="${grupo.name}"]:checked`);
+                const groupEl = document.getElementById(grupo.groupId);
+                const erro    = document.getElementById(grupo.erro);
+                const ok      = !!sel;
+                erro.style.display = ok ? 'none' : 'block';
+                groupEl.classList.toggle('group-error', !ok);
+                if (!ok) valido = false;
+            });
+
+            // Valida checkbox group 3.10 (ao menos um marcado)
+            const acoesMarcadas = document.querySelectorAll('input[name="acoes[]"]:checked');
+            const err310 = document.getElementById('err310');
+            const ok310  = acoesMarcadas.length > 0;
+            err310.style.display = ok310 ? 'none' : 'block';
+            document.getElementById('group-acoes').classList.toggle('group-error', !ok310);
+            if (!ok310) valido = false;
+
+            if (valido) alert('✅ Seção 3 enviada com sucesso!');
+        });
+
+        // ── 21. Botão Limpar ──────────────────────────────────────────────────
+        document.getElementById('btnLimpar').addEventListener('click', function () {
+            if (!confirm('Deseja limpar todos os campos?')) return;
+
+            form03.reset();
+            toggleCustos();
+
+            document.querySelectorAll('#form03 .error-msg').forEach(e => e.style.display = 'none');
+            document.querySelectorAll('#form03 .field-error, #form03 .field-valid').forEach(el => {
+                el.classList.remove('field-error', 'field-valid');
+            });
+            document.querySelectorAll('#form03 .group-error').forEach(el => {
+                el.classList.remove('group-error');
+            });
+        });
+
+    } // fim if form03
+
+
+    // ══════════════════════════════════════════════════════════════════════════
+    // FOCO-04 — Seção 4: Análise do Destinatário
+    // ══════════════════════════════════════════════════════════════════════════
+    if (document.getElementById('form04')) {
+
+        // ── 22. Campo condicional 4.1 (contratos — visível se Sim) ───────────
+        const bloco41 = document.getElementById('bloco41');
+
+        function toggleContratos() {
+            const sel   = document.querySelector('input[name="campo41"]:checked');
+            const isSim = sel && sel.value === 'Sim';
+            bloco41.classList.toggle('visivel', isSim);
+        }
+
+        document.querySelectorAll('input[name="campo41"]').forEach(function (r) {
+            r.addEventListener('change', toggleContratos);
+        });
+
+        // ── 23. Campo condicional 4.7 (vedações — visível se Sim) ────────────
+        const bloco47 = document.getElementById('bloco47');
+
+        function toggleVedacoes() {
+            const sel   = document.querySelector('input[name="campo47"]:checked');
+            const isSim = sel && sel.value === 'Sim';
+            bloco47.classList.toggle('visivel', isSim);
+        }
+
+        document.querySelectorAll('input[name="campo47"]').forEach(function (r) {
+            r.addEventListener('change', toggleVedacoes);
+        });
+
+        // ── 24. Checkboxes exclusivos (4.2 — pendências) ─────────────────────
+        const campo42Nenhuma = document.getElementById('campo42-nenhuma');
+        const campo42Outras  = document.querySelectorAll(
+            'input[name="campo42[]"]:not(#campo42-nenhuma)'
+        );
+
+        campo42Nenhuma.addEventListener('change', function () {
+            if (this.checked) campo42Outras.forEach(c => c.checked = false);
+        });
+        campo42Outras.forEach(function (cb) {
+            cb.addEventListener('change', function () {
+                if (this.checked) campo42Nenhuma.checked = false;
+            });
+        });
+
+        // ── 25. Validação no submit ───────────────────────────────────────────
+        const form04 = document.getElementById('form04');
+
+        const camposF04 = [
+            { id: 'campo43', erro: 'err43', check: v => v !== '' },
+            { id: 'campo44', erro: 'err44', check: v => v !== '' },
+            { id: 'campo46', erro: 'err46', check: v => v !== '' },
+        ];
+
+        const gruposF04 = [
+            { name: 'campo41', groupId: 'group-campo41', erro: 'err41' },
+            { name: 'campo45', groupId: 'group-campo45', erro: 'err45' },
+            { name: 'campo47', groupId: 'group-campo47', erro: 'err47' },
+        ];
+
+        form04.addEventListener('submit', function (e) {
+            e.preventDefault();
+            let valido = true;
+
+            camposF04.forEach(function (reg) {
+                const campo = document.getElementById(reg.id);
+                const erro  = document.getElementById(reg.erro);
+                const ok    = reg.check(campo.value);
+                erro.style.display = ok ? 'none' : 'block';
+                campo.classList.toggle('field-error', !ok);
+                campo.classList.toggle('field-valid',  ok);
+                if (!ok) valido = false;
+            });
+
+            gruposF04.forEach(function (grupo) {
+                const sel     = document.querySelector(`input[name="${grupo.name}"]:checked`);
+                const groupEl = document.getElementById(grupo.groupId);
+                const erro    = document.getElementById(grupo.erro);
+                const ok      = !!sel;
+                erro.style.display = ok ? 'none' : 'block';
+                groupEl.classList.toggle('group-error', !ok);
+                if (!ok) valido = false;
+            });
+
+            // Valida checkbox group 4.2 (ao menos um marcado)
+            const checks42 = document.querySelectorAll('input[name="campo42[]"]:checked');
+            const err42    = document.getElementById('err42');
+            const ok42     = checks42.length > 0;
+            err42.style.display = ok42 ? 'none' : 'block';
+            document.getElementById('group-campo42').classList.toggle('group-error', !ok42);
+            if (!ok42) valido = false;
+
+            if (valido) alert('✅ Seção 4 enviada com sucesso!');
+        });
+
+        // ── 26. Botão Limpar ──────────────────────────────────────────────────
+        document.getElementById('btnLimpar').addEventListener('click', function () {
+            if (!confirm('Deseja limpar todos os campos?')) return;
+
+            form04.reset();
+            toggleContratos();
+            toggleVedacoes();
+
+            document.querySelectorAll('#form04 .error-msg').forEach(e => e.style.display = 'none');
+            document.querySelectorAll('#form04 .field-error, #form04 .field-valid').forEach(el => {
+                el.classList.remove('field-error', 'field-valid');
+            });
+            document.querySelectorAll('#form04 .group-error').forEach(el => {
+                el.classList.remove('group-error');
+            });
+        });
+
+    } // fim if form04
+
+
+    // ══════════════════════════════════════════════════════════════════════════
+    // FOCO-05 — Seção 5: Análise da Destinação Proposta
+    // ══════════════════════════════════════════════════════════════════════════
+    if (document.getElementById('form05')) {
+
+        // ── 27. Campo condicional 5.4 (descrição modificação — visível se Sim)
+        const bloco54 = document.getElementById('bloco54');
+
+        function toggleModificacao() {
+            const sel   = document.querySelector('input[name="campo54"]:checked');
+            const isSim = sel && sel.value === 'Sim';
+            bloco54.classList.toggle('visivel', isSim);
+        }
+
+        document.querySelectorAll('input[name="campo54"]').forEach(function (r) {
+            r.addEventListener('change', toggleModificacao);
+        });
+
+        // ── 28. Checkboxes exclusivos (5.6 — vinculação estratégica) ─────────
+        // "Nenhuma vinculação identificada" é exclusivo em relação aos demais
+        const campo56Nenhuma = document.getElementById('campo56-nenhuma');
+        const campo56Outras  = document.querySelectorAll(
+            'input[name="campo56[]"]:not(#campo56-nenhuma)'
+        );
+
+        campo56Nenhuma.addEventListener('change', function () {
+            if (this.checked) campo56Outras.forEach(c => c.checked = false);
+        });
+        campo56Outras.forEach(function (cb) {
+            cb.addEventListener('change', function () {
+                if (this.checked) campo56Nenhuma.checked = false;
+            });
+        });
+
+        // ── 29. Checkboxes exclusivos (5.7 — políticas vinculadas) ───────────
+        // "Nenhuma política vinculada" é exclusivo em relação aos demais
+        const campo57Nenhuma = document.getElementById('campo57-nenhuma');
+        const campo57Outras  = document.querySelectorAll(
+            'input[name="campo57[]"]:not(#campo57-nenhuma)'
+        );
+
+        campo57Nenhuma.addEventListener('change', function () {
+            if (this.checked) campo57Outras.forEach(c => c.checked = false);
+        });
+        campo57Outras.forEach(function (cb) {
+            cb.addEventListener('change', function () {
+                if (this.checked) campo57Nenhuma.checked = false;
+            });
+        });
+
+        // ── 30. Validação no submit ───────────────────────────────────────────
+        const form05 = document.getElementById('form05');
+
+        const camposF05 = [
+            { id: 'campo51',  erro: 'err51'  },
+            { id: 'campo52',  erro: 'err52'  },
+            { id: 'campo53',  erro: 'err53'  },
+            { id: 'campo55',  erro: 'err55'  },
+            { id: 'campo58',  erro: 'err58'  },
+            { id: 'campo510', erro: 'err510' },
+            { id: 'campo511', erro: 'err511' },
+        ];
+
+        const gruposF05 = [
+            { name: 'campo54', groupId: 'group-campo54', erro: 'err54' },
+        ];
+
+        const checkboxesF05 = [
+            { name: 'campo56[]', groupId: 'group-campo56', erro: 'err56' },
+            { name: 'campo57[]', groupId: 'group-campo57', erro: 'err57' },
+        ];
+
+        form05.addEventListener('submit', function (e) {
+            e.preventDefault();
+            let valido = true;
+
+            // Valida selects obrigatórios
+            camposF05.forEach(function (reg) {
+                const campo = document.getElementById(reg.id);
+                const erro  = document.getElementById(reg.erro);
+                const ok    = campo.value !== '';
+                erro.style.display = ok ? 'none' : 'block';
+                campo.classList.toggle('field-error', !ok);
+                campo.classList.toggle('field-valid',  ok);
+                if (!ok) valido = false;
+            });
+
+            // Valida radio groups
+            gruposF05.forEach(function (grupo) {
+                const sel     = document.querySelector(`input[name="${grupo.name}"]:checked`);
+                const groupEl = document.getElementById(grupo.groupId);
+                const erro    = document.getElementById(grupo.erro);
+                const ok      = !!sel;
+                erro.style.display = ok ? 'none' : 'block';
+                groupEl.classList.toggle('group-error', !ok);
+                if (!ok) valido = false;
+            });
+
+            // Valida checkbox groups (ao menos um marcado)
+            checkboxesF05.forEach(function (grupo) {
+                const marcados = document.querySelectorAll(`input[name="${grupo.name}"]:checked`);
+                const groupEl  = document.getElementById(grupo.groupId);
+                const erro     = document.getElementById(grupo.erro);
+                const ok       = marcados.length > 0;
+                erro.style.display = ok ? 'none' : 'block';
+                groupEl.classList.toggle('group-error', !ok);
+                if (!ok) valido = false;
+            });
+
+            if (valido) alert('✅ Seção 5 enviada com sucesso!');
+        });
+
+        // ── 31. Botão Limpar ──────────────────────────────────────────────────
+        document.getElementById('btnLimpar').addEventListener('click', function () {
+            if (!confirm('Deseja limpar todos os campos?')) return;
+
+            form05.reset();
+            toggleModificacao();
+
+            document.querySelectorAll('#form05 .error-msg').forEach(e => e.style.display = 'none');
+            document.querySelectorAll('#form05 .field-error, #form05 .field-valid').forEach(el => {
+                el.classList.remove('field-error', 'field-valid');
+            });
+            document.querySelectorAll('#form05 .group-error').forEach(el => {
+                el.classList.remove('group-error');
+            });
+        });
+
+    } // fim if form05
+
+}); // fim DOMContentLoaded

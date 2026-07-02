@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aba 1 — Identificação do Imóvel</title>
+    <link rel="stylesheet" href="styles-forms.css">
+    <link rel="stylesheet" href="hints.css">
+</head>
+<body>
+    <div class="form-container">
+        <h2>Aba 1: Identificação do Imóvel</h2>
+        
+        <div class="form-group inline">
+            <label for="campo-rip_0">RIP:</label>
+            <input type="text" id="campo-rip_0" name="imoveis[0][rip]" placeholder="Ex: 0101000001-00" value="9701.00012.500-0" autocomplete="off" class="rip-input" required>
+        </div>
+        <div class="form-group inline">
+            <label for="campo21_0">CEP:</label>
+            <input type="text" id="campo21_0" name="imoveis[0][cep]" placeholder="Ex: 00000-000" maxlength="9" value="01001-000" autocomplete="off" required>
+        </div>
+        <div class="form-group inline">
+            <label for="campo22_0">UF:</label>
+            <input type="text" id="campo22_0" name="imoveis[0][uf]" value="SP" required>
+        </div>
+        <div class="form-group inline">
+            <label for="campo23_0">Município:</label>
+            <input type="text" id="campo23_0" name="imoveis[0][municipio]" value="São Paulo" autocomplete="off" required>
+        </div>
+        <div class="form-group inline">
+            <label for="campo24_0">Endereço:</label>
+            <input type="text" id="campo24_0" name="imoveis[0][endereco]" value="Praça da Sé, s/n" autocomplete="off" required>
+        </div>
+        <div class="form-group inline">
+            <label for="campo27_0">Área total (m²):</label>
+            <input type="number" id="campo27_0" name="imoveis[0][area_total]" value="5000.00" required>
+        </div>
+        <div class="form-group inline">
+            <label for="campo28_0">Área da União (m²):</label>
+            <input type="number" id="campo28_0" name="imoveis[0][area_uniao]" value="5000.00">
+        </div>
+        <div class="form-group inline">
+            <label>Há benfeitorias?</label>
+            <div class="radio-group">
+                <label class="radio-option"><input type="radio" name="imoveis[0][benfeitorias]" value="Sim" checked> Sim</label>
+                <label class="radio-option"><input type="radio" name="imoveis[0][benfeitorias]" value="Não"> Não</label>
+            </div>
+        </div>
+        <div class="form-group inline">
+            <label for="campo210_0">Área construída total (m²):</label>
+            <input type="number" id="campo210_0" name="imoveis[0][area_construida_total]" value="1200.00">
+        </div>
+        <div class="form-group inline">
+            <label for="campo211_0">Área construída prop. destinação (m²):</label>
+            <input type="number" id="campo211_0" name="imoveis[0][area_construida_proposta]" value="1200.00">
+        </div>
+        <div class="form-group editavel">
+            <label for="campo212_0">Geolocalização (link Maps):</label>
+            <input type="url" id="campo212_0" name="imoveis[0][geolocalizacao]" value="https://maps.google.com/?q=-23.5505,-46.6333" autocomplete="off">
+        </div>
+        <div class="form-group inline">
+            <label for="campo213_0">Valor avaliado (R$):</label>
+            <input type="text" id="campo213_0" name="imoveis[0][valor_imovel]" value="R$ 15.000.000,00" autocomplete="off">
+        </div>
+        <div class="form-group inline">
+            <label for="campo214_0">Data da avaliação:</label>
+            <input type="date" id="campo214_0" name="imoveis[0][data_avaliacao]" value="2024-01-10">
+        </div>
+        <div class="form-group inline">
+            <label for="campo215_0">Instrumento de avaliação:</label>
+            <input type="text" id="campo215_0" name="imoveis[0][instrumento_avaliacao]" value="Laudo Técnico SPU" autocomplete="off">
+        </div>
+        <div class="form-group inline">
+            <label for="campo216_0">Conceituação do Imóvel:</label>
+            <select id="campo216_0" name="imoveis[0][conceituacao]">
+                <option value="Terreno/acrescido de marinha" selected>Terreno/Acrescido de marinha</option>
+                <option value="Nacional interior">Nacional interior</option>
+            </select>
+        </div>
+        <div class="form-group inline">
+            <label for="campo217_0">Categoria:</label>
+            <select id="campo217_0" name="imoveis[0][categoria]">
+                <option value="Edificação Pública" selected>Edificação Pública</option>
+                <option value="Terreno">Terreno</option>
+            </select>
+        </div>
+        <div class="form-group editavel">
+            <label>Faixas de segurança?</label>
+            <div class="checkbox-group">
+                <label class="checkbox-option"><input type="checkbox" name="imoveis[0][faixas][]" value="Nenhuma das alternativas" checked> Nenhuma das alternativas</label>
+            </div>
+        </div>
+        <div class="form-group inline">
+            <label>LPM/1831 ou LMEO homologadas?</label>
+            <div class="radio-group">
+                <label class="radio-option"><input type="radio" name="imoveis[0][lpm_lmeo]" value="Sim"> Sim</label>
+                <label class="radio-option"><input type="radio" name="imoveis[0][lpm_lmeo]" value="Não" checked> Não</label>
+            </div>
+        </div>
+        <div class="form-group inline">
+            <label>Imagens/plantas (link SEI):</label>
+            <input type="text" name="imoveis[0][imagens][]" value="https://sei.gov.br/sei/doc=123456" class="imagem-input" style="flex: 1;">
+        </div>
+        <div class="form-group inline">
+            <label for="campo221_0">Tipologia territorial:</label>
+            <select id="campo221_0" name="imoveis[0][tipologia]">
+                <option value="Zona urbana consolidada" selected>Zona urbana consolidada</option>
+            </select>
+        </div>
+        <div class="form-group editavel">
+            <label for="obs221_0">Observações complementares (Tipologia):</label>
+            <textarea id="obs221_0" name="imoveis[0][obs_tipologia]"></textarea>
+        </div>
+        <div class="form-group inline">
+            <label>Processo de incorporação?</label>
+            <div class="radio-group">
+                <label class="radio-option"><input type="radio" name="imoveis[0][incorporacao]" value="Sim"> Sim</label>
+                <label class="radio-option"><input type="radio" name="imoveis[0][incorporacao]" value="Não" checked> Não</label>
+            </div>
+        </div>
+        <div class="form-group inline">
+            <label for="campo223_0">Situação dominial/registral:</label>
+            <select id="campo223_0" name="imoveis[0][situacao_dominial]">
+                <option value="Regular" selected>Regular</option>
+            </select>
+        </div>
+        <div class="form-group editavel">
+            <label for="obs223_0">Observações complementares (Dominial):</label>
+            <textarea id="obs223_0" name="imoveis[0][obs_dominial]"></textarea>
+        </div>
+        <div class="form-group inline">
+            <label for="campo224_0">Matrículas:</label>
+            <textarea id="campo224_0" name="imoveis[0][matriculas]">Matrícula 123.456 - 1º CRI SP</textarea>
+        </div>
+        <div class="form-group inline">
+            <label for="campo225_0">Informações adicionais:</label>
+            <textarea id="campo225_0" name="imoveis[0][info_adicionais]">Imóvel sem pendências financeiras aparentes.</textarea>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário 01 - Dados do Requerimento</title>
+    <link rel="stylesheet" href="styles-forms.css">
+</head>
+<body>
+    <div class="form-container">
+        <h2>Seção 1: Dados do Requerimento</h2>
+        <h3>Origem dos dados: Portal de Serviços da SPU</h3>
+        <form id="form01" novalidate>
+
+            <!-- 1.1 Número do Requerimento -->
+            <div class="form-group">
+                <label for="campo11">
+                    1.1 Número do requerimento
+                    <!-- TIPO B: tooltip + abre HTML -->
+                    <span
+                        class="hint-icon hint-link"
+                        data-popup="hints/processoSEI.html"
+                        data-hint="Clique para abrir informações detalhadas sobre como localizar o número do requerimento."
+                        role="button"
+                        tabindex="0"
+                        aria-label="Ajuda: Número do requerimento"
+                    >?</span>
+                    <!-- AVISO: tooltip + abre HTML -->
+                    <span
+                        class="hint-icon hint-link aviso-problema"
+                        data-popup="problemas/1_1.html"
+                        data-hint="Há observações importantes sobre o preenchimento deste campo. Clique para ver."
+                        role="button"
+                        tabindex="0"
+                        aria-label="Aviso: Observações importantes sobre o campo 1.1"
+                    >⚠️</span>
+                </label>
+                <input
+                    type="text"
+                    id="campo11"
+                    name="campo11"
+                    placeholder="Ex: REQ-2024-00001"
+                    autocomplete="off"
+                    required
+                >
+                <span class="error-msg" id="err11">Preencha o número do requerimento.</span>
+            </div>
+
+            <!-- 1.2 Data de Protocolamento -->
+            <div class="form-group">
+                <label for="campo12">
+                    1.2 Data de protocolamento
+                    <!-- TIPO A: só tooltip -->
+                    <span
+                        class="hint-icon"
+                        data-hint="Informe a data de protocolamento do requerimento (dd/mm/aaaa)."
+                        role="tooltip"
+                        aria-label="Ajuda: Data de protocolamento"
+                    >?</span>
+                </label>
+                <input
+                    type="date"
+                    id="campo12"
+                    name="campo12"
+                    required
+                >
+                <span class="error-msg" id="err12">Informe uma data válida.</span>
+            </div>
+
+            <!-- 1.3 Número do Processo SEI -->
+            <div class="form-group">
+                <label for="campo13">
+                    1.3 Número do processo SEI
+                    <!-- TIPO A: só tooltip -->
+                    <span
+                        class="hint-icon"
+                        data-hint="Número completo do processo no SEI (ex: 12345.678901/2023-00)."
+                        role="tooltip"
+                        aria-label="Ajuda: Número do processo SEI"
+                    >?</span>
+                </label>
+                <input
+                    type="text"
+                    id="campo13"
+                    name="campo13"
+                    placeholder="Ex: 10480.012345/2024-00"
+                    maxlength="20"
+                    autocomplete="off"
+                    required
+                >
+                <small>Formato: NNNNN.NNNNNN/AAAA-DD</small>
+                <span class="error-msg" id="err13">Informe o número do processo SEI.</span>
+            </div>
+
+            <!-- 1.4 CPF/CNPJ -->
+            <div class="form-group">
+                <label for="campo14">
+                    1.4 CPF/CNPJ do requerente
+                    <!-- TIPO A: só tooltip -->
+                    <span
+                        class="hint-icon"
+                        data-hint="Número do CPF (11 dígitos) ou CNPJ (14 dígitos) do requerente, conforme Receita Federal."
+                        role="tooltip"
+                        aria-label="Ajuda: CPF ou CNPJ"
+                    >?</span>
+                    <!-- AVISO: tooltip + abre HTML -->
+                    <span
+                        class="hint-icon hint-link aviso-problema"
+                        data-popup="problemas/1_4.html"
+                        data-hint="Há observações importantes sobre o preenchimento deste campo. Clique para ver."
+                        role="button"
+                        tabindex="0"
+                        aria-label="Aviso: Observações importantes sobre o campo 1.4"
+                    >⚠️</span>
+                </label>
+                <input
+                    type="text"
+                    id="campo14"
+                    name="campo14"
+                    placeholder="000.000.000-00 ou 00.000.000/0001-00"
+                    maxlength="18"
+                    autocomplete="off"
+                    required
+                >
+                <span class="error-msg" id="err14">Informe um CPF ou CNPJ válido.</span>
+            </div>
+
+            <!-- 1.5 Nome do Requerente -->
+            <div class="form-group">
+                <label for="campo15">
+                    1.5 Nome do requerente
+                    <!-- TIPO A: só tooltip -->
+                    <span
+                        class="hint-icon"
+                        data-hint="Nome completo do requerente conforme cadastro da Receita Federal."
+                        role="tooltip"
+                        aria-label="Ajuda: Nome do requerente"
+                    >?</span>
+                </label>
+                <input
+                    type="text"
+                    id="campo15"
+                    name="campo15"
+                    placeholder="Nome completo ou razão social"
+                    autocomplete="off"
+                    required
+                >
+                <span class="error-msg" id="err15">Informe o nome do requerente.</span>
+            </div>
+
+            <!-- 1.6 Tipo de Pessoa -->
+            <div class="form-group">
+                <label for="campo16">
+                    1.6 Tipo de pessoa
+                    <!-- TIPO A: só tooltip -->
+                    <span
+                        class="hint-icon"
+                        data-hint="Selecione Pessoa Física (CPF) ou Pessoa Jurídica (CNPJ)."
+                        role="tooltip"
+                        aria-label="Ajuda: Tipo de pessoa"
+                    >?</span>
+                </label>
+                <select id="campo16" name="campo16" required>
+                    <option value="" disabled selected>Selecione...</option>
+                    <option value="pf">Pessoa Física</option>
+                    <option value="pj">Pessoa Jurídica</option>
+                </select>
+                <span class="error-msg" id="err16">Selecione o tipo de pessoa.</span>
+            </div>
+
+            <!-- 1.7 Pessoa Estrangeira -->
+            <div class="form-group">
+                <label>
+                    1.7 Pessoa estrangeira
+                    <!-- TIPO A: só tooltip -->
+                    <span
+                        class="hint-icon"
+                        data-hint="Indique se o requerente é pessoa estrangeira ou PJ com capital estrangeiro majoritário."
+                        role="tooltip"
+                        aria-label="Ajuda: Pessoa estrangeira"
+                    >?</span>
+                </label>
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="campo17" value="sim" required> Sim
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="campo17" value="nao"> Não
+                    </label>
+                </div>
+                <span class="error-msg" id="err17">Selecione uma opção.</span>
+            </div>
+
+            <!-- Botões -->
+            <div class="button-group">
+                <button type="button" class="btn-secondary" id="btnLimpar">🗑️ Limpar</button>
+                <button type="submit" id="btnEnviar">✅ Enviar Seção 1</button>
+            </div>
+
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // ── 1. TIPO A: Tooltip hover (só mensagem) ──────────────────────
+            //      Seleciona hints que NÃO têm a classe hint-link
+            let tooltipEl = null;
+
+            document.querySelectorAll('.hint-icon:not(.hint-link)').forEach(function (icon) {
+                icon.addEventListener('mouseenter', function () {
+                    const texto = icon.getAttribute('data-hint');
+                    if (!texto) return;
+                    tooltipEl = document.createElement('div');
+                    tooltipEl.className = 'hint-tooltip';
+                    tooltipEl.textContent = texto;
+                    document.body.appendChild(tooltipEl);
+                    const rect = icon.getBoundingClientRect();
+                    tooltipEl.style.top  = (rect.bottom + window.scrollY + 6) + 'px';
+                    tooltipEl.style.left = (rect.left  + window.scrollX) + 'px';
+                });
+                icon.addEventListener('mouseleave', function () {
+                    if (tooltipEl) { tooltipEl.remove(); tooltipEl = null; }
+                });
+            });
+
+            // ── 2. TIPO B: Tooltip hover + clique abre popup ────────────────
+            //      Seleciona hints que TÊM a classe hint-link
+            document.querySelectorAll('.hint-icon.hint-link').forEach(function (icon) {
+
+                // Tooltip ao passar o mouse (igual ao Tipo A)
+                icon.addEventListener('mouseenter', function () {
+                    const texto = icon.getAttribute('data-hint');
+                    if (!texto) return;
+                    tooltipEl = document.createElement('div');
+                    tooltipEl.className = 'hint-tooltip';
+                    tooltipEl.textContent = texto;
+                    document.body.appendChild(tooltipEl);
+                    const rect = icon.getBoundingClientRect();
+                    tooltipEl.style.top  = (rect.bottom + window.scrollY + 6) + 'px';
+                    tooltipEl.style.left = (rect.left  + window.scrollX) + 'px';
+                });
+                icon.addEventListener('mouseleave', function () {
+                    if (tooltipEl) { tooltipEl.remove(); tooltipEl = null; }
+                });
+
+                // Clique abre o arquivo HTML em popup
+                function openPopup() {
+                    const url = icon.getAttribute('data-popup');
+                    if (!url) return;
+                    window.open(
+                        url, 'hintPopup',
+                        'width=900,height=720,left=' + (screen.width  / 2 - 450) +
+                        ',top='                      + (screen.height / 2 - 360)
+                    );
+                }
+                icon.addEventListener('click', openPopup);
+                icon.addEventListener('keydown', function (e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        openPopup();
+                    }
+                });
+            });
+
+            // ── 3. Máscara CPF/CNPJ ─────────────────────────────────────────
+            const campo14 = document.getElementById('campo14');
+            campo14.addEventListener('input', function () {
+                let v = this.value.replace(/\D/g, '');
+                if (v.length <= 11) {
+                    v = v.replace(/(\d{3})(\d)/, '$1.$2');
+                    v = v.replace(/(\d{3})(\d)/, '$1.$2');
+                    v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+                } else {
+                    v = v.substring(0, 14);
+                    v = v.replace(/(\d{2})(\d)/, '$1.$2');
+                    v = v.replace(/(\d{3})(\d)/, '$1.$2');
+                    v = v.replace(/(\d{3})(\d)/, '$1/$2');
+                    v = v.replace(/(\d{4})(\d{1,2})$/, '$1-$2');
+                }
+                this.value = v;
+            });
+
+            // ── 4. Máscara SEI ──────────────────────────────────────────────
+            const campo13 = document.getElementById('campo13');
+            campo13.addEventListener('input', function () {
+                let v = this.value.replace(/\D/g, '');
+                v = v.substring(0, 17);
+                if (v.length > 11) v = v.replace(/(\d{5})(\d{6})(\d{4})(\d{0,2})/, '$1.$2/$3-$4');
+                else if (v.length > 5) v = v.replace(/(\d{5})(\d+)/, '$1.$2');
+                this.value = v;
+            });
+
+            // ── 5. Data máxima = hoje ───────────────────────────────────────
+            document.getElementById('campo12').setAttribute('max', new Date().toISOString().split('T')[0]);
+
+            // ── 6. Validação no submit ──────────────────────────────────────
+            const form = document.getElementById('form01');
+
+            const validacoes = [
+                { id: 'campo11', erro: 'err11', check: v => v.trim() !== '' },
+                { id: 'campo12', erro: 'err12', check: v => v !== '' },
+                { id: 'campo13', erro: 'err13', check: v => v.trim() !== '' },
+                { id: 'campo14', erro: 'err14', check: v => [11, 14].includes(v.replace(/\D/g, '').length) },
+                { id: 'campo15', erro: 'err15', check: v => v.trim().length >= 3 },
+                { id: 'campo16', erro: 'err16', check: v => v !== '' },
+            ];
+
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                let valido = true;
+
+                validacoes.forEach(function (reg) {
+                    const campo = document.getElementById(reg.id);
+                    const erro  = document.getElementById(reg.erro);
+                    const ok    = reg.check(campo.value);
+                    erro.style.display      = ok ? 'none'    : 'block';
+                    campo.style.borderColor = ok ? '#28a745' : '#dc3545';
+                    if (!ok) valido = false;
+                });
+
+                const radioSelecionado = document.querySelector('input[name="campo17"]:checked');
+                const err17 = document.getElementById('err17');
+                err17.style.display = radioSelecionado ? 'none' : 'block';
+                if (!radioSelecionado) valido = false;
+
+                if (valido) {
+                    alert('✅ Seção 1 enviada com sucesso!');
+                }
+            });
+
+            // ── 7. Botão Limpar ─────────────────────────────────────────────
+            document.getElementById('btnLimpar').addEventListener('click', function () {
+                if (confirm('Deseja limpar todos os campos?')) {
+                    form.reset();
+                    document.querySelectorAll('.error-msg').forEach(e => e.style.display = 'none');
+                    document.querySelectorAll('input, select').forEach(el => el.style.borderColor = '');
+                }
+            });
+
+        });
+    </script>
+</body>
+</html>

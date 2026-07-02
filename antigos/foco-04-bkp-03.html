@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FOCO-04 — Proposta de Destinação</title>
+    <link rel="stylesheet" href="styles-forms.css">
+    <link rel="stylesheet" href="hints.css">
+</head>
+<body>
+    <div class="form-container">
+
+        <h2>4: Proposta de Destinação</h2>
+
+        <form id="form04" novalidate>
+
+            <!-- 5.1 Tipo de procedimento -->
+            <div class="form-group editavel">
+                <label for="campo51">
+                    Tipo de procedimento pretendido:
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Selecione o tipo de procedimento administrativo que origina esta análise de destinação."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: Tipo de procedimento"
+                        >?</span>
+                    </span>
+                </label>
+                <select id="campo51" name="tipo_procedimento" required>
+                    <option value="" selected>Selecione...</option>
+                    <option value="Nova destinação">Nova destinação: primeiro instrumento formal de destinação para o imóvel</option>
+                    <option value="Renovação">Renovação: continuidade de instrumento vigente com as mesmas condições</option>
+                    <option value="Alteração">Alteração: modificação de condições, finalidade ou área em instrumento vigente</option>
+                    <option value="Regularização">Regularização: formalização de uso preexistente sem instrumento vigente</option>
+                </select>
+                <span class="error-msg" id="err51">Selecione o tipo de procedimento.</span>
+                <!-- Observações — exibido condicionalmente -->
+                <div id="bloco51_obs" style="display:none;">
+                    <label for="campo51_obs">Informações complementares:</label>
+                    <textarea
+                        id="campo51_obs"
+                        name="campo51_obs"
+                        placeholder="Informações complementares ao tipo de procedimento..."
+                    ></textarea>
+                </div>
+            </div>
+
+            <!-- 5.2 Tipo de uso imobiliário pretendido -->
+            <div class="form-group editavel">
+                <label for="campo52">
+                    Tipo de uso imobiliário pretendido:
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Selecione o tipo de uso imobiliário pretendido conforme Tabela Taxonômica RESOLUÇÃO COMGC/SPU/MGI Nº 3/2025."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: Tipo de uso imobiliário pretendido"
+                        >?</span>
+                    </span>
+                </label>
+                <select id="campo52" name="tipo_uso_imobiliario" required>
+                    <option value="" selected>Selecione (Tabela Taxonômica RESOLUÇÃO COMGC/SPU/MGI Nº 3/2025)...</option>
+                    <option value="0101">01.01 Uso administrativo e representativo</option>
+                    <option value="0102">01.02 Uso para agropecuária, aquicultura, produção florestal e pesca</option>
+                    <option value="0103">01.03 Uso ambiental e dos recursos naturais</option>
+                    <option value="0104">01.04 Uso cultural, esportivo e de lazer</option>
+                    <option value="0105">01.05 Uso em eventos de curta duração</option>
+                    <option value="0106">01.06 Uso habitacional</option>
+                    <option value="0107">01.07 Uso industrial, comercial ou de prestação de serviços</option>
+                    <option value="0108">01.08 Uso em infraestrutura de serviços públicos </option>
+                    <option value="0109">01.09 Uso em infraestrutura de transportes</option>
+                    <option value="0110">01.10 Uso multifinalitário em projeto de requalificação urbana</option>
+                    <option value="0111">01.11 Uso por povos originários e comunidades tradicionais</option>
+                    <option value="0112">01.12 Uso em serviço de ensino, pesquisa e extensão</option>
+                    <option value="0113">01.13 Uso em serviço socioassistencial e de cidadania </option>
+                    <option value="0114">01.14 Uso em serviços de saúde</option>
+                    <option value="0115">01.15 Uso residencial para servidor</option>
+                    <option value="0116">01.16 Uso para segurança pública e defesa nacional</option>
+                    <option value="0117">01.17 Uso religioso</option>
+                    <option value="0118">01.18 Sem informação</option>
+                    <option value="0119">01.19 Sem uso definido/vinculado</option>
+                </select>
+                <span class="error-msg" id="err52">Selecione o tipo de uso imobiliário pretendido.</span>
+            </div>
+
+            <!-- 5.3 Tipo de uso específico pretendido -->
+            <div class="form-group editavel">
+                <label for="campo53">
+                    Tipo de uso específico pretendido:
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Selecione o tipo de uso específico pretendido conforme Tabela Taxonômica RESOLUÇÃO COMGC/SPU/MGI Nº 3/2025."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: Tipo de uso específico pretendido"
+                        >?</span>
+                    </span>
+                </label>
+                <select id="campo53" name="tipo_uso_especifico" required>
+                    <option value="" selected>Selecione (Tabela Taxonômica RESOLUÇÃO COMGC/SPU/MGI Nº 3/2025)...</option>
+                    <option value="Moradia unifamiliar">Moradia unifamiliar</option>
+                    <option value="Moradia multifamiliar">Moradia multifamiliar</option>
+                    <option value="Habitação de interesse social">Habitação de interesse social</option>
+                    <option value="Escritório/sede administrativa">Escritório/sede administrativa</option>
+                    <option value="Escola/instituição de ensino">Escola/instituição de ensino</option>
+                    <option value="Unidade de saúde">Unidade de saúde</option>
+                    <option value="Equipamento de segurança pública">Equipamento de segurança pública</option>
+                    <option value="Equipamento de defesa nacional">Equipamento de defesa nacional</option>
+                    <option value="Área de lazer/recreação">Área de lazer/recreação</option>
+                    <option value="Armazenagem/logística">Armazenagem/logística</option>
+                    <option value="Outro">Outro</option>
+                </select>
+                <span class="error-msg" id="err53">Selecione o tipo de uso específico pretendido.</span>
+            </div>
+
+            <!-- 5.4 Haverá modificação do terreno/edificação? -->
+            <div class="form-group editavel">
+                <label>
+                    Há previsão de modificação do terreno, aterro ou retirada de material, que acresça ou diminua a área?
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Indique se a destinação proposta implica modificações físicas no terreno ou na edificação existente."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: Modificação do terreno/edificação"
+                        >?</span>
+                    </span>
+                </label>
+                <div class="radio-group" id="group-campo54">
+                    <label class="radio-option">
+                        <input type="radio" name="campo54" value="Sim" required> Sim
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="campo54" value="Não"> Não
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="campo54" value="Sem informação"> Sem informação
+                    </label>
+                </div>
+                <span class="error-msg" id="err54">Selecione uma opção.</span>
+                <!-- Subgrupo: descrição da modificação — exibido condicionalmente -->
+                <div id="bloco54" style="display:none;">
+                    <label for="campo54_desc">
+                        Descrição da modificação prevista:
+                        <span class="hint-semaforo">
+                            <span
+                                class="hint-icon"
+                                data-hint-tipo="verde"
+                                data-hint="Descreva as modificações físicas previstas no terreno ou na edificação."
+                                role="tooltip"
+                                tabindex="0"
+                                aria-label="Ajuda: Descrição da modificação"
+                            >?</span>
+                        </span>
+                    </label>
+                    <textarea
+                        id="campo54_desc"
+                        name="campo54_desc"
+                        placeholder="Descreva as modificações previstas no terreno ou na edificação..."
+                    ></textarea>
+                </div>
+            </div>
+
+            <!-- 5.5 Compatibilidade urbanística -->
+            <div class="form-group editavel">
+                <label for="campo55">
+                    Compatibilidade urbanística [Catálogo: Conflito (incompatibilidade de zoneamento)]:
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Avalie a compatibilidade do uso proposto com as normas urbanísticas municipais vigentes (Plano Diretor, zoneamento, etc.)."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: Compatibilidade urbanística"
+                        >?</span>
+                    </span>
+                </label>
+                <select id="campo55" name="compatibilidade_urbanistica" required>
+                    <option value="" selected>Selecione...</option>
+                    <option value="Compatível">Compatível: uso proposto está em conformidade com o zoneamento e normas urbanísticas vigentes</option>
+                    <option value="Compatível com restrições">Compatível com restrições: uso admitido com condicionantes ou mediante aprovação específica</option>
+                    <option value="Incompatível">Incompatível: uso proposto contraria as normas urbanísticas vigentes</option>
+                    <option value="Não foi possível verificar">Não foi possível verificar: ausência de informações ou acesso às normas municipais</option>
+                </select>
+                <span class="error-msg" id="err55">Selecione a compatibilidade urbanística.</span>
+                <!-- Observações — exibido condicionalmente -->
+                <div id="bloco55_obs" style="display:none;">
+                    <label for="campo55_obs">Observações complementares:</label>
+                    <textarea
+                        id="campo55_obs"
+                        name="campo55_obs"
+                        placeholder="Observações sobre a compatibilidade urbanística..."
+                    ></textarea>
+                </div>
+            </div>
+
+            <!-- 5.6 Vinculação estratégica -->
+            <div class="form-group editavel">
+                <label>
+                    Vinculação estratégica [Catálogo: Linha do programa]:
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Indique se a destinação proposta está vinculada a programas ou estratégias governamentais."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: Vinculação estratégica"
+                        >?</span>
+                    </span>
+                </label>
+                <div class="checkbox-group" id="group-campo56">
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="campo56[]" value="Nenhuma vinculação identificada" id="campo56-nenhuma">
+                        Nenhuma vinculação identificada
+                        <input type="checkbox" name="campo56[]" value="Programa Minha Casa Minha Vida" id="campo56-mcmv">
+                        Programa Minha Casa Minha Vida
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="campo56[]" value="Programa de Regularização Fundiária (REURB)" id="campo56-reurb">
+                        Programa de Regularização Fundiária (REURB)
+                        <input type="checkbox" name="campo56[]" value="Programa de Desestatização/Privatização" id="campo56-priv">
+                        Programa de Desestatização/Privatização
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="campo56[]" value="Programa de infraestrutura federal" id="campo56-infra">
+                        Programa de infraestrutura federal
+                        <input type="checkbox" name="campo56[]" value="Plano de desenvolvimento regional" id="campo56-regional">
+                        Plano de desenvolvimento regional
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="campo56[]" value="Outro programa ou estratégia" id="campo56-outro">
+                        Outro programa ou estratégia (descrever nas observações)
+                    </label>
+                </div>
+                <span class="error-msg" id="err56">Selecione ao menos uma opção.</span>
+                <label for="campo56_obs">Observações complementares:</label>
+                <textarea
+                    id="campo56_obs"
+                    name="campo56_obs"
+                    placeholder="Descreva a vinculação estratégica..."
+                    required
+                ></textarea>
+            </div>
+
+            <!-- 5.7 Políticas vinculadas -->
+            <div class="form-group editavel">
+                <label>
+                    Políticas e programas estratégicos vinculados:
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Indique as políticas públicas às quais a destinação proposta se vincula."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: Políticas vinculadas"
+                        >?</span>
+                    </span>
+                </label>
+                <div class="checkbox-group" id="group-campo57">
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="campo57[]" value="Nenhuma política vinculada" id="campo57-nenhuma">
+                        Nenhuma política vinculada
+                        <input type="checkbox" name="campo57[]" value="Política Nacional de Habitação" id="campo57-habitacao">
+                        Política Nacional de Habitação
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="campo57[]" value="Política Nacional de Mobilidade Urbana" id="campo57-mobilidade">
+                        Política Nacional de Mobilidade Urbana
+                        <input type="checkbox" name="campo57[]" value="Política Nacional de Meio Ambiente" id="campo57-meioambiente">
+                        Política Nacional de Meio Ambiente
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="campo57[]" value="Política Nacional de Segurança Pública" id="campo57-seguranca">
+                        Política Nacional de Segurança Pública
+                        <input type="checkbox" name="campo57[]" value="Política Nacional de Defesa Nacional" id="campo57-defesa">
+                        Política Nacional de Defesa Nacional
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="campo57[]" value="Política Nacional de Saúde" id="campo57-saude">
+                        Política Nacional de Saúde
+                        <input type="checkbox" name="campo57[]" value="Política Nacional de Educação" id="campo57-educacao">
+                        Política Nacional de Educação
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="campo57[]" value="Outra política pública" id="campo57-outra">
+                        Outra política pública (descrever nas observações)
+                    </label>
+                </div>
+                <span class="error-msg" id="err57">Selecione ao menos uma opção.</span>
+                <label for="campo57_obs">Especificar:</label>
+                <textarea
+                    id="campo57_obs"
+                    name="campo57_obs"
+                    placeholder="Especifique as políticas vinculadas..."
+                    required
+                ></textarea>
+            </div>
+
+            <!-- 5.8 Impacto social esperado -->
+            <div class="form-group editavel">
+                <label for="campo58">
+                    Impacto social esperado:
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Avalie o impacto social esperado da destinação proposta para a população beneficiada."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: Impacto social esperado"
+                        >?</span>
+                    </span>
+                </label>
+                <select id="campo58" name="impacto_social" required>
+                    <option value="" selected>Selecione...</option>
+                    <option value="Alto impacto positivo">Alto impacto positivo: benefício expressivo e direto para a coletividade</option>
+                    <option value="Médio impacto positivo">Médio impacto positivo: benefício moderado ou indireto para a coletividade</option>
+                    <option value="Baixo impacto positivo">Baixo impacto positivo: benefício restrito ou pouco expressivo</option>
+                    <option value="Sem impacto social relevante">Sem impacto social relevante: destinação sem reflexo significativo sobre a coletividade</option>
+                    <option value="Impacto social negativo">Impacto social negativo: destinação pode gerar prejuízo social identificado</option>
+                    <option value="Não foi possível avaliar">Não foi possível avaliar: ausência de informações suficientes</option>
+                </select>
+                <span class="error-msg" id="err58">Selecione o impacto social esperado.</span>
+                <!-- Observações — exibido condicionalmente -->
+                <div id="bloco58_obs" style="display:none;">
+                    <label for="campo58_obs">Observações complementares:</label>
+                    <textarea
+                        id="campo58_obs"
+                        name="campo58_obs"
+                        placeholder="Observações sobre o impacto social esperado..."
+                    ></textarea>
+                </div>
+            </div>
+
+            <!-- 5.9 Número estimado de beneficiários diretos -->
+            <div class="form-group editavel">
+                <label for="campo59">
+                    Número estimado de beneficiários em potencial:
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Informe o número estimado de pessoas ou famílias beneficiadas diretamente pela destinação proposta."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: Número estimado de beneficiários"
+                        >?</span>
+                    </span>
+                </label>
+                <input
+                    type="number"
+                    id="campo59"
+                    name="num_beneficiarios"
+                    placeholder="0"
+                    min="0"
+                    autocomplete="off"
+                    required
+                >
+            </div>
+
+            <!-- 5.10 Impacto ambiental esperado -->
+            <div class="form-group editavel">
+                <label for="campo510">
+                    Impacto ambiental esperado:
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Avalie o impacto ambiental esperado da destinação proposta sobre o meio ambiente local e regional."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: Impacto ambiental esperado"
+                        >?</span>
+                    </span>
+                </label>
+                <select id="campo510" name="impacto_ambiental" required>
+                    <option value="" selected>Selecione...</option>
+                    <option value="Impacto positivo">Impacto positivo: destinação contribui para recuperação ou preservação ambiental</option>
+                    <option value="Sem impacto ambiental relevante">Sem impacto ambiental relevante: destinação não altera significativamente o meio ambiente</option>
+                    <option value="Impacto negativo mitigável">Impacto negativo mitigável: impacto identificado, passível de controle por medidas mitigadoras</option>
+                    <option value="Impacto negativo relevante">Impacto negativo relevante: impacto significativo com necessidade de licenciamento ambiental</option>
+                    <option value="Não foi possível avaliar">Não foi possível avaliar: ausência de informações suficientes</option>
+                </select>
+                <span class="error-msg" id="err510">Selecione o impacto ambiental esperado.</span>
+                <!-- Observações — exibido condicionalmente -->
+                <div id="bloco510_obs" style="display:none;">
+                    <label for="campo510_obs">Observações complementares:</label>
+                    <textarea
+                        id="campo510_obs"
+                        name="campo510_obs"
+                        placeholder="Observações sobre o impacto ambiental esperado..."
+                    ></textarea>
+                </div>
+            </div>
+
+            <!-- 5.11 Regime de destinação proposto -->
+            <div class="form-group editavel">
+                <label for="campo511">
+                    Regime de destinação proposto:
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Selecione o regime de destinação proposto conforme Tabela RESOLUÇÃO COMGC/SPU/MGI Nº 3/2025."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: Regime de destinação proposto"
+                        >?</span>
+                    </span>
+                </label>
+                <select id="campo511" name="regime_destinacao" required>
+                    <option value="" selected>Selecione (Tabela RESOLUÇÃO COMGC/SPU/MGI Nº 3/2025)...</option>
+                    <optgroup label="Uso por órgão/entidade da Administração Pública Federal">
+                        <option value="Afetação">Afetação</option>
+                        <option value="Cessão de Uso gratuita APF">Cessão de Uso gratuita — Administração Pública Federal</option>
+                    </optgroup>
+                    <optgroup label="Uso por ente federativo (Estado/DF/Município)">
+                        <option value="Cessão de Uso gratuita ente federativo">Cessão de Uso gratuita — ente federativo</option>
+                        <option value="Cessão de Uso onerosa ente federativo">Cessão de Uso onerosa — ente federativo</option>
+                    </optgroup>
+                    <optgroup label="Uso por entidade sem fins lucrativos">
+                        <option value="Cessão de Uso gratuita entidade">Cessão de Uso gratuita — entidade sem fins lucrativos</option>
+                        <option value="Cessão de Uso onerosa entidade">Cessão de Uso onerosa — entidade sem fins lucrativos</option>
+                    </optgroup>
+                    <optgroup label="Uso por particular (pessoa física ou jurídica)">
+                        <option value="Concessão de Uso Especial para fins de Moradia (CUEM)">Concessão de Uso Especial para fins de Moradia (CUEM)</option>
+                        <option value="Concessão de Direito Real de Uso (CDRU) gratuita">Concessão de Direito Real de Uso (CDRU) gratuita</option>
+                        <option value="Concessão de Direito Real de Uso (CDRU) onerosa">Concessão de Direito Real de Uso (CDRU) onerosa</option>
+                        <option value="Autorização de Uso">Autorização de Uso</option>
+                        <option value="Locação">Locação</option>
+                        <option value="Arrendamento">Arrendamento</option>
+                    </optgroup>
+                    <optgroup label="Alienação">
+                        <option value="Venda">Venda</option>
+                        <option value="Doação">Doação</option>
+                        <option value="Legitimação Fundiária">Legitimação Fundiária</option>
+                        <option value="Legitimação de Posse">Legitimação de Posse</option>
+                        <option value="Alienação em REURB">Alienação em REURB</option>
+                    </optgroup>
+                    <optgroup label="Sem destinação">
+                        <option value="Manutenção em vacância">Manutenção em vacância</option>
+                    </optgroup>
+                </select>
+                <span class="error-msg" id="err511">Selecione o regime de destinação proposto.</span>
+                <!-- Observações — exibido condicionalmente -->
+                <div id="bloco511_obs" style="display:none;">
+                    <label for="campo511_obs">Observações complementares:</label>
+                    <textarea
+                        id="campo511_obs"
+                        name="campo511_obs"
+                        placeholder="Observações sobre o regime de destinação proposto..."
+                    ></textarea>
+                </div>
+            </div>
+
+            <!-- Proposta de Destinação — Observações gerais / Arquivos complementares / Retificação do cadastro -->
+            <div class="form-group editavel">
+                <label for="obs224-rest_0">Proposta de Destinação:<br>(Observações gerais / Arquivos complementares / Retificação do cadastro)</label>
+                <textarea id="obs224-rest_0" name="imoveis[0][obs_geral_rest]" placeholder="Descreva a observação, faça upload do(s) arquivos ou solicite uma retificação no cadastro..."></textarea>
+                <div class="dynamic-list-wrapper" style="flex: 1; display: flex; flex-direction: column; gap: 8px;">
+                    <div id="imagens-list-rest_0">
+                        <div class="imagem-item">
+                            <input type="text" name="imoveis[0][imagens_rest][]" value="" placeholder="Faça upload dos documentos adicionais..." autocomplete="off" class="imagem-input" style="flex: 1;">
+                            <button type="button" class="btn-remove-imagem" title="Remover">✕</button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-add" id="btnAdicionarImagemRest_0" style="align-self: flex-start;">＋ Adicionar link/documento</button>
+                </div>
+            </div>
+
+            <!-- Botões -->
+            <div class="button-group">
+                <button type="button" class="btn-secondary" id="btnLimpar">🗑️ Limpar</button>
+                <button type="button" id="btnImprimir" onclick="window.print()">🖨️ Imprimir / Salvar PDF</button>
+                <button type="submit" id="btnEnviar">✅ Salvar</button>
+            </div>
+
+        </form>
+    </div>
+
+    <script src="formulario.js"></script>
+    <script src="hints.js"></script>
+    <script src="foco-04.js"></script>
+
+</body>
+</html>

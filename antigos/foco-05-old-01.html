@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5 – Geolocalização</title>
+    <link rel="stylesheet" href="styles-forms.css">
+    <link rel="stylesheet" href="hints.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <style>
+        #map {
+            height: 500px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        #map-container {
+            position: relative;
+        }
+        #expandir-mapa {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+        }
+        #map-container.fullscreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 10000;
+            background: white;
+            display: flex;
+            flex-direction: column;
+        }
+        #map-container.fullscreen #map {
+            flex: 1;
+            border: none;
+            border-radius: 0;
+        }
+        .documento-item {
+            border: 1px solid #ccc;
+            margin: 10px 0;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-radius: 4px;
+        }
+        .documento-item img {
+            max-width: 200px;
+            max-height: 150px;
+        }
+        .hint-warning, .hint-info {
+            cursor: help;
+            margin-left: 5px;
+            font-size: 1.2em;
+        }
+        .field-group {
+            margin-bottom: 20px;
+        }
+        .field-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .field-group input, .field-group textarea {
+            width: 100%;
+            max-width: 600px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 8px 16px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .form-actions {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .form-actions button {
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <main class="form-container">
+        <header>
+            <h1>5 – Geolocalização</h1>
+        </header>
+        <form id="foco05-form">
+            <section class="form-section">
+                <div class="field-group">
+                    <label for="campo501_0">
+                        CEP
+                        <span class="hint-info" title="Digite o CEP (ex: 01001-000) para geocodificação automática via Nominatim">?</span>
+                    </label>
+                    <div style="display: flex; gap: 10px; align-items: end;">
+                        <input type="text" id="campo501_0" placeholder="00000-000" maxlength="9">
+                        <button type="button" onclick="buscarLocalizacao()">Buscar localização</button>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label for="campo502_0">
+                        Endereço
+                        <span class="hint-warning" title="Preenchido automaticamente após geocodificação do CEP">⚠️</span>
+                    </label>
+                    <input type="text" id="campo502_0" readonly style="background: #f8f9fa;">
+                </div>
+                <div class="field-group">
+                    <label>Mapa (tamanho médio 500px)</label>
+                    <div id="map-container">
+                        <div id="map"></div>
+                        <button type="button" id="expandir-mapa">Expandir para tela grande</button>
+                    </div>
+                    <p style="margin-top: 5px; font-style: italic;">Clique no mapa para adicionar marcadores e identificar testada ou limites (popup exibe coordenadas).</p>
+                </div>
+                <div class="field-group">
+                    <label>Lista dinâmica de documentos / prints</label>
+                    <div id="lista-documentos">
+                        <button type="button" onclick="adicionarDocumento()">+ Adicionar documento / print</button>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label for="obs501_0">
+                        Observações técnicas
+                        <span class="hint-info" title="Descreva observações sobre geolocalização, marcadores, discrepâncias encontradas etc.">?</span>
+                    </label>
+                    <textarea id="obs501_0" rows="6" placeholder="Digite suas observações técnicas aqui..."></textarea>
+                </div>
+            </section>
+            <div class="form-actions">
+                <button type="submit">Salvar</button>
+            </div>
+        </form>
+    </main>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script>
+        let map;
+        let docCounter = 0;
+        let userMarkers = [];
+
+        function initMap() {
+            map = L.map('map').setView([-23.5505, -46.6333], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            map.on('click', function(e) {
+                const lat = e.latlng.lat.toFixed(6);
+                const lng = e.latlng.lng.toFixed(6);
+                const popupContent = `
+                    <div>
+                        <strong>Novo marcador</strong><br>
+                        Lat: ${lat}<br>
+                        Lng: ${lng}<br>
+                        <em>(Testada ou limites - copie as coordenadas para observações)</em>
+                    </div>
+                `;
+                const marker = L.marker(e.latlng).addTo(map).bindPopup(popupContent);
+                userMarkers.push(marker);
+            });
+        }
+
+        function buscarLocalizacao() {
+            const cepEl = document.getElementById('campo501_0');
+            let cep = cepEl.value.replace(/\D/g, '');
+            if (cep.length !== 8) {
+                alert('CEP inválido. Deve conter 8 dígitos.');
+                return;
+            }
+            const url = `https://nominatim.openstreetmap.org/search?format=json&postalcode=${cep}&countrycode=BR&limit=1`;
+            fetch(url)
+                .then(r => r.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        const loc = data[0];
+                        const lat = parseFloat(loc.lat);
+                        const lng = parseFloat(loc.lon);
+                        map.setView([lat, lng], 18);
+                        document.getElementById('campo502_0').value = loc.display_name;
+                        L.marker([lat, lng]).addTo(map)
+                            .bindPopup(`<strong>Local do CEP ${cep}</strong><br>${loc.display_name}`);
+                    } else {
+                        alert('CEP não encontrado no Nominatim. Verifique o CEP.');
+                    }
+                })
+                .catch(() => alert('Erro na geocodificação.'));
+        }
+
+        function adicionarDocumento() {
+            docCounter++;
+            const container = document.getElementById('lista-documentos');
+            const div = document.createElement('div');
+            div.className = 'documento-item';
+            div.id = `doc_${docCounter}`;
+            div.innerHTML = `
+                <input type="file" accept="image/*,.pdf" onchange="previewFile(this)">
+                <img id="preview_${docCounter}" style="display: none;">
+                <button type="button" onclick="removerDocumento('${div.id}')" style="background: #dc3545;">Remover</button>
+            `;
+            container.appendChild(div);
+        }
+
+        function previewFile(input) {
+            const file = input.files[0];
+            if (!file) return;
+            const docId = input.parentElement.id.split('_')[1];
+            const preview = document.getElementById(`preview_${docId}`);
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function removerDocumento(docId) {
+            const div = document.getElementById(docId);
+            if (div) div.remove();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initMap();
+            const btnExpand = document.getElementById('expandir-mapa');
+            const mapCont = document.getElementById('map-container');
+            btnExpand.onclick = () => {
+                mapCont.classList.toggle('fullscreen');
+                const isFull = mapCont.classList.contains('fullscreen');
+                btnExpand.textContent = isFull ? 'Reduzir mapa' : 'Expandir para tela grande';
+                setTimeout(() => map.invalidateSize(), 100);
+            };
+
+            document.getElementById('foco05-form').onsubmit = e => {
+                e.preventDefault();
+                alert('Foco 05 salvo! (simulação - implemente salvamento real).');
+            };
+        });
+    </script>
+</body>
+</html>

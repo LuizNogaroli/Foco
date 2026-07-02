@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aba 2 — Ocupação</title>
+    <link rel="stylesheet" href="styles-forms.css">
+    <link rel="stylesheet" href="hints.css">
+</head>
+<body>
+    <div class="form-container">
+        <h2>Aba 2: Ocupação</h2>
+
+        <div class="form-group editavel">
+            <label for="campo31_0">Situação ocupacional:</label>
+            <select id="campo31_0" name="imoveis[0][situacao_ocupacional]" required>
+                <option value="Desocupado">Desocupado</option>
+                <option value="Ocupado regularmente">Ocupado regularmente</option>
+            </select>
+            <label for="obs31_0" style="margin-top: 10px;">Observações complementares:</label>
+            <textarea id="obs31_0" name="imoveis[0][obs_situacao_ocupacional]"></textarea>
+        </div>
+        <div class="form-group inline">
+            <label for="campo32_0">Tipo de uso imobiliário atual:</label>
+            <select id="campo32_0" name="imoveis[0][tipo_uso_atual]">
+                <option value="Comercial" selected>Comercial</option>
+            </select>
+        </div>
+        <div class="form-group inline">
+            <label for="campo33_0">Tipo de uso específico atual:</label>
+            <select id="campo33_0" name="imoveis[0][tipo_uso_especifico_atual]">
+                <option value="Escritório/sede administrativa" selected>Escritório/sede administrativa</option>
+            </select>
+        </div>
+        <div class="form-group inline">
+            <label for="campo34_0">Tempo de ocupação:</label>
+            <input type="text" id="campo34_0" name="imoveis[0][tempo_ocupacao]" value="01" autocomplete="off">
+        </div>
+        <div class="form-group inline">
+            <label for="campo35_0">Incidência ambiental:</label>
+            <select id="campo35_0" name="imoveis[0][incidencia_ambiental]">
+                <option value="Nenhuma incidência relevante" selected>Nenhuma incidência relevante</option>
+            </select>
+        </div>
+        <div class="form-group editavel">
+            <label for="obs35_0">Observações complementares (Ambiental):</label>
+            <textarea id="obs35_0" name="imoveis[0][obs_incidencia_ambiental]"></textarea>
+        </div>
+        <div class="form-group inline">
+            <label>Há custos de manutenção (SPU)?</label>
+            <div class="radio-group">
+                <label class="radio-option"><input type="radio" name="imoveis[0][custos_manutencao]" value="Sim" checked> Sim</label>
+                <label class="radio-option"><input type="radio" name="imoveis[0][custos_manutencao]" value="Não"> Não</label>
+            </div>
+        </div>
+        <div class="form-group inline">
+            <label for="campo37_0">Estimativa de custos anuais (R$):</label>
+            <input type="text" id="campo37_0" name="imoveis[0][estimativa_custos]" value="R$ 15.000,00" autocomplete="off">
+        </div>
+    </div>
+</body>
+</html>

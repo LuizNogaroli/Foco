@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index Alternativa – Versão A (Restaurada)</title>
+
+    <style>
+        :root {
+            --menu-height: 150px; /* altura total do cabeçalho */
+            --main-blue: #007bff;
+            --dark-blue: #0056b3;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
+            overflow: hidden;
+        }
+
+        /* MENU SUPERIOR */
+        header.menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: var(--menu-height);
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            box-shadow: 0 5px 5px rgba(0,0,0,0.15);
+            padding-top: 1px;
+            z-index: 1000;
+        }
+
+        /* LINHA CONTÍNUA ATRÁS DOS BOTÕES */
+        .buttons-flow-line {
+            position: absolute;
+            top: 35px; 
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: rgba(152, 152, 155, 0.35);
+            z-index: 1;
+        }
+
+        .buttons-container {
+            display: flex;
+            gap: 50px;
+            margin-top: 0px;
+            position: relative;
+            z-index: 2; 
+        }
+
+        .button-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 50px;
+        }
+
+        .circle-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid var(--main-blue);
+            background: white;
+            font-size: 16px;
+            font-weight: normal;
+            color: var(--main-blue);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 5px 5px rgba(0, 123, 255, 0.3);
+            text-decoration: none;
+        }
+
+        .circle-btn:hover {
+            border-color: var(--dark-blue);
+            color: var(--dark-blue);
+            transform: scale(1.08);
+            box-shadow: 0 5px 5px rgba(0, 86, 179, 0.4);
+        }
+
+        /* ⭐ BOTÃO ATIVO */
+        .active-btn {
+            background: #e9ecef !important; /* cinza claro */
+            border-color: var(--dark-blue) !important;
+            color: var(--dark-blue) !important;
+            transform: scale(1.10);
+            box-shadow: 0 6px 12px rgba(0, 86, 179, 0.3) !important;
+        }
+
+        .legend {
+            margin-top: 10px;
+            font-size: 16px;
+            font-weight: 500;
+            text-align: justify;
+            color: #444;
+            white-space: nowrap;
+        }
+
+        /* ÁREA DO IFRAME */
+        main {
+            position: absolute;
+            top: var(--menu-height);
+            left: 0;
+            width: 100%;
+            height: calc(100vh - var(--menu-height));
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: white;
+        }
+
+        /* RESPONSIVO */
+        @media (max-width: 900px) {
+            .buttons-container {
+                gap: 35px;
+            }
+            .button-wrapper {
+                width: 100px;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .buttons-container {
+                flex-wrap: wrap;
+                gap: 30px;
+            }
+            :root {
+                --menu-height: 300px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .buttons-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+            :root {
+                --menu-height: 480px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="menu">
+
+    <div class="buttons-flow-line"></div>
+
+    <div class="buttons-container">
+
+        <div class="button-wrapper">
+            <a class="circle-btn active-btn" onclick="activateButton(this); loadPage('foco-01.html')">1</a>
+            <span class="legend">Dados do Requerimento</span>
+        </div>
+
+        <div class="button-wrapper">
+            <a class="circle-btn" onclick="activateButton(this); loadPage('foco-02.html')">2</a>
+            <span class="legend">Dados do(s) Imóvel(eis)</span>
+        </div>
+
+        <div class="button-wrapper">
+            <a class="circle-btn" onclick="activateButton(this); loadPage('foco-03.html')">3</a>
+            <span class="legend">Análise do(s) Imóvel(eis)</span>
+        </div>
+
+        <div class="button-wrapper">
+            <a class="circle-btn" onclick="activateButton(this); loadPage('foco-04.html')">4</a>
+            <span class="legend">Geolocalização</span>
+        </div>
+
+        <div class="button-wrapper">
+            <a class="circle-btn" onclick="activateButton(this); loadPage('foco-05.html')">5</a>
+            <span class="legend">Análise do Destinatário</span>
+        </div>
+
+        <div class="button-wrapper">
+            <a class="circle-btn" onclick="activateButton(this); loadPage('foco-06.html')">6</a>
+            <span class="legend">Proposta de Destinação</span>
+        </div>
+
+        <div class="button-wrapper">
+            <a class="circle-btn" onclick="activateButton(this); loadPage('foco-07.html')">7</a>
+            <span class="legend">Mérito</span>
+        </div>
+
+    </div>
+</header>
+
+<main>
+    <iframe id="frame" src="foco-01.html"></iframe>
+</main>
+
+<script>
+
+function loadPage(url) {
+    document.getElementById('frame').src = url;
+}
+
+function activateButton(element) {
+    document.querySelectorAll('.circle-btn')
+        .forEach(btn => btn.classList.remove('active-btn'));
+
+    element.classList.add('active-btn');
+}
+
+</script>
+
+</body>
+</html>

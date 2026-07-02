@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aba 3 — Restrições</title>
+    <link rel="stylesheet" href="styles-forms.css">
+    <link rel="stylesheet" href="hints.css">
+</head>
+<body>
+    <div class="form-container">
+        <h2>Aba 3: Restrições / Diagnóstico</h2>
+
+        <div class="form-group inline">
+            <label>Risco de invasão/esbulho?</label>
+            <div class="radio-group">
+                <label class="radio-option"><input type="radio" name="imoveis[0][risco_invasao]" value="Não" checked> Não</label>
+            </div>
+        </div>
+        <div class="form-group editavel">
+            <label for="desc38_0">Descrever Risco Invasão:</label>
+            <textarea id="desc38_0" name="imoveis[0][desc_risco_invasao]"></textarea>
+        </div>
+        <div class="form-group inline">
+            <label>Riscos para coletividade?</label>
+            <div class="radio-group">
+                <label class="radio-option"><input type="radio" name="imoveis[0][risco_coletividade]" value="Não" checked> Não</label>
+            </div>
+        </div>
+        <div class="form-group editavel">
+            <label for="desc39_0">Descrever Riscos Coletividade:</label>
+            <textarea id="desc39_0" name="imoveis[0][desc_risco_coletividade]"></textarea>
+        </div>
+        <div class="form-group inline">
+            <label>Ações judiciais (CGU/TCU/MP):</label>
+            <div class="checkbox-group" style="flex: 1;">
+                <label class="checkbox-option"><input type="checkbox" name="imoveis[0][acoes][]" value="Não existe" checked> Não existe</label>
+            </div>
+        </div>
+        <div class="form-group editavel">
+            <label for="obs310_0">Observações complementares (Ações Judiciais):</label>
+            <textarea id="obs310_0" name="imoveis[0][obs_acoes]"></textarea>
+        </div>
+        <div class="form-group inline">
+            <label>Imóvel tombado?</label>
+            <div class="radio-group">
+                <label class="radio-option"><input type="radio" name="imoveis[0][tombado]" value="Não" checked> Não</label>
+            </div>
+        </div>
+        <div class="form-group editavel">
+            <label for="obs311_0">Observações complementares (Tombamento):</label>
+            <textarea id="obs311_0" name="imoveis[0][obs_tombado]"></textarea>
+        </div>
+        <div class="form-group inline">
+            <label>Há conflitos fundiários/sociais?</label>
+            <div class="radio-group">
+                <label class="radio-option"><input type="radio" name="imoveis[0][conflitos_fundiarios]" value="Não" checked> Não</label>
+            </div>
+        </div>
+        <div class="form-group editavel">
+            <label for="obs312_0">Observações complementares (Conflitos):</label>
+            <textarea id="obs312_0" name="imoveis[0][obs_conflitos]"></textarea>
+        </div>
+        <div class="form-group inline">
+            <label>Termo Gestão Praias/PGI?</label>
+            <div class="radio-group">
+                <label class="radio-option"><input type="radio" name="imoveis[0][gestao_praias]" value="Não" checked> Não</label>
+            </div>
+        </div>
+        <div class="form-group editavel">
+            <label for="obs313_0">Observações complementares (Gestão Praias):</label>
+            <textarea id="obs313_0" name="imoveis[0][obs_gestao_praias]"></textarea>
+        </div>
+    </div>
+</body>
+</html>

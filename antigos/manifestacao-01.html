@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Imóvel - SPU (Progressive Workflow)</title>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <style>
+    :root {
+      --carousel-gap: 16px;
+      --carousel-height-desktop: 180px;
+      --carousel-height-mobile: 380px;
+      --spu-blue: #1e3a5f;
+      --spu-light-blue: #f1f5f9;
+      --spu-green: #1a7a4a;
+    }
+
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: #ffffff; color: #333333; }
+    .page { display: flex; width: 100vw; height: 100vh; overflow: hidden; }
+
+    .left { width: 50%; display: flex; flex-direction: column; gap: 15px; padding: 15px; overflow-y: auto; background: #ffffff; scrollbar-gutter: stable; }
+    #map { width: 100%; height: 40vh; min-height: 320px; border: 1px solid #cccccc; border-radius: 6px; flex: 0 0 auto; }
+
+    .carousel-container { width: 100%; height: var(--carousel-height-desktop); overflow: hidden; position: relative; border-radius: 12px; background: #f2f2f2; flex: 0 0 auto; }
+    .carousel-track { display: flex; gap: var(--carousel-gap); height: 100%; transition: transform 0.4s; }
+    .carousel-item { flex: 0 0 calc((100% - var(--carousel-gap)) / 2); height: 100%; border-radius: 12px; overflow: hidden; cursor: pointer; }
+    .carousel-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .carousel-button { position: absolute; top: 50%; transform: translateY(-50%); width: 42px; height: 90px; border: none; background: rgba(0, 0, 0, 0.28); color: #ffffff; font-size: 38px; cursor: pointer; border-radius: 6px; z-index: 10; display: flex; align-items: center; justify-content: center; }
+
+    .right { width: 50%; padding: 20px; overflow-y: auto; background: #ffffff; scrollbar-gutter: stable; }
+
+    .btn-grid { display: grid; gap: 10px; margin-top: 10px; }
+    .grid-resumos { grid-template-columns: repeat(5, 1fr); }
+    .grid-historico { grid-template-columns: repeat(3, 1fr); }
+
+    .popup-btn {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 8px 5px; background: #fff; border: 2px solid #e2e8f0; border-radius: 10px;
+      cursor: pointer; transition: all 0.2s; text-align: center; gap: 4px; min-height: 65px; word-wrap: break-word;
+    }
+    .popup-btn:hover { border-color: var(--spu-blue); background: var(--spu-light-blue); transform: translateY(-2px); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    .popup-btn span { font-size: 13.5px; line-height: 1.1; font-weight: 700; color: var(--spu-blue); display: block; width: 100%; }
+
+    .btn-hist { background: #f0fdf4; border-color: var(--spu-green); }
+    .btn-hist span { color: var(--spu-green); }
+
+    @media (max-width: 768px) {
+      .page { flex-direction: column; height: auto; overflow: auto; }
+      .left, .right { width: 100%; }
+      .grid-resumos { grid-template-columns: repeat(2, 1fr); }
+      .grid-historico { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+    <section class="left">
+      <!-- SELETOR DE PERFIL -->
+      <div style="margin-bottom: 20px; padding: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; flex: 0 0 auto;">
+        <label for="perfilSeletor" style="display: block; font-size: 11px; font-weight: 700; color: #1e3a5f; text-transform: uppercase; margin-bottom: 6px;">Visualizar como:</label>
+        <select id="perfilSeletor" style="width: 100%; padding: 8px; border: 2px solid #1e3a5f; border-radius: 6px; font-size: 13.5px; font-weight: 600; color: #1e3a5f; cursor: pointer;">
+          <option value="uf-tecnica">UF - Equipe Técnica</option>
+          <option value="uf-chefia">UF - Chefia</option>
+          <option value="uf-coord">UF - Coordenação</option>
+          <option value="uf-super">UF - Superintendência</option>
+          <option value="uc-tecnica">UC - Equipe Técnica</option>
+          <option value="uc-coord">UC - Coordenação Geral</option>
+          <option value="uc-diretoria">UC - Diretoria</option>
+          <option value="cde">CDE - Comitê de Destinação</option>
+        </select>
+      </div>
+      <div id="map"></div>
+      <div class="carousel-container">
+        <button class="carousel-button prev" onclick="moveCarousel(-1)">‹</button>
+        <div class="carousel-track" id="carouselTrack">
+          <div class="carousel-item"><img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1200&q=80" alt="1" /></div>
+          <div class="carousel-item"><img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80" alt="2" /></div>
+          <div class="carousel-item"><img src="https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80" alt="3" /></div>
+          <div class="carousel-item"><img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80" alt="4" /></div>
+          <div class="carousel-item"><img src="https://images.unsplash.com/photo-1605146769289-440113cc3d00?auto=format&fit=crop&w=1200&q=80" alt="5" /></div>
+          <div class="carousel-item"><img src="https://images.unsplash.com/photo-1582407947304-fd86f028f716?auto=format&fit=crop&w=1200&q=80" alt="6" /></div>
+        </div>
+        <button class="carousel-button next" onclick="moveCarousel(1)">›</button>
+      </div>
+    </section>
+
+    <section class="right">
+      <h2 style="font-size: 15px; color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; margin-bottom: 15px;">Acesso Rápido aos Resumos</h2>
+      <div class="btn-grid grid-resumos">
+        <button class="popup-btn" data-url="foco-01-resumo.html"><span>Dados do<br>Requerimento</span></button>
+        <button class="popup-btn" data-url="foco-02-resumo.html"><span>Dados do Imóvel</span></button>
+        <button class="popup-btn" data-url="foco-04-resumo.html"><span>Análise do Imóvel</span></button>
+        <button class="popup-btn" data-url="foco-05-resumo.html"><span>Análise do<br>Destinatário</span></button>
+        <button class="popup-btn" data-url="foco-06-resumo.html"><span>Proposta de<br>Destinação</span></button>
+      </div>
+
+      <!-- HISTÓRICO DE MANIFESTAÇÕES (DINÂMICO) -->
+      <div id="secaoHistorico" style="display: none;">
+          <h2 style="font-size: 15px; color: var(--spu-green); border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; margin: 25px 0 15px 0;">Histórico de Manifestações</h2>
+          <div class="btn-grid grid-historico" id="gridHistorico">
+              <!-- Botões inseridos via JS -->
+          </div>
+      </div>
+
+      <h2 id="tituloManifestacoes" style="font-size: 15px; color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; margin: 25px 0 15px 0;">Manifestações</h2>
+      <div id="containerManifestacao">
+        <iframe id="iframeManifestacao" src="telas/UF-Equipe-Tecnica.html" style="width: 100%; height: 55vh; border: 1px solid #e2e8f0; border-radius: 12px; background: #fff;"></iframe>
+      </div>
+    </section>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="formulario.js"></script>
+  <script>
+    const map = L.map("map").setView([-15.7998, -47.8645], 15);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
+    const polygon = L.polygon([[-15.7989, -47.866], [-15.7987, -47.8634], [-15.801, -47.8631], [-15.8013, -47.8657]], { color: "#176985" }).addTo(map);
+    map.fitBounds(polygon.getBounds());
+
+    function abrirPopupCentrado(url, w, h) {
+      const left = (screen.width / 2) - (w / 2);
+      const top = (screen.height / 2) - (h / 2);
+      window.open(url, '_blank', `width=${w},height=${h},top=${top},left=${left},scrollbars=yes,resizable=yes`);
+    }
+
+    document.querySelectorAll('.popup-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const url = btn.getAttribute('data-url');
+        if (url) abrirPopupCentrado(url, 1100, 850);
+      });
+    });
+
+    /* =========================
+       FLUXO HIERÁRQUICO
+    ========================== */
+    const niveis = [
+      { id: 'uf-tecnica', label: 'Manifestação<br>Equipe Técnica', resumo: 'uf-tecnica-resumo.html', tela: 'telas/UF-Equipe-Tecnica.html' },
+      { id: 'uf-chefia', label: 'Manifestação<br>Chefia SPU/UF', resumo: 'uf-chefia-resumo.html', tela: 'telas/UF-Chefia.html' },
+      { id: 'uf-coord', label: 'Manifestação<br>Coordenação UF', resumo: 'uf-coord-resumo.html', tela: 'telas/UF-Coordenacao.html' },
+      { id: 'uf-super', label: 'Manifestação<br>Superintendência', resumo: 'uf-super-resumo.html', tela: 'telas/UF-Superintendencia.html' },
+      { id: 'uc-tecnica', label: 'Manifestação<br>Técnica SPU/UC', resumo: 'uf-super-resumo.html', tela: 'telas/UC-Equipe-Tecnica.html' },
+      { id: 'uc-coord', label: 'Manifestação<br>C.G. SPU/UC', resumo: 'uc-coord-resumo.html', tela: 'telas/UC-Coordenacao-Geral.html' },
+      { id: 'uc-diretoria', label: 'Manifestação<br>Diretoria SPU/UC', resumo: 'uc-coord-resumo.html', tela: 'telas/UC-Diretoria.html' },
+      { id: 'cde', label: 'Deliberação<br>CDE', resumo: 'uc-coord-resumo.html', tela: 'telas/CDE.html' }
+    ];
+
+    document.getElementById('perfilSeletor').addEventListener('change', function(e) {
+      const perfilId = e.target.value;
+      const gridHist = document.getElementById('gridHistorico');
+      const secaoHist = document.getElementById('secaoHistorico');
+      const iframe = document.getElementById('iframeManifestacao');
+      
+      gridHist.innerHTML = '';
+      let indexAtual = niveis.findIndex(n => n.id === perfilId);
+      
+      // Carrega tela ativa
+      iframe.src = niveis[indexAtual].tela;
+
+      // Gera botões de histórico (todos os níveis ANTERIORES ao atual)
+      if (indexAtual > 0) {
+        secaoHist.style.display = 'block';
+        for (let i = 0; i < indexAtual; i++) {
+          const btn = document.createElement('button');
+          btn.className = 'popup-btn btn-hist';
+          btn.innerHTML = `<span>${niveis[i].label}</span>`;
+          btn.onclick = () => abrirPopupCentrado(niveis[i].resumo, 1100, 850);
+          gridHist.appendChild(btn);
+        }
+      } else {
+        secaoHist.style.display = 'none';
+      }
+    });
+
+    let pos = 0;
+    function moveCarousel(d) {
+      const track = document.getElementById('carouselTrack');
+      const items = document.querySelectorAll('.carousel-item');
+      if(!items.length) return;
+      pos = Math.max(0, Math.min(items.length - 2, pos + d));
+      track.style.transform = `translateX(-${pos * (items[0].offsetWidth + 16)}px)`;
+    }
+  </script>
+</body>
+</html>

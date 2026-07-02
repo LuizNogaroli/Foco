@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário 03 - Ocupação e Restrições</title>
+    <link rel="stylesheet" href="styles-forms.css">
+</head>
+<body>
+    <div class="form-container">
+        <h2>Seção 3: Ocupação e Restrições</h2>
+        <form id="form03" novalidate>
+
+            <!-- 3.1 Situação Ocupacional -->
+            <div class="form-group">
+                <label for="campo31">
+                    3.1 Situação Ocupacional
+                    <span
+                        class="hint-icon hint-popup"
+                        data-popup="hints/situacao_ocupacional.html"
+                        data-hint="Clique para abrir informações detalhadas sobre a situação ocupacional."
+                        role="button"
+                        tabindex="0"
+                        aria-label="Ajuda: Situação Ocupacional"
+                    >?</span>
+                </label>
+                <select id="campo31" name="situacao_ocupacional" required>
+                    <option value="" disabled selected>Selecione...</option>
+                    <option value="empregado">Empregado</option>
+                    <option value="autonomo">Autônomo</option>
+                    <option value="desempregado">Desempregado</option>
+                    <option value="aposentado">Aposentado</option>
+                </select>
+                <span class="error-msg" id="err31">Selecione a situação ocupacional.</span>
+            </div>
+
+            <!-- 3.2 Ocupação Principal -->
+            <div class="form-group">
+                <label for="campo32">
+                    3.2 Ocupação Principal
+                    <span
+                        class="hint-icon"
+                        data-hint="Descreva sua ocupação atual ou principal."
+                        role="tooltip"
+                        aria-label="Ajuda: Ocupação Principal"
+                    >?</span>
+                </label>
+                <input
+                    type="text"
+                    id="campo32"
+                    name="ocupacao_principal"
+                    placeholder="Ex: Analista de Sistemas, Comerciante"
+                    autocomplete="off"
+                    required
+                >
+                <span class="error-msg" id="err32">Informe a ocupação principal.</span>
+            </div>
+
+            <!-- 3.3 Setor de Atividade -->
+            <div class="form-group">
+                <label for="campo33">
+                    3.3 Setor de Atividade
+                    <span
+                        class="hint-icon"
+                        data-hint="Indique o setor em que trabalha."
+                        role="tooltip"
+                        aria-label="Ajuda: Setor de Atividade"
+                    >?</span>
+                </label>
+                <select id="campo33" name="setor_atividade" required>
+                    <option value="" disabled selected>Selecione...</option>
+                    <option value="comercio">Comércio</option>
+                    <option value="industria">Indústria</option>
+                    <option value="servicos">Serviços</option>
+                    <option value="agricultura">Agricultura</option>
+                </select>
+                <span class="error-msg" id="err33">Selecione o setor de atividade.</span>
+            </div>
+
+            <!-- 3.4 Tempo de Serviço -->
+            <div class="form-group">
+                <label for="campo34">
+                    3.4 Tempo de Serviço (anos)
+                    <span
+                        class="hint-icon"
+                        data-hint="Informe o tempo total de serviço em anos."
+                        role="tooltip"
+                        aria-label="Ajuda: Tempo de Serviço"
+                    >?</span>
+                </label>
+                <input
+                    type="number"
+                    id="campo34"
+                    name="tempo_servico"
+                    placeholder="0"
+                    min="0"
+                    max="70"
+                    required
+                >
+                <span class="error-msg" id="err34">Informe o tempo de serviço.</span>
+            </div>
+
+            <!-- 3.5 Restrições Médicas -->
+            <div class="form-group">
+                <label for="campo35">
+                    3.5 Restrições Médicas
+                    <span
+                        class="hint-icon"
+                        data-hint="Liste restrições médicas que afetam o trabalho. Se não houver, escreva 'Nenhuma'."
+                        role="tooltip"
+                        aria-label="Ajuda: Restrições Médicas"
+                    >?</span>
+                </label>
+                <textarea
+                    id="campo35"
+                    name="restricoes_medicas"
+                    placeholder="Descreva as restrições médicas ou informe 'Nenhuma'."
+                    required
+                ></textarea>
+                <span class="error-msg" id="err35">Informe as restrições médicas.</span>
+            </div>
+
+            <!-- 3.6 Benefícios Sociais -->
+            <div class="form-group">
+                <label>
+                    3.6 Benefícios Sociais
+                    <span
+                        class="hint-icon"
+                        data-hint="Marque todos os benefícios sociais que recebe atualmente."
+                        role="tooltip"
+                        aria-label="Ajuda: Benefícios Sociais"
+                    >?</span>
+                </label>
+                <div class="checkbox-group" id="group-beneficios">
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="beneficios" value="aposentadoria">
+                        Aposentadoria
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="beneficios" value="seguro_desemprego">
+                        Seguro Desemprego
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="beneficios" value="auxilio_doenca">
+                        Auxílio Doença
+                    </label>
+                </div>
+            </div>
+
+            <!-- 3.7 Renda Mensal -->
+            <div class="form-group">
+                <label for="campo37">
+                    3.7 Renda Mensal (R$)
+                    <span
+                        class="hint-icon"
+                        data-hint="Informe sua renda mensal aproximada em reais."
+                        role="tooltip"
+                        aria-label="Ajuda: Renda Mensal"
+                    >?</span>
+                </label>
+                <input
+                    type="number"
+                    id="campo37"
+                    name="renda_mensal"
+                    placeholder="0,00"
+                    min="0"
+                    step="0.01"
+                    required
+                >
+                <span class="error-msg" id="err37">Informe a renda mensal.</span>
+            </div>
+
+            <!-- 3.8 Horário de Trabalho -->
+            <div class="form-group">
+                <label for="campo38">
+                    3.8 Horário de Trabalho
+                    <span
+                        class="hint-icon"
+                        data-hint="Descreva seu horário habitual de trabalho."
+                        role="tooltip"
+                        aria-label="Ajuda: Horário de Trabalho"
+                    >?</span>
+                </label>
+                <input
+                    type="text"
+                    id="campo38"
+                    name="horario_trabalho"
+                    placeholder="Ex: 08h00 às 17h00"
+                    autocomplete="off"
+                    required
+                >
+                <span class="error-msg" id="err38">Informe o horário de trabalho.</span>
+            </div>
+
+            <!-- 3.9 Tipo de Contrato -->
+            <div class="form-group">
+                <label>
+                    3.9 Tipo de Contrato
+                    <span
+                        class="hint-icon"
+                        data-hint="Selecione o tipo de contrato de trabalho vigente."
+                        role="tooltip"
+                        aria-label="Ajuda: Tipo de Contrato"
+                    >?</span>
+                </label>
+                <div class="radio-group" id="group-contrato">
+                    <label class="radio-option">
+                        <input type="radio" name="tipo_contrato" value="clt">
+                        CLT
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="tipo_contrato" value="pj">
+                        PJ
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="tipo_contrato" value="temporario">
+                        Temporário
+                    </label>
+                </div>
+                <span class="error-msg" id="err39">Selecione o tipo de contrato.</span>
+            </div>
+
+            <!-- 3.10 Empresa Atual -->
+            <div class="form-group">
+                <label for="campo310">
+                    3.10 Empresa Atual
+                    <span
+                        class="hint-icon"
+                        data-hint="Nome da empresa onde trabalha atualmente."
+                        role="tooltip"
+                        aria-label="Ajuda: Empresa Atual"
+                    >?</span>
+                </label>
+                <input
+                    type="text"
+                    id="campo310"
+                    name="empresa_atual"
+                    placeholder="Nome da empresa"
+                    autocomplete="off"
+                    required
+                >
+                <span class="error-msg" id="err310">Informe a empresa atual.</span>
+            </div>
+
+            <!-- 3.11 Local de Trabalho -->
+            <div class="form-group">
+                <label for="campo311">
+                    3.11 Local de Trabalho
+                    <span
+                        class="hint-icon"
+                        data-hint="Informe o endereço ou local do trabalho."
+                        role="tooltip"
+                        aria-label="Ajuda: Local de Trabalho"
+                    >?</span>
+                </label>
+                <input
+                    type="text"
+                    id="campo311"
+                    name="local_trabalho"
+                    placeholder="Endereço ou descrição do local"
+                    autocomplete="off"
+                    required
+                >
+                <span class="error-msg" id="err311">Informe o local de trabalho.</span>
+            </div>
+
+            <!-- 3.12 Observações -->
+            <div class="form-group">
+                <label for="campo312">
+                    3.12 Observações
+                    <span
+                        class="hint-icon"
+                        data-hint="Adicione observações relevantes sobre sua ocupação."
+                        role="tooltip"
+                        aria-label="Ajuda: Observações"
+                    >?</span>
+                </label>
+                <textarea
+                    id="campo312"
+                    name="observacoes"
+                    placeholder="Observações adicionais sobre a ocupação..."
+                ></textarea>
+            </div>
+
+            <!-- 3.13 Restrições Legais -->
+            <div class="form-group">
+                <label for="campo313">
+                    3.13 Restrições Legais
+                    <span
+                        class="hint-icon"
+                        data-hint="Descreva restrições legais ou judiciais. Se não houver, escreva 'Nenhuma'."
+                        role="tooltip"
+                        aria-label="Ajuda: Restrições Legais"
+                    >?</span>
+                </label>
+                <textarea
+                    id="campo313"
+                    name="restricoes_legais"
+                    placeholder="Descreva as restrições legais ou informe 'Nenhuma'."
+                    required
+                ></textarea>
+                <span class="error-msg" id="err313">Informe as restrições legais.</span>
+            </div>
+
+            <!-- Botões -->
+            <div class="button-group">
+                <button type="button" class="btn-secondary" id="btnLimpar">🗑️ Limpar</button>
+                <button type="submit" id="btnEnviar">✅ Enviar Seção 3</button>
+            </div>
+
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // ── 1. Hint popup ───────────────────────────────────────────────
+            document.querySelectorAll('.hint-popup').forEach(function (icon) {
+                function openPopup() {
+                    var url = icon.getAttribute('data-popup');
+                    if (!url) return;
+                    window.open(
+                        url, 'hintPopup',
+                        'width=900,height=720,left=' + (screen.width / 2 - 450) +
+                        ',top=' + (screen.height / 2 - 360)
+                    );
+                }
+                icon.addEventListener('click', openPopup);
+                icon.addEventListener('keydown', function (e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        openPopup();
+                    }
+                });
+            });
+
+            // ── 2. Campos e regras de validação ─────────────────────────────
+            const camposTexto = [
+                { id: 'campo31',  erro: 'err31',  check: v => v !== '' },
+                { id: 'campo32',  erro: 'err32',  check: v => v.trim().length >= 3 },
+                { id: 'campo33',  erro: 'err33',  check: v => v !== '' },
+                { id: 'campo34',  erro: 'err34',  check: v => v !== '' && parseInt(v) >= 0 },
+                { id: 'campo35',  erro: 'err35',  check: v => v.trim().length >= 3 },
+                { id: 'campo37',  erro: 'err37',  check: v => v !== '' && parseFloat(v) >= 0 },
+                { id: 'campo38',  erro: 'err38',  check: v => v.trim().length >= 3 },
+                { id: 'campo310', erro: 'err310', check: v => v.trim().length >= 2 },
+                { id: 'campo311', erro: 'err311', check: v => v.trim().length >= 3 },
+                { id: 'campo313', erro: 'err313', check: v => v.trim().length >= 3 },
+            ];
+
+            const gruposRadio = [
+                { name: 'tipo_contrato', groupId: 'group-contrato', erro: 'err39' },
+            ];
+
+            // ── 3. Validação no submit ──────────────────────────────────────
+            const form = document.getElementById('form03');
+
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                let valido = true;
+
+                // Valida campos de texto/select/number/textarea
+                camposTexto.forEach(function (reg) {
+                    const campo = document.getElementById(reg.id);
+                    const erro = document.getElementById(reg.erro);
+                    const ok = reg.check(campo.value);
+                    erro.style.display = ok ? 'none' : 'block';
+                    campo.classList.toggle('field-error', !ok);
+                    campo.classList.toggle('field-valid', ok);
+                    if (!ok) valido = false;
+                });
+
+                // Valida radio groups
+                gruposRadio.forEach(function (grupo) {
+                    const selecionado = document.querySelector(`input[name="${grupo.name}"]:checked`);
+                    const groupEl = document.getElementById(grupo.groupId);
+                    const erro = document.getElementById(grupo.erro);
+                    const ok = !!selecionado;
+                    erro.style.display = ok ? 'none' : 'block';
+                    groupEl.classList.toggle('group-error', !ok);
+                    if (!ok) valido = false;
+                });
+
+                if (valido) {
+                    alert('✅ Seção 3 enviada com sucesso!');
+                    // Substituir pelo envio real (fetch/AJAX)
+                }
+            });
+
+            // ── 4. Botão Limpar ─────────────────────────────────────────────
+            document.getElementById('btnLimpar').addEventListener('click', function () {
+                if (confirm('Deseja limpar todos os campos?')) {
+                    form.reset();
+                    document.querySelectorAll('.error-msg').forEach(e => e.style.display = 'none');
+                    document.querySelectorAll('.field-error, .field-valid').forEach(el => {
+                        el.classList.remove('field-error', 'field-valid');
+                    });
+                    document.querySelectorAll('.group-error').forEach(el => {
+                        el.classList.remove('group-error');
+                    });
+                }
+            });
+
+        });
+    </script>
+</body>
+</html>

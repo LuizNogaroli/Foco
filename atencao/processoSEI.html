@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Processo SEI — Orientações</title>
+    <style>
+
+        /* ── Reset e base ── */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 0.95em;
+            line-height: 1.75;
+            color: #2c2c2c;
+            background-color: #ffffff;
+            padding: 10px 4px;
+        }
+
+        /* ── Cabeçalho estilo jornal ── */
+        .artigo-header {
+            border-top: 4px solid #1a3a5c;
+            border-bottom: 2px solid #1a3a5c;
+            padding: 12px 0 10px;
+            margin-bottom: 18px;
+            text-align: center;
+        }
+
+        .artigo-header .secao {
+            font-size: 0.75em;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #1a3a5c;
+            margin-bottom: 6px;
+        }
+
+        .artigo-header h1 {
+            font-size: 1.6em;
+            font-weight: 800;
+            color: #1a3a5c;
+            line-height: 1.2;
+            margin-bottom: 8px;
+        }
+
+        .artigo-header .subtitulo {
+            font-size: 0.9em;
+            color: #555;
+            font-style: italic;
+        }
+
+        .artigo-header .linha-divisora {
+            border: none;
+            border-top: 1px solid #ccc;
+            margin: 10px 0 6px;
+        }
+
+        .artigo-header .meta {
+            font-size: 0.75em;
+            color: #888;
+            letter-spacing: 1px;
+        }
+
+        /* ── Texto corrido ── */
+        p {
+            margin-bottom: 14px;
+            text-align: justify;
+            hyphens: auto;
+        }
+
+        /* ── Imagem flutuando à DIREITA ── */
+        .img-direita {
+            float: right;
+            margin: 0 0 14px 20px;
+            width: 220px;
+        }
+
+        /* ── Imagem flutuando à ESQUERDA ── */
+        .img-esquerda {
+            float: left;
+            margin: 0 20px 14px 0;
+            width: 220px;
+        }
+
+        .img-direita img,
+        .img-esquerda img {
+            width: 100%;
+            height: auto;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            display: block;
+        }
+
+        .img-direita figcaption,
+        .img-esquerda figcaption {
+            font-size: 0.75em;
+            color: #666;
+            text-align: center;
+            margin-top: 5px;
+            font-style: italic;
+            line-height: 1.3;
+        }
+
+        /* ── Clearfix ── */
+        .clearfix::after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        /* ── Seção com título ── */
+        .secao-titulo {
+            font-size: 1em;
+            font-weight: 700;
+            color: #1a3a5c;
+            border-left: 4px solid #e67e22;
+            padding-left: 10px;
+            margin: 22px 0 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* ── Destaque / pull quote ── */
+        .destaque {
+            border-left: 4px solid #1a3a5c;
+            background-color: #f0f4f8;
+            padding: 12px 16px;
+            margin: 18px 0;
+            border-radius: 0 6px 6px 0;
+            font-style: italic;
+            color: #1a3a5c;
+            font-size: 1em;
+            line-height: 1.6;
+        }
+
+        /* ── Tabela de formato ── */
+        .tabela-formato {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 14px 0 18px;
+            font-size: 0.88em;
+        }
+
+        .tabela-formato th {
+            background-color: #1a3a5c;
+            color: #ffffff;
+            padding: 8px 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .tabela-formato td {
+            padding: 7px 12px;
+            border-bottom: 1px solid #e0e0e0;
+            vertical-align: top;
+        }
+
+        .tabela-formato tr:nth-child(even) td {
+            background-color: #f8f9fb;
+        }
+
+        .tabela-formato tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* ── Badge de exemplo ── */
+        .exemplo-numero {
+            display: inline-block;
+            background-color: #1a3a5c;
+            color: #ffffff;
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
+            font-weight: 700;
+            padding: 6px 16px;
+            border-radius: 4px;
+            letter-spacing: 2px;
+            margin: 8px 0 14px;
+        }
+
+        /* ── Lista estilizada ── */
+        ul.lista-hint, ol.lista-hint {
+            padding-left: 20px;
+            margin: 8px 0 14px;
+        }
+
+        ul.lista-hint li, ol.lista-hint li {
+            margin-bottom: 7px;
+        }
+
+        ul.lista-hint li::marker {
+            color: #e67e22;
+        }
+
+        /* ── Alerta / aviso ── */
+        .aviso {
+            background-color: #fff8e1;
+            border: 1px solid #f9c03e;
+            border-left: 4px solid #f9c03e;
+            border-radius: 4px;
+            padding: 10px 14px;
+            margin: 14px 0;
+            font-size: 0.88em;
+            color: #5a4000;
+        }
+
+        .aviso strong {
+            color: #c07000;
+        }
+
+        /* ── Rodapé do artigo ── */
+        .artigo-footer {
+            border-top: 2px solid #1a3a5c;
+            margin-top: 24px;
+            padding-top: 10px;
+            font-size: 0.75em;
+            color: #888;
+            text-align: center;
+        }
+
+        /* ── Como substituir imagens — instrução visível ── */
+        .instrucao-imagem {
+            background-color: #e8f4fd;
+            border: 1px dashed #4a90d9;
+            border-radius: 4px;
+            padding: 8px 12px;
+            font-size: 0.78em;
+            color: #1a5276;
+            margin-top: 6px;
+            line-height: 1.4;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- ══════════════════════════════════════
+         CABEÇALHO ESTILO JORNAL
+    ══════════════════════════════════════ -->
+    <header class="artigo-header">
+        <div class="secao">📁 Guia de Preenchimento · SPU</div>
+        <h1>Processo SEI:<br>Como identificar e informar corretamente</h1>
+        <p class="subtitulo">
+            Tudo o que o servidor precisa saber para localizar, validar
+            e registrar o número do processo eletrônico
+        </p>
+        <hr class="linha-divisora">
+        <div class="meta">SECRETARIA DO PATRIMÔNIO DA UNIÃO &nbsp;·&nbsp; MANUAL OPERACIONAL</div>
+    </header>
+
+
+    <!-- ══════════════════════════════════════
+         BLOCO 1 — O que é o SEI
+         Imagem flutuando à DIREITA
+    ══════════════════════════════════════ -->
+    <div class="clearfix">
+
+        <figure class="img-direita">
+            <!--
+                COMO USAR SUA PRÓPRIA IMAGEM (offline):
+                1. Salve a imagem na pasta  hints/img/
+                2. Substitua o src abaixo pelo caminho relativo.
+                   Exemplo: src="img/hq720.png"
+            -->
+            <img
+                src="img/hq720.png"
+                alt="Tela do sistema SEI mostrando a capa do processo"
+                onerror="this.outerHTML=`
+                    <svg xmlns='http://www.w3.org/2000/svg' width='220' height='150'
+                         style='border-radius:4px;border:1px solid #ddd;display:block'>
+                      <rect width='220' height='150' fill='#e8f0fb'/>
+                      <rect x='14' y='14' width='192' height='122' rx='4'
+                            fill='#fff' stroke='#b0c4de' stroke-width='1.5'/>
+                      <rect x='14' y='14' width='192' height='28' rx='4' fill='#1a3a5c'/>
+                      <text x='110' y='33' text-anchor='middle'
+                            font-family='Segoe UI,sans-serif' font-size='11'
+                            fill='#fff' font-weight='bold'>Sistema SEI</text>
+                      <rect x='24' y='54' width='120' height='8' rx='3' fill='#c8d8ec'/>
+                      <rect x='24' y='68' width='80' height='6' rx='3' fill='#dce8f5'/>
+                      <rect x='24' y='80' width='100' height='6' rx='3' fill='#dce8f5'/>
+                      <rect x='24' y='92' width='90' height='6' rx='3' fill='#dce8f5'/>
+                      <rect x='24' y='108' width='140' height='18' rx='3' fill='#fff3cd'
+                            stroke='#f9c03e' stroke-width='1'/>
+                      <text x='94' y='121' text-anchor='middle'
+                            font-family='Courier New,monospace' font-size='9'
+                            fill='#5a4000'>04972.001234/2024-87</text>
+                    </svg>`"
+            >
+            <figcaption>
+                Capa do processo no sistema SEI — o número aparece
+                no topo da tela, destacado em amarelo
+            </figcaption>
+        </figure>
+        <div class="instrucao-imagem">
+            💾 <strong>Para usar offline:</strong> salve sua imagem em
+            <code>hints/img/hq720.png</code> e atualize o atributo
+            <code>src</code> acima.
+        </div>
+
+        <h2 class="secao-titulo">O que é o Processo SEI?</h2>
+
+        <p>
+            O <strong>Sistema Eletrônico de Informações (SEI)</strong> é a plataforma
+            oficial de gestão de processos administrativos adotada pelo Governo Federal.
+            Cada processo recebe um número único no momento de sua autuação, que serve
+            como identificador permanente ao longo de toda a tramitação.
+        </p>
+
+        <p>
+            Ao preencher o formulário de análise de requerimentos da SPU, o servidor
+            deve informar este número com exatidão, pois ele vincula todos os documentos,
+            despachos e decisões ao processo correto. Um número incorreto pode gerar
+            inconsistências graves no sistema patrimonial.
+        </p>
+
+        <p>
+            O número do processo SEI é composto por <strong>cinco segmentos</strong>
+            separados por pontos, barra e hífen, totalizando 20 caracteres alfanuméricos.
+            Ele é gerado automaticamente pelo sistema no momento da autuação e não pode
+            ser alterado posteriormente.
+        </p>
+
+    </div>
+
+
+    <!-- ══════════════════════════════════════
+         BLOCO 2 — Formato do número
+    ══════════════════════════════════════ -->
+
+    <h2 class="secao-titulo">Estrutura e formato do número</h2>
+
+    <p>
+        O número segue o padrão estabelecido pelo Decreto nº 8.539/2015 e pelas
+        normas do Ministério da Gestão e da Inovação em Serviços Públicos.
+        Compreender cada segmento é fundamental para validar se o número
+        informado pelo interessado está correto.
+    </p>
+
+    <div class="exemplo-numero">04972 . 001234 / 2024 - 87</div>
+
+    <table class="tabela-formato">
+        <thead>
+            <tr>
+                <th>Segmento</th>
+                <th>Descrição</th>
+                <th>Exemplo</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>NNNNN</strong></td>
+                <td>Código SIORG do órgão autuador (5 dígitos)</td>
+                <td><code>04972</code></td>
+            </tr>
+            <tr>
+                <td><strong>NNNNNN</strong></td>
+                <td>Número sequencial do processo (6 dígitos)</td>
+                <td><code>001234</code></td>
+            </tr>
+            <tr>
+                <td><strong>AAAA</strong></td>
+                <td>Ano de autuação (4 dígitos)</td>
+                <td><code>2024</code></td>
+            </tr>
+            <tr>
+                <td><strong>DD</strong></td>
+                <td>Dígitos verificadores (2 dígitos)</td>
+                <td><code>87</code></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="destaque">
+        "O número do processo SEI é o elo entre o requerimento do interessado
+        e toda a cadeia documental que instrui a decisão administrativa.
+        Sua correta informação garante rastreabilidade e segurança jurídica
+        ao processo de destinação patrimonial."
+    </div>
+
+
+    <!-- ══════════════════════════════════════
+         BLOCO 3 — Onde encontrar
+         Imagem flutuando à ESQUERDA
+    ══════════════════════════════════════ -->
+    <div class="clearfix">
+
+        <figure class="img-esquerda">
+            <!--
+                COMO USAR SUA PRÓPRIA IMAGEM (offline):
+                1. Salve a imagem na pasta  hints/img/
+                2. Substitua o src abaixo pelo caminho relativo.
+                   Exemplo: src="img/media.png"
+            -->
+            <img
+                src="img/media.png"
+                alt="Recibo de protocolo com número SEI destacado"
+                onerror="this.outerHTML=`
+                    <svg xmlns='http://www.w3.org/2000/svg' width='220' height='160'
+                         style='border-radius:4px;border:1px solid #ddd;display:block'>
+                      <rect width='220' height='160' fill='#fafafa'/>
+                      <rect x='10' y='10' width='200' height='140' rx='4'
+                            fill='#fff' stroke='#ccc' stroke-width='1'
+                            stroke-dasharray='4,3'/>
+                      <text x='110' y='32' text-anchor='middle'
+                            font-family='Segoe UI,sans-serif' font-size='10'
+                            fill='#1a3a5c' font-weight='bold'>RECIBO DE PROTOCOLO</text>
+                      <line x1='20' y1='38' x2='200' y2='38'
+                            stroke='#ccc' stroke-width='1'/>
+                      <rect x='20' y='46' width='80' height='6' rx='2' fill='#eee'/>
+                      <rect x='20' y='58' width='110' height='6' rx='2' fill='#eee'/>
+                      <rect x='20' y='70' width='95' height='6' rx='2' fill='#eee'/>
+                      <rect x='18' y='88' width='184' height='22' rx='3'
+                            fill='#fff3cd' stroke='#f9c03e' stroke-width='1.5'/>
+                      <text x='110' y='103' text-anchor='middle'
+                            font-family='Courier New,monospace' font-size='10'
+                            fill='#5a4000' font-weight='bold'>04972.001234/2024-87</text>
+                      <rect x='20' y='120' width='75' height='6' rx='2' fill='#eee'/>
+                      <rect x='20' y='132' width='55' height='6' rx='2' fill='#eee'/>
+                      <circle cx='180' cy='130' r='18' fill='none'
+                              stroke='#1a3a5c' stroke-width='1.5'
+                              stroke-dasharray='3,2'/>
+                      <text x='180' y='134' text-anchor='middle'
+                            font-family='Segoe UI,sans-serif' font-size='7'
+                            fill='#1a3a5c'>CARIMBO</text>
+                    </svg>`"
+            >
+            <figcaption>
+                Recibo de protocolo físico — o número SEI aparece
+                em destaque na área central do documento
+            </figcaption>
+        </figure>
+        <div class="instrucao-imagem">
+            💾 <strong>Para usar offline:</strong> salve sua imagem em
+            <code>hints/img/media.png</code> e atualize o
+            atributo <code>src</code> acima.
+        </div>
+
+        <h2 class="secao-titulo">Onde encontrar o número</h2>
+
+        <p>
+            O número do processo SEI pode ser localizado em diferentes fontes,
+            dependendo de como o protocolo foi realizado. Em qualquer caso,
+            o número deve ser idêntico em todos os documentos — qualquer
+            divergência indica possível erro de autuação.
+        </p>
+
+        <ol class="lista-hint">
+            <li>
+                <strong>Sistema SEI (acesso eletrônico):</strong> na tela inicial
+                do processo, o número aparece no cabeçalho, destacado em negrito,
+                logo abaixo do tipo e da especificação do processo.
+            </li>
+            <li>
+                <strong>E-mail de confirmação de protocolo:</strong> enviado
+                automaticamente ao endereço cadastrado no momento do requerimento,
+                com o número no assunto e no corpo da mensagem.
+            </li>
+            <li>
+                <strong>Recibo de protocolo impresso:</strong> fornecido no
+                balcão de atendimento da SPU, com o número em destaque e
+                carimbo do servidor recebedor.
+            </li>
+            <li>
+                <strong>Ofícios e despachos anteriores:</strong> qualquer
+                documento já expedido no âmbito do processo trará o número
+                no cabeçalho ou rodapé.
+            </li>
+        </ol>
+
+    </div>
+
+
+    <!-- ══════════════════════════════════════
+         BLOCO 4 — Atenção e erros comuns
+    ══════════════════════════════════════ -->
+
+    <h2 class="secao-titulo">⚠️ Pontos de atenção</h2>
+
+    <div class="aviso">
+        <strong>Não confunda</strong> o número do Processo SEI com o NUP
+        (Número Único de Protocolo) de sistemas legados como o SIPAR ou o
+        SAPIENS. Embora visualmente semelhantes, possuem estruturas distintas
+        e não são intercambiáveis neste formulário.
+    </div>
+
+    <ul class="lista-hint">
+        <li>
+            Verifique se o processo está <strong>aberto e ativo</strong>
+            na unidade responsável pela análise antes de informar o número.
+        </li>
+        <li>
+            O processo deve estar <strong>vinculado à SPU</strong> e conter
+            o requerimento original e todos os documentos de instrução.
+        </li>
+        <li>
+            Processos <strong>sigilosos</strong> requerem nível de acesso
+            específico — confirme as permissões antes de prosseguir com
+            a análise.
+        </li>
+        <li>
+            Em caso de <strong>processos apensados</strong>, informe sempre
+            o número do processo principal (o que contém o requerimento),
+            não o número do processo acessório.
+        </li>
+    </ul>
+
+
+    <!-- ══════════════════════════════════════
+         RODAPÉ
+    ══════════════════════════════════════ -->
+    <footer class="artigo-footer">
+        Secretaria do Patrimônio da União · Manual Operacional de Análise de Requerimentos
+        &nbsp;·&nbsp; Uso interno
+    </footer>
+
+</body>
+</html>

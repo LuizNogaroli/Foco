@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FOCO-06 — Proposta de Destinação</title>
+<link rel="stylesheet" href="styles-forms.css" />
+<link rel="stylesheet" href="hints.css" />
+<link rel="stylesheet" href="custom-select.css" />
+<style>
+  .label-subnivel {
+    font-weight: normal;
+    font-size: 0.92em;
+    color: #555;
+    margin-bottom: 2px;
+    display: block;
+  }
+  .regime-resumo {
+    background: #f0f7ff;
+    border-left: 4px solid #2a6ebb;
+    padding: 8px 12px;
+    margin-top: 10px;
+    border-radius: 4px;
+    font-size: 0.93em;
+    color: #1a3a5c;
+  }
+  .regime-resumo strong {
+    display: block;
+    margin-bottom: 2px;
+    color: #1a3a5c;
+  }
+</style>
+</head>
+<body>
+<div class="form-container">
+<h2>6: Proposta de Destinação</h2>
+<form id="form06" novalidate>
+
+  <!-- ==================== 5.1 Tipo de procedimento ==================== -->
+  <div class="form-group editavel">
+    <label for="campo51">
+      5.1 Tipo de procedimento pretendido:
+      <span class="hint-semaforo">
+        <span class="hint-icon" data-hint-tipo="verde"
+          data-hint="Selecione o tipo de procedimento administrativo que origina esta análise de destinação."
+          role="tooltip" tabindex="0" aria-label="Ajuda: Tipo de procedimento">?</span>
+      </span>
+    </label>
+    <select id="campo51" name="tipo_procedimento" required>
+      <option value="" selected>Selecione...</option>
+      <option value="destinacao_direta">Destinação Direta</option>
+      <option value="licitacao">Licitação</option>
+      <option value="dispensa">Dispensa de Licitação</option>
+      <option value="inexigibilidade">Inexigibilidade</option>
+      <option value="outros">Outros</option>
+    </select>
+    <span class="error-msg" id="err51">Selecione o tipo de procedimento.</span>
+    <div id="bloco51_obs" style="display:none; margin-top:8px;">
+      <label for="campo51_obs">Informações complementares:</label>
+      <textarea id="campo51_obs" name="campo51_obs"
+        placeholder="Informações complementares ao tipo de procedimento..."></textarea>
+    </div>
+  </div>
+
+  <!-- ==================== 5.2 Identificação do Interessado ==================== -->
+  <div class="form-group editavel">
+    <label for="campo52">
+      5.2 Identificação do interessado:
+      <span class="hint-semaforo">
+        <span class="hint-icon" data-hint-tipo="verde"
+          data-hint="Informe o nome completo ou razão social do interessado na destinação."
+          role="tooltip" tabindex="0" aria-label="Ajuda: Identificação do interessado">?</span>
+      </span>
+    </label>
+    <input type="text" id="campo52" name="interessado_nome"
+      placeholder="Nome completo / Razão Social" required />
+    <span class="error-msg" id="err52">Informe o nome do interessado.</span>
+  </div>
+
+  <!-- ==================== 5.3 CPF/CNPJ do Interessado ==================== -->
+  <div class="form-group editavel">
+    <label for="campo53">
+      5.3 CPF / CNPJ do interessado:
+      <span class="hint-semaforo">
+        <span class="hint-icon" data-hint-tipo="amarelo"
+          data-hint="Informe o CPF (pessoa física) ou CNPJ (pessoa jurídica) do interessado."
+          role="tooltip" tabindex="0" aria-label="Ajuda: CPF/CNPJ">?</span>
+      </span>
+    </label>
+    <input type="text" id="campo53" name="interessado_cpfcnpj"
+      placeholder="000.000.000-00 ou 00.000.000/0000-00"
+      maxlength="18" required />
+    <span class="error-msg" id="err53">Informe o CPF ou CNPJ do interessado.</span>
+  </div>
+
+  <!-- ==================== 5.4 Finalidade da Destinação ==================== -->
+  <div class="form-group editavel">
+    <label for="campo54">
+      5.4 Finalidade da destinação:
+      <span class="hint-semaforo">
+        <span class="hint-icon" data-hint-tipo="verde"
+          data-hint="Descreva a finalidade para a qual o imóvel será destinado."
+          role="tooltip" tabindex="0" aria-label="Ajuda: Finalidade">?</span>
+      </span>
+    </label>
+    <textarea id="campo54" name="finalidade_destinacao"
+      placeholder="Descreva a finalidade da destinação do imóvel..." required></textarea>
+    <span class="error-msg" id="err54">Descreva a finalidade da destinação.</span>
+  </div>
+
+  <!-- ==================== 5.5 Prazo ==================== -->
+  <div class="form-group editavel">
+    <label for="campo55">
+      5.5 Prazo da destinação:
+      <span class="hint-semaforo">
+        <span class="hint-icon" data-hint-tipo="amarelo"
+          data-hint="Informe o prazo previsto para a destinação (em meses ou anos)."
+          role="tooltip" tabindex="0" aria-label="Ajuda: Prazo">?</span>
+      </span>
+    </label>
+    <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+      <input type="number" id="campo55_valor" name="prazo_valor"
+        placeholder="Prazo" min="1" style="width:120px;" />
+      <select id="campo55_unidade" name="prazo_unidade" style="width:140px;">
+        <option value="">Unidade...</option>
+        <option value="meses">Meses</option>
+        <option value="anos">Anos</option>
+        <option value="indeterminado">Indeterminado</option>
+      </select>
+    </div>
+    <span class="error-msg" id="err55">Informe o prazo da destinação.</span>
+  </div>
+
+  <!-- ==================== 5.6 Valor da Destinação ==================== -->
+  <div class="form-group editavel">
+    <label for="campo56">
+      5.6 Valor da destinação (R$):
+      <span class="hint-semaforo">
+        <span class="hint-icon" data-hint-tipo="amarelo"
+          data-hint="Informe o valor proposto para a destinação, se aplicável."
+          role="tooltip" tabindex="0" aria-label="Ajuda: Valor">?</span>
+      </span>
+    </label>
+    <input type="text" id="campo56" name="valor_destinacao"
+      placeholder="R$ 0,00" />
+  </div>
+
+  <!-- ==================== 5.7 Área a ser Destinada ==================== -->
+  <div class="form-group editavel">
+    <label for="campo57">
+      5.7 Área a ser destinada (m²):
+      <span class="hint-semaforo">
+        <span class="hint-icon" data-hint-tipo="verde"
+          data-hint="Informe a área total (em m²) a ser contemplada pela destinação."
+          role="tooltip" tabindex="0" aria-label="Ajuda: Área">?</span>
+      </span>
+    </label>
+    <input type="number" id="campo57" name="area_destinada"
+      placeholder="Área em m²" min="0" step="0.01" />
+  </div>
+
+  <!-- ==================== 5.8 Restrições e Condicionantes ==================== -->
+  <div class="form-group editavel">
+    <label for="campo58">
+      5.8 Restrições e condicionantes:
+      <span class="hint-semaforo">
+        <span class="hint-icon" data-hint-tipo="amarelo"
+          data-hint="Informe restrições legais, ambientais, urbanísticas ou outras condicionantes aplicáveis."
+          role="tooltip" tabindex="0" aria-label="Ajuda: Restrições">?</span>
+      </span>
+    </label>
+    <textarea id="campo58" name="restricoes_condicionantes"
+      placeholder="Descreva restrições e condicionantes relevantes..."></textarea>
+  </div>
+
+  <!-- ==================== 5.9 Fundamento Legal ==================== -->
+  <div class="form-group editavel">
+    <label for="campo59">
+      5.9 Fundamento legal:
+      <span class="hint-semaforo">
+        <span class="hint-icon" data-hint-tipo="verde"
+          data-hint="Cite o fundamento legal que ampara a destinação proposta (lei, decreto, portaria, etc.)."
+          role="tooltip" tabindex="0" aria-label="Ajuda: Fundamento Legal">?</span>
+      </span>
+    </label>
+    <textarea id="campo59" name="fundamento_legal"
+      placeholder="Ex.: Lei nº 9.636/1998, art. XX; Decreto nº XX/XXXX..." required></textarea>
+    <span class="error-msg" id="err59">Informe o fundamento legal.</span>
+  </div>
+
+  <!-- ==================== 5.10 Justificativa ==================== -->
+  <div class="form-group editavel">
+    <label for="campo510">
+      5.10 Justificativa da proposta:
+      <span class="hint-semaforo">
+        <span class="hint-icon" data-hint-tipo="verde"
+          data-hint="Apresente a justificativa técnica e/ou social para a destinação proposta."
+          role="tooltip" tabindex="0" aria-label="Ajuda: Justificativa">?</span>
+      </span>
+    </label>
+    <textarea id="campo510" name="justificativa"
+      placeholder="Apresente a justificativa para a destinação proposta..." required></textarea>
+    <span class="error-msg" id="err510">Apresente a justificativa da proposta.</span>
+  </div>
+
+  <!-- ==================== 5.11 Regime de Destinação (Hierárquico) ==================== -->
+  <div class="form-group editavel">
+    <label>
+      5.11 Regime de destinação proposto:
+      <span class="hint-semaforo">
+        <span class="hint-icon" data-hint-tipo="verde"
+          data-hint="Selecione o regime de destinação conforme a tabela. Navegue pelos níveis: Classe → Subclasse → Modalidade → Submodalidade."
+          role="tooltip" tabindex="0" aria-label="Ajuda: Regime de destinação">?</span>
+      </span>
+    </label>
+
+    <!-- Nível 1: Classe -->
+    <label for="campo511_classe" class="label-subnivel">Classe:</label>
+    <select id="campo511_classe" name="regime_classe" required>
+      <option value="">Selecione a classe...</option>
+      <option value="02.01">02.01 — Regimes de direito real</option>
+      <option value="02.02">02.02 — Regimes de direito pessoal/obrigacional</option>
+      <option value="02.03">02.03 — Regimes de transferência/compartilhamento de gestão</option>
+      <option value="02.04">02.04 — Regimes de Outorga</option>
+    </select>
+
+    <!-- Nível 2: Subclasse -->
+    <div id="bloco511_subclasse" style="display:none; margin-top:10px;">
+      <label for="campo511_subclasse" class="label-subnivel">Subclasse:</label>
+      <select id="campo511_subclasse" name="regime_subclasse" disabled>
+        <option value="">Selecione primeiro a classe...</option>
+      </select>
+    </div>
+
+    <!-- Nível 3: Modalidade -->
+    <div id="bloco511_modalidade" style="display:none; margin-top:10px;">
+      <label for="campo511_modalidade" class="label-subnivel">Modalidade:</label>
+      <select id="campo511_modalidade" name="regime_modalidade" disabled>
+        <option value="">Selecione primeiro a subclasse...</option>
+      </select>
+    </div>
+
+    <!-- Nível 4: Submodalidade -->
+    <div id="bloco511_submodalidade" style="display:none; margin-top:10px;">
+      <label for="campo511_submodalidade" class="label-subnivel">Submodalidade:</label>
+      <select id="campo511_submodalidade" name="regime_submodalidade" disabled>
+        <option value="">Selecione primeiro a modalidade...</option>
+      </select>
+    </div>
+
+    <!-- Código consolidado oculto -->
+    <input type="hidden" id="campo511" name="regime_destinacao" />
+
+    <!-- Resumo do regime selecionado -->
+    <div id="regime511_resumo" class="regime-resumo" style="display:none;">
+      <strong>Regime selecionado:</strong>
+      <span id="regime511_resumo_texto"></span>
+    </div>
+
+    <!-- Observações -->
+    <div id="bloco511_obs" style="display:none; margin-top:10px;">
+      <label for="campo511_obs">Observações complementares:</label>
+      <textarea id="campo511_obs" name="campo511_obs"
+        placeholder="Observações sobre o regime de destinação..."></textarea>
+    </div>
+
+    <span class="error-msg" id="err511">Selecione o regime de destinação.</span>
+  </div>
+
+  <!-- ==================== 5.12 Manifestação da Unidade Gestora ==================== -->
+  <div class="form-group editavel">
+    <label for="campo512">
+      5.12 Manifestação da unidade gestora:
+      <span class="hint-semaforo">
+        <span class="hint-icon" data-hint-tipo="amarelo"
+          data-hint="Registre a manifestação formal da unidade gestora responsável pelo imóvel."
+          role="tooltip" tabindex="0" aria-label="Ajuda: Manifestação">?</span>
+      </span>
+    </label>
+    <div style="display:flex; gap:16px; margin-bottom:8px;">
+      <label>
+        <input type="radio" name="manifestacao_gestora" value="favoravel" />
+        Favorável
+      </label>
+      <label>
+        <input type="radio" name="manifestacao_gestora" value="contraria" />
+        Contrária
+      </label>
+      <label>
+        <input type="radio" name="manifestacao_gestora" value="sem_manifestacao" />
+        Sem manifestação
+      </label>
+    </div>
+    <textarea id="campo512" name="manifestacao_obs"
+      placeholder="Observações sobre a manifestação da unidade gestora..."></textarea>
+  </div>
+
+  <!-- ==================== 5.13 Responsável pela Proposta ==================== -->
+  <div class="form-group editavel">
+    <label for="campo513">
+      5.13 Responsável pela proposta:
+      <span class="hint-semaforo">
+        <span class="hint-icon" data-hint-tipo="verde"
+          data-hint="Informe o nome e cargo/função do responsável pela elaboração desta proposta."
+          role="tooltip" tabindex="0" aria-label="Ajuda: Responsável">?</span>
+      </span>
+    </label>
+    <input type="text" id="campo513" name="responsavel_nome"
+      placeholder="Nome completo do responsável" required />
+    <input type="text" id="campo513_cargo" name="responsavel_cargo"
+      placeholder="Cargo / Função" style="margin-top:6px;" />
+    <span class="error-msg" id="err513">Informe o nome do responsável.</span>
+  </div>
+
+  <!-- ==================== 5.14 Data da Proposta ==================== -->
+  <div class="form-group editavel">
+    <label for="campo514">
+      5.14 Data da proposta:
+      <span class="hint-semaforo">
+        <span class="hint-icon" data-hint-tipo="verde"
+          data-hint="Informe a data de elaboração desta proposta de destinação."
+          role="tooltip" tabindex="0" aria-label="Ajuda: Data">?</span>
+      </span>
+    </label>
+    <input type="date" id="campo514" name="data_proposta" required />
+    <span class="error-msg" id="err514">Informe a data da proposta.</span>
+  </div>
+
+  <!-- ==================== Botões ==================== -->
+  <div class="button-group">
+    <button type="button" class="btn-secondary" id="btnLimpar">🗑️ Limpar</button>
+    <button type="button" id="btnImprimir" onclick="window.print()">🖨️ Imprimir / Salvar PDF</button>
+    <button type="submit" id="btnEnviar">✅ Salvar</button>
+  </div>
+
+</form>
+</div>
+
+<!-- ============================== SCRIPTS ============================== -->
+<script>
+// =====================================================================
+// MAPA HIERÁRQUICO DOS REGIMES DE DESTINAÇÃO
+// =====================================================================
+const regimeMap = {
+
+  // ------ 02.01 — Regimes de direito real ------
+  "02.01": {
+    label: "02.01 — Regimes de direito real",
+    subclasses: {
+      "02.01.01": {
+        label: "02.01.01 — Regimes de transferência da propriedade",
+        modalidades: {
+          "02.01.01.01": {
+            label: "02.01.01.01 — Alienação imobiliária discricionária",
+            submodalidades: [
+              { value: "02.01.01.01.01", label: "02.01.01.01.01 — Dação em pagamento" },
+              { value: "02.01.01.01.02", label: "02.01.01.01.02 — Doação" },
+              { value: "02.01.01.01.03", label: "02.01.01.01.03 — Integralização de cotas em FII" },
+              { value: "02.01.01.01.04", label: "02.01.01.01.04 — Investidura" },
+              { value: "02.01.01.01.05", label: "02.01.01.01.05 — Permuta" },
+              { value: "02.01.01.01.06.01", label: "02.01.01.01.06.01 — Remição de foro gratuita" },
+              { value: "02.01.01.01.06.02", label: "02.01.01.01.06.02 — Remição de foro onerosa" },
+              { value: "02.01.01.01.07", label: "02.01.01.01.07 — Venda" }
+            ]
+          },
+          "02.01.01.02": {
+            label: "02.01.01.02 — Alienação imobiliária vinculada",
+            submodalidades: [
+              { value: "02.01.01.02.01", label: "02.01.01.02.01 — Legitimação fundiária" },
+              { value: "02.01.01.02.02", label: "02.01.01.02.02 — Reconhecimento de domínio" },
+              { value: "02.01.01.02.03", label: "02.01.01.02.03 — Transferência de Reurb-S" },
+              { value: "02.01.01.02.04", label: "02.01.01.02.04 — Transferência por dispositivo legal" }
+            ]
+          }
+        }
+      },
+      "02.01.02": {
+        label: "02.01.02 — Regimes de direito real limitado",
+        modalidades: {
+          "02.01.02.01": {
+            label: "02.01.02.01 — Aforamento",
+            submodalidades: [
+              { value: "02.01.02.01.01", label: "02.01.02.01.01 — Aforamento gratuito" },
+              { value: "02.01.02.01.02", label: "02.01.02.01.02 — Aforamento oneroso" }
+            ]
+          },
+          "02.01.02.02": {
+            label: "02.01.02.02 — Concessão de Direito Real de Laje (CDRL)",
+            submodalidades: [
+              { value: "02.01.02.02.01", label: "02.01.02.02.01 — CDRL Gratuita" },
+              { value: "02.01.02.02.02", label: "02.01.02.02.02 — CDRL Onerosa" }
+            ]
+          },
+          "02.01.02.03": {
+            label: "02.01.02.03 — Concessão de Direito Real de Uso (CDRU)",
+            submodalidades: [
+              { value: "02.01.02.03.01", label: "02.01.02.03.01 — CDRU Gratuita" },
+              { value: "02.01.02.03.02", label: "02.01.02.03.02 — CDRU Onerosa" },
+              { value: "02.01.02.03.03", label: "02.01.02.03.03 — CDRU coletiva para fins de Reurb" }
+            ]
+          },
+          "02.01.02.04": {
+            label: "02.01.02.04 — Concessão de Uso Especial para fins de Moradia (CUEM)",
+            submodalidades: [
+              { value: "02.01.02.04.01", label: "02.01.02.04.01 — CUEM individual" },
+              { value: "02.01.02.04.02", label: "02.01.02.04.02 — CUEM coletiva" }
+            ]
+          },
+          "02.01.02.05": {
+            label: "02.01.02.05 — Direito de Superfície",
+            submodalidades: [
+              { value: "02.01.02.05.01", label: "02.01.02.05.01 — Direito de superfície gratuito" },
+              { value: "02.01.02.05.02", label: "02.01.02.05.02 — Direito de superfície oneroso" }
+            ]
+          },
+          "02.01.02.06": {
+            label: "02.01.02.06 — Servidão Administrativa",
+            submodalidades: []
+          },
+          "02.01.02.07": {
+            label: "02.01.02.07 — Usufruto",
+            submodalidades: [
+              { value: "02.01.02.07.01", label: "02.01.02.07.01 — Usufruto gratuito" },
+              { value: "02.01.02.07.02", label: "02.01.02.07.02 — Usufruto oneroso" }
+            ]
+          }
+        }
+      }
+    }
+  },
+
+  // ------ 02.02 — Regimes de direito pessoal/obrigacional ------
+  "02.02": {
+    label: "02.02 — Regimes de direito pessoal/obrigacional",
+    subclasses: {
+      "02.02.01": {
+        label: "02.02.01 — Arrendamento",
+        modalidades: {
+          "02.02.01.01": {
+            label: "02.02.01.01 — Arrendamento para fins de uso",
+            submodalidades: []
+          },
+          "02.02.01.02": {
+            label: "02.02.01.02 — Arrendamento para fins habitacionais",
+            submodalidades: []
+          },
+          "02.02.01.03": {
+            label: "02.02.01.03 — Arrendamento para fins de exploração econômica",
+            submodalidades: []
+          }
+        }
+      },
+      "02.02.02": {
+        label: "02.02.02 — Cessão de Uso",
+        modalidades: {
+          "02.02.02.01": {
+            label: "02.02.02.01 — Cessão gratuita",
+            submodalidades: []
+          },
+          "02.02.02.02": {
+            label: "02.02.02.02 — Cessão onerosa",
+            submodalidades: []
+          },
+          "02.02.02.03": {
+            label: "02.02.02.03 — Cessão em condições especiais",
+            submodalidades: []
+          },
+          "02.02.02.04": {
+            label: "02.02.02.04 — Cessão provisória",
+            submodalidades: []
+          }
+        }
+      },
+      "02.02.03": {
+        label: "02.02.03 — Locação",
+        modalidades: {
+          "02.02.03.01": {
+            label: "02.02.03.01 — Locação para fins comerciais",
+            submodalidades: []
+          },
+          "02.02.03.02": {
+            label: "02.02.03.02 — Locação para fins residenciais",
+            submodalidades: []
+          },
+          "02.02.03.03": {
+            label: "02.02.03.03 — Locação para fins institucionais",
+            submodalidades: []
+          }
+        }
+      },
+      "02.02.04": {
+        label: "02.02.04 — Permissão de Uso",
+        modalidades: {
+          "02.02.04.01": {
+            label: "02.02.04.01 — Permissão gratuita",
+            submodalidades: []
+          },
+          "02.02.04.02": {
+            label: "02.02.04.02 — Permissão onerosa",
+            submodalidades: []
+          }
+        }
+      },
+      "02.02.05": {
+        label: "02.02.05 — Autorização de Uso",
+        modalidades: {
+          "02.02.05.01": {
+            label: "02.02.05.01 — Autorização precária",
+            submodalidades: []
+          },
+          "02.02.05.02": {
+            label: "02.02.05.02 — Autorização temporária",
+            submodalidades: []
+          }
+        }
+      }
+    }
+  },
+
+  // ------ 02.03 — Regimes de transferência/compartilhamento de gestão ------
+  "02.03": {
+    label: "02.03 — Regimes de transferência/compartilhamento de gestão",
+    subclasses: {
+      "02.03.01": {
+        label: "02.03.01 — Entrega",
+        modalidades: {
+          "02.03.01.01": {
+            label: "02.03.01.01 — Entrega a órgão ou entidade federal",
+            submodalidades: []
+          },
+          "02.03.01.02": {
+            label: "02.03.01.02 — Entrega a ente federativo",
+            submodalidades: []
+          }
+        }
+      },
+      "02.03.02": {
+        label: "02.03.02 — Transferência de Administração",
+        modalidades: {
+          "02.03.02.01": {
+            label: "02.03.02.01 — Transferência para autarquia federal",
+            submodalidades: []
+          },
+          "02.03.02.02": {
+            label: "02.03.02.02 — Transferência para fundação federal",
+            submodalidades: []
+          },
+          "02.03.02.03": {
+            label: "02.03.02.03 — Transferência para empresa pública",
+            submodalidades: []
+          }
+        }
+      },
+      "02.03.03": {
+        label: "02.03.03 — Afetação",
+        modalidades: {
+          "02.03.03.01": {
+            label: "02.03.03.01 — Afetação ao patrimônio de afetação",
+            submodalidades: []
+          },
+          "02.03.03.02": {
+            label: "02.03.03.02 — Afetação para uso especial",
+            submodalidades: []
+          }
+        }
+      }
+    }
+  },
+
+  // ------ 02.04 — Regimes de Outorga ------
+  "02.04": {
+    label: "02.04 — Regimes de Outorga",
+    subclasses: {
+      "02.04.01": {
+        label: "02.04.01 — Concessão Administrativa",
+        modalidades: {
+          "02.04.01.01": {
+            label: "02.04.01.01 — Concessão administrativa comum",
+            submodalidades: []
+          },
+          "02.04.01.02": {
+            label: "02.04.01.02 — Concessão administrativa especial (PPP)",
+            submodalidades: []
+          }
+        }
+      },
+      "02.04.02": {
+        label: "02.04.02 — Concessão Patrocinada (PPP)",
+        modalidades: {
+          "02.04.02.01": {
+            label: "02.04.02.01 — PPP com aporte financeiro",
+            submodalidades: []
+          },
+          "02.04.02.02": {
+            label: "02.04.02.02 — PPP sem aporte financeiro",
+            submodalidades: []
+          }
+        }
+      },
+      "02.04.03": {
+        label: "02.04.03 — Concessão Comum",
+        modalidades: {
+          "02.04.03.01": {
+            label: "02.04.03.01 — Concessão de serviço público",
+            submodalidades: []
+          },
+          "02.04.03.02": {
+            label: "02.04.03.02 — Concessão de obra pública",
+            submodalidades: []
+          }
+        }
+      },
+      "02.04.04": {
+        label: "02.04.04 — Outorga Onerosa",
+        modalidades: {
+          "02.04.04.01": {
+            label: "02.04.04.01 — Outorga onerosa do direito de construir",
+            submodalidades: []
+          },
+          "02.04.04.02": {
+            label: "02.04.04.02 — Outorga onerosa de alteração de uso",
+            submodalidades: []
+          }
+        }
+      }
+    }
+  }
+};
+
+// =====================================================================
+// FUNÇÕES UTILITÁRIAS
+// =====================================================================
+
+function popularSelect(sel, itens, placeholder) {
+  sel.innerHTML = '';
+  const optDefault = document.createElement('option');
+  optDefault.value = '';
+  optDefault.textContent = placeholder;
+  sel.appendChild(optDefault);
+  (itens || []).forEach(item => {
+    const opt = document.createElement('option');
+    opt.value = item.value;
+    opt.textContent = item.label;
+    sel.appendChild(opt);
+  });
+  sel.disabled = false;
+}
+
+function resetSelect(sel, placeholder) {
+  sel.innerHTML = `<option value="">${placeholder}</option>`;
+  sel.disabled = true;
+  sel.value = '';
+}
+
+function atualizarCampo511() {
+  const selCls = document.getElementById('campo511_classe');
+  const selSub = document.getElementById('campo511_subclasse');
+  const selMod = document.getElementById('campo511_modalidade');
+  const selSbm = document.getElementById('campo511_submodalidade');
+  const hiddenInput = document.getElementById('campo511');
+  const resumoTexto = document.getElementById('regime511_resumo_texto');
+  const resumoDiv = document.getElementById('regime511_resumo');
+
+  let valorFinal = "", labelFinal = "";
+
+  if (selSbm.value && !selSbm.disabled && selSbm.selectedIndex > 0) {
+    valorFinal = selSbm.value;
+    labelFinal = selSbm.options[selSbm.selectedIndex].text;
+  } else if (selMod.value && !selMod.disabled && selMod.selectedIndex > 0) {
+    valorFinal = selMod.value;
+    labelFinal = selMod.options[selMod.selectedIndex].text;
+  } else if (selSub.value && !selSub.disabled && selSub.selectedIndex > 0) {
+    valorFinal = selSub.value;
+    labelFinal = selSub.options[selSub.selectedIndex].text;
+  } else if (selCls.value && selCls.selectedIndex > 0) {
+    valorFinal = selCls.value;
+    labelFinal = selCls.options[selCls.selectedIndex].text;
+  }
+
+  hiddenInput.value = valorFinal;
+
+  if (valorFinal) {
+    if (resumoTexto) resumoTexto.textContent = labelFinal;
+    if (resumoDiv) resumoDiv.style.display = '';
+  } else {
+    if (resumoDiv) resumoDiv.style.display = 'none';
+  }
+
+  document.getElementById('bloco511_obs').style.display = valorFinal ? '' : 'none';
+}
+
+// =====================================================================
+// LISTENERS HIERÁRQUICOS DO CAMPO 5.11
+// =====================================================================
+(function () {
+  const selClasse       = document.getElementById('campo511_classe');
+  const selSub          = document.getElementById('campo511_subclasse');
+  const selModalidade   = document.getElementById('campo511_modalidade');
+  const selSubmodalidade= document.getElementById('campo511_submodalidade');
+
+  const blocoSub        = document.getElementById('bloco511_subclasse');
+  const blocoModal      = document.getElementById('bloco511_modalidade');
+  const blocoSubmodal   = document.getElementById('bloco511_submodalidade');
+
+  // — Mudança de CLASSE —
+  selClasse.addEventListener('change', function () {
+    resetSelect(selSub,          'Selecione a subclasse...');
+    resetSelect(selModalidade,   'Selecione primeiro a subclasse...');
+    resetSelect(selSubmodalidade,'Selecione primeiro a modalidade...');
+    blocoSub.style.display      = 'none';
+    blocoModal.style.display    = 'none';
+    blocoSubmodal.style.display = 'none';
+    atualizarCampo511();
+
+    if (!this.value) return;
+    const dataClasse = regimeMap[this.value];
+    if (dataClasse && dataClasse.subclasses) {
+      const itens = Object.entries(dataClasse.subclasses)
+        .map(([k, v]) => ({ value: k, label: v.label }));
+      popularSelect(selSub, itens, 'Selecione a subclasse...');
+      blocoSub.style.display = '';
+    }
+  });
+
+  // — Mudança de SUBCLASSE —
+  selSub.addEventListener('change', function () {
+    resetSelect(selModalidade,   'Selecione a modalidade...');
+    resetSelect(selSubmodalidade,'Selecione primeiro a modalidade...');
+    blocoModal.style.display    = 'none';
+    blocoSubmodal.style.display = 'none';
+    atualizarCampo511();
+
+    if (!this.value) return;
+    const subData = regimeMap[selClasse.value]?.subclasses?.[this.value];
+    if (!subData) return;
+
+    if (!subData.modalidades || Object.keys(subData.modalidades).length === 0) {
+      selModalidade.innerHTML = '<option value="">— Sem modalidade específica —</option>';
+      selModalidade.disabled = true;
+      return;
+    }
+    const itens = Object.entries(subData.modalidades)
+      .map(([k, v]) => ({ value: k, label: v.label }));
+    popularSelect(selModalidade, itens, 'Selecione a modalidade...');
+    blocoModal.style.display = '';
+  });
+
+  // — Mudança de MODALIDADE —
+  selModalidade.addEventListener('change', function () {
+    resetSelect(selSubmodalidade, 'Selecione a submodalidade...');
+    blocoSubmodal.style.display = 'none';
+    atualizarCampo511();
+
+    if (!this.value) return;
+    const regClasse = selClasse.value;
+    const regSub    = selSub.value;
+    const regMod    = this.value;
+    const modData   = regimeMap[regClasse]?.subclasses?.[regSub]?.modalidades?.[regMod];
+
+    if (!modData || !modData.submodalidades || modData.submodalidades.length === 0) {
+      selSubmodalidade.innerHTML = '<option value="">— Sem submodalidade específica —</option>';
+      selSubmodalidade.disabled  = true;
+      return;
+    }
+    popularSelect(selSubmodalidade, modData.submodalidades, 'Selecione a submodalidade...');
+    blocoSubmodal.style.display = '';
+  });
+
+  // — Mudança de SUBMODALIDADE —
+  selSubmodalidade.addEventListener('change', atualizarCampo511);
+})();
+
+// =====================================================================
+// CAMPO 5.1 — Mostrar/esconder observações
+// =====================================================================
+document.getElementById('campo51').addEventListener('change', function () {
+  const bloco = document.getElementById('bloco51_obs');
+  bloco.style.display = (this.value === 'outros') ? '' : 'none';
+});
+
+// =====================================================================
+// BOTÃO LIMPAR
+// =====================================================================
+document.getElementById('btnLimpar').addEventListener('click', function () {
+  if (!confirm('Deseja realmente limpar todos os campos do formulário?')) return;
+  document.getElementById('form06').reset();
+
+  // Resetar selects hierárquicos e blocos ocultos
+  ['bloco51_obs', 'bloco511_subclasse', 'bloco511_modalidade',
+   'bloco511_submodalidade', 'bloco511_obs', 'regime511_resumo'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+
+  ['campo511_subclasse','campo511_modalidade','campo511_submodalidade'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.disabled = true;
+  });
+
+  document.getElementById('campo511').value = '';
+  document.getElementById('regime511_resumo_texto').textContent = '';
+});
+
+// =====================================================================
+// VALIDAÇÃO E ENVIO
+// =====================================================================
+document.getElementById('form06').addEventListener('submit', function (e) {
+  e.preventDefault();
+  let valido = true;
+
+  const camposObrigatorios = [
+    { id: 'campo51',  errId: 'err51'  },
+    { id: 'campo52',  errId: 'err52'  },
+    { id: 'campo53',  errId: 'err53'  },
+    { id: 'campo54',  errId: 'err54'  },
+    { id: 'campo59',  errId: 'err59'  },
+    { id: 'campo510', errId: 'err510' },
+    { id: 'campo513', errId: 'err513' },
+    { id: 'campo514', errId: 'err514' }
+  ];
+
+  camposObrigatorios.forEach(({ id, errId }) => {
+    const el  = document.getElementById(id);
+    const err = document.getElementById(errId);
+    if (!el || !err) return;
+    if (!el.value.trim()) {
+      err.style.display = 'block';
+      valido = false;
+    } else {
+      err.style.display = 'none';
+    }
+  });
+
+  // Validar regime de destinação
+  const regime = document.getElementById('campo511');
+  const errRegime = document.getElementById('err511');
+  if (!regime.value) {
+    errRegime.style.display = 'block';
+    valido = false;
+  } else {
+    errRegime.style.display = 'none';
+  }
+
+  if (valido) {
+    alert('✅ Formulário salvo com sucesso!');
+    // Aqui pode-se adicionar envio via fetch/AJAX
+  }
+});
+</script>
+</body>
+</html>

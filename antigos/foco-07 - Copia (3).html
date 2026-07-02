@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FOCO-07 — Trâmite na Superintendência</title>
+    <link rel="stylesheet" href="styles-forms.css">
+    <link rel="stylesheet" href="hints.css">
+    <link rel="stylesheet" href="custom-select.css">
+    <style>
+/* ═══════════════════════════════════════════════════
+   SANFONA — Boxes de Declaração
+═══════════════════════════════════════════════════ */
+.acordeao-wrapper {
+  margin-top: 16px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.acordeao-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: #1e3a5f;
+  cursor: pointer;
+  user-select: none;
+  gap: 10px;
+  transition: background 0.2s;
+}
+.acordeao-header:hover { background: #2d5282; }
+
+.acordeao-titulo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 0.97em;
+  color: #ffffff;
+  flex: 1;
+  flex-wrap: wrap;
+}
+
+.acordeao-badge-ok {
+  display: none;
+  align-items: center;
+  gap: 4px;
+  background: #dcfce7;
+  color: #16a34a;
+  font-size: 0.82em;
+  font-weight: 700;
+  padding: 2px 9px;
+  border-radius: 20px;
+  border: 1px solid #86efac;
+  white-space: nowrap;
+}
+.acordeao-badge-ok.visivel { display: flex; }
+
+.acordeao-badge-pendente {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: #fee2e2;
+  color: #dc2626;
+  font-size: 0.78em;
+  font-weight: 700;
+  padding: 2px 9px;
+  border-radius: 20px;
+  border: 1px solid #fca5a5;
+  white-space: nowrap;
+}
+.acordeao-badge-pendente.oculto { display: none; }
+
+.acordeao-seta {
+  font-size: 0.85em;
+  color: #ffffff;
+  transition: transform 0.25s;
+  flex-shrink: 0;
+}
+.acordeao-wrapper.aberto .acordeao-seta { transform: rotate(180deg); }
+
+.acordeao-corpo {
+  display: none;
+  padding: 20px 20px 24px;
+  background: #fff;
+  border-top: 1px solid #e2e8f0;
+}
+.acordeao-wrapper.aberto .acordeao-corpo { display: block; }
+
+/* ═══════════════════════════════════════════════════
+   BOTÕES DE OPÇÃO (estilo toggle)
+═══════════════════════════════════════════════════ */
+.decl-opcao-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 14px 0 6px;
+}
+
+.decl-opcao-btns input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.decl-opcao-btn-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 11px 14px;
+  border: 2px solid #cbd5e1;
+  border-radius: 7px;
+  cursor: pointer;
+  background: #f8fafc;
+  transition: border-color 0.18s, background 0.18s, box-shadow 0.18s;
+  font-size: 0.93em;
+  color: #1e293b;
+  line-height: 1.5;
+  user-select: none;
+}
+.decl-opcao-btn-label:hover {
+  border-color: #1e3a5f;
+  background: #eff6ff;
+}
+
+.decl-opcao-btn-label .opcao-icone {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #94a3b8;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.18s, background 0.18s;
+  margin-top: 1px;
+  font-size: 0.75em;
+  color: transparent;
+}
+
+.decl-opcao-btns input[type="radio"]:checked + .decl-opcao-btn-label {
+  border-color: #1e3a5f;
+  background: #eff6ff;
+  box-shadow: 0 0 0 3px rgba(30,58,95,0.10);
+  color: #1e293b;
+  font-weight: 500;
+}
+.decl-opcao-btns input[type="radio"]:checked + .decl-opcao-btn-label .opcao-icone {
+  border-color: #1e3a5f;
+  background: #1e3a5f;
+  color: #fff;
+}
+
+.decl-opcao-btns input[type="radio"]:disabled + .decl-opcao-btn-label {
+  cursor: not-allowed;
+  opacity: 0.72;
+}
+.decl-opcao-btns input[type="radio"]:disabled + .decl-opcao-btn-label:hover {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+  box-shadow: none;
+}
+.decl-opcao-btns input[type="radio"]:checked:disabled + .decl-opcao-btn-label {
+  border-color: #94a3b8;
+  background: #f1f5f9;
+  box-shadow: none;
+}
+.decl-opcao-btns input[type="radio"]:checked:disabled + .decl-opcao-btn-label .opcao-icone {
+  border-color: #94a3b8;
+  background: #94a3b8;
+}
+
+/* ═══════════════════════════════════════════════════
+   ELEMENTOS DE DECLARAÇÃO
+═══════════════════════════════════════════════════ */
+.decl-checks { display: flex; flex-direction: column; gap: 12px; margin: 12px 0 4px; }
+
+.decl-check-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.93em;
+  color: #1e293b;
+  cursor: pointer;
+  line-height: 1.5;
+}
+.decl-check-item input[type="checkbox"],
+.decl-check-item input[type="radio"] {
+  margin-top: 3px;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  cursor: pointer;
+  accent-color: #1e3a5f;
+}
+
+.decl-radio-group { display: flex; flex-direction: column; gap: 8px; margin: 8px 0 4px; }
+.decl-radio-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.93em;
+  color: #1e293b;
+  cursor: pointer;
+  line-height: 1.5;
+}
+.decl-radio-item input[type="radio"] {
+  margin-top: 3px;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  cursor: pointer;
+  accent-color: #1e3a5f;
+}
+
+.decl-sublabel {
+  font-weight: 600;
+  font-size: 0.92em;
+  color: #1e3a5f;
+  margin: 16px 0 4px;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 4px;
+}
+
+.decl-bloco-condicional { display: none; }
+.decl-bloco-condicional.visivel { display: block; }
+
+.decl-pergunta-inline {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: 8px 0 4px;
+  font-size: 0.94em;
+  color: #1e293b;
+}
+.decl-pergunta-inline .decl-radio-inline {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: 0.93em;
+}
+.decl-pergunta-inline .decl-radio-inline input[type="radio"] {
+  width: 15px;
+  height: 15px;
+  accent-color: #1e3a5f;
+  cursor: pointer;
+}
+
+.decl-obs-group { margin-top: 16px; }
+.decl-obs-group label {
+  display: block;
+  font-size: 0.92em;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 5px;
+}
+.decl-obs-group textarea {
+  width: 100%;
+  min-height: 80px;
+  border: 1px solid #cbd5e1;
+  border-radius: 5px;
+  padding: 8px 10px;
+  font-size: 0.91em;
+  resize: vertical;
+  color: #1e293b;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+.decl-obs-group textarea:focus {
+  outline: none;
+  border-color: #1e3a5f;
+  box-shadow: 0 0 0 2px rgba(30,58,95,0.08);
+}
+.decl-obs-group textarea:disabled { background: #f8fafc; cursor: not-allowed; }
+
+.decl-select-group { margin-top: 12px; }
+.decl-select-group label {
+  display: block;
+  font-size: 0.92em;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 5px;
+}
+.decl-select-group select {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 5px;
+  padding: 7px 10px;
+  font-size: 0.91em;
+  color: #1e293b;
+  background: #fff;
+  box-sizing: border-box;
+}
+.decl-select-group select:focus {
+  outline: none;
+  border-color: #1e3a5f;
+}
+.decl-select-group select:disabled { background: #f8fafc; cursor: not-allowed; }
+
+.decl-separador {
+  border: none;
+  border-top: 1px dashed #e2e8f0;
+  margin: 18px 0 14px;
+}
+
+.decl-info-nota {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 5px;
+  padding: 10px 14px;
+  font-size: 0.88em;
+  color: #1e40af;
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+
+/* ═══════════════════════════════════════════════════
+   ÁREA DE ASSINATURA
+═══════════════════════════════════════════════════ */
+.decl-btn-assinar {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  pointer-events: auto !important;
+  opacity: 1 !important;
+}
+.btn-assinar {
+  padding: 8px 22px;
+  background: #1e3a5f;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.93em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-assinar:hover:not(:disabled) { background: #2d5282; }
+.btn-assinar:disabled { background: #94a3b8; cursor: not-allowed; }
+
+.btn-limpar-decl {
+  padding: 8px 16px;
+  background: transparent;
+  color: #64748b;
+  border: 1px solid #cbd5e1;
+  border-radius: 5px;
+  font-size: 0.91em;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-limpar-decl:hover { background: #f1f5f9; color: #374151; }
+
+.decl-status-assinado {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  color: #16a34a;
+  font-size: 0.91em;
+  font-weight: 600;
+}
+.decl-status-assinado.visivel { display: flex; }
+.decl-status-assinado::before { content: "✔"; font-size: 1.1em; }
+
+.decl-assinado-overlay {
+  display: none;
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+  border-radius: 5px;
+  padding: 14px 16px;
+  margin-top: 16px;
+  font-size: 0.91em;
+  color: #15803d;
+  line-height: 1.7;
+}
+.decl-assinado-overlay.visivel { display: block; }
+.decl-assinado-overlay strong {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 1em;
+  color: #166534;
+}
+
+.decl-error-msg {
+  display: none;
+  color: #dc2626;
+  font-size: 0.85em;
+  margin-top: 4px;
+}
+.decl-error-msg.visivel { display: block; }
+
+/* Bloqueio de conteúdo após assinatura (não afeta botões) */
+.decl-conteudo-bloqueado {
+  opacity: 0.72;
+  pointer-events: none;
+}
+    </style>
+</head>
+<body>
+<div class="form-container">
+
+    <h2>7: Trâmite na Superintendência</h2>
+
+    <form id="form07" novalidate>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             SEÇÃO A — CHEFIA DA ÁREA DE DESTINAÇÃO
+        ════════════════════════════════════════════════════════════════ -->
+        <div class="acordeao-wrapper" id="acordeao-A">
+            <div class="acordeao-header" id="acordeao-header-A"
+                 role="button" tabindex="0"
+                 aria-expanded="false" aria-controls="acordeao-corpo-A">
+                <div class="acordeao-titulo">
+                    📋 Declaração (Chefia da área de destinação)
+                    <span class="acordeao-badge-pendente" id="pendente-A">⏳ Pendente de Assinatura</span>
+                    <span class="acordeao-badge-ok" id="badge-A-ok">✔ Assinado</span>
+                </div>
+                <span class="acordeao-seta">▼</span>
+            </div>
+
+            <div class="acordeao-corpo" id="acordeao-corpo-A">
+                <div id="conteudo-A">
+                    <p style="font-size:0.94em; color:#1e293b; margin:0 0 4px;"><strong>Declaro que:</strong></p>
+
+                    <div class="decl-opcao-btns">
+                        <input type="radio" name="decl_A_opcao" id="decl-A-radio1" value="suficiente">
+                        <label class="decl-opcao-btn-label" for="decl-A-radio1">
+                            <span class="opcao-icone">✔</span>
+                            <span>Os elementos constantes do formulário são <strong>suficientes</strong> para apreciação dos aspectos de mérito da destinação proposta.</span>
+                        </label>
+
+                        <input type="radio" name="decl_A_opcao" id="decl-A-radio2" value="insuficiente">
+                        <label class="decl-opcao-btn-label" for="decl-A-radio2">
+                            <span class="opcao-icone">✔</span>
+                            <span><strong>NÃO</strong> há elementos suficientes para apreciação dos aspectos de mérito da destinação proposta, sendo necessária a complementação das informações.</span>
+                        </label>
+                    </div>
+                    <span class="decl-error-msg" id="err-A-opcao">Selecione uma das opções acima.</span>
+
+                    <hr class="decl-separador">
+
+                    <div class="decl-obs-group">
+                        <label for="obs-A">Observações:</label>
+                        <textarea id="obs-A" name="obs_chefia_destinacao"
+                                  placeholder="Observações adicionais da Chefia da área de destinação..."></textarea>
+                    </div>
+                </div><!-- /conteudo-A -->
+
+                <div class="decl-btn-assinar">
+                    <button type="button" class="btn-assinar" id="btn-assinar-A" disabled>✍️ Assinar Declaração</button>
+                    <button type="button" class="btn-limpar-decl" id="btn-limpar-A" style="display:none;">🗑️ Desfazer assinatura</button>
+                    <span class="decl-status-assinado" id="status-A">Declaração assinada</span>
+                </div>
+                <div class="decl-assinado-overlay" id="overlay-A">
+                    <strong>✔ Declaração registrada</strong>
+                    <span id="resumo-A"></span>
+                </div>
+                <input type="hidden" id="flag-A" name="decl_chefia_assinado" value="0">
+            </div><!-- /corpo A -->
+        </div><!-- /acordeao A -->
+
+
+        <!-- ═══════════════════════════════════════════════════════════
+             SEÇÃO B — COORDENADOR
+        ════════════════════════════════════════════════════════════════ -->
+        <div class="acordeao-wrapper" id="acordeao-B">
+            <div class="acordeao-header" id="acordeao-header-B"
+                 role="button" tabindex="0"
+                 aria-expanded="false" aria-controls="acordeao-corpo-B">
+                <div class="acordeao-titulo">
+                    📋 Declaração (Coordenador)
+                    <span class="acordeao-badge-pendente" id="pendente-B">⏳ Pendente de Assinatura</span>
+                    <span class="acordeao-badge-ok" id="badge-B-ok">✔ Assinado</span>
+                </div>
+                <span class="acordeao-seta">▼</span>
+            </div>
+
+            <div class="acordeao-corpo" id="acordeao-corpo-B">
+                <div id="conteudo-B">
+                    <p style="font-size:0.94em; color:#1e293b; margin:0 0 4px;"><strong>Declaro que:</strong></p>
+
+                    <div class="decl-opcao-btns">
+                        <input type="radio" name="decl_B_opcao" id="decl-B-radio1" value="suficiente">
+                        <label class="decl-opcao-btn-label" for="decl-B-radio1">
+                            <span class="opcao-icone">✔</span>
+                            <span>Os elementos constantes do formulário são <strong>suficientes</strong> para apreciação dos aspectos de mérito da destinação proposta.</span>
+                        </label>
+
+                        <input type="radio" name="decl_B_opcao" id="decl-B-radio2" value="insuficiente">
+                        <label class="decl-opcao-btn-label" for="decl-B-radio2">
+                            <span class="opcao-icone">✔</span>
+                            <span><strong>NÃO</strong> há elementos suficientes para apreciação dos aspectos de mérito da destinação proposta, sendo necessária a complementação das informações.</span>
+                        </label>
+                    </div>
+                    <span class="decl-error-msg" id="err-B-opcao">Selecione uma das opções acima.</span>
+
+                    <hr class="decl-separador">
+
+                    <div class="decl-obs-group">
+                        <label for="obs-B">Observações:</label>
+                        <textarea id="obs-B" name="obs_coordenador"
+                                  placeholder="Observações adicionais do Coordenador..."></textarea>
+                    </div>
+                </div><!-- /conteudo-B -->
+
+                <div class="decl-btn-assinar">
+                    <button type="button" class="btn-assinar" id="btn-assinar-B" disabled>✍️ Assinar Declaração</button>
+                    <button type="button" class="btn-limpar-decl" id="btn-limpar-B" style="display:none;">🗑️ Desfazer assinatura</button>
+                    <span class="decl-status-assinado" id="status-B">Declaração assinada</span>
+                </div>
+                <div class="decl-assinado-overlay" id="overlay-B">
+                    <strong>✔ Declaração registrada</strong>
+                    <span id="resumo-B"></span>
+                </div>
+                <input type="hidden" id="flag-B" name="decl_coordenador_assinado" value="0">
+            </div><!-- /corpo B -->
+        </div><!-- /acordeao B -->
+
+
+        <!-- ═══════════════════════════════════════════════════════════
+             SEÇÃO C — SUPERINTENDENTE
+        ════════════════════════════════════════════════════════════════ -->
+        <div class="acordeao-wrapper" id="acordeao-C">
+            <div class="acordeao-header" id="acordeao-header-C"
+                 role="button" tabindex="0"
+                 aria-expanded="false" aria-controls="acordeao-corpo-C">
+                <div class="acordeao-titulo">
+                    📋 Manifestação (Superintendente)
+                    <span class="acordeao-badge-pendente" id="pendente-C">⏳ Pendente de Assinatura</span>
+                    <span class="acordeao-badge-ok" id="badge-C-ok">✔ Assinado</span>
+                </div>
+                <span class="acordeao-seta">▼</span>
+            </div>
+
+            <div class="acordeao-corpo" id="acordeao-corpo-C">
+                <div id="conteudo-C">
+
+                    <!-- Pergunta CDE -->
+                    <div style="margin-bottom:14px;">
+                        <p class="decl-sublabel" style="margin-top:0;">Necessária manifestação da CDE?</p>
+                        <div class="decl-pergunta-inline">
+                            <label class="decl-radio-inline">
+                                <input type="radio" name="cde_manifestacao" id="cde-sim" value="sim">
+                                <span>Sim</span>
+                            </label>
+                            <label class="decl-radio-inline">
+                                <input type="radio" name="cde_manifestacao" id="cde-nao" value="nao">
+                                <span>Não</span>
+                            </label>
+                        </div>
+                        <span class="decl-error-msg" id="err-C-cde">Selecione uma opção.</span>
+                    </div>
+
+                    <!-- ─── BLOCO CDE = SIM ─────────────────────────── -->
+                    <div class="decl-bloco-condicional" id="bloco-C-cde-sim">
+                        <div class="decl-info-nota">
+                            ℹ️ A manifestação da CDE foi indicada como necessária. Preencha a declaração abaixo após o retorno.
+                        </div>
+                        <p style="font-size:0.94em; color:#1e293b; margin:0 0 4px;"><strong>Declaro que:</strong></p>
+                        <div class="decl-checks">
+                            <label class="decl-check-item">
+                                <input type="radio" name="decl_C_sim_opcao" id="decl-C-sim-radio1" value="suficiente">
+                                <span>Os elementos constantes do formulário são suficientes para apreciação dos aspectos de mérito da destinação proposta.</span>
+                            </label>
+                            <label class="decl-check-item">
+                                <input type="radio" name="decl_C_sim_opcao" id="decl-C-sim-radio2" value="insuficiente">
+                                <span><strong>NÃO</strong> haver elementos suficientes para apreciação dos aspectos de mérito da destinação proposta, sendo necessária a complementação das informações.</span>
+                            </label>
+                        </div>
+                        <span class="decl-error-msg" id="err-C-sim-opcao">Selecione uma das opções acima.</span>
+
+                        <div class="decl-obs-group" style="margin-top:14px;">
+                            <label for="obs-C-sim">Observações:</label>
+                            <textarea id="obs-C-sim" name="obs_super_cde_sim"
+                                      placeholder="Observações adicionais..."></textarea>
+                        </div>
+                    </div><!-- /bloco CDE sim -->
+
+                    <!-- ─── BLOCO CDE = NÃO ─────────────────────────── -->
+                    <div class="decl-bloco-condicional" id="bloco-C-cde-nao">
+
+                        <p class="decl-sublabel">Aspectos de Interesse Público</p>
+                        <div class="decl-radio-group">
+                            <label class="decl-radio-item">
+                                <input type="radio" name="C_interesse_publico" value="consistente">
+                                <span>Evidenciado de forma consistente</span>
+                            </label>
+                            <label class="decl-radio-item">
+                                <input type="radio" name="C_interesse_publico" value="ajustes">
+                                <span>Evidenciado com necessidade de ajustes</span>
+                            </label>
+                            <label class="decl-radio-item">
+                                <input type="radio" name="C_interesse_publico" value="insuficiente">
+                                <span>Não suficientemente demonstrado</span>
+                            </label>
+                        </div>
+                        <span class="decl-error-msg" id="err-C-interesse">Selecione uma opção.</span>
+
+                        <hr class="decl-separador">
+
+                        <p class="decl-sublabel">Escolha do Destinatário</p>
+                        <div class="decl-radio-group">
+                            <label class="decl-radio-item">
+                                <input type="radio" name="C_destinatario" value="consistente">
+                                <span>Fundamentação consistente</span>
+                            </label>
+                            <label class="decl-radio-item">
+                                <input type="radio" name="C_destinatario" value="ressalvas">
+                                <span>Fundamentação suficiente com ressalvas</span>
+                            </label>
+                            <label class="decl-radio-item">
+                                <input type="radio" name="C_destinatario" value="insuficiente">
+                                <span>Fundamentação insuficiente</span>
+                            </label>
+                        </div>
+                        <span class="decl-error-msg" id="err-C-destinatario">Selecione uma opção.</span>
+
+                        <hr class="decl-separador">
+
+                        <p class="decl-sublabel">Impactos sociais, territoriais e ambientais</p>
+                        <div class="decl-radio-group">
+                            <label class="decl-radio-item">
+                                <input type="radio" name="C_impactos" value="positivo_relevante">
+                                <span>Impacto positivo relevante</span>
+                            </label>
+                            <label class="decl-radio-item">
+                                <input type="radio" name="C_impactos" value="positivo_moderado">
+                                <span>Impacto positivo moderado</span>
+                            </label>
+                            <label class="decl-radio-item">
+                                <input type="radio" name="C_impactos" value="neutro">
+                                <span>Impacto neutro</span>
+                            </label>
+                            <label class="decl-radio-item">
+                                <input type="radio" name="C_impactos" value="adverso">
+                                <span>Impacto potencialmente adverso</span>
+                            </label>
+                        </div>
+                        <span class="decl-error-msg" id="err-C-impactos">Selecione uma opção.</span>
+
+                        <hr class="decl-separador">
+
+                        <p class="decl-sublabel">Regime de destinação</p>
+                        <div class="decl-info-nota" id="nota-regime-proposto">
+                            ℹ️ Regime proposto pelo analista: <strong id="texto-regime-proposto">—</strong>
+                        </div>
+                        <div class="decl-radio-group">
+                            <label class="decl-radio-item">
+                                <input type="radio" name="C_regime" id="C-regime-concordo" value="concordo">
+                                <span>Concordo com o regime proposto</span>
+                            </label>
+                            <label class="decl-radio-item">
+                                <input type="radio" name="C_regime" id="C-regime-discordo" value="discordo">
+                                <span>Não concordo com o regime proposto</span>
+                            </label>
+                        </div>
+                        <span class="decl-error-msg" id="err-C-regime">Selecione uma opção.</span>
+
+                        <!-- Sub-bloco: regime alternativo -->
+                        <div class="decl-bloco-condicional" id="bloco-C-regime-alt" style="margin-top:10px;">
+                            <div class="decl-select-group">
+                                <label for="C-regime-alt-select">Regime alternativo sugerido:</label>
+                                <select id="C-regime-alt-select" name="C_regime_alternativo">
+                                    <option value="">Selecione (Tabela TT02 — RESOLUÇÃO COMGC/SPU/MGI Nº 3/2025)...</option>
+                                    <optgroup label="── 02.01 Regimes de direito real ──────────────────"></optgroup>
+                                    <optgroup label="  02.01.01 Regimes de transferência da propriedade"></optgroup>
+                                    <optgroup label="    02.01.01.01 Alienação imobiliária discricionária">
+                                        <option value="02.01.01.01.01">02.01.01.01.01 — Dação em pagamento</option>
+                                        <option value="02.01.01.01.02">02.01.01.01.02 — Doação</option>
+                                        <option value="02.01.01.01.03">02.01.01.01.03 — Integralização de cotas em Fundo de Investimento Imobiliário</option>
+                                        <option value="02.01.01.01.04">02.01.01.01.04 — Investidura</option>
+                                        <option value="02.01.01.01.05">02.01.01.01.05 — Permuta</option>
+                                        <option value="02.01.01.01.06.01">02.01.01.01.06.01 — Remição de foro gratuita</option>
+                                        <option value="02.01.01.01.06.02">02.01.01.01.06.02 — Remição de foro onerosa</option>
+                                        <option value="02.01.01.01.07">02.01.01.01.07 — Venda</option>
+                                    </optgroup>
+                                    <optgroup label="    02.01.01.02 Alienação imobiliária vinculada">
+                                        <option value="02.01.01.02.01">02.01.01.02.01 — Legitimação fundiária</option>
+                                        <option value="02.01.01.02.02">02.01.01.02.02 — Reconhecimento de domínio</option>
+                                        <option value="02.01.01.02.03">02.01.01.02.03 — Transferência de propriedade para fins de Reurb-S</option>
+                                        <option value="02.01.01.02.04">02.01.01.02.04 — Transferência de propriedade por dispositivo legal específico</option>
+                                    </optgroup>
+                                    <optgroup label="  02.01.02 Regimes de direito real limitado"></optgroup>
+                                    <optgroup label="    02.01.02.01 Aforamento">
+                                        <option value="02.01.02.01.01">02.01.02.01.01 — Aforamento gratuito</option>
+                                        <option value="02.01.02.01.02">02.01.02.01.02 — Aforamento oneroso</option>
+                                    </optgroup>
+                                    <optgroup label="    02.01.02.02 Concessão de Direito Real de Laje">
+                                        <option value="02.01.02.02.01">02.01.02.02.01 — Concessão de Direito Real de Laje Gratuita</option>
+                                        <option value="02.01.02.02.02">02.01.02.02.02 — Concessão de Direito Real de Laje Onerosa</option>
+                                    </optgroup>
+                                    <optgroup label="    02.01.02.03 Concessão de Direito Real de Uso">
+                                        <option value="02.01.02.03.01">02.01.02.03.01 — Concessão de Direito Real de Uso Gratuita</option>
+                                        <option value="02.01.02.03.02">02.01.02.03.02 — Concessão de Direito Real de Uso Onerosa</option>
+                                    </optgroup>
+                                    <optgroup label="    02.01.02.04 Concessão de Direito de Superfície">
+                                        <option value="02.01.02.04.01">02.01.02.04.01 — Concessão de Direito de Superfície Gratuita</option>
+                                        <option value="02.01.02.04.02">02.01.02.04.02 — Concessão de Direito de Superfície Onerosa</option>
+                                    </optgroup>
+                                    <optgroup label="    02.01.02 — Outros regimes de direito real limitado">
+                                        <option value="02.01.02.05">02.01.02.05 — Concessão de Uso Especial para Fins de Moradia (CUEM)</option>
+                                        <option value="02.01.02.06">02.01.02.06 — Promessa de compra e venda</option>
+                                        <option value="02.01.02.07">02.01.02.07 — Transferência de Direito Real de Uso para Reurb-S</option>
+                                    </optgroup>
+                                    <optgroup label="── 02.02 Regimes de direito pessoal/obrigacional ─"></optgroup>
+                                    <optgroup label="  02.02.01 Arrendamento">
+                                        <option value="02.02.01">02.02.01 — Arrendamento</option>
+                                    </optgroup>
+                                    <optgroup label="  02.02.02 Cessão de Uso">
+                                        <option value="02.02.02.01">02.02.02.01 — Cessão de Uso Gratuita</option>
+                                        <option value="02.02.02.02">02.02.02.02 — Cessão de Uso Onerosa</option>
+                                        <option value="02.02.02.03">02.02.02.03 — Cessão de Uso em Condições Especiais</option>
+                                        <option value="02.02.02.04">02.02.02.04 — Cessão de uso provisória</option>
+                                    </optgroup>
+                                    <optgroup label="  02.02 — Outros regimes de direito pessoal/obrigacional">
+                                        <option value="02.02.03">02.02.03 — Comodato</option>
+                                        <option value="02.02.04">02.02.04 — Locação para terceiros</option>
+                                        <option value="02.02.05">02.02.05 — Permissão de uso para fins residenciais</option>
+                                        <option value="02.02.06.01">02.02.06.01 — Transferência gratuita da posse</option>
+                                        <option value="02.02.06.02">02.02.06.02 — Transferência onerosa da posse</option>
+                                    </optgroup>
+                                    <optgroup label="── 02.03 Regimes de transferência/compartilhamento de gestão ─">
+                                        <option value="02.03.01">02.03.01 — Acordo de Cooperação Técnica para Regularização Fundiária Urbana (ACT-Reurb)</option>
+                                        <option value="02.03.02">02.03.02 — Entrega</option>
+                                        <option value="02.03.03">02.03.03 — Entrega provisória</option>
+                                        <option value="02.03.04">02.03.04 — Guarda Provisória</option>
+                                        <option value="02.03.05">02.03.05 — Transferência de gestão por determinação legal</option>
+                                        <option value="02.03.06">02.03.06 — Transferência de gestão de orlas e praias</option>
+                                    </optgroup>
+                                    <optgroup label="── 02.04 Regimes de Outorga ──────────────────────"></optgroup>
+                                    <optgroup label="  02.04.01 Autorização de obras / 02.04.02 Autorização de passagem">
+                                        <option value="02.04.01">02.04.01 — Autorização de obras</option>
+                                        <option value="02.04.02.01">02.04.02.01 — Autorização de passagem gratuita</option>
+                                        <option value="02.04.02.02">02.04.02.02 — Autorização de passagem onerosa</option>
+                                    </optgroup>
+                                    <optgroup label="  02.04 — Outros regimes de outorga">
+                                        <option value="02.04.03">02.04.03 — Autorização de uso para fins comerciais</option>
+                                        <option value="02.04.04">02.04.04 — Autorização de Uso Sustentável</option>
+                                        <option value="02.04.05">02.04.05 — Inscrição de ocupação</option>
+                                        <option value="02.04.06">02.04.06 — Permissão de uso para eventos</option>
+                                    </optgroup>
+                                </select>
+                                <span class="decl-error-msg" id="err-C-regime-alt">Selecione o regime alternativo.</span>
+                            </div>
+                        </div><!-- /bloco-C-regime-alt -->
+
+                        <hr class="decl-separador">
+
+                        <p class="decl-sublabel">Deliberação</p>
+                        <div class="decl-radio-group">
+                            <label class="decl-radio-item">
+                                <input type="radio" name="C_deliberacao" value="aprovado">
+                                <span>Aprovo a proposta, nos termos apresentados.</span>
+                            </label>
+                            <label class="decl-radio-item">
+                                <input type="radio" name="C_deliberacao" value="aprovado_condicionantes">
+                                <span>Aprovo com condicionantes.</span>
+                            </label>
+                            <label class="decl-radio-item">
+                                <input type="radio" name="C_deliberacao" value="diligencia">
+                                <span>Determino diligência complementar.</span>
+                            </label>
+                            <label class="decl-radio-item">
+                                <input type="radio" name="C_deliberacao" value="indeferido">
+                                <span>Indefiro a proposta.</span>
+                            </label>
+                        </div>
+                        <span class="decl-error-msg" id="err-C-deliberacao">Selecione uma opção.</span>
+
+                        <hr class="decl-separador">
+
+                        <div class="decl-obs-group">
+                            <label for="obs-C-nao">
+                                Observações <span style="font-weight:400; color:#64748b;">(condicionantes, diligências etc.)</span>:
+                            </label>
+                            <textarea id="obs-C-nao" name="obs_super_cde_nao"
+                                      placeholder="Descreva as condicionantes, diligências ou observações complementares..."></textarea>
+                        </div>
+
+                    </div><!-- /bloco CDE não -->
+                </div><!-- /conteudo-C -->
+
+                <!-- Botões FORA do conteúdo bloqueável -->
+                <div class="decl-btn-assinar" id="area-btn-C" style="display:none;">
+                    <button type="button" class="btn-assinar" id="btn-assinar-C" disabled>✍️ Assinar Manifestação</button>
+                    <button type="button" class="btn-limpar-decl" id="btn-limpar-C" style="display:none;">🗑️ Desfazer assinatura</button>
+                    <span class="decl-status-assinado" id="status-C">Manifestação assinada</span>
+                </div>
+                <div class="decl-assinado-overlay" id="overlay-C">
+                    <strong>✔ Manifestação registrada</strong>
+                    <span id="resumo-C"></span>
+                </div>
+                <input type="hidden" id="flag-C" name="decl_super_assinado" value="0">
+            </div><!-- /corpo C -->
+        </div><!-- /acordeao C -->
+
+
+        <!-- ═══════════════════════════════════════════════════════════
+             BOTÕES GLOBAIS
+        ════════════════════════════════════════════════════════════════ -->
+        <div class="button-group" style="margin-top:28px;">
+            <button type="button" class="btn-secondary" id="btnLimpar">🗑️ Limpar</button>
+            <button type="button" id="btnImprimir" onclick="window.print()">🖨️ Imprimir / Salvar PDF</button>
+            <button type="submit" id="btnEnviar">✅ Salvar</button>
+        </div>
+
+    </form>
+</div><!-- /form-container -->
+
+<script src="formulario.js"></script>
+<script src="hints.js"></script>
+<script src="custom-select.js"></script>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   UTILITÁRIOS COMPARTILHADOS
+═══════════════════════════════════════════════════════════════ */
+
+/**
+ * Inicializa um acordeão (toggle abrir/fechar).
+ */
+function initAcordeao(wrapperId, headerId) {
+    var wrapper = document.getElementById(wrapperId);
+    var header  = document.getElementById(headerId);
+    if (!wrapper || !header) return;
+
+    function toggle() {
+        var aberto = wrapper.classList.toggle('aberto');
+        header.setAttribute('aria-expanded', String(aberto));
+    }
+
+    header.addEventListener('click', toggle);
+    header.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            toggle();
+        }
+    });
+}
+
+/**
+ * Bloqueia ou desbloqueia os campos de um bloco de conteúdo.
+ * Ao desbloquear, respeita se o elemento pertence a um bloco
+ * condicional que esteja oculto (mantém disabled nesses casos).
+ */
+function bloquearConteudo(conteudoId, bloquear) {
+    var el = document.getElementById(conteudoId);
+    if (!el) return;
+
+    if (bloquear) {
+        el.classList.add('decl-conteudo-bloqueado');
+        el.querySelectorAll('input, textarea, select').forEach(function(inp) {
+            inp.disabled = true;
+        });
+    } else {
+        el.classList.remove('decl-conteudo-bloqueado');
+        el.querySelectorAll('input, textarea, select').forEach(function(inp) {
+            // Só reabilita se o campo não estiver dentro de um bloco condicional oculto
+            var blocoCondicional = inp.closest('.decl-bloco-condicional');
+            if (!blocoCondicional || blocoCondicional.classList.contains('visivel')) {
+                inp.disabled = false;
+            }
+        });
+    }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   SEÇÃO A — CHEFIA DA ÁREA DE DESTINAÇÃO
+═══════════════════════════════════════════════════════════════ */
+(function() {
+    initAcordeao('acordeao-A', 'acordeao-header-A');
+
+    var radios   = document.querySelectorAll('input[name="decl_A_opcao"]');
+    var btnAss   = document.getElementById('btn-assinar-A');
+    var btnLimp  = document.getElementById('btn-limpar-A');
+    var badge    = document.getElementById('badge-A-ok');
+    var pendente = document.getElementById('pendente-A');
+    var status   = document.getElementById('status-A');
+    var overlay  = document.getElementById('overlay-A');
+    var resumo   = document.getElementById('resumo-A');
+    var flag     = document.getElementById('flag-A');
+    var errOpc   = document.getElementById('err-A-opcao');
+
+    function verificar() {
+        var marcado = document.querySelector('input[name="decl_A_opcao"]:checked');
+        btnAss.disabled = !marcado || flag.value === '1';
+    }
+
+    radios.forEach(function(r) { r.addEventListener('change', verificar); });
+
+    btnAss.addEventListener('click', function() {
+        var sel = document.querySelector('input[name="decl_A_opcao"]:checked');
+        if (!sel) { errOpc.classList.add('visivel'); return; }
+        errOpc.classList.remove('visivel');
+
+        flag.value = '1';
+        pendente.classList.add('oculto');
+        badge.classList.add('visivel');
+        status.classList.add('visivel');
+        overlay.classList.add('visivel');
+        resumo.textContent = sel.value === 'suficiente'
+            ? 'Declarado: elementos suficientes para apreciação do mérito.'
+            : 'Declarado: NÃO há elementos suficientes — necessária complementação.';
+
+        bloquearConteudo('conteudo-A', true);
+        btnAss.style.display = 'none';
+        btnLimp.style.display = '';
+        verificar();
+    });
+
+    btnLimp.addEventListener('click', function() {
+        flag.value = '0';
+        pendente.classList.remove('oculto');
+        badge.classList.remove('visivel');
+        status.classList.remove('visivel');
+        overlay.classList.remove('visivel');
+        resumo.textContent = '';
+
+        bloquearConteudo('conteudo-A', false);
+        btnAss.style.display = '';
+        btnLimp.style.display = 'none';
+        verificar();
+    });
+}());
+
+
+/* ═══════════════════════════════════════════════════════════════
+   SEÇÃO B — COORDENADOR
+═══════════════════════════════════════════════════════════════ */
+(function() {
+    initAcordeao('acordeao-B', 'acordeao-header-B');
+
+    var radios   = document.querySelectorAll('input[name="decl_B_opcao"]');
+    var btnAss   = document.getElementById('btn-assinar-B');
+    var btnLimp  = document.getElementById('btn-limpar-B');
+    var badge    = document.getElementById('badge-B-ok');
+    var pendente = document.getElementById('pendente-B');
+    var status   = document.getElementById('status-B');
+    var overlay  = document.getElementById('overlay-B');
+    var resumo   = document.getElementById('resumo-B');
+    var flag     = document.getElementById('flag-B');
+    var errOpc   = document.getElementById('err-B-opcao');
+
+    function verificar() {
+        var marcado = document.querySelector('input[name="decl_B_opcao"]:checked');
+        btnAss.disabled = !marcado || flag.value === '1';
+    }
+
+    radios.forEach(function(r) { r.addEventListener('change', verificar); });
+
+    btnAss.addEventListener('click', function() {
+        var sel = document.querySelector('input[name="decl_B_opcao"]:checked');
+        if (!sel) { errOpc.classList.add('visivel'); return; }
+        errOpc.classList.remove('visivel');
+
+        flag.value = '1';
+        pendente.classList.add('oculto');
+        badge.classList.add('visivel');
+        status.classList.add('visivel');
+        overlay.classList.add('visivel');
+        resumo.textContent = sel.value === 'suficiente'
+            ? 'Declarado: elementos suficientes para apreciação do mérito.'
+            : 'Declarado: NÃO há elementos suficientes — necessária complementação.';
+
+        bloquearConteudo('conteudo-B', true);
+        btnAss.style.display = 'none';
+        btnLimp.style.display = '';
+        verificar();
+    });
+
+    btnLimp.addEventListener('click', function() {
+        flag.value = '0';
+        pendente.classList.remove('oculto');
+        badge.classList.remove('visivel');
+        status.classList.remove('visivel');
+        overlay.classList.remove('visivel');
+        resumo.textContent = '';
+
+        bloquearConteudo('conteudo-B', false);
+        btnAss.style.display = '';
+        btnLimp.style.display = 'none';
+        verificar();
+    });
+}());
+
+
+/* ═══════════════════════════════════════════════════════════════
+   SEÇÃO C — SUPERINTENDENTE
+═══════════════════════════════════════════════════════════════ */
+(function() {
+    initAcordeao('acordeao-C', 'acordeao-header-C');
+
+    var cdeSim      = document.getElementById('cde-sim');
+    var cdeNao      = document.getElementById('cde-nao');
+    var blocoCdeSim = document.getElementById('bloco-C-cde-sim');
+    var blocoCdeNao = document.getElementById('bloco-C-cde-nao');
+    var areaBtnC    = document.getElementById('area-btn-C');
+    var btnAss      = document.getElementById('btn-assinar-C');
+    var btnLimp     = document.getElementById('btn-limpar-C');
+    var badge       = document.getElementById('badge-C-ok');
+    var pendente    = document.getElementById('pendente-C');
+    var status      = document.getElementById('status-C');
+    var overlay     = document.getElementById('overlay-C');
+    var resumo      = document.getElementById('resumo-C');
+    var flag        = document.getElementById('flag-C');
+    var altSelect   = document.getElementById('C-regime-alt-select');
+    var blocoRegimeAlt = document.getElementById('bloco-C-regime-alt');
+
+    /* Carrega regime proposto salvo pelo FOCO-06 */
+    var textoRegime = document.getElementById('texto-regime-proposto');
+    var regimeSalvo = localStorage.getItem('foco06_regime_proposto');
+    if (regimeSalvo) textoRegime.textContent = regimeSalvo;
+
+    /* Exibe/oculta blocos conforme seleção CDE */
+    function onCdeChange() {
+        var isSim = cdeSim.checked;
+        blocoCdeSim.classList.toggle('visivel', isSim);
+        blocoCdeNao.classList.toggle('visivel', !isSim);
+        areaBtnC.style.display = '';
+        verificarC();
+    }
+    cdeSim.addEventListener('change', onCdeChange);
+    cdeNao.addEventListener('change', onCdeChange);
+
+    /* Exibe/oculta bloco de regime alternativo */
+    document.querySelectorAll('input[name="C_regime"]').forEach(function(r) {
+        r.addEventListener('change', function() {
+            blocoRegimeAlt.classList.toggle('visivel', this.value === 'discordo');
+            verificarC();
+        });
+    });
+
+    /* Valida se todos os campos obrigatórios da seção C estão preenchidos */
+    function verificarC() {
+        if (flag.value === '1') { btnAss.disabled = true; return; }
+        if (!cdeSim.checked && !cdeNao.checked) { btnAss.disabled = true; return; }
+
+        if (cdeSim.checked) {
+            var sel = document.querySelector('input[name="decl_C_sim_opcao"]:checked');
+            btnAss.disabled = !sel;
+            return;
+        }
+
+        /* Caminho CDE = NÃO */
+        var interesse   = document.querySelector('input[name="C_interesse_publico"]:checked');
+        var destinat    = document.querySelector('input[name="C_destinatario"]:checked');
+        var impactos    = document.querySelector('input[name="C_impactos"]:checked');
+        var regime      = document.querySelector('input[name="C_regime"]:checked');
+        var deliberacao = document.querySelector('input[name="C_deliberacao"]:checked');
+
+        var regimeOk = !!regime;
+        if (regime && regime.value === 'discordo') {
+            regimeOk = !!(altSelect && altSelect.value);
+        }
+
+        btnAss.disabled = !(interesse && destinat && impactos && regimeOk && deliberacao);
+    }
+
+    /* Ouve qualquer mudança dentro do conteúdo C */
+    document.getElementById('conteudo-C').addEventListener('change', verificarC);
+    altSelect.addEventListener('change', verificarC);
+
+    /* Assinar */
+    btnAss.addEventListener('click', function() {
+        flag.value = '1';
+        pendente.classList.add('oculto');
+        badge.classList.add('visivel');
+        status.classList.add('visivel');
+        overlay.classList.add('visivel');
+
+        var msg = '';
+        if (cdeSim.checked) {
+            var sel = document.querySelector('input[name="decl_C_sim_opcao"]:checked');
+            msg = 'CDE necessária. ' + (sel && sel.value === 'suficiente'
+                ? 'Elementos suficientes declarados.'
+                : 'Complementação de informações necessária declarada.');
+        } else {
+            var delib = document.querySelector('input[name="C_deliberacao"]:checked');
+            var textos = {
+                aprovado:                'Aprovado nos termos apresentados.',
+                aprovado_condicionantes: 'Aprovado com condicionantes.',
+                diligencia:              'Diligência complementar determinada.',
+                indeferido:              'Proposta indeferida.'
+            };
+            msg = 'CDE não necessária. Deliberação: ' + (delib ? (textos[delib.value] || delib.value) : '—');
+        }
+        resumo.textContent = msg;
+
+        bloquearConteudo('conteudo-C', true);
+        btnAss.style.display = 'none';
+        btnLimp.style.display = '';
+        verificarC();
+    });
+
+    /* Desfazer assinatura */
+    btnLimp.addEventListener('click', function() {
+        flag.value = '0';
+        pendente.classList.remove('oculto');
+        badge.classList.remove('visivel');
+        status.classList.remove('visivel');
+        overlay.classList.remove('visivel');
+        resumo.textContent = '';
+
+        bloquearConteudo('conteudo-C', false);
+        btnAss.style.display = '';
+        btnLimp.style.display = 'none';
+        verificarC();
+    });
+}());
+
+
+/* ═══════════════════════════════════════════════════════════════
+   BOTÃO LIMPAR GLOBAL
+═══════════════════════════════════════════════════════════════ */
+document.getElementById('btnLimpar').addEventListener('click', function() {
+    if (!confirm('Deseja limpar todos os dados do formulário? Esta ação não pode ser desfeita.')) return;
+    document.getElementById('form07').reset();
+
+    /* Reseta estado visual de cada seção */
+    ['A', 'B', 'C'].forEach(function(sec) {
+        var flag     = document.getElementById('flag-' + sec);
+        var badge    = document.getElementById('badge-' + sec + '-ok');
+        var pendente = document.getElementById('pendente-' + sec);
+        var status   = document.getElementById('status-' + sec);
+        var overlay  = document.getElementById('overlay-' + sec);
+        var resumo   = document.getElementById('resumo-' + sec);
+        var btnAss   = document.getElementById('btn-assinar-' + sec);
+        var btnLimp  = document.getElementById('btn-limpar-' + sec);
+
+        if (flag)     flag.value = '0';
+        if (badge)    badge.classList.remove('visivel');
+        if (pendente) pendente.classList.remove('oculto');
+        if (status)   status.classList.remove('visivel');
+        if (overlay)  overlay.classList.remove('visivel');
+        if (resumo)   resumo.textContent = '';
+        if (btnAss)   { btnAss.style.display = ''; btnAss.disabled = true; }
+        if (btnLimp)  btnLimp.style.display = 'none';
+
+        bloquearConteudo('conteudo-' + sec, false);
+    });
+
+    /* Oculta blocos condicionais da seção C */
+    ['bloco-C-cde-sim', 'bloco-C-cde-nao', 'bloco-C-regime-alt'].forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) el.classList.remove('visivel');
+    });
+
+    /* Oculta a área de botões da seção C */
+    var areaBtnC = document.getElementById('area-btn-C');
+    if (areaBtnC) areaBtnC.style.display = 'none';
+});
+
+
+/* ═══════════════════════════════════════════════════════════════
+   SUBMIT — exige todas as seções assinadas
+═══════════════════════════════════════════════════════════════ */
+document.getElementById('form07').addEventListener('submit', function(e) {
+    var pendentes = ['flag-A', 'flag-B', 'flag-C'].filter(function(id) {
+        var el = document.getElementById(id);
+        return !el || el.value !== '1';
+    });
+    if (pendentes.length > 0) {
+        e.preventDefault();
+        alert('Todas as seções devem ser assinadas antes de salvar.');
+    }
+});
+</script>
+</body>
+</html>

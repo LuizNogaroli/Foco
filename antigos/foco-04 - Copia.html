@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4: Análise do Imóvel - Maquete SPU</title>
+  <link rel="stylesheet" href="styles-forms.css" />
+  <link rel="stylesheet" href="hints.css" />
+</head>
+
+<body>
+  <div class="form-container">
+    <h2>Análise do Imóvel</h2>
+
+    <form id="form04" novalidate>
+      <div id="imoveis-container">
+
+        <section class="imovel-block" data-index="0">
+
+          <!-- ==================== OCUPAÇÃO ==================== -->
+          <h4 style="margin: 24px 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 8px;">
+            Ocupação
+          </h4>
+
+          <!-- 3.1 Situação ocupacional -->
+          <div class="form-group editavel">
+            <label for="campo31_0">Situação ocupacional:</label>
+            <select id="campo31_0" name="imoveis[0][situacao_ocupacional]" required>
+              <option value="" selected>Selecione...</option>
+              <option value="Desocupado">Desocupado</option>
+              <option value="Ocupado regularmente">Ocupado regularmente</option>
+              <option value="Ocupado irregularmente">Ocupado irregularmente</option>
+              <option value="Em disputa judicial">Em disputa judicial</option>
+              <option value="Parcialmente ocupado">Parcialmente ocupado</option>
+            </select>
+
+            <div id="bloco-obs31_0" style="display: none; flex-direction: column; gap: 6px; margin-top: 8px;">
+              <label for="obs31_0">Observações complementares:</label>
+              <textarea id="obs31_0" name="imoveis[0][obs_situacao_ocupacional]" placeholder="Observações sobre a situação ocupacional..."></textarea>
+            </div>
+          </div>
+
+          <!-- 3.4 Tempo de ocupação -->
+          <div class="form-group editavel">
+            <label for="campo34_0">Tempo de ocupação:</label>
+            <input type="text" id="campo34_0" name="imoveis[0][tempo_ocupacao]" value="05 anos" placeholder="Ex: 03/2010 ou 2010" />
+          </div>
+
+          <!-- 3.2 Tipo de uso atual -->
+          <div class="form-group editavel">
+            <label for="campo32_0">Tipo de uso imobiliário atual:</label>
+            <select id="campo32_0" name="imoveis[0][tipo_uso_atual]" required>
+              <option value="" disabled>Selecione...</option>
+              <option value="Residencial">Residencial</option>
+              <option value="Comercial">Comercial</option>
+              <option value="Industrial">Industrial</option>
+              <option value="Institucional" selected>Institucional</option>
+              <option value="Infraestrutura">Infraestrutura</option>
+              <option value="Uso misto">Uso misto</option>
+              <option value="Sem uso definido">Sem uso definido</option>
+            </select>
+          </div>
+
+          <!-- 3.3 Uso específico atual -->
+          <div class="form-group editavel">
+            <label for="campo33_0">Tipo de uso específico atual:</label>
+            <select id="campo33_0" name="imoveis[0][tipo_uso_especifico_atual]">
+              <option value="" selected>Selecione...</option>
+              <option value="Moradia unifamiliar">Moradia unifamiliar</option>
+              <option value="Moradia multifamiliar">Moradia multifamiliar</option>
+              <option value="Habitação de interesse social">Habitação de interesse social</option>
+              <option value="Escritório/sede administrativa">Escritório/sede administrativa</option>
+              <option value="Escola/instituição de ensino">Escola/instituição de ensino</option>
+              <option value="Unidade de saúde">Unidade de saúde</option>
+              <option value="Equipamento de segurança pública">Equipamento de segurança pública</option>
+              <option value="Equipamento de defesa nacional">Equipamento de defesa nacional</option>
+              <option value="Área de lazer/recreação">Área de lazer/recreação</option>
+              <option value="Armazenagem/logística">Armazenagem/logística</option>
+              <option value="Outro">Outro</option>
+            </select>
+          </div>
+
+          <!-- 3.5 Incidência ambiental (Convertido para Checkboxes conforme solicitado) -->
+          <div class="form-group editavel">
+            <label>Incidência ambiental:</label>
+            <div class="checkbox-group" id="group-incidencia_0">
+                <label class="checkbox-option">
+                    <input type="checkbox" name="imoveis[0][incidencia_ambiental][]" value="APP">
+                    APP — Área de Preservação Permanente
+                    <span class="hint-semaforo"><span class="hint-icon" data-hint="Área protegida por legislação específica com restrições severas." data-hint-tipo="vermelho">?</span></span>
+                </label>
+                <label class="checkbox-option">
+                    <input type="checkbox" name="imoveis[0][incidencia_ambiental][]" value="Unidade de Conservação">
+                    Unidade de Conservação (Federal, Estadual ou Municipal)
+                    <span class="hint-semaforo"><span class="hint-icon" data-hint="Sujeito a regime próprio de proteção." data-hint-tipo="amarelo">?</span></span>
+                </label>
+                <label class="checkbox-option">
+                    <input type="checkbox" name="imoveis[0][incidencia_ambiental][]" value="Área de risco">
+                    Área de risco (Geotécnica, Inundação, etc.)
+                </label>
+                <label class="checkbox-option">
+                    <input type="checkbox" name="imoveis[0][incidencia_ambiental][]" value="Área contaminada">
+                    Área contaminada (Passivo ambiental)
+                </label>
+                <label class="checkbox-option">
+                    <input type="checkbox" name="imoveis[0][incidencia_ambiental][]" value="Nenhuma" checked>
+                    Nenhuma incidência relevante identificada
+                </label>
+                <label class="checkbox-option">
+                    <input type="checkbox" name="imoveis[0][incidencia_ambiental][]" value="Outra" id="chk-outra-ambiental_0">
+                    Outra situação específica
+                </label>
+            </div>
+
+            <div id="bloco-obs35_0" style="display: none; flex-direction: column; gap: 6px; margin-top: 8px;">
+              <label for="obs35_0">Observações complementares — Ambiental:</label>
+              <textarea id="obs35_0" name="imoveis[0][obs_incidencia_ambiental]" placeholder="Descreva a incidência ambiental..."></textarea>
+            </div>
+          </div>
+
+          <!-- 3.6 Custos SPU -->
+          <div class="form-group editavel">
+            <label>Há custos de manutenção — SPU?</label>
+            <div class="radio-group">
+              <label class="radio-option">
+                <input type="radio" name="imoveis[0][custos_manutencao]" value="Sim" /> Sim
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="imoveis[0][custos_manutencao]" value="Não" checked /> Não
+              </label>
+            </div>
+
+            <div id="bloco-obs37_0" style="display: none; flex-direction: column; gap: 6px; margin-top: 8px;">
+              <label for="campo37_0">Estimativa de custos anuais — R$:</label>
+              <input type="text" id="campo37_0" name="imoveis[0][estimativa_custos]" class="mask-moeda" placeholder="R$ 0,00" />
+            </div>
+          </div>
+
+          <!-- ==================== RISCOS ==================== -->
+          <h4 style="margin: 24px 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 8px;">
+            Riscos
+          </h4>
+
+          <!-- 3.8 Risco invasão -->
+          <div class="form-group editavel">
+            <label>Risco de invasão/esbulho?</label>
+            <div class="radio-group">
+              <label class="radio-option"><input type="radio" name="imoveis[0][risco_invasao]" value="Sim" /> Sim</label>
+              <label class="radio-option"><input type="radio" name="imoveis[0][risco_invasao]" value="Não" checked /> Não</label>
+              <label class="radio-option"><input type="radio" name="imoveis[0][risco_invasao]" value="Não há como avaliar" /> Não há como avaliar</label>
+            </div>
+            <div id="bloco-desc38_0" style="display: none; flex-direction: column; gap: 6px; margin-top: 8px;">
+              <label for="desc38_0">Descrever risco de invasão:</label>
+              <textarea id="desc38_0" name="imoveis[0][desc_risco_invasao]" placeholder="Descreva o risco de invasão/esbulho..."></textarea>
+            </div>
+          </div>
+
+          <!-- 3.9 Riscos para coletividade -->
+          <div class="form-group editavel">
+            <label>
+              Riscos para coletividade?
+              <span class="hint-semaforo"><span class="hint-icon" data-hint-tipo="verde" data-hint="O estado de conservação ou uso pode comprometer a estabilidade do prédio.">?</span></span>
+            </label>
+            <div class="radio-group">
+              <label class="radio-option"><input type="radio" name="imoveis[0][risco_coletividade]" value="Sim" /> Sim</label>
+              <label class="radio-option"><input type="radio" name="imoveis[0][risco_coletividade]" value="Não" checked /> Não</label>
+              <label class="radio-option"><input type="radio" name="imoveis[0][risco_coletividade]" value="Não há como avaliar" /> Não há como avaliar</label>
+            </div>
+            <div id="bloco-desc39_0" style="display: none; flex-direction: column; gap: 6px; margin-top: 8px;">
+              <label for="desc39_0">Descrever riscos para coletividade:</label>
+              <textarea id="desc39_0" name="imoveis[0][desc_risco_coletividade]" placeholder="Descreva os riscos para a coletividade..."></textarea>
+            </div>
+          </div>
+
+          <!-- ==================== RESTRIÇÕES ==================== -->
+          <h4 style="margin: 24px 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 8px;">
+            Restrições
+          </h4>
+
+          <div class="form-group editavel">
+            <label>Selecione as restrições incidentes:</label>
+            <div class="checkbox-group" id="group-restricoes_0">
+              <label class="checkbox-option"><input type="checkbox" name="imoveis[0][restricoes][]" value="Faixa de fronteira"> Faixa de fronteira</label>
+              <label class="checkbox-option"><input type="checkbox" name="imoveis[0][restricoes][]" value="Faixa de segurança"> Faixa de segurança</label>
+              <label class="checkbox-option"><input type="checkbox" name="imoveis[0][restricoes][]" value="Faixa de domínio Ferrovia/Rodovia"> Faixa de domínio Ferrovia/Rodovia</label>
+              <label class="checkbox-option"><input type="checkbox" name="imoveis[0][restricoes][]" value="Faixa de 100 metros ao longo da costa marítima"> Faixa de 100 metros ao longo da costa marítima</label>
+              <label class="checkbox-option"><input type="checkbox" name="imoveis[0][restricoes][]" value="Circunferência de 1.320 metros em torno de instalações militares"> Circunferência de 1.320 metros em torno de instalações militares</label>
+              <label class="checkbox-option"><input type="checkbox" name="imoveis[0][restricoes][]" value="Terra indígena"> Terra indígena</label>
+              <label class="checkbox-option"><input type="checkbox" name="imoveis[0][restricoes][]" value="Território quilombola ou área de comunidade tradicional"> Território quilombola ou área de comunidade tradicional</label>
+              <label class="checkbox-option"><input type="checkbox" name="imoveis[0][restricoes][]" value="Poligonal de Porto Organizado"> Poligonal de Porto Organizado</label>
+              <label class="checkbox-option"><input type="checkbox" name="imoveis[0][restricoes][]" value="Área de regularização fundiária"> Área de regularização fundiária</label>
+              <label class="checkbox-option"><input type="checkbox" name="imoveis[0][restricoes][]" value="Possui PDISP"> Possui PDISP</label>
+              <label class="checkbox-option"><input type="checkbox" name="imoveis[0][restricoes][]" value="Área operacional da RFFSA"> Área operacional da RFFSA</label>
+              <label class="checkbox-option"><input type="checkbox" name="imoveis[0][restricoes][]" value="Zona/Área de Interesse Social (ZEIS)"> Zona/Área de Interesse Social (ZEIS)</label>
+              <label class="checkbox-option"><input type="checkbox" name="imoveis[0][restricoes][]" value="Área de segurança"> Área de segurança</label>
+              <label class="checkbox-option"><input type="checkbox" name="imoveis[0][restricoes][]" value="Área Non Aedificandi"> Área Non Aedificandi</label>
+              <label class="checkbox-option"><input type="checkbox" name="imoveis[0][restricoes][]" value="Restrição de uso/ocupação incidente sobre o imóvel"> Restrição de uso/ocupação incidente sobre o imóvel</label>
+              <label class="checkbox-option"><input type="checkbox" name="imoveis[0][restricoes][]" value="Ações judiciais ou de órgãos de controle"> Ações judiciais ou de órgãos de controle</label>
+              <label class="checkbox-option"><input type="checkbox" name="imoveis[0][restricoes][]" value="Tombado como patrimônio histórico, artístico e/ou cultural"> Tombado como patrimônio histórico, artístico e/ou cultural</label>
+              <label class="checkbox-option"><input type="checkbox" name="imoveis[0][restricoes][]" value="Conflitos fundiários/sociais"> Conflitos fundiários/sociais</label>
+              <label class="checkbox-option"><input type="checkbox" name="imoveis[0][restricoes][]" value="Termo Gestão Praias/PGI"> Termo Gestão Praias/PGI</label>
+            </div>
+
+            <div id="bloco-obs-restricoes_0" style="display: none; flex-direction: column; gap: 6px; margin-top: 16px;">
+              <label for="obs-restricoes_0">Observações sobre as restrições marcadas:</label>
+              <textarea id="obs-restricoes_0" name="imoveis[0][obs_restricoes]" placeholder="Descreva informações complementares..."></textarea>
+            </div>
+          </div>
+
+          <!-- Observações Gerais -->
+          <div class="form-group editavel">
+            <label for="obs_geral_0">Observações:</label>
+            <textarea id="obs_geral_0" name="imoveis[0][obs_geral]" placeholder="Conclusões da análise..."></textarea>
+            
+            <div class="dynamic-list-wrapper" style="margin-top: 10px;">
+              <button type="button" class="btn-add" id="btnAdicionarImagemIdent_0">＋ Adicionar link/documento</button>
+              <div id="imagens-list-ident_0"></div>
+            </div>
+          </div>
+
+        </section>
+      </div>
+
+      <!-- Botões -->
+      <div class="button-group">
+        <button type="button" class="btn-secondary" id="btnLimpar">🗑️ Limpar</button>
+        <button type="button" id="btnImprimir" onclick="window.print()">🖨️ Imprimir</button>
+        <button type="submit" id="btnEnviar">✅ Salvar Rascunho</button>
+      </div>
+    </form>
+  </div>
+
+  <script src="formulario.js"></script>
+  <script src="hints.js"></script>
+  <script src="foco-04.js"></script>
+</body>
+</html>

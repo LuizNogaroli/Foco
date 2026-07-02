@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gerenciamento de Imóveis da União - Mockup</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7f6;
+            display: flex; /* Usamos flexbox para o layout lateral */
+            min-height: 100vh;
+        }
+
+        /* Estilos para o menu lateral */
+        .sidebar {
+            width: 300px;
+            background-color: #2c3e50; /* Cor escura para o menu */
+            color: #ffffff;
+            padding: 20px;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0; /* Impede que a sidebar encolha */
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            color: #ffffff;
+            margin-bottom: 30px;
+            font-size: 1.5em;
+            border-bottom: 1px solid #4a657e;
+            padding-bottom: 15px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar ul li a {
+            display: block;
+            padding: 10px 15px;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .sidebar ul li a:hover,
+        .sidebar ul li a.active {
+            background-color: #007bff; /* Cor de destaque ao passar o mouse ou ativo */
+            color: #ffffff;
+        }
+
+        /* Estilos para a área de conteúdo principal */
+        .main-content {
+            flex-grow: 1; /* Permite que a área de conteúdo ocupe o espaço restante */
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            margin: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            overflow: auto; /* Permite scroll se o conteúdo for maior que a área */
+        }
+
+        .main-content iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            min-height: 800px; /* Garante altura mínima para o iframe */
+        }
+
+        .welcome-message {
+            text-align: center;
+            padding: 50px;
+            color: #555;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Menu do Sistema</h2>
+        <ul>
+            <li><a href="Formulario-01.html" target="contentFrame">01: Análise de Requerimentos</a></li>
+            <li><a href="Formulario-02.html" target="contentFrame">02: Admissibilidade de Requerimentos</a></li>
+            <li><a href="Formulario-03.html" target="contentFrame">03: Dados do Requerente</a></li>
+            <li><a href="Formulario-04.html" target="contentFrame">04: Dados do Imóvel</a></li>
+            <li><a href="Formulario-05.html" target="contentFrame">05: C&O Imóvel</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <iframe name="contentFrame" id="contentFrame" src="" frameborder="0"></iframe>
+        <div id="welcome" class="welcome-message">
+            <p>Selecione uma opção no menu lateral para visualizar o formulário correspondente.</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebarLinks = document.querySelectorAll('.sidebar ul li a');
+            const contentFrame = document.getElementById('contentFrame');
+            const welcomeMessage = document.getElementById('welcome');
+
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', function(event) {
+                    // Remove 'active' class from all links
+                    sidebarLinks.forEach(l => l.classList.remove('active'));
+                    // Add 'active' class to the clicked link
+                    this.classList.add('active');
+
+                    // Hide welcome message
+                    welcomeMessage.style.display = 'none';
+                    // Show iframe if it was hidden
+                    contentFrame.style.display = 'block';
+
+                    // Load content into iframe
+                    contentFrame.src = this.href;
+
+                    event.preventDefault(); // Prevent default link behavior (navigating the parent page)
+                });
+            });
+
+            // Set initial state: hide iframe, show welcome message
+            contentFrame.style.display = 'none';
+
+            // Optional: If you want to load the first form by default on page load
+            // if (sidebarLinks.length > 0) {
+            //     sidebarLinks[0].click();
+            // }
+        });
+    </script>
+</body>
+</html>

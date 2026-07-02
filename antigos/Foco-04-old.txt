@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foco-04 - Análise do Destinatário</title>
+    <link rel="stylesheet" href="styles-forms.css">
+    <style>
+        .campo-condicional {
+            overflow: hidden;
+            transition: max-height 0.4s ease, opacity 0.3s ease, margin 0.3s ease;
+            max-height: 0;
+            opacity: 0;
+            margin-bottom: 0;
+        }
+        .campo-condicional.visivel {
+            max-height: 400px;
+            opacity: 1;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Seção 4: Análise do Destinatário</h2>
+	<h3>Os dados serão carregados do SPUnet</h3>
+        <form id="form04" novalidate>
+
+            <!-- 4.1 Destinação ativa -->
+            <div class="form-group">
+                <label>
+                    4.1 Requerente/interessado possui destinação ativa?
+                    <span
+                        class="hint-icon hint-popup"
+                        data-popup="hints/destinacao_ativa.html"
+                        data-hint="Clique para abrir informações detalhadas sobre destinação ativa."
+                        role="button"
+                        tabindex="0"
+                        aria-label="Ajuda: Destinação ativa"
+                    >?</span>
+                </label>
+                <div class="radio-group" id="group-campo41">
+                    <label class="radio-option">
+                        <input type="radio" name="campo41" value="Sim" required> Sim
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="campo41" value="Não"> Não
+                    </label>
+                </div>
+                <span class="error-msg" id="err41">Selecione uma opção.</span>
+
+                <!-- Subgrupo condicional: contratos (visível apenas se Sim) -->
+                <div class="campo-condicional" id="bloco41">
+                    <label for="campo41_contratos" class="label-obs">
+                        Contratos relacionados
+                        <span
+                            class="hint-icon"
+                            data-hint="Indique os números e tipos dos contratos relacionados à destinação ativa vigente."
+                            role="tooltip"
+                            aria-label="Ajuda: Contratos relacionados"
+                        >?</span>
+                    </label>
+                    <textarea
+                        id="campo41_contratos"
+                        name="campo41_contratos"
+                        placeholder="Ex: Contrato de Cessão de Uso nº 001/2020, vigência até 12/2025..."
+                    ></textarea>
+                </div>
+            </div>
+
+            <!-- 4.2 Pendências identificadas -->
+            <div class="form-group">
+                <label>
+                    4.2 Requerente/interessado apresenta algum tipo de pendência contratual (destinaçõesa tivas ou não)?
+                    <span
+                        class="hint-icon"
+                        data-hint="Indique as pendências identificadas em relação ao destinatário ou ao instrumento de destinação."
+                        role="tooltip"
+                        aria-label="Ajuda: Pendências identificadas"
+                    >?</span>
+                </label>
+                <div class="checkbox-group" id="group-campo42">
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="campo42[]" value="Nenhuma identificada" id="campo42-nenhuma">
+                        Nenhuma identificada
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="campo42[]" value="Inadimplência financeira" id="campo42-inadimplencia">
+                        Inadimplência financeira
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="campo42[]" value="Pendências contratuais" id="campo42-contratuais">
+                        Pendências contratuais
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="campo42[]" value="Irregularidade cadastral" id="campo42-cadastral">
+                        Irregularidade cadastral
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="campo42[]" value="Uso em desacordo com o autorizado" id="campo42-uso">
+                        Uso em desacordo com o autorizado
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="campo42[]" value="Outras" id="campo42-outras">
+                        Outras
+                    </label>
+                </div>
+                <span class="error-msg" id="err42">Selecione ao menos uma opção.</span>
+                <label for="campo42_obs" class="label-obs">Observações complementares:</label>
+                <textarea
+                    id="campo42_obs"
+                    name="campo42_obs"
+                    placeholder="Descreva as pendências identificadas..."
+                ></textarea>
+            </div>
+
+            <!-- 4.3 Capacidade de pagamento -->
+            <div class="form-group">
+                <label for="campo43">
+                    4.3 Capacidade de pagamento
+                    <span
+                        class="hint-icon"
+                        data-hint="Avalie a capacidade financeira do destinatário para arcar com as obrigações do instrumento de destinação."
+                        role="tooltip"
+                        aria-label="Ajuda: Capacidade de pagamento"
+                    >?</span>
+                </label>
+                <select id="campo43" name="campo43" required>
+                    <option value="" disabled selected>Selecione...</option>
+                    <option value="Demonstrada formalmente">Demonstrada formalmente: documentação comprobatória apresentada e analisada</option>
+                    <option value="Demonstrada informalmente">Demonstrada informalmente: evidências indiretas sem documentação formal</option>
+                    <option value="Não demonstrada">Não demonstrada: ausência de informações ou documentação insuficiente</option>
+                    <option value="Não se aplica">Não se aplica: destinação gratuita ou sem contraprestação financeira</option>
+                </select>
+                <span class="error-msg" id="err43">Selecione a capacidade de pagamento.</span>
+                <label for="campo43_obs" class="label-obs">Observações complementares:</label>
+                <textarea
+                    id="campo43_obs"
+                    name="campo43_obs"
+                    placeholder="Observações sobre a capacidade de pagamento..."
+                ></textarea>
+            </div>
+
+            <!-- 4.4 Aptidão do destinatário para a finalidade proposta -->
+            <div class="form-group">
+                <label for="campo44">
+                    4.4 Aptidão do destinatário para a finalidade proposta
+                    <span
+                        class="hint-icon"
+                        data-hint="Avalie se o destinatário tem condições técnicas, institucionais e operacionais para executar a finalidade proposta para o imóvel."
+                        role="tooltip"
+                        aria-label="Ajuda: Aptidão do destinatário"
+                    >?</span>
+                </label>
+                <select id="campo44" name="campo44" required>
+                    <option value="" disabled selected>Selecione...</option>
+                    <option value="Apto">Apto: reúne as condições necessárias para executar a finalidade proposta</option>
+                    <option value="Apto com ressalvas">Apto com ressalvas: reúne as condições principais, mas apresenta limitações que devem ser sanadas</option>
+                    <option value="Inapto">Inapto: não reúne as condições necessárias para executar a finalidade proposta</option>
+                    <option value="Não foi possível avaliar">Não foi possível avaliar: ausência de informações suficientes para a análise</option>
+                </select>
+                <span class="error-msg" id="err44">Selecione a aptidão do destinatário.</span>
+                <label for="campo44_obs" class="label-obs">Observações complementares:</label>
+                <textarea
+                    id="campo44_obs"
+                    name="campo44_obs"
+                    placeholder="Observações sobre a aptidão do destinatário..."
+                ></textarea>
+            </div>
+
+            <!-- 4.5 Experiência comprovada na atividade proposta -->
+            <div class="form-group">
+                <label>
+                    4.5 Experiência comprovada na atividade proposta?
+                    <span
+                        class="hint-icon"
+                        data-hint="Indique se o destinatário comprovou experiência prévia na atividade ou finalidade proposta para o imóvel."
+                        role="tooltip"
+                        aria-label="Ajuda: Experiência comprovada"
+                    >?</span>
+                </label>
+                <div class="radio-group" id="group-campo45">
+                    <label class="radio-option">
+                        <input type="radio" name="campo45" value="Sim" required> Sim
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="campo45" value="Não"> Não
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="campo45" value="Parcialmente"> Parcialmente
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="campo45" value="Não se aplica"> Não se aplica
+                    </label>
+                </div>
+                <span class="error-msg" id="err45">Selecione uma opção.</span>
+                <label for="campo45_obs" class="label-obs">Observações complementares:</label>
+                <textarea
+                    id="campo45_obs"
+                    name="campo45_obs"
+                    placeholder="Descreva a experiência comprovada ou justifique a ausência..."
+                ></textarea>
+            </div>
+
+            <!-- 4.6 Regularidade fiscal e jurídica -->
+            <div class="form-group">
+                <label for="campo46">
+                    4.6 Regularidade fiscal e jurídica
+                    <span
+                        class="hint-icon"
+                        data-hint="Avalie a situação de regularidade fiscal e jurídica do destinatário junto aos órgãos competentes."
+                        role="tooltip"
+                        aria-label="Ajuda: Regularidade fiscal e jurídica"
+                    >?</span>
+                </label>
+                <select id="campo46" name="campo46" required>
+                    <option value="" disabled selected>Selecione...</option>
+                    <option value="Regular">Regular: sem pendências fiscais ou jurídicas identificadas</option>
+                    <option value="Regular com ressalvas">Regular com ressalvas: pendências de baixa relevância ou em processo de regularização</option>
+                    <option value="Irregular">Irregular: pendências fiscais ou jurídicas relevantes identificadas</option>
+                    <option value="Não foi possível verificar">Não foi possível verificar: ausência de documentação ou acesso às informações</option>
+                </select>
+                <span class="error-msg" id="err46">Selecione a regularidade fiscal e jurídica.</span>
+                <label for="campo46_obs" class="label-obs">Observações complementares:</label>
+                <textarea
+                    id="campo46_obs"
+                    name="campo46_obs"
+                    placeholder="Observações sobre a regularidade fiscal e jurídica..."
+                ></textarea>
+            </div>
+
+            <!-- 4.7 Há vedações legais ao destinatário? -->
+            <div class="form-group">
+                <label>
+                    4.7 Há vedações legais ao destinatário?
+                    <span
+                        class="hint-icon"
+                        data-hint="Indique se existem impedimentos legais que vedem ou restrinjam a destinação do imóvel ao requerente."
+                        role="tooltip"
+                        aria-label="Ajuda: Vedações legais"
+                    >?</span>
+                </label>
+                <div class="radio-group" id="group-campo47">
+                    <label class="radio-option">
+                        <input type="radio" name="campo47" value="Sim" required> Sim
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="campo47" value="Não"> Não
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="campo47" value="Não foi possível verificar"> Não foi possível verificar
+                    </label>
+                </div>
+                <span class="error-msg" id="err47">Selecione uma opção.</span>
+
+                <!-- Subgrupo condicional: descrição das vedações (visível apenas se Sim) -->
+                <div class="campo-condicional" id="bloco47">
+                    <label for="campo47_desc" class="label-obs">
+                        Descreva as vedações legais identificadas:
+                        <span
+                            class="hint-icon"
+                            data-hint="Informe o fundamento legal e a natureza das vedações identificadas."
+                            role="tooltip"
+                            aria-label="Ajuda: Descrição das vedações"
+                        >?</span>
+                    </label>
+                    <textarea
+                        id="campo47_desc"
+                        name="campo47_desc"
+                        placeholder="Descreva as vedações legais e seus fundamentos..."
+                    ></textarea>
+                </div>
+            </div>
+
+            <!-- 4.8 Informações adicionais sobre o destinatário -->
+            <div class="form-group">
+                <label for="campo48">
+                    4.8 Informações adicionais sobre o destinatário
+                    <span
+                        class="hint-icon"
+                        data-hint="Acrescente quaisquer informações relevantes sobre o destinatário que não tenham sido contempladas nos campos anteriores."
+                        role="tooltip"
+                        aria-label="Ajuda: Informações adicionais"
+                    >?</span>
+                </label>
+                <textarea
+                    id="campo48"
+                    name="campo48"
+                    placeholder="Informações adicionais relevantes sobre o destinatário..."
+                ></textarea>
+            </div>
+
+            <!-- Botões -->
+            <div class="button-group">
+                <button type="button" class="btn-secondary" id="btnLimpar">🗑️ Limpar</button>
+                <button type="submit" id="btnEnviar">✅ Enviar Seção 4</button>
+            </div>
+
+        </form>
+    </div>
+
+    <script src="formulario.js"></script>
+</body>
+</html>

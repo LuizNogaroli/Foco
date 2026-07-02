@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FOCO-05 — Análise do Destinatário</title>
+    <link rel="stylesheet" href="styles-forms.css">
+    <link rel="stylesheet" href="hints.css">
+    <style>
+        /* Blocos condicionais: ocultos por padrão */
+        #bloco31,
+        #bloco33_obs {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 8px;
+            width: 100%;
+        }
+
+        /* Layout em 3 colunas para o grupo de checkboxes */
+        #group-campo42 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>5: Análise do Destinatário</h2>
+        <form id="form04" novalidate>
+
+            <!-- ── 3.1 Destinação ativa ─────────────────────────────────────── -->
+            <div class="form-group editavel">
+                <label>
+                    Requerente/interessado possui destinação ativa?
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon hint-link"
+                            data-hint-tipo="verde"
+                            data-popup="hints/destinacao_ativa.html"
+                            data-hint="Clique para abrir informações detalhadas sobre destinação ativa."
+                            role="button"
+                            tabindex="0"
+                            aria-label="Ajuda: Destinação ativa"
+                        >?</span>
+                    </span>
+                </label>
+
+                <div class="radio-group" id="group-campo31">
+                    <label class="radio-option">
+                        <input type="radio" name="campo31" value="Sim" required> Sim
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="campo31" value="Não"> Não
+                    </label>
+                </div>
+                <span id="err31" class="error-msg">Selecione uma opção.</span>
+
+                <!-- 3.1 → Subgrupo: contratos (exibido apenas quando "Sim") -->
+                <div id="bloco31">
+                    <label for="campo31_contratos">
+                        Contratos relacionados à destinação ativa
+                        <span class="hint-semaforo">
+                            <span
+                                class="hint-icon"
+                                data-hint-tipo="verde"
+                                data-hint="Indique os números e tipos dos contratos relacionados à destinação ativa vigente."
+                                role="tooltip"
+                                tabindex="0"
+                                aria-label="Ajuda: Contratos relacionados"
+                            >?</span>
+                        </span>
+                    </label>
+                    <textarea
+                        id="campo31_contratos"
+                        name="campo31_contratos"
+                        placeholder="Ex: Contrato de Cessão de Uso nº 001/2020, vigência até 12/2025..."
+                    ></textarea>
+                </div>
+            </div>
+
+            <!-- ── 3.2 Pendências identificadas ────────────────────────────── -->
+            <div class="form-group editavel">
+                <label>
+                    Requerente/interessado apresenta algum tipo de pendência contratual
+                    (destinações ativas ou não)?
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Indique as pendências identificadas em relação ao destinatário ou ao instrumento de destinação."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: Pendências identificadas"
+                        >?</span>
+                    </span>
+                </label>
+
+                <div class="checkbox-group" id="group-campo42">
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="campo42[]" value="Nenhuma identificada" id="campo42-nenhuma">
+                        Nenhuma identificada
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="campo42[]" value="Inadimplência financeira" id="campo42-inadimplencia">
+                        Inadimplência financeira
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="campo42[]" value="Pendências contratuais" id="campo42-contratuais">
+                        Pendências contratuais
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="campo42[]" value="Irregularidade cadastral" id="campo42-cadastral">
+                        Irregularidade cadastral
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="campo42[]" value="Uso em desacordo com o autorizado" id="campo42-uso">
+                        Uso em desacordo com o autorizado
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="campo42[]" value="Outras" id="campo42-outras">
+                        Outras
+                    </label>
+                </div>
+                <span id="err42" class="error-msg">Selecione ao menos uma opção.</span>
+
+                <label for="campo32_obs">Observações complementares:</label>
+                <textarea
+                    id="campo32_obs"
+                    name="campo32_obs"
+                    placeholder="Descreva as pendências identificadas..."
+                    required
+                ></textarea>
+            </div>
+
+            <!-- ── 3.3 Capacidade técnica demonstrada ──────────────────────── -->
+            <div class="form-group editavel">
+                <label for="campo33">
+                    Capacidade técnica demonstrada:
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Avalie a capacidade técnica do destinatário para arcar com as obrigações do instrumento de destinação."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: Capacidade técnica"
+                        >?</span>
+                    </span>
+                </label>
+
+                <select id="campo33" name="campo33" required>
+                    <option value="">Selecione...</option>
+                    <option value="Demonstrada formalmente">
+                        Demonstrada formalmente: documentação comprobatória apresentada e analisada
+                    </option>
+                    <option value="Demonstrada informalmente">
+                        Demonstrada informalmente: evidências indiretas sem documentação formal
+                    </option>
+                    <option value="Não demonstrada">
+                        Não demonstrada: ausência de informações ou documentação insuficiente
+                    </option>
+                    <option value="Não se aplica">
+                        Não se aplica: destinação gratuita ou sem contraprestação financeira
+                    </option>
+                </select>
+                <span id="err33" class="error-msg">Selecione uma opção.</span>
+
+                <!-- 3.3 → Observações (exibido quando qualquer opção for selecionada) -->
+                <div id="bloco33_obs">
+                    <label for="campo33_obs">Observações complementares:</label>
+                    <textarea
+                        id="campo33_obs"
+                        name="campo33_obs"
+                        placeholder="Observações sobre a capacidade técnica..."
+                    ></textarea>
+                </div>
+            </div>
+
+            <!-- ── Observações / Upload ─────────────────────────────────────── -->
+            <div class="form-group editavel">
+                <label for="obs_geral_05">Observações:</label>
+                <textarea id="obs_geral_05" name="obs_geral_05" placeholder=""></textarea>
+                <div class="dynamic-list-wrapper" style="flex: 1; display: flex; flex-direction: column; gap: 8px;">
+                    <button type="button" class="btn-add" id="btnAdicionarDocumento05" style="align-self: flex-start;">
+                        ＋ Adicionar link/documento
+                    </button>
+                    <div id="documentos-list-05"></div>
+                </div>
+            </div>
+
+            <!-- ── Botões ───────────────────────────────────────────────────── -->
+            <div class="button-group">
+                <button type="button" class="btn-secondary" id="btnLimpar">🗑️ Limpar</button>
+                <button type="button" class="btn-print" onclick="window.print()">🖨️ Imprimir / Salvar PDF</button>
+                <button type="submit" id="btnEnviar">✅ Salvar</button>
+            </div>
+
+        </form>
+    </div>
+
+    <script src="formulario.js"></script>
+    <script src="hints.js"></script>
+    <script src="foco-05.js"></script>
+</body>
+</html>

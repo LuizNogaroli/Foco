@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Proposta de Destinação - Maquete SPU</title>
+<link rel="stylesheet" href="styles-forms.css" />
+<link rel="stylesheet" href="hints.css" />
+</head>
+
+<body>
+<div class="form-container">
+<h2>Proposta de Destinação</h2>
+
+<form id="form06" novalidate>
+
+  <!-- Tipo de Procedimento -->
+  <div class="form-group editavel">
+    <label for="campo51">Tipo de procedimento:</label>
+    <select id="campo51" name="tipo_procedimento" required>
+      <option value="">Selecione...</option>
+      <option value="Nova destinação">Nova destinação</option>
+      <option value="Renovação/alteração contratual">Renovação/alteração contratual</option>
+      <option value="Regularização de uso">Regularização de uso</option>
+    </select>
+  </div>
+
+  <!-- Uso Imobiliário -->
+  <div class="form-group editavel">
+    <label for="campo52">Uso imobiliário pretendido:</label>
+    <select id="campo52" name="tipo_uso_imobiliario" required>
+      <option value="">Selecione...</option>
+      <option value="0101">01.01 Uso administrativo e representativo</option>
+      <option value="0102">01.02 Uso para agropecuária, aquicultura, produção florestal e pesca</option>
+      <option value="0103">01.03 Uso ambiental e dos recursos naturais</option>
+      <option value="0104">01.04 Uso cultural, esportivo e de lazer</option>
+      <option value="0106">01.06 Uso habitacional</option>
+      <option value="0111">01.11 Uso por povos originários e comunidades tradicionais</option>
+    </select>
+  </div>
+
+  <!-- Uso Específico -->
+  <div class="form-group editavel">
+    <label for="campo53">Uso específico pretendido:</label>
+    <select id="campo53" name="tipo_uso_especifico" required disabled>
+      <option value="">Selecione primeiro o uso imobiliário pretendido...</option>
+    </select>
+  </div>
+
+
+<!-- Área a ser destinada -->
+<div class="form-section area-destinada-box">
+  <h3>Área a ser destinada:</h3>
+
+  <div class="area-destinada-linha">
+    <label for="area_terreno_destinada">
+      Área do terreno a ser destinada:
+    </label>
+    <input
+      type="text"
+      id="area_terreno_destinada"
+      name="area_terreno_destinada"
+      placeholder="Informe a área em m²"
+    />
+  </div>
+
+  <div class="area-destinada-linha">
+    <label for="area_construida_destinada">
+      Área construída a ser destinada:
+    </label>
+    <input
+      type="text"
+      id="area_construida_destinada"
+      name="area_construida_destinada"
+      placeholder="Informe a área em m²"
+    />
+  </div>
+</div>
+
+
+
+
+
+
+
+  <!-- Regime de Destinação -->
+  <div class="form-group editavel">
+    <label for="campo511">Regime de destinação proposto:</label>
+    <select id="campo511" name="regime_destinacao" required>
+      <option value="">Selecione...</option>
+      <option value="Cessão de Uso Onerosa">Cessão de Uso Onerosa</option>
+      <option value="Cessão de Uso Gratuita">Cessão de Uso Gratuita</option>
+      <option value="Entrega">Entrega (Uso da Administração)</option>
+      <option value="Venda">Venda</option>
+    </select>
+  </div>
+
+  <!-- Observações -->
+  <div class="form-group editavel">
+    <label for="observacoes">Observações:</label>
+    <textarea
+      id="observacoes"
+      name="observacoes"
+      rows="4"
+      placeholder="Registre informações complementares, se necessário..."
+    ></textarea>
+  </div>
+
+  <!-- Botões -->
+  <div class="button-group">
+    <button type="button" class="btn-secondary" id="btnLimpar">🗑️ Limpar</button>
+    <button type="button" id="btnImprimir" onclick="window.print()">🖨️ Imprimir</button>
+    <button type="submit">✅ Salvar Rascunho</button>
+    <button type="button" id="btnEnviarSPU" style="background:#1a7a4a; color:white;">🚀 Salvar e enviar</button>
+  </div>
+</form>
+</div>
+
+<!-- Modal de Confirmação -->
+<div
+  id="modalEnvio"
+  style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:2000; align-items:center; justify-content:center;"
+>
+  <div
+    style="background:white; padding:30px; border-radius:12px; max-width:560px; width:90%; box-shadow:0 10px 25px rgba(0,0,0,0.3); text-align:center; position:relative; border-top:8px solid #1a7a4a;"
+  >
+    <div style="font-size:40px; margin-bottom:15px;">⚠️</div>
+
+    <h3 style="color:#1e3a5f; margin-bottom:15px;">Confirmar envio</h3>
+
+    <p style="color:#475569; line-height:1.6; font-size:0.95em; text-align:left;">
+      Você confirma que as informações consignadas neste formulário foram inseridas com base nos dados disponíveis nos sistemas oficiais, nos documentos constantes do processo e nas verificações realizadas no âmbito desta unidade, estando compatíveis com os elementos analisados?
+    </p>
+
+    <div style="display:flex; gap:12px; margin-top:25px; justify-content:center; flex-wrap:wrap;">
+      <button
+        type="button"
+        id="btnConfirmarEnvio"
+        style="padding:10px 22px; background:#1a7a4a; color:#fff; border:none; border-radius:5px; font-size:0.93em; font-weight:600; cursor:pointer;"
+      >
+        Confirmar e enviar
+      </button>
+
+      <button
+        type="button"
+        id="btnCancelarEnvio"
+        class="btn-secondary"
+        style="padding:10px 22px;"
+      >
+        Cancelar
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="formulario.js"></script>
+<script src="hints.js"></script>
+<script src="foco-06.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const btnEnviar = document.getElementById("btnEnviarSPU");
+  const modalEnvio = document.getElementById("modalEnvio");
+  const btnConfirmarEnvio = document.getElementById("btnConfirmarEnvio");
+  const btnCancelarEnvio = document.getElementById("btnCancelarEnvio");
+  const form = document.getElementById("form06");
+
+  if (btnEnviar && modalEnvio) {
+    btnEnviar.addEventListener("click", function () {
+      modalEnvio.style.display = "flex";
+    });
+  }
+
+  if (btnCancelarEnvio && modalEnvio) {
+    btnCancelarEnvio.addEventListener("click", function () {
+      modalEnvio.style.display = "none";
+    });
+  }
+
+  if (modalEnvio) {
+    modalEnvio.addEventListener("click", function (event) {
+      if (event.target === modalEnvio) {
+        modalEnvio.style.display = "none";
+      }
+    });
+  }
+
+  if (btnConfirmarEnvio && form && modalEnvio) {
+    btnConfirmarEnvio.addEventListener("click", function () {
+      modalEnvio.style.display = "none";
+
+      const eventoEnvio = new Event("submit", {
+        bubbles: true,
+        cancelable: true
+      });
+
+      form.dispatchEvent(eventoEnvio);
+    });
+  }
+});
+</script>
+</body>
+</html>

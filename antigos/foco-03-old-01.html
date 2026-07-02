@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FOCO-03 — Ocupação e Restrições</title>
+    <link rel="stylesheet" href="styles-forms.css">
+    <link rel="stylesheet" href="hints.css">
+</head>
+<body>
+    <div class="form-container">
+
+        <h2>Seção 3: Ocupação e Restrições</h2>
+        <h3>Os dados serão carregados do SPUnet</h3>
+
+        <form id="form03" novalidate>
+
+            <!-- 3.1 Situação ocupacional -->
+            <div class="form-group editavel">
+                <label for="campo31">
+                    3.1 Situação ocupacional
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Selecione a situação de ocupação atual do imóvel."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: Situação ocupacional"
+                        >?</span>
+                    </span>
+		    <span class="campo-origem">[[ Origem do dado: PREENCHIDO PELO USUÁRIO ]]</span>
+                </label>
+                <select id="campo31" name="situacao_ocupacional" required>
+                    <option value="" disabled selected>Selecione...</option>
+                    <option value="Desocupado">Desocupado: Imóvel/área sem uso ou ocupação atual identificada</option>
+                    <option value="Ocupado regularmente">Ocupado regularmente: uso formalizado por instrumento vigente e compatível com sua finalidade</option>
+                    <option value="Ocupado irregularmente">Ocupado irregularmente: Uso não formalizado ou em desacordo com instrumento vigente</option>
+                    <option value="Em disputa judicial">Em disputa judicial: Existência de controvérsia judicial ou conflito envolvendo posse, domínio ou uso do imóvel</option>
+                    <option value="Parcialmente ocupado">Parcialmente ocupado: Parte do imóvel ocupada, coexistindo área livre ou subutilizada</option>
+                </select>
+                <span class="error-msg" id="err31">Selecione a situação ocupacional.</span>
+                <label for="obs31">Observações complementares:</label>
+                <textarea
+                    id="obs31"
+                    name="obs_situacao_ocupacional"
+                    placeholder="Observações sobre a situação ocupacional..."
+                ></textarea>
+            </div>
+
+            <!-- 3.2 Tipo de uso imobiliário atual -->
+            <div class="form-group">
+                <label for="campo32">
+                    3.2 Tipo de uso imobiliário atual (se ocupado)
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Selecione o tipo de uso imobiliário atual conforme Tabela Taxonômica RESOLUÇÃO COMGC/SPU/MGI Nº 3/2025. Aplicável somente se o imóvel estiver ocupado."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: Tipo de uso imobiliário atual"
+                        >?</span>
+                    </span>
+		    <span class="campo-origem">[[ Origem do dado: PORTAL DE SERVIÇOS ]]</span>
+                </label>
+                <select id="campo32" name="tipo_uso_atual">
+                    <option value="" disabled selected>Selecione (Tabela Taxonômica RESOLUÇÃO COMGC/SPU/MGI Nº 3/2025)...</option>
+                    <option value="Residencial">Residencial</option>
+                    <option value="Comercial">Comercial</option>
+                    <option value="Industrial">Industrial</option>
+                    <option value="Institucional">Institucional</option>
+                    <option value="Infraestrutura">Infraestrutura</option>
+                    <option value="Uso misto">Uso misto</option>
+                    <option value="Sem uso definido">Sem uso definido</option>
+                </select>
+            </div>
+
+            <!-- 3.3 Tipo de uso específico atual -->
+            <div class="form-group">
+                <label for="campo33">
+                    3.3 Tipo de uso específico atual (se ocupado)
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Selecione o tipo de uso específico atual conforme Tabela Taxonômica RESOLUÇÃO COMGC/SPU/MGI Nº 3/2025. Aplicável somente se o imóvel estiver ocupado."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: Tipo de uso específico atual"
+                        >?</span>
+                    </span>
+		    <span class="campo-origem">[[ Origem do dado: PORTAL DE SERVIÇOS ]]</span>
+                </label>
+                <select id="campo33" name="tipo_uso_especifico_atual">
+                    <option value="" disabled selected>Selecione (Tabela Taxonômica RESOLUÇÃO COMGC/SPU/MGI Nº 3/2025)...</option>
+                    <option value="Moradia unifamiliar">Moradia unifamiliar</option>
+                    <option value="Moradia multifamiliar">Moradia multifamiliar</option>
+                    <option value="Habitação de interesse social">Habitação de interesse social</option>
+                    <option value="Escritório/sede administrativa">Escritório/sede administrativa</option>
+                    <option value="Escola/instituição de ensino">Escola/instituição de ensino</option>
+                    <option value="Unidade de saúde">Unidade de saúde</option>
+                    <option value="Equipamento de segurança pública">Equipamento de segurança pública</option>
+                    <option value="Equipamento de defesa nacional">Equipamento de defesa nacional</option>
+                    <option value="Área de lazer/recreação">Área de lazer/recreação</option>
+                    <option value="Armazenagem/logística">Armazenagem/logística</option>
+                    <option value="Outro">Outro</option>
+                </select>
+            </div>
+
+            <!-- 3.4 Tempo de ocupação -->
+            <div class="form-group">
+                <label for="campo34">
+                    3.4 Tempo de ocupação (se ocupado)
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Informe o mês/ano ou ano de início da ocupação do imóvel, se aplicável."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: Tempo de ocupação"
+                        >?</span>
+                    </span>
+		    <span class="campo-origem">[[ Origem do dado: PORTAL DE SERVIÇOS ]]</span>
+                </label>
+                <input
+                    type="text"
+                    id="campo34"
+                    name="tempo_ocupacao"
+                    placeholder="Ex: 03/2010 ou 2010"
+                    autocomplete="off"
+                >
+            </div>
+
+            <!-- 3.5 Incidência ambiental -->
+            <div class="form-group">
+                <label for="campo35">
+                    3.5 Incidência ambiental
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Selecione a incidência ambiental identificada para o imóvel."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: Incidência ambiental"
+                        >?</span>
+                    </span>
+		    <span class="campo-origem">[[ Origem do dado: PORTAL DE SERVIÇOS ]]</span>
+                </label>
+                <select id="campo35" name="incidencia_ambiental" required>
+                    <option value="" disabled selected>Selecione...</option>
+                    <option value="APP">APP (Área de Preservação Permanente): Área protegida por legislação ambiental específica, com restrições severas de uso e ocupação</option>
+                    <option value="Unidade de Conservação">Unidade de Conservação: Inserida em UC federal, estadual ou municipal, sujeito a regime próprio de proteção</option>
+                    <option value="Área de risco">Área de risco: Zona com instabilidade geotécnica, inundação recorrente ou outro risco físico relevante</option>
+                    <option value="Área contaminada">Área contaminada: Presença de passivo ambiental identificado ou potencial</option>
+                    <option value="Nenhuma incidência relevante">Nenhuma incidência relevante identificada: Não foram constatadas restrições ambientais significativas</option>
+                    <option value="Outra">Outra situação específica (descrever nas observações)</option>
+                </select>
+                <span class="error-msg" id="err35">Selecione a incidência ambiental.</span>
+                <label for="obs35">Observações complementares:</label>
+                <textarea
+                    id="obs35"
+                    name="obs_incidencia_ambiental"
+                    placeholder="Observações sobre a incidência ambiental..."
+                ></textarea>
+            </div>
+
+            <!-- 3.6 Há custos de manutenção e guarda para SPU? -->
+            <div class="form-group">
+                <label>
+                    3.6 Há custos de manutenção e guarda para SPU?
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Indique se há custos de manutenção e guarda do imóvel a cargo da SPU."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: Custos de manutenção"
+                        >?</span>
+                    </span>
+		    <span class="campo-origem">[[ Origem do dado: PORTAL DE SERVIÇOS ]]</span>
+                </label>
+                <div class="radio-group" id="group-custos">
+                    <label class="radio-option">
+                        <input type="radio" name="custos_manutencao" value="Sim" id="custos-sim"> Sim
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="custos_manutencao" value="Não" id="custos-nao"> Não
+                    </label>
+                </div>
+                <span class="error-msg" id="err36">Selecione uma opção.</span>
+            </div>
+
+            <!-- 3.7 Estimativa de custos anuais — condicional (custos_manutencao = Sim) -->
+            <div class="form-group visivel-nao" id="bloco37">
+                <label for="campo37">
+                    3.7 Estimativa de custos anuais (R$)
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Informe o valor estimado dos custos anuais de manutenção e guarda do imóvel."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: Estimativa de custos anuais"
+                        >?</span>
+                    </span>
+		    <span class="campo-origem">[[ Origem do dado: PORTAL DE SERVIÇOS ]]</span>
+                </label>
+                <input
+                    type="text"
+                    id="campo37"
+                    name="estimativa_custos"
+                    placeholder="R$ 0,00"
+                    autocomplete="off"
+                >
+            </div>
+
+            <!-- 3.8 Risco de invasão/esbulho? -->
+            <div class="form-group">
+                <label>
+                    3.8 Risco de invasão/esbulho?
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Indique se há risco de invasão ou esbulho do imóvel."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: Risco de invasão"
+                        >?</span>
+                    </span>
+		    <span class="campo-origem">[[ Origem do dado: PORTAL DE SERVIÇOS ]]</span>
+                </label>
+                <div class="radio-group" id="group-invasao">
+                    <label class="radio-option">
+                        <input type="radio" name="risco_invasao" value="Sim"> Sim
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="risco_invasao" value="Não"> Não
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="risco_invasao" value="Não há como avaliar"> Não há como avaliar
+                    </label>
+                </div>
+                <span class="error-msg" id="err38">Selecione uma opção.</span>
+                <label for="desc38">Descrever:</label>
+                <textarea
+                    id="desc38"
+                    name="desc_risco_invasao"
+                    placeholder="Descreva o risco de invasão/esbulho..."
+                ></textarea>
+            </div>
+
+            <!-- 3.9 Riscos para coletividade? -->
+            <div class="form-group">
+                <label>
+                    3.9 Riscos para coletividade?
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="O estado de conservação ou uso do imóvel pode comprometer a estabilidade do prédio/terreno, causar incêndio ou outras situações de risco para ocupantes ou entorno."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: Riscos para coletividade"
+                        >?</span>
+                    </span>
+		    <span class="campo-origem">[[ Origem do dado: PORTAL DE SERVIÇOS ]]</span>
+                </label>
+                <div class="radio-group" id="group-risco-coletividade">
+                    <label class="radio-option">
+                        <input type="radio" name="risco_coletividade" value="Sim"> Sim
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="risco_coletividade" value="Não"> Não
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="risco_coletividade" value="Não há como avaliar"> Não há como avaliar
+                    </label>
+                </div>
+                <span class="error-msg" id="err39">Selecione uma opção.</span>
+                <label for="desc39">Descrever:</label>
+                <textarea
+                    id="desc39"
+                    name="desc_risco_coletividade"
+                    placeholder="Descreva os riscos para a coletividade..."
+                ></textarea>
+            </div>
+
+            <!-- 3.10 Ações judiciais ou de órgãos de controle externo -->
+            <div class="form-group">
+                <label>
+                    3.10 Ações judiciais ou de órgãos de controle externo (CGU/TCU/Ministério Público)
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Selecione as ações judiciais ou de controle externo que incidem sobre o imóvel."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: Ações judiciais"
+                        >?</span>
+                    </span>
+		    <span class="campo-origem">[[ Origem do dado: PORTAL DE SERVIÇOS ]]</span>
+                </label>
+                <div class="checkbox-group" id="group-acoes">
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="acoes[]" value="Não existe" id="acao-nenhuma">
+                        Não existe
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="acoes[]" value="Ação Civil Pública">
+                        Ação Civil Pública (dano ambiental; REURB; outros)
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="acoes[]" value="Usucapião">
+                        Usucapião
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="acoes[]" value="Reintegração de Posse">
+                        Reintegração de Posse
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="acoes[]" value="Outra" id="acao-outra">
+                        Outra situação específica (descrever nas observações)
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="acoes[]" value="Sem informação" id="acao-sem-info">
+                        Sem informação
+                    </label>
+                </div>
+                <span class="error-msg" id="err310">Selecione ao menos uma opção.</span>
+                <label for="obs310">Se sim, informar se as ações impedem, limitam ou condicionam o uso e/ou a destinação do imóvel:</label>
+                <textarea
+                    id="obs310"
+                    name="obs_acoes"
+                    placeholder="Descreva o impacto das ações sobre o uso/destinação do imóvel..."
+                ></textarea>
+            </div>
+
+            <!-- 3.11 Imóvel tombado? -->
+            <div class="form-group">
+                <label>
+                    3.11 Imóvel tombado?
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Indique se o imóvel é tombado pelo patrimônio histórico e/ou cultural."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: Imóvel tombado"
+                        >?</span>
+                    </span>
+		    <span class="campo-origem">[[ Origem do dado: PORTAL DE SERVIÇOS ]]</span>
+                </label>
+                <div class="radio-group" id="group-tombado">
+                    <label class="radio-option">
+                        <input type="radio" name="tombado" value="Sim"> Sim
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="tombado" value="Não"> Não
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="tombado" value="Sem informação"> Sem informação
+                    </label>
+                </div>
+                <span class="error-msg" id="err311">Selecione uma opção.</span>
+                <label for="obs311">Informar se o tombamento impede, limita ou condiciona o uso e/ou a destinação do imóvel:</label>
+                <textarea
+                    id="obs311"
+                    name="obs_tombado"
+                    placeholder="Descreva o impacto do tombamento sobre o uso/destinação..."
+                ></textarea>
+            </div>
+
+            <!-- 3.12 Conflitos fundiários/sociais -->
+            <div class="form-group">
+                <label>
+                    3.12 Há conflitos fundiários/sociais identificados?
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Indique se há conflitos fundiários ou sociais identificados no imóvel ou entorno."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: Conflitos fundiários"
+                        >?</span>
+                    </span>
+		    <span class="campo-origem">[[ Origem do dado: PORTAL DE SERVIÇOS ]]</span>
+                </label>
+                <div class="radio-group" id="group-conflitos">
+                    <label class="radio-option">
+                        <input type="radio" name="conflitos_fundiarios" value="Sim"> Sim
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="conflitos_fundiarios" value="Não"> Não
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="conflitos_fundiarios" value="Sem informação"> Sem informação
+                    </label>
+                </div>
+                <span class="error-msg" id="err312">Selecione uma opção.</span>
+                <label for="obs312">Informações complementares:</label>
+                <textarea
+                    id="obs312"
+                    name="obs_conflitos"
+                    placeholder="Descreva os conflitos fundiários/sociais identificados..."
+                ></textarea>
+            </div>
+
+            <!-- 3.13 Termo de Gestão de Praias / Plano de Gestão Integrada -->
+            <div class="form-group">
+                <label>
+                    3.13 O imóvel está inserido em área que possui Termo de Gestão de Praias firmado e/ou Plano de Gestão Integrada?
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Indique se o imóvel está inserido em área com Termo de Gestão de Praias ou Plano de Gestão Integrada vigente."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: Termo de Gestão de Praias"
+                        >?</span>
+                    </span>
+		    <span class="campo-origem">[[ Origem do dado: PORTAL DE SERVIÇOS ]]</span>
+                </label>
+                <div class="radio-group" id="group-gestao-praias">
+                    <label class="radio-option">
+                        <input type="radio" name="gestao_praias" value="Sim"> Sim
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="gestao_praias" value="Não"> Não
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="gestao_praias" value="Sem informação"> Sem informação
+                    </label>
+                </div>
+                <span class="error-msg" id="err313">Selecione uma opção.</span>
+                <label for="obs313">Informações complementares:</label>
+                <textarea
+                    id="obs313"
+                    name="obs_gestao_praias"
+                    placeholder="Descreva informações sobre o Termo de Gestão de Praias ou Plano de Gestão Integrada..."
+                ></textarea>
+            </div>
+
+		<!-- Botões -->
+		<div class="button-group">
+		    <button type="button" class="btn-secondary" id="btnLimpar">🗑️ Limpar</button>
+		    <button type="button" id="btnImprimir" onclick="window.print()">🖨️ Imprimir / Salvar PDF</button>
+		    <button type="submit" id="btnEnviar">✅ Enviar Seção 1</button>
+		</div>
+
+        </form>
+    </div>
+
+    <script src="formulario.js"></script>
+    <script src="hints.js"></script>
+    <script src="foco-03.js"></script>
+
+</body>
+</html>

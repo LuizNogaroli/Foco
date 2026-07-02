@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FOCO-02 — Identificação do Imóvel</title>
+    <link rel="stylesheet" href="styles-forms.css">
+    <link rel="stylesheet" href="hints.css">
+</head>
+<body>
+    <div class="form-container">
+
+        <h2>Seção 2: Identificação do Imóvel, Ocupação e Restrições</h2>
+        <h3>Os dados serão carregados do SPUnet</h3>
+
+        <form id="form02" novalidate>
+
+            <!-- 2.1 CEP -->
+            <div class="form-group">
+                <label for="campo21">
+                    2.1 CEP
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Informe o CEP do imóvel. UF, Município e Endereço serão preenchidos automaticamente."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: CEP"
+                        >?</span>
+                    </span>
+                </label>
+                <input
+                    type="text"
+                    id="campo21"
+                    name="cep"
+                    placeholder="Ex: 00000-000"
+                    maxlength="9"
+                    autocomplete="off"
+                    required
+                >
+                <span class="cep-loading" id="cep-loading">Buscando CEP...</span>
+                <span class="error-msg" id="err21">Informe um CEP válido.</span>
+            </div>
+
+            <!-- 2.2 UF -->
+            <div class="form-group">
+                <label for="campo22">
+                    2.2 UF
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Preenchido automaticamente a partir do CEP."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: UF"
+                        >?</span>
+                    </span>
+                </label>
+                <select id="campo22" name="uf" required>
+                    <option value="" disabled selected>Preenchido a partir do CEP</option>
+                    <option value="AC">AC</option>
+                    <option value="AL">AL</option>
+                    <option value="AP">AP</option>
+                    <option value="AM">AM</option>
+                    <option value="BA">BA</option>
+                    <option value="CE">CE</option>
+                    <option value="DF">DF</option>
+                    <option value="ES">ES</option>
+                    <option value="GO">GO</option>
+                    <option value="MA">MA</option>
+                    <option value="MT">MT</option>
+                    <option value="MS">MS</option>
+                    <option value="MG">MG</option>
+                    <option value="PA">PA</option>
+                    <option value="PB">PB</option>
+                    <option value="PR">PR</option>
+                    <option value="PE">PE</option>
+                    <option value="PI">PI</option>
+                    <option value="RJ">RJ</option>
+                    <option value="RN">RN</option>
+                    <option value="RS">RS</option>
+                    <option value="RO">RO</option>
+                    <option value="RR">RR</option>
+                    <option value="SC">SC</option>
+                    <option value="SP">SP</option>
+                    <option value="SE">SE</option>
+                    <option value="TO">TO</option>
+                </select>
+                <span class="error-msg" id="err22">Selecione a UF.</span>
+            </div>
+
+            <!-- 2.3 Município -->
+            <div class="form-group">
+                <label for="campo23">
+                    2.3 Município
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Preenchido automaticamente a partir do CEP."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: Município"
+                        >?</span>
+                    </span>
+                </label>
+                <input
+                    type="text"
+                    id="campo23"
+                    name="municipio"
+                    placeholder="Preenchido a partir do CEP"
+                    autocomplete="off"
+                    required
+                >
+                <span class="error-msg" id="err23">Informe o município.</span>
+            </div>
+
+            <!-- 2.4 Endereço -->
+            <div class="form-group">
+                <label for="campo24">
+                    2.4 Endereço
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Logradouro, número e bairro. Preenchido automaticamente a partir do CEP."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: Endereço"
+                        >?</span>
+                    </span>
+                </label>
+                <input
+                    type="text"
+                    id="campo24"
+                    name="endereco"
+                    placeholder="Logradouro, número, bairro"
+                    autocomplete="off"
+                    required
+                >
+                <span class="error-msg" id="err24">Informe o endereço.</span>
+            </div>
+
+            <!-- 2.5 RIP apresentado ou identificável? -->
+            <div class="form-group">
+                <label>
+                    2.5 RIP apresentado ou identificável?
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Indique se o Registro Imobiliário Patrimonial foi apresentado ou pode ser identificado."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: RIP apresentado"
+                        >?</span>
+                    </span>
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon hint-link"
+                            data-hint-tipo="vermelho"
+                            data-popup="problema/2-5-rip-apresentado.html"
+                            data-hint="Há observações importantes sobre o preenchimento deste campo. Clique para ver."
+                            role="button"
+                            tabindex="0"
+                            aria-label="Aviso: Observações importantes sobre o campo 2.5"
+                        >⚠</span>
+		    <span class="campo-origem">[[ Origem do dado: PORTAL DE SERVIÇOS ]]</span>
+                    </span>
+                </label>
+                <div class="radio-group" id="group-rip-apresentado">
+                    <label class="radio-option">
+                        <input type="radio" name="rip_apresentado" value="Sim"> Sim
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="rip_apresentado" value="Não"> Não
+                    </label>
+                </div>
+                <span class="error-msg" id="err25">Selecione uma opção.</span>
+            </div>
+
+            <!-- 2.6 RIP(s) — lista dinâmica -->
+            <div class="form-group">
+                <label>
+                    2.6 RIP(s)
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Informe o(s) número(s) do Registro Imobiliário Patrimonial. Use '+ Adicionar' para incluir múltiplos RIPs."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: RIPs"
+                        >?</span>
+                    </span>
+		    <span class="campo-origem">[[ Origem do dado: PORTAL DE SERVIÇOS ]]</span>
+                </label>
+                <div id="rip-list">
+                    <div class="rip-item">
+                        <input
+                            type="text"
+                            name="rips[]"
+                            placeholder="Ex: 0101000001-00"
+                            autocomplete="off"
+                            class="rip-input"
+                        >
+                        <button type="button" class="btn-remove-rip" title="Remover RIP">✕</button>
+                    </div>
+                </div>
+                <button type="button" class="btn-add" id="btnAdicionarRIP">
+                    ＋ Adicionar RIP
+                </button>
+            </div>
+
+            <!-- 2.7 Área total -->
+            <div class="form-group">
+                <label for="campo27">
+                    2.7 Área total (m²)
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Informe a área total do imóvel em metros quadrados."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: Área total"
+                        >?</span>
+                    </span>
+		    <span class="campo-origem">[[ Origem do dado: PORTAL DE SERVIÇOS ]]</span>
+                </label>
+                <input
+                    type="number"
+                    id="campo27"
+                    name="area_total"
+                    placeholder="0,00"
+                    min="0"
+                    step="0.01"
+                    required
+                >
+                <span class="error-msg" id="err27">Informe a área total.</span>
+            </div>
+
+            <!-- 2.8 Área da União -->
+            <div class="form-group">
+                <label for="campo28">
+                    2.8 Área da União (m²)
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Informe a área pertencente à União."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: Área da União"
+                        >?</span>
+                    </span>
+		    <span class="campo-origem">[[ Origem do dado: PORTAL DE SERVIÇOS ]]</span>
+                </label>
+                <input
+                    type="number"
+                    id="campo28"
+                    name="area_uniao"
+                    placeholder="0,00"
+                    min="0"
+                    step="0.01"
+                >
+            </div>
+
+            <!-- 2.9 Há benfeitorias? -->
+            <div class="form-group">
+                <label>
+                    2.9 Há benfeitorias?
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Indique se o imóvel possui benfeitorias (construções, instalações)."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: Benfeitorias"
+                        >?</span>
+                    </span>
+		    <span class="campo-origem">[[ Origem do dado: PORTAL DE SERVIÇOS ]]</span>
+                </label>
+                <div class="radio-group" id="group-benfeitorias">
+                    <label class="radio-option">
+                        <input type="radio" name="benfeitorias" value="Sim" id="benfeitorias-sim"> Sim
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="benfeitorias" value="Não" id="benfeitorias-nao"> Não
+                    </label>
+                </div>
+                <span class="error-msg" id="err29">Selecione uma opção.</span>
+            </div>
+
+            <!-- 2.10 Área construída total — condicional (benfeitorias = Sim) -->
+            <div class="form-group visivel-nao" id="bloco210">
+                <label for="campo210">
+                    2.10 Área construída total (m²)
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Informe a área total construída no imóvel."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: Área construída total"
+                        >?</span>
+                    </span>
+		    <span class="campo-origem">[[ Origem do dado: PORTAL DE SERVIÇOS ]]</span>
+                </label>
+                <input
+                    type="number"
+                    id="campo210"
+                    name="area_construida_total"
+                    placeholder="0,00"
+                    min="0"
+                    step="0.01"
+                >
+            </div>
+
+            <!-- 2.11 Área construída proposta — condicional (benfeitorias = Sim) -->
+            <div class="form-group visivel-nao" id="bloco211">
+                <label for="campo211">
+                    2.11 Área construída proposta para destinação (m²)
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Informe a área construída proposta para a destinação do imóvel."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: Área construída proposta"
+                        >?</span>
+                    </span>
+		    <span class="campo-origem">[[ Origem do dado: PORTAL DE SERVIÇOS ]]</span>
+                </label>
+                <input
+                    type="number"
+                    id="campo211"
+                    name="area_construida_proposta"
+                    placeholder="0,00"
+                    min="0"
+                    step="0.01"
+                >
+            </div>
+
+            <!-- 2.12 Geolocalização -->
+            <div class="form-group">
+                <label for="campo212">
+                    2.12 Geolocalização (link Google Maps)
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon hint-link"
+                            data-hint-tipo="verde"
+                            data-popup="atencao/2-12-geolocalizacao.html"
+                            data-hint="Cole o link do Google Maps com a localização do imóvel."
+                            role="button"
+                            tabindex="0"
+                            aria-label="Ajuda: Geolocalização"
+                        >?</span>
+                    </span>
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon hint-link"
+                            data-hint-tipo="vermelho"
+                            data-popup="problema/2-12-geolocalizacao.html"
+                            data-hint="Há observações importantes sobre o preenchimento deste campo. Clique para ver."
+                            role="button"
+                            tabindex="0"
+                            aria-label="Aviso: Observações importantes sobre o campo 2.12"
+                        >⚠</span>
+                    </span>
+		    <span class="campo-origem">[[ Origem do dado: PORTAL DE SERVIÇOS ]]</span>
+                </label>
+                <input
+                    type="url"
+                    id="campo212"
+                    name="geolocalizacao"
+                    placeholder="Cole aqui o link do Google Maps (ou Google Earth, se necessário)"
+                    autocomplete="off"
+                >
+            </div>
+
+            <!-- 2.13 Valor do Imóvel -->
+            <div class="form-group">
+                <label for="campo213">
+                    2.13 Valor do Imóvel/parcela requerida (R$)
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Informe o valor avaliado do imóvel ou da parcela requerida em reais."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: Valor do imóvel"
+                        >?</span>
+                    </span>
+		    <span class="campo-origem">[[ Origem do dado: PORTAL DE SERVIÇOS ]]</span>
+                </label>
+                <input
+                    type="text"
+                    id="campo213"
+                    name="valor_imovel"
+                    placeholder="R$ 0,00"
+                    autocomplete="off"
+                >
+            </div>
+
+            <!-- 2.14 Data da avaliação -->
+            <div class="form-group">
+                <label for="campo214">
+                    2.14 Data da avaliação
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Informe a data em que o imóvel foi avaliado."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: Data da avaliação"
+                        >?</span>
+                    </span>
+		    <span class="campo-origem">[[ Origem do dado: PORTAL DE SERVIÇOS ]]</span>
+                </label>
+                <input
+                    type="date"
+                    id="campo214"
+                    name="data_avaliacao"
+                >
+            </div>
+
+            <!-- 2.15 Instrumento de avaliação -->
+            <div class="form-group">
+                <label for="campo215">
+                    2.15 Instrumento de avaliação
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Informe o instrumento utilizado para a avaliação do imóvel (ex: laudo, parecer técnico)."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: Instrumento de avaliação"
+                        >?</span>
+                    </span>
+		    <span class="campo-origem">[[ Origem do dado: PORTAL DE SERVIÇOS ]]</span>
+                </label>
+                <input
+                    type="text"
+                    id="campo215"
+                    name="instrumento_avaliacao"
+                    placeholder="Ex: Laudo de avaliação, Parecer técnico..."
+                    autocomplete="off"
+                >
+            </div>
+
+            <!-- 2.16 Conceituação do Imóvel -->
+            <div class="form-group">
+                <label for="campo216">
+                    2.16 Conceituação do Imóvel
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Selecione a conceituação do imóvel conforme classificação da SPU."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: Conceituação do imóvel"
+                        >?</span>
+                    </span>
+		    <span class="campo-origem">[[ Origem do dado: PORTAL DE SERVIÇOS ]]</span>
+                </label>
+                <select id="campo216" name="conceituacao" required>
+                    <option value="" disabled selected>Selecione...</option>
+                    <option value="Terreno/acrescido de marinha">Terreno/Acrescido de marinha</option>
+                    <option value="Terreno/Acrescido marginal">Terreno/Acrescido marginal</option>
+                    <option value="Nacional interior">Nacional interior</option>
+                    <option value="Ilha">Ilha</option>
+                    <option value="Espelho d'água">Espelho d'água</option>
+                </select>
+                <span class="error-msg" id="err216">Selecione a conceituação.</span>
+            </div>
+
+            <!-- 2.17 Categoria -->
+            <div class="form-group">
+                <label for="campo217">
+                    2.17 Categoria
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Selecione a categoria do imóvel."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: Categoria"
+                        >?</span>
+                    </span>
+		    <span class="campo-origem">[[ Origem do dado: PORTAL DE SERVIÇOS ]]</span>
+                </label>
+                <select id="campo217" name="categoria" required>
+                    <option value="" disabled selected>Selecione...</option>
+                    <option value="Apartamento">Apartamento</option>
+                    <option value="Casa">Casa</option>
+                    <option value="Galpão">Galpão</option>
+                    <option value="Loja/Sala Comercial">Loja/Sala Comercial</option>
+                    <option value="Terreno">Terreno</option>
+                    <option value="Área Aquática">Área Aquática</option>
+                    <option value="Área Rural">Área Rural</option>
+                    <option value="Edificação Pública">Edificação Pública</option>
+                    <option value="Outro">Outro</option>
+                </select>
+                <span class="error-msg" id="err217">Selecione a categoria.</span>
+            </div>
+
+            <!-- 2.18 Localizada em faixas de segurança? -->
+            <div class="form-group">
+                <label>
+                    2.18 Localizada em faixas consideradas de segurança?
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Marque todas as faixas de segurança em que o imóvel está localizado."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: Faixas de segurança"
+                        >?</span>
+                    </span>
+		    <span class="campo-origem">[[ Origem do dado: PORTAL DE SERVIÇOS ]]</span>
+                </label>
+                <div class="checkbox-group" id="group-faixas">
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="faixas[]" value="Faixa de fronteiras">
+                        Faixa de fronteiras
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="faixas[]" value="Faixa de 100m ao longo da costa marítima">
+                        Faixa de 100 (cem) metros ao longo da costa marítima
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="faixas[]" value="Circunferência de 1.320m em torno de fortificações/estabelecimentos militares">
+                        Circunferência de 1.320 (mil trezentos e vinte) metros em torno de fortificações e estabelecimentos militares
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="faixas[]" value="Nenhuma das alternativas" id="faixa-nenhuma">
+                        Nenhuma das alternativas
+                    </label>
+                </div>
+            </div>
+
+            <!-- 2.19 LPM/LMEO — condicional (conceituação = marinha ou marginal) -->
+            <div class="form-group visivel-nao" id="bloco219">
+                <label>
+                    2.19 Há Linha do Preamar Médio de 1831 (LPM/1831) ou Linha Média das Enchentes Ordinárias (LMEO) homologadas?
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Indique se há LPM/1831 ou LMEO homologadas para o imóvel."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: LPM/LMEO"
+                        >?</span>
+                    </span>
+		    <span class="campo-origem">[[ Origem do dado: PORTAL DE SERVIÇOS ]]</span>
+                </label>
+                <div class="radio-group" id="group-lpm">
+                    <label class="radio-option">
+                        <input type="radio" name="lpm_lmeo" value="Sim"> Sim
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="lpm_lmeo" value="Não"> Não
+                    </label>
+                </div>
+                <span class="error-msg" id="err219">Selecione uma opção.</span>
+            </div>
+
+            <!-- 2.20 Imagens/plantas do imóvel -->
+            <div class="form-group">
+                <label>
+                    2.20 Imagens/plantas do imóvel (link documento SEI)
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Adicione links de documentos SEI referentes às imagens e plantas do imóvel."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: Imagens/plantas"
+                        >?</span>
+                    </span>
+		    <span class="campo-origem">[[ Origem do dado: PORTAL DE SERVIÇOS ]]</span>
+                </label>
+                <div id="imagens-list">
+                    <div class="imagem-item">
+                        <input
+                            type="text"
+                            name="imagens[]"
+                            placeholder="Ex: https://sei.gov.br/..."
+                            autocomplete="off"
+                            class="imagem-input"
+                        >
+                        <button type="button" class="btn-remove-imagem" title="Remover">✕</button>
+                    </div>
+                </div>
+                <button type="button" class="btn-add" id="btnAdicionarImagem">
+                    ＋ Adicionar link/documento
+                </button>
+            </div>
+
+            <!-- 2.21 Tipologia e inserção territorial -->
+            <div class="form-group">
+                <label for="campo221">
+                    2.21 Tipologia e inserção territorial
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Selecione a tipologia territorial do imóvel conforme classificação SPUnet."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: Tipologia territorial"
+                        >?</span>
+                    </span>
+		    <span class="campo-origem">[[ Origem do dado: PORTAL DE SERVIÇOS ]]</span>
+                </label>
+                <select id="campo221" name="tipologia" required>
+                    <option value="" disabled selected>Selecione (Ver classificação SPUnet)...</option>
+                    <option value="Zona urbana consolidada">Zona urbana consolidada</option>
+                    <option value="Zona urbana em expansão">Zona urbana em expansão</option>
+                    <option value="Periurbana">Periurbana</option>
+                    <option value="Rural">Rural</option>
+                    <option value="Área aquática">Área aquática</option>
+                </select>
+                <span class="error-msg" id="err221">Selecione a tipologia territorial.</span>
+                <label for="obs221">Observações complementares:</label>
+                <textarea
+                    id="obs221"
+                    name="obs_tipologia"
+                    placeholder="Observações sobre a tipologia territorial..."
+                ></textarea>
+            </div>
+
+            <!-- 2.22 Existe processo de incorporação? -->
+            <div class="form-group">
+                <label>
+                    2.22 Existe processo de incorporação?
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Indique se existe processo de incorporação para o imóvel."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: Processo de incorporação"
+                        >?</span>
+                    </span>
+		    <span class="campo-origem">[[ Origem do dado: PORTAL DE SERVIÇOS ]]</span>
+                </label>
+                <div class="radio-group" id="group-incorporacao">
+                    <label class="radio-option">
+                        <input type="radio" name="incorporacao" value="Sim"> Sim
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="incorporacao" value="Não"> Não
+                    </label>
+                </div>
+                <span class="error-msg" id="err222">Selecione uma opção.</span>
+            </div>
+
+            <!-- 2.23 Situação dominial/registral -->
+            <div class="form-group">
+                <label for="campo223">
+                    2.23 Situação dominial/registral
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Selecione a situação dominial ou registral do imóvel."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: Situação dominial"
+                        >?</span>
+                    </span>
+		    <span class="campo-origem">[[ Origem do dado: PORTAL DE SERVIÇOS ]]</span>
+                </label>
+                <select id="campo223" name="situacao_dominial" required>
+                    <option value="" disabled selected>Selecione...</option>
+                    <option value="Regular">Regular: Matrícula individualizada em nome da União, sem pendências impeditivas conhecidas.</option>
+                    <option value="Regular com averbações pendentes">Regular com averbações pendentes: matrícula existente, mas com necessidade de ajustes formais.</option>
+                    <option value="Em regularização registral">Em regularização registral: Existem procedimentos em curso para consolidação dominial.</option>
+                    <option value="Indefinida/sem matrícula">Indefinida/sem matrícula individualizada: Não há registro formal consolidado.</option>
+                    <option value="Matrícula dispensável">Matrícula dispensável: Área de uso comum do povo (praia, espelho d'água, caverna).</option>
+                    <option value="Sem informação">Sem informação: Não há informações que permitam essa análise.</option>
+                </select>
+                <span class="error-msg" id="err223">Selecione a situação dominial.</span>
+                <label for="obs223">Observações complementares:</label>
+                <textarea
+                    id="obs223"
+                    name="obs_dominial"
+                    placeholder="Observações sobre a situação dominial/registral..."
+                ></textarea>
+            </div>
+
+            <!-- 2.24 Matrículas -->
+            <div class="form-group">
+                <label for="campo224">
+                    2.24 Matrículas
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Discrimine os números das matrículas do imóvel."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: Matrículas"
+                        >?</span>
+                    </span>
+		    <span class="campo-origem">[[ Origem do dado: PORTAL DE SERVIÇOS ]]</span>
+                </label>
+                <textarea
+                    id="campo224"
+                    name="matriculas"
+                    placeholder="Discriminar números das matrículas..."
+                ></textarea>
+            </div>
+
+            <!-- 2.25 Informações adicionais -->
+            <div class="form-group">
+                <label for="campo225">
+                    2.25 Informações adicionais
+                    <span class="hint-semaforo">
+                        <span
+                            class="hint-icon"
+                            data-hint-tipo="verde"
+                            data-hint="Inclua informações adicionais sobre o imóvel, área ou parcela."
+                            role="tooltip"
+                            tabindex="0"
+                            aria-label="Ajuda: Informações adicionais"
+                        >?</span>
+                    </span>
+		    <span class="campo-origem">[[ Origem do dado: PORTAL DE SERVIÇOS ]]</span>
+                </label>
+                <textarea
+                    id="campo225"
+                    name="info_adicionais"
+                    placeholder="Incluir informações adicionais sobre o imóvel/área/parcela..."
+                ></textarea>
+            </div>
+
+		<!-- Botões -->
+		<div class="button-group">
+		    <button type="button" class="btn-secondary" id="btnLimpar">🗑️ Limpar</button>
+		    <button type="button" id="btnImprimir" onclick="window.print()">🖨️ Imprimir / Salvar PDF</button>
+		    <button type="submit" id="btnEnviar">✅ Enviar Seção 1</button>
+		</div>
+
+        </form>
+    </div>
+
+    <script src="formulario.js"></script>
+    <script src="hints.js"></script>
+    <script src="foco-02.js"></script>
+
+</body>
+</html>

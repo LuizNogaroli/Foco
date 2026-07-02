@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FOCO-07 — Trâmite na Superintendência</title>
+    <link rel="stylesheet" href="styles-forms.css">
+    <link rel="stylesheet" href="hints.css">
+    <link rel="stylesheet" href="custom-select.css">
+    <style>
+/* ═══════════════════════════════════════════════════
+   SANFONA — Boxes de Declaração
+═══════════════════════════════════════════════════ */
+.acordeao-wrapper {
+  margin-top: 16px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.acordeao-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* Alinha itens da esquerda para a direita */
+  padding: 12px 16px;
+  background: #1e3a5f;
+  cursor: pointer;
+  user-select: none;
+  gap: 10px;
+  transition: background 0.2s;
+}
+.acordeao-header:hover { background: #2d5282; }
+
+.acordeao-titulo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 0.97em;
+  color: #ffffff;
+  flex: 1; /* Ocupa todo o espaço à esquerda, empurrando o status e a seta */
+}
+
+.acordeao-badge-ok {
+  display: none;
+  align-items: center;
+  gap: 4px;
+  background: #dcfce7;
+  color: #16a34a;
+  font-size: 0.82em;
+  font-weight: 700;
+  padding: 2px 9px;
+  border-radius: 20px;
+  border: 1px solid #86efac;
+  white-space: nowrap;
+  margin-right: 50px; /* Distância de 50px da seta */
+}
+.acordeao-badge-ok.visivel { display: flex; }
+
+.acordeao-badge-pendente {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: #fef3c7;
+  color: #92400e;
+  font-size: 0.82em;
+  font-weight: 700;
+  padding: 2px 9px;
+  border-radius: 20px;
+  border: 1px solid #fde68a;
+  white-space: nowrap;
+  margin-right: 50px; /* Distância de 50px da seta */
+}
+.acordeao-badge-pendente.oculto { display: none; }
+
+.acordeao-seta {
+  font-size: 0.85em;
+  color: #ffffff;
+  transition: transform 0.25s;
+  flex-shrink: 0;
+}
+.acordeao-wrapper.aberto .acordeao-seta { transform: rotate(180deg); }
+
+.acordeao-corpo {
+  display: none;
+  padding: 20px 20px 24px;
+  background: #fff;
+  border-top: 1px solid #e2e8f0;
+}
+.acordeao-wrapper.aberto .acordeao-corpo { display: block; }
+
+/* ═══════════════════════════════════════════════════
+   BOTÕES DE OPÇÃO
+═══════════════════════════════════════════════════ */
+.decl-opcao-btns { display: flex; flex-direction: column; gap: 10px; margin: 14px 0 6px; }
+.decl-opcao-btns > input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none; }
+.decl-opcao-btn-label { display: flex; align-items: flex-start; gap: 12px; padding: 11px 14px; border: 2px solid #cbd5e1; border-radius: 7px; cursor: pointer; background: #f8fafc; transition: 0.18s; font-size: 0.93em; color: #1e293b; line-height: 1.5; }
+.decl-opcao-btn-label:hover { border-color: #1e3a5f; background: #eff6ff; }
+.decl-opcao-btn-label .opcao-icone { flex-shrink: 0; width: 20px; height: 20px; border-radius: 50%; border: 2px solid #94a3b8; background: #fff; display: flex; align-items: center; justify-content: center; transition: 0.18s; margin-top: 1px; font-size: 0.75em; color: transparent; }
+.decl-opcao-btns > input[type="radio"]:checked + .decl-opcao-btn-label { border-color: #1e3a5f; background: #eff6ff; box-shadow: 0 0 0 3px rgba(30,58,95,0.10); font-weight: 500; }
+.decl-opcao-btns > input[type="radio"]:checked + .decl-opcao-btn-label .opcao-icone { border-color: #1e3a5f; background: #1e3a5f; color: #fff; }
+
+/* ═══════════════════════════════════════════════════
+   ELEMENTOS DE DECLARAÇÃO
+═══════════════════════════════════════════════════ */
+.decl-checks { display: flex; flex-direction: column; gap: 12px; margin: 12px 0 4px; }
+.decl-check-item { display: flex; align-items: flex-start; gap: 10px; font-size: 0.93em; color: #1e293b; cursor: pointer; line-height: 1.5; }
+.decl-check-item input { margin-top: 3px; width: 16px; height: 16px; flex-shrink: 0; accent-color: #1e3a5f; }
+.decl-radio-group { display: flex; flex-direction: column; gap: 8px; margin: 8px 0 4px; }
+.decl-radio-item { display: flex; align-items: flex-start; gap: 10px; font-size: 0.93em; color: #1e293b; cursor: pointer; line-height: 1.5; }
+.decl-radio-item input { margin-top: 3px; width: 16px; height: 16px; flex-shrink: 0; accent-color: #1e3a5f; }
+.decl-sublabel { font-weight: 600; font-size: 0.92em; color: #1e3a5f; margin: 16px 0 4px; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; }
+.decl-bloco-condicional { display: none; }
+.decl-bloco-condicional.visivel { display: block; }
+.decl-pergunta-inline { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin: 8px 0 4px; font-size: 0.94em; color: #1e293b; }
+.decl-radio-inline { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+.decl-radio-inline input { width: 15px; height: 15px; accent-color: #1e3a5f; }
+.decl-obs-group { margin-top: 16px; }
+.decl-obs-group label { display: block; font-size: 0.92em; font-weight: 600; color: #374151; margin-bottom: 5px; }
+.decl-obs-group textarea { width: 100%; min-height: 80px; border: 1px solid #cbd5e1; border-radius: 5px; padding: 8px 10px; font-size: 0.91em; resize: vertical; color: #1e293b; }
+.decl-separador { border: none; border-top: 1px dashed #e2e8f0; margin: 18px 0 14px; }
+.decl-info-nota { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 5px; padding: 10px 14px; font-size: 0.88em; color: #1e40af; margin-bottom: 14px; line-height: 1.5; }
+
+/* ═══════════════════════════════════════════════════
+   ÁREA DE ASSINATURA
+═══════════════════════════════════════════════════ */
+.decl-btn-assinar { margin-top: 20px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.btn-assinar { padding: 8px 22px; background: #1e3a5f; color: #fff; border: none; border-radius: 5px; font-size: 0.93em; font-weight: 600; cursor: pointer; transition: 0.2s; }
+.btn-assinar:hover:not(:disabled) { background: #2d5282; }
+.btn-assinar:disabled { background: #94a3b8; cursor: not-allowed; }
+.btn-limpar-decl { padding: 8px 16px; background: transparent; color: #64748b; border: 1px solid #cbd5e1; border-radius: 5px; font-size: 0.91em; cursor: pointer; }
+.decl-status-assinado { display: none; align-items: center; gap: 6px; color: #16a34a; font-size: 0.91em; font-weight: 600; }
+.decl-status-assinado.visivel { display: flex; }
+.decl-status-assinado::before { content: "✔"; font-size: 1.1em; }
+.decl-assinado-overlay { display: none; background: #f0fdf4; border: 1px solid #86efac; border-radius: 5px; padding: 14px 16px; margin-top: 16px; font-size: 0.91em; color: #15803d; line-height: 1.7; }
+.decl-assinado-overlay.visivel { display: block; }
+.decl-conteudo-bloqueado { opacity: 0.72; pointer-events: none; }
+    </style>
+</head>
+<body>
+<div class="form-container">
+
+    <h2>Trâmite na Superintendência</h2>
+
+    <form id="form07" novalidate>
+
+        <!-- SEÇÃO A — CHEFIA DA ÁREA DE DESTINAÇÃO -->
+        <div class="acordeao-wrapper" id="acordeao-A">
+            <div class="acordeao-header" id="acordeao-header-A" role="button" tabindex="0">
+                <div class="acordeao-titulo">📋 Chefia da área de destinação</div>
+                <span class="acordeao-badge-pendente" id="pendente-A">⏳ Pendente</span>
+                <span class="acordeao-badge-ok" id="badge-A-ok">✔ Concluído</span>
+                <span class="acordeao-seta">▼</span>
+            </div>
+
+            <div class="acordeao-corpo" id="acordeao-corpo-A">
+                <div id="conteudo-A">
+                    <p style="font-size:0.94em; color:#1e293b; margin:0 0 4px;"><strong>Declaro que:</strong></p>
+                    <div class="decl-opcao-btns">
+                        <input type="radio" name="decl_A_opcao" id="decl-A-radio1" value="suficiente">
+                        <label class="decl-opcao-btn-label" for="decl-A-radio1">
+                            <span class="opcao-icone">✔</span>
+                            <span>Os elementos constantes do formulário são <strong>suficientes</strong> para apreciação dos aspectos de mérito da destinação proposta.</span>
+                        </label>
+                        <input type="radio" name="decl_A_opcao" id="decl-A-radio2" value="insuficiente">
+                        <label class="decl-opcao-btn-label" for="decl-A-radio2">
+                            <span class="opcao-icone">✔</span>
+                            <span><strong>NÃO</strong> há elementos suficientes para apreciação dos aspectos de mérito da destinação proposta, sendo necessária a complementação das informações.</span>
+                        </label>
+                    </div>
+                    <div class="decl-obs-group">
+                        <label for="obs-A">Observações:</label>
+                        <textarea id="obs-A" name="obs_chefia_destinacao" placeholder="Observações adicionais..."></textarea>
+                    </div>
+                </div>
+                <div class="decl-btn-assinar">
+                    <button type="button" class="btn-assinar" id="btn-assinar-A" disabled>✍️ Concluir manifestação</button>
+                    <button type="button" class="btn-limpar-decl" id="btn-limpar-A" style="display:none;">🗑️ Desfazer</button>
+                    <span class="decl-status-assinado" id="status-A">Manifestação registrada</span>
+                </div>
+                <div class="decl-assinado-overlay" id="overlay-A">
+                    <strong>✔ Manifestação registrada</strong>
+                    <span id="resumo-A"></span>
+                </div>
+                <input type="hidden" id="flag-A" value="0">
+            </div>
+        </div>
+
+        <!-- SEÇÃO B — COORDENADOR -->
+        <div class="acordeao-wrapper" id="acordeao-B">
+            <div class="acordeao-header" id="acordeao-header-B" role="button" tabindex="0">
+                <div class="acordeao-titulo">📋 Coordenação</div>
+                <span class="acordeao-badge-pendente" id="pendente-B">⏳ Pendente</span>
+                <span class="acordeao-badge-ok" id="badge-B-ok">✔ Concluído</span>
+                <span class="acordeao-seta">▼</span>
+            </div>
+
+            <div class="acordeao-corpo" id="acordeao-corpo-B">
+                <div id="conteudo-B">
+                    <p style="font-size:0.94em; color:#1e293b; margin:0 0 4px;"><strong>Declaro que:</strong></p>
+                    <div class="decl-opcao-btns">
+                        <input type="radio" name="decl_B_opcao" id="decl-B-radio1" value="suficiente">
+                        <label class="decl-opcao-btn-label" for="decl-B-radio1">
+                            <span class="opcao-icone">✔</span>
+                            <span>Os elementos constantes do formulário são <strong>suficientes</strong> para apreciação dos aspectos de mérito da destinação proposta.</span>
+                        </label>
+                        <input type="radio" name="decl_B_opcao" id="decl-B-radio2" value="insuficiente">
+                        <label class="decl-opcao-btn-label" for="decl-B-radio2">
+                            <span class="opcao-icone">✔</span>
+                            <span><strong>NÃO</strong> há elementos suficientes para apreciação dos aspectos de mérito da destinação proposta, sendo necessária a complementação das informações.</span>
+                        </label>
+                    </div>
+                    <div class="decl-obs-group">
+                        <label for="obs-B">Observações:</label>
+                        <textarea id="obs-B" name="obs_coordenador" placeholder="Observações adicionais..."></textarea>
+                    </div>
+                </div>
+                <div class="decl-btn-assinar">
+                    <button type="button" class="btn-assinar" id="btn-assinar-B" disabled>✍️ Concluir manifestação</button>
+                    <button type="button" class="btn-limpar-decl" id="btn-limpar-B" style="display:none;">🗑️ Desfazer</button>
+                    <span class="decl-status-assinado" id="status-B">Manifestação registrada</span>
+                </div>
+                <div class="decl-assinado-overlay" id="overlay-B">
+                    <strong>✔ Manifestação registrada</strong>
+                    <span id="resumo-B"></span>
+                </div>
+                <input type="hidden" id="flag-B" value="0">
+            </div>
+        </div>
+
+        <!-- SEÇÃO C — SUPERINTENDÊNCIA -->
+        <div class="acordeao-wrapper" id="acordeao-C">
+            <div class="acordeao-header" id="acordeao-header-C" role="button" tabindex="0">
+                <div class="acordeao-titulo">📋 Superintendência</div>
+                <span class="acordeao-badge-pendente" id="pendente-C">⏳ Pendente</span>
+                <span class="acordeao-badge-ok" id="badge-C-ok">✔ Concluído</span>
+                <span class="acordeao-seta">▼</span>
+            </div>
+
+            <div class="acordeao-corpo" id="acordeao-corpo-C">
+                <div id="conteudo-C">
+                    <div style="margin-bottom:14px;">
+                        <p class="decl-sublabel" style="margin-top:0;">A destinação é de competência da CDE?</p>
+                        <div class="decl-pergunta-inline">
+                            <label class="decl-radio-inline"><input type="radio" name="cde_manifestacao" id="cde-sim" value="sim"> Sim</label>
+                            <label class="decl-radio-inline"><input type="radio" name="cde_manifestacao" id="cde-nao" value="nao"> Não</label>
+                        </div>
+                    </div>
+
+                    <!-- BLOCO CDE = SIM -->
+                    <div class="decl-bloco-condicional" id="bloco-C-cde-sim">
+                        <p><strong>Declaro que:</strong></p>
+                        <div class="decl-checks">
+                            <label class="decl-check-item"><input type="radio" name="decl_C_sim_opcao" value="suficiente"> Os elementos constantes do formulário são suficientes.</label>
+                            <label class="decl-check-item"><input type="radio" name="decl_C_sim_opcao" value="insuficiente"> NÃO há elementos suficientes, sendo necessária a complementação das informações.</label>
+                        </div>
+                    </div>
+
+                    <!-- BLOCO CDE = NÃO -->
+                    <div class="decl-bloco-condicional" id="bloco-C-cde-nao">
+                        <p class="decl-sublabel">Aspectos de Interesse Público</p>
+                        <div class="decl-radio-group">
+                            <label class="decl-radio-item"><input type="radio" name="C_interesse_publico" value="consistente"> Evidenciado de forma consistente</label>
+                            <label class="decl-radio-item"><input type="radio" name="C_interesse_publico" value="ajustes"> Evidenciado com necessidade de ajustes</label>
+                            <label class="decl-radio-item"><input type="radio" name="C_interesse_publico" value="insuficiente"> Não suficientemente demonstrado</label>
+                        </div>
+
+                        <p class="decl-sublabel">Escolha do Destinatário</p>
+                        <div class="decl-radio-group">
+                            <label class="decl-radio-item"><input type="radio" name="C_destinatario" value="consistente"> Fundamentação consistente</label>
+                            <label class="decl-radio-item"><input type="radio" name="C_destinatario" value="ressalvas"> Fundamentação suficiente com ressalvas</label>
+                            <label class="decl-radio-item"><input type="radio" name="C_destinatario" value="insuficiente"> Fundamentação insuficiente</label>
+                        </div>
+
+                        <p class="decl-sublabel">Impactos sociais, territoriais e ambientais</p>
+                        <div class="decl-radio-group">
+                            <label class="decl-radio-item"><input type="radio" name="C_impactos" value="positivo_relevante"> Impacto positivo relevante</label>
+                            <label class="decl-radio-item"><input type="radio" name="C_impactos" value="positivo_moderado"> Impacto positivo moderado</label>
+                            <label class="decl-radio-item"><input type="radio" name="C_impactos" value="neutro"> Impacto neutro</label>
+                            <label class="decl-radio-item"><input type="radio" name="C_impactos" value="adverso"> Impacto potencialmente adverso</label>
+                        </div>
+
+                        <p class="decl-sublabel">Regime de destinação</p>
+                        <div class="decl-info-nota">ℹ️ Regime proposto pelo analista: <strong>Cessão de uso gratuita</strong></div>
+                        <div class="decl-radio-group">
+                            <label class="decl-radio-item"><input type="radio" name="C_regime" value="concordo"> Concordo com o regime proposto</label>
+                            <label class="decl-radio-item"><input type="radio" name="C_regime" value="discordo"> Não concordo com o regime proposto</label>
+                        </div>
+
+                        <!-- Novo campo condicional para outro regime -->
+                        <div id="bloco-outro-regime" style="display:none; margin-top: 10px; padding: 10px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 5px;">
+                            <label for="outro_regime_destinacao" style="display:block; font-size:0.92em; font-weight:600; color:#374151; margin-bottom:5px;">Selecione o regime de destinação desejado:</label>
+                            <select id="outro_regime_destinacao" name="outro_regime_destinacao" style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:5px;">
+                                <option value="">Selecione...</option>
+                                <option value="Cessão de Uso Onerosa">Cessão de Uso Onerosa</option>
+                                <option value="Cessão de Uso Gratuita">Cessão de Uso Gratuita</option>
+                                <option value="Entrega">Entrega (Uso da Administração)</option>
+                                <option value="Venda">Venda</option>
+                            </select>
+                        </div>
+
+                        <p class="decl-sublabel">Deliberação</p>
+                        <div class="decl-radio-group">
+                            <label class="decl-radio-item"><input type="radio" name="C_deliberacao" value="aprovado"> Aprovo a proposta, nos termos apresentados.</label>
+                            <label class="decl-radio-item"><input type="radio" name="C_deliberacao" value="aprovado_condicionantes"> Aprovo com condicionantes.</label>
+                            <label class="decl-radio-item"><input type="radio" name="C_deliberacao" value="diligencia"> Determino diligência complementar.</label>
+                            <label class="decl-radio-item"><input type="radio" name="C_deliberacao" value="indeferido"> Indefiro a proposta.</label>
+                        </div>
+                    </div>
+
+                    <div class="decl-obs-group">
+                        <label for="obs-C">Observações:</label>
+                        <textarea id="obs-C" name="obs_super" placeholder="Observações adicionais..."></textarea>
+                    </div>
+                </div>
+                <div class="decl-btn-assinar">
+                    <button type="button" class="btn-assinar" id="btn-assinar-C" disabled>✍️ Concluir manifestação</button>
+                    <button type="button" class="btn-limpar-decl" id="btn-limpar-C" style="display:none;">🗑️ Desfazer</button>
+                    <span class="decl-status-assinado" id="status-C">Manifestação registrada</span>
+                </div>
+                <div class="decl-assinado-overlay" id="overlay-C">
+                    <strong>✔ Manifestação registrada</strong>
+                    <span id="resumo-C"></span>
+                </div>
+                <input type="hidden" id="flag-C" value="0">
+            </div>
+        </div>
+
+        <!-- BOTÕES GLOBAIS -->
+        <div class="button-group" style="margin-top:28px;">
+            <button type="button" class="btn-secondary" id="btnLimparGlobal">🗑️ Limpar</button>
+            <button type="button" id="btnImprimir" onclick="window.print()">🖨️ Imprimir</button>
+        </div>
+
+    </form>
+</div>
+
+<!-- Modal de Confirmação -->
+<div id="modalEnvio" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:2000; align-items:center; justify-content:center;">
+    <div style="background:white; padding:30px; border-radius:12px; max-width:500px; width:90%; box-shadow:0 10px 25px rgba(0,0,0,0.3); text-align:center; position:relative; border-top: 8px solid #1a7a4a;">
+        <div style="font-size:40px; margin-bottom:15px;">✅</div>
+        <h3 style="color:#1e3a5f; margin-bottom:15px;">Envio Realizado!</h3>
+        <p style="color:#475569; line-height:1.6; font-size:0.95em;">
+            O status da demanda foi atualizado no sistema e estará disponível para a Unidade Central para ciência e encaminhamentos, se necessários.
+        </p>
+        <button type="button" id="btnFecharModal" class="btn-assinar" style="margin-top:25px; width:100%; background:#1e3a5f;">Entendido</button>
+    </div>
+</div>
+
+<script src="formulario.js"></script>
+<script src="hints.js"></script>
+<script src="foco-07.js"></script>
+</body>
+</html>

@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FOCO-03 — Análise do(s) Imóvel(eis)</title>
+    <link rel="stylesheet" href="styles-forms.css">
+    <link rel="stylesheet" href="hints.css">
+</head>
+<body>
+    <div class="form-container">
+
+        <h2>3: Análise do(s) Imóvel(eis)</h2>
+
+        <form id="form0203" novalidate>
+
+            <div id="imoveis-container">
+                <div class="imovel-block" data-index="0" id="imovel_0">
+                    <div class="imovel-header accordion-header">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span class="accordion-icon open">▼</span>
+                            <h3 style="margin: 0; color: #0056b3;" class="imovel-title">Imóvel 1</h3>
+                        </div>
+                        <button type="button" class="btn-remove-imovel" style="display: none; background: #dc3545; color: white; border: none; border-radius: 4px; padding: 6px 12px; cursor: pointer; transition: background 0.2s;">✕ Remover</button>
+                    </div>
+                    <div class="imovel-content accordion-content open">
+
+		<!-- ==================== OCUPAÇÃO ==================== -->
+                        <h4 style="margin: 0px 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 8px;">Ocupação</h4>
+
+                        <!-- 3.1 Situação ocupacional -->
+                        <div class="form-group editavel">
+                            <label for="campo31_0">Situação ocupacional:</label>
+                            <select id="campo31_0" name="imoveis[0][situacao_ocupacional]" required>
+                                <option value="" selected>Selecione...</option>
+                                <option value="Desocupado">Desocupado</option>
+                                <option value="Ocupado regularmente">Ocupado regularmente</option>
+                                <option value="Ocupado irregularmente">Ocupado irregularmente</option>
+                                <option value="Em disputa judicial">Em disputa judicial</option>
+                                <option value="Parcialmente ocupado">Parcialmente ocupado</option>
+                            </select>
+                            <div id="bloco-obs31_0" style="display: none; flex-direction: column; gap: 6px; margin-top: 8px;">
+                                <label for="obs31_0">Observações complementares:</label>
+                                <textarea id="obs31_0" name="imoveis[0][obs_situacao_ocupacional]" placeholder="Observações sobre a situação ocupacional..."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- 3.2 Tipo de uso atual -->
+                        <div class="form-group editavel">
+                            <label for="campo32_0">Tipo de uso imobiliário atual:</label>
+                            <input type="text" id="campo32_0" name="imoveis[0][tipo_uso_atual]" value="Comercial">
+                        </div>
+
+                        <!-- 3.3 Uso específico atual -->
+                        <div class="form-group editavel">
+                            <label for="campo33_0">Tipo de uso específico atual:</label>
+                            <input type="text" id="campo33_0" name="imoveis[0][tipo_uso_especifico_atual]" value="Escritório/sede administrativa">
+                        </div>
+
+                        <!-- 3.4 Tempo de ocupação -->
+                        <div class="form-group editavel">
+                            <label for="campo34_0">Tempo de ocupação:</label>
+                            <input type="text" id="campo34_0" name="imoveis[0][tempo_ocupacao]" value="01" placeholder="Ex: 03/2010 ou 2010" autocomplete="off">
+                        </div>
+
+                        <!-- 3.5 Incidência ambiental -->
+                        <div class="form-group editavel">
+                            <label for="campo35_0">Incidência ambiental:</label>
+                            <select id="campo35_0" name="imoveis[0][incidencia_ambiental]" required>
+                                <option value="" selected>Selecione...</option>
+                                <option value="APP">APP (Área de Preservação Permanente): Área protegida por legislação ambiental específica, com restrições severas de uso e ocupação</option>
+                                <option value="Unidade de Conservação">Unidade de Conservação: Inserida em UC federal, estadual ou municipal, sujeito a regime próprio de proteção</option>
+                                <option value="Área de risco">Área de risco: Zona com instabilidade geotécnica, inundação recorrente ou outro risco físico relevante</option>
+                                <option value="Área contaminada">Área contaminada: Presença de passivo ambiental identificado ou potencial</option>
+                                <option value="Nenhuma incidência relevante">Nenhuma incidência relevante identificada: Não foram constatadas restrições ambientais significativas</option>
+                                <option value="Outra">Outra situação específica (descrever nas observações)</option>
+                            </select>
+                            <div id="bloco-obs35_0" style="display: none; flex-direction: column; gap: 6px; margin-top: 8px;">
+                                <label for="obs35_0">Observações complementares (Ambiental):</label>
+                                <textarea id="obs35_0" name="imoveis[0][obs_incidencia_ambiental]" placeholder="Observações sobre a incidência ambiental..."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- 3.6 Custos SPU -->
+                        <div class="form-group editavel">
+                            <label>Há custos de manutenção (SPU)?</label>
+                            <div class="radio-group" id="group-custos_0">
+                                <label class="radio-option"><input type="radio" name="imoveis[0][custos_manutencao]" value="Sim" id="custos-sim_0"> Sim</label>
+                                <label class="radio-option"><input type="radio" name="imoveis[0][custos_manutencao]" value="Não" id="custos-nao_0"> Não</label>
+                            </div>
+                            <div id="bloco-obs37_0" style="display: none; flex-direction: column; gap: 6px; margin-top: 8px;">
+                                <label for="campo37_0">Estimativa de custos anuais (R$):</label>
+                                <input type="text" id="campo37_0" name="imoveis[0][estimativa_custos]" value="R$ 15.000,00" placeholder="R$ 0,00" autocomplete="off">
+                            </div>
+                        </div>
+
+
+                        <!-- ==================== RESTRIÇÕES ==================== -->
+                        <h4 style="margin: 24px 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 8px;">Restrições</h4>
+
+                        <!-- 2.18 Faixas de segurança -->
+                        <div class="form-group editavel">
+                            <label>Faixas de segurança?
+                                <span class="hint-semaforo">
+                                    <span class="hint-icon" data-hint-tipo="verde" data-hint="Marque todas as faixas de segurança em que o imóvel está localizado." role="tooltip" tabindex="0" aria-label="Ajuda: Faixas de segurança">?</span>
+                                </span>
+                            </label>
+                            <div class="checkbox-group" id="group-faixas_0" style="flex: 1;">
+                                <label class="checkbox-option">
+                                    <input type="checkbox" name="imoveis[0][faixas][]" value="Faixa de fronteiras"> Faixa de fronteiras
+                                    <input type="checkbox" name="imoveis[0][faixas][]" value="Faixa de 100m ao longo da costa marítima"> Faixa de 100 metros da costa marítima
+                                </label>
+                                <label class="checkbox-option">
+                                    <input type="checkbox" name="imoveis[0][faixas][]" value="Circunferência de 1.320m em torno de fortificações/estabelecimentos militares"> Circunferência de 1.320m em torno de instalações militares
+                                    <input type="checkbox" name="imoveis[0][faixas][]" value="Nenhuma das alternativas" id="faixa-nenhuma_0" checked> Nenhuma das alternativas
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- 3.8 Risco invasão -->
+                        <div class="form-group editavel">
+                            <label>Risco de invasão/esbulho?</label>
+                            <div class="radio-group" id="group-invasao_0">
+                                <label class="radio-option"><input type="radio" name="imoveis[0][risco_invasao]" value="Sim"> Sim</label>
+                                <label class="radio-option"><input type="radio" name="imoveis[0][risco_invasao]" value="Não"> Não</label>
+                                <label class="radio-option"><input type="radio" name="imoveis[0][risco_invasao]" value="Não há como avaliar"> Não há como avaliar</label>
+                            </div>
+                            <div id="bloco-desc38_0" style="display: none; flex-direction: column; gap: 6px; margin-top: 8px;">
+                                <label for="desc38_0">Descrever Risco Invasão:</label>
+                                <textarea id="desc38_0" name="imoveis[0][desc_risco_invasao]" placeholder="Descreva o risco de invasão/esbulho..."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- 3.9 Riscos coletividade -->
+                        <div class="form-group editavel">
+                            <label>Riscos para coletividade?
+                                <span class="hint-semaforo">
+                                    <span class="hint-icon" data-hint-tipo="verde" data-hint="O estado de conservação ou uso pode comprometer a estabilidade do prédio ou causar situações de risco." role="tooltip" tabindex="0" aria-label="Ajuda: Riscos para coletividade">?</span>
+                                </span>
+                            </label>
+                            <div class="radio-group" id="group-risco-coletividade_0">
+                                <label class="radio-option"><input type="radio" name="imoveis[0][risco_coletividade]" value="Sim"> Sim</label>
+                                <label class="radio-option"><input type="radio" name="imoveis[0][risco_coletividade]" value="Não"> Não</label>
+                                <label class="radio-option"><input type="radio" name="imoveis[0][risco_coletividade]" value="Não há como avaliar"> Não há como avaliar</label>
+                            </div>
+                            <div id="bloco-desc39_0" style="display: none; flex-direction: column; gap: 6px; margin-top: 8px;">
+                                <label for="desc39_0">Descrever Riscos Coletividade:</label>
+                                <textarea id="desc39_0" name="imoveis[0][desc_risco_coletividade]" placeholder="Descreva os riscos para a coletividade..."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- 3.10 Ações judiciais -->
+                        <div class="form-group editavel">
+                            <label>Ações judiciais ou de órgãos de controle:
+                                <span class="hint-semaforo">
+                                    <span class="hint-icon" data-hint-tipo="verde" data-hint="Selecione as ações judiciais ou de controle externo que incidem sobre o imóvel." role="tooltip" tabindex="0" aria-label="Ajuda: Ações judiciais">?</span>
+                                </span>
+                            </label>
+                            <div class="radio-group" id="group-acoes_0">
+                                <label class="radio-option"><input type="radio" name="imoveis[0][acoes]" value="Sim"> Sim</label>
+                                <label class="radio-option"><input type="radio" name="imoveis[0][acoes]" value="Não"> Não</label>
+                                <label class="radio-option"><input type="radio" name="imoveis[0][acoes]" value="Não há como avaliar"> Não há como avaliar</label>
+                            </div>
+                            <div id="bloco-obs310_0" style="display: none; flex-direction: column; gap: 6px; margin-top: 8px;">
+                                <label for="obs310_0">Observações complementares (Ações judiciais ou de órgãos de controle):</label>
+                                <textarea id="obs310_0" name="imoveis[0][obs_acoes]" placeholder="Descreva o impacto das ações sobre o uso/destinação do imóvel..."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- 3.11 Imóvel tombado -->
+                        <div class="form-group editavel">
+                            <label>Imóvel tombado?
+                                <span class="hint-semaforo">
+                                    <span class="hint-icon" data-hint-tipo="verde" data-hint="Indique se o imóvel é tombado pelo patrimônio histórico e/ou cultural." role="tooltip" tabindex="0" aria-label="Ajuda: Imóvel tombado">?</span>
+                                </span>
+                            </label>
+                            <div class="radio-group" id="group-tombado_0">
+                                <label class="radio-option"><input type="radio" name="imoveis[0][tombado]" value="Sim"> Sim</label>
+                                <label class="radio-option"><input type="radio" name="imoveis[0][tombado]" value="Não"> Não</label>
+                                <label class="radio-option"><input type="radio" name="imoveis[0][tombado]" value="Sem informação"> Sem informação</label>
+                            </div>
+                            <div id="bloco-obs311_0" style="display: none; flex-direction: column; gap: 6px; margin-top: 8px;">
+                                <label for="obs311_0">Observações complementares (Tombamento):</label>
+                                <textarea id="obs311_0" name="imoveis[0][obs_tombado]" placeholder="Descreva o impacto do tombamento sobre o uso/destinação..."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- 3.12 Conflitos fundiários -->
+                        <div class="form-group editavel">
+                            <label>Há conflitos fundiários/sociais?
+                                <span class="hint-semaforo">
+                                    <span class="hint-icon" data-hint-tipo="verde" data-hint="Indique se há conflitos fundiários ou sociais identificados no imóvel ou entorno." role="tooltip" tabindex="0" aria-label="Ajuda: Conflitos fundiários">?</span>
+                                </span>
+                            </label>
+                            <div class="radio-group" id="group-conflitos_0">
+                                <label class="radio-option"><input type="radio" name="imoveis[0][conflitos_fundiarios]" value="Sim"> Sim</label>
+                                <label class="radio-option"><input type="radio" name="imoveis[0][conflitos_fundiarios]" value="Não"> Não</label>
+                                <label class="radio-option"><input type="radio" name="imoveis[0][conflitos_fundiarios]" value="Sem informação"> Sem informação</label>
+                            </div>
+                            <div id="bloco-obs312_0" style="display: none; flex-direction: column; gap: 6px; margin-top: 8px;">
+                                <label for="obs312_0">Observações complementares (Conflitos):</label>
+                                <textarea id="obs312_0" name="imoveis[0][obs_conflitos]" placeholder="Descreva os conflitos fundiários/sociais identificados..."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- 3.13 Termo gestão praias -->
+                        <div class="form-group editavel">
+                            <label>Termo Gestão Praias/PGI?
+                                <span class="hint-semaforo">
+                                    <span class="hint-icon" data-hint-tipo="verde" data-hint="Indique se o imóvel está inserido em área com Termo de Gestão de Praias ou Plano de Gestão Integrada vigente." role="tooltip" tabindex="0" aria-label="Ajuda: Termo de Gestão de Praias">?</span>
+                                </span>
+                            </label>
+                            <div class="radio-group" id="group-gestao-praias_0">
+                                <label class="radio-option"><input type="radio" name="imoveis[0][gestao_praias]" value="Sim"> Sim</label>
+                                <label class="radio-option"><input type="radio" name="imoveis[0][gestao_praias]" value="Não"> Não</label>
+                                <label class="radio-option"><input type="radio" name="imoveis[0][gestao_praias]" value="Sem informação"> Sem informação</label>
+                            </div>
+                            <div id="bloco-obs313_0" style="display: none; flex-direction: column; gap: 6px; margin-top: 8px;">
+                                <label for="obs313_0">Observações complementares (Gestão Praias):</label>
+                                <textarea id="obs313_0" name="imoveis[0][obs_gestao_praias]" placeholder="Descreva informações sobre o Termo de Gestão de Praias ou PGI..."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Observações / Upload -->
+                        <div class="form-group editavel">
+                            <label for="obs224_0">Observações:</label>
+                            <textarea id="obs224_0" name="imoveis[0][obs_geral_ident]" placeholder=""></textarea>
+                            <div class="dynamic-list-wrapper" style="flex: 1; display: flex; flex-direction: column; gap: 8px;">
+                                <button type="button" class="btn-add" id="btnAdicionarImagemIdent_0" style="align-self: flex-start;">＋ Adicionar link/documento</button>
+                                <div id="imagens-list-ident_0"></div>
+                            </div>
+                        </div>
+
+                    </div> <!-- Fim accordion-content -->
+                </div>
+            </div> <!-- Fim imoveis-container -->
+
+            <div class="form-group" style="text-align: center; margin-top: 30px;">
+                <button type="button" class="btn-add" id="btnAdicionarImovel" style="font-size: 1.1em; padding: 12px 24px;">
+                    ＋ Adicionar Novo Imóvel/RIP
+                </button>
+            </div>
+
+            <!-- Botões -->
+            <div class="button-group">
+                <button type="button" class="btn-secondary" id="btnLimpar">🗑️ Limpar</button>
+                <button type="button" id="btnImprimir" onclick="window.print()">🖨️ Imprimir / Salvar PDF</button>
+                <button type="submit" id="btnEnviar">✅ Salvar</button>
+            </div>
+
+        </form>
+    </div>
+
+    <script src="formulario.js"></script>
+    <script src="hints.js"></script>
+    <script src="foco-02.js"></script>
+
+    <script>
+        // ================================================================
+        // UTILITÁRIO: mostrar/ocultar bloco pelo ID
+        // ================================================================
+        function setBlocoVisivel(blocoId, visivel) {
+            const bloco = document.getElementById(blocoId);
+            if (!bloco) return;
+            bloco.style.display = visivel ? 'flex' : 'none';
+        }
+
+        // ================================================================
+        // SELECT TOGGLE
+        // Abre o bloco quando qualquer opção válida (não vazia) é escolhida.
+        // ================================================================
+        function initSelectToggle(selectEl, blocoId) {
+            if (!selectEl) return;
+            const atualizar = () => setBlocoVisivel(blocoId, selectEl.value !== '');
+            atualizar();
+            selectEl.addEventListener('change', atualizar);
+        }
+
+        // ================================================================
+        // RADIO TOGGLE — modo "somente Sim"
+        // Abre o bloco SOMENTE quando o radio com value="Sim" está marcado.
+        // ================================================================
+        function initRadioToggleSim(radioName, blocoId, scope) {
+            scope = scope || document;
+            const radios = scope.querySelectorAll('input[type="radio"][name="' + radioName + '"]');
+            if (!radios.length) return;
+
+            const atualizar = () => {
+                const simMarcado = Array.from(radios).some(r => r.value === 'Sim' && r.checked);
+                setBlocoVisivel(blocoId, simMarcado);
+            };
+            atualizar();
+            radios.forEach(r => r.addEventListener('change', atualizar));
+        }
+
+        // ================================================================
+        // LISTA DINÂMICA DE DOCUMENTOS
+        // O campo só aparece após clicar em "＋ Adicionar link/documento".
+        // ================================================================
+        function initDynamicList(btnId, listId) {
+            const btn  = document.getElementById(btnId);
+            const list = document.getElementById(listId);
+            if (!btn || !list) return;
+
+            // Garante lista vazia no início (sem itens visíveis)
+            list.innerHTML = '';
+
+            // Clona o botão para remover qualquer listener anterior
+            const newBtn = btn.cloneNode(true);
+            btn.parentNode.replaceChild(newBtn, btn);
+
+            newBtn.addEventListener('click', () => {
+                // Descobre o name base a partir do listId (ex: imagens-list-ident_0 → imoveis[0][imagens_ident][])
+                const nameMap = {
+                    'ident': 'imagens_ident',
+                    'ocup' : 'imagens_ocup',
+                    'rest' : 'imagens_rest'
+                };
+                const matchSuffix = listId.match(/imagens-list-(\w+)_(\d+)/);
+                let inputName = '';
+                if (matchSuffix) {
+                    const section = matchSuffix[1];
+                    const idx     = matchSuffix[2];
+                    const field   = nameMap[section] || ('imagens_' + section);
+                    inputName = `imoveis[${idx}][${field}][]`;
+                }
+
+                const item = document.createElement('div');
+                item.className = 'imagem-item';
+                item.style.cssText = 'display:flex; gap:8px; align-items:center; margin-top:6px;';
+                item.innerHTML = `
+                    <input type="text" name="${inputName}" placeholder="Link/Documento Anexado"
+                           autocomplete="off" class="imagem-input" style="flex: 1;">
+                    <button type="button" class="btn-remove-imagem" title="Remover">✕</button>
+                `;
+                list.appendChild(item);
+                item.querySelector('input').focus();
+                item.querySelector('.btn-remove-imagem')
+                    .addEventListener('click', () => item.remove());
+            });
+        }
+
+        // ================================================================
+        // INICIALIZAÇÃO DE UM BLOCO DE IMÓVEL (por índice)
+        // ================================================================
+        function initImovelToggle(idx) {
+            const scope = document.getElementById('imovel_' + idx) || document;
+
+            // --- Identificação ---
+            initSelectToggle(scope.querySelector('#campo221_' + idx), 'bloco-obs221_' + idx);
+            initSelectToggle(scope.querySelector('#campo223_' + idx), 'bloco-obs223_' + idx);
+            initDynamicList('btnAdicionarImagemIdent_' + idx, 'imagens-list-ident_' + idx);
+
+            // --- Ocupação ---
+            initSelectToggle(scope.querySelector('#campo31_' + idx),  'bloco-obs31_'  + idx);
+            initSelectToggle(scope.querySelector('#campo35_' + idx),  'bloco-obs35_'  + idx);
+            initRadioToggleSim('imoveis[' + idx + '][custos_manutencao]', 'bloco-obs37_' + idx, scope);
+            initDynamicList('btnAdicionarImagemOcup_' + idx, 'imagens-list-ocup_' + idx);
+
+            // --- Restrições ---
+            initRadioToggleSim('imoveis[' + idx + '][risco_invasao]',        'bloco-desc38_'  + idx, scope);
+            initRadioToggleSim('imoveis[' + idx + '][risco_coletividade]',   'bloco-desc39_'  + idx, scope);
+            initRadioToggleSim('imoveis[' + idx + '][acoes]',                'bloco-obs310_'  + idx, scope);
+            initRadioToggleSim('imoveis[' + idx + '][tombado]',              'bloco-obs311_'  + idx, scope);
+            initRadioToggleSim('imoveis[' + idx + '][conflitos_fundiarios]', 'bloco-obs312_'  + idx, scope);
+            initRadioToggleSim('imoveis[' + idx + '][gestao_praias]',        'bloco-obs313_'  + idx, scope);
+            initDynamicList('btnAdicionarImagemRest_' + idx, 'imagens-list-rest_' + idx);
+        }
+
+        // ================================================================
+        // EXECUTA AO CARREGAR A PÁGINA
+        // ================================================================
+        document.addEventListener('DOMContentLoaded', function () {
+            initImovelToggle(0);
+        });
+
+        // ================================================================
+        // HOOK GLOBAL para foco-02.js ao criar novos imóveis dinamicamente.
+        // ================================================================
+        window.initImovelToggle = initImovelToggle;
+    </script>
+
+</body>
+</html>

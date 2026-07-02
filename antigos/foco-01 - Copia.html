@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FOCO-01 — Dados do Requerimento</title>
+    <link rel="stylesheet" href="styles-forms.css">
+    <link rel="stylesheet" href="hints.css">
+</head>
+<body>
+    <div class="form-container">
+
+        <h2>Dados do Requerimento</h2>
+
+        <form id="form01" novalidate>
+
+            <!-- 1.1 Número do Requerimento -->
+            <div class="form-group inline">
+                <label for="campo11">Número do requerimento:</label>
+                <input
+                    type="text"
+                    id="campo11"
+                    name="campo11"
+                    placeholder="Ex: DF004598/2026"
+                    value="DF04598/2026"
+                    autocomplete="off"
+                    required
+                >
+            </div>
+
+            <!-- 1.2 Data de Protocolamento -->
+            <div class="form-group inline">
+                <label for="campo12">Data de Requerimento:</label>
+                <input
+                    type="text"
+                    id="campo12"
+                    name="campo12"
+                    value="15/05/2026"
+                    required
+                >
+            </div>
+
+            <!-- 1.3 Número do Processo SEI -->
+            <div class="form-group inline">
+                <label for="campo13">Número do processo SEI:</label>
+                <input
+                    type="text"
+                    id="campo13"
+                    name="campo13"
+                    class="mask-sei"
+                    placeholder="Ex: 10480.012345/2024-00"
+                    maxlength="20"
+                    value="10480.012345/2024-00"
+                    autocomplete="off"
+                    required
+                >
+            </div>
+
+            <!-- 1.4 CPF/CNPJ -->
+            <div class="form-group inline">
+                <label for="campo14">CPF/CNPJ:</label>
+                <input
+                    type="text"
+                    id="campo14"
+                    name="campo14"
+                    class="mask-cpf-cnpj"
+                    placeholder="000.000.000-00 ou 00.000.000/0001-00"
+                    maxlength="18"
+                    value="12.345.678/0001-90"
+                    autocomplete="off"
+                    required
+                >
+            </div>
+
+            <!-- 1.5 Nome do Requerente -->
+            <div class="form-group inline">
+                <label for="campo15">Nome do requerente:</label>
+                <input
+                    type="text"
+                    id="campo15"
+                    name="campo15"
+                    placeholder="Nome completo ou razão social"
+                    value="Empresa Exemplo S/A"
+                    autocomplete="off"
+                    required
+                >
+            </div>
+
+            <!-- 1.6 Natureza Jurídica -->
+            <div class="form-group inline">
+                <label for="campo16">Natureza Jurídica:</label>
+                <input
+                    type="text"
+                    id="campo16"
+                    name="campo16"
+                    placeholder="Conforme Tabela IBGE"
+                    value="206-2 - Sociedade Empresária Limitada"
+                    autocomplete="off"
+                    required
+                >
+            </div>
+
+            <!-- 1.7 Pessoa Estrangeira -->
+            <div class="form-group inline">
+                <label for="campo17">Pessoa estrangeira:</label>
+                <input type="text" id="campo17" name="campo17" value="Sim">
+            </div>
+
+            <!-- 1.8 E-mail -->
+            <div class="form-group inline">
+                <label for="campo18">Endereço de e-mail:</label>
+                <input
+                    type="email"
+                    id="campo18"
+                    name="campo18"
+                    placeholder="exemplo@dominio.com.br"
+                    value="contato@empresaexemplo.com.br"
+                    autocomplete="off"
+                    required
+                >
+            </div>
+
+            <!-- 1.9 Telefone celular -->
+            <div class="form-group inline">
+                <label for="campo19">Telefone celular:</label>
+                <input
+                    type="text"
+                    id="campo19"
+                    name="campo19"
+                    placeholder="(99) 99999-9999"
+                    maxlength="15"
+                    value="(11) 98765-4321"
+                    autocomplete="off"
+                    required
+                >
+            </div>
+
+            <!-- 1.10 Prioridade Legal -->
+            <div class="form-group inline">
+                <label for="campo110">Prioridade Legal:</label>
+                <input type="text" id="campo110" name="campo110" value="Sim">
+            </div>
+
+
+            <!-- 1.11 Documentos linkados -->
+            <section class="documentos-linkados-section" aria-labelledby="titulo-documentos-linkados">
+                <div class="documentos-linkados-header">
+                    <div>
+                        <h3 id="titulo-documentos-linkados" style="text-align: left; margin: 0;">Documentos anexados ao requerimento</h3>
+                    </div>
+                    <span class="documentos-linkados-badge">5 documentos</span>
+                </div>
+
+                <div class="documentos-linkados-card">
+                    <table class="documentos-linkados-table">
+                        <thead>
+                            <tr>
+                                <th>Nome do Documento</th>
+                                <th>Tipo</th>
+                                <th>Origem</th>
+                                <th class="coluna-acao">Acesso</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="doc-nome">
+                                        <span class="doc-icon">📄</span>
+                                        <div>
+                                            <strong>Requerimento inicial</strong>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="tipo-doc tipo-pdf">PDF</span></td>
+                                <td>Processo SEI</td>
+                                <td class="coluna-acao">
+                                    <button type="button" class="btn-link-doc btn-simular-doc">Abrir</button>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <div class="doc-nome">
+                                        <span class="doc-icon">🏢</span>
+                                        <div>
+                                            <strong>Contrato social / Estatuto</strong>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="tipo-doc tipo-pdf">PDF</span></td>
+                                <td>Portal de Serviços</td>
+                                <td class="coluna-acao">
+                                    <button type="button" class="btn-link-doc btn-simular-doc">Abrir</button>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <div class="doc-nome">
+                                        <span class="doc-icon">🪪</span>
+                                        <div>
+                                            <strong>Identificação do representante</strong>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="tipo-doc tipo-img">Imagem</span></td>
+                                <td>Sistemas Oficiais</td>
+                                <td class="coluna-acao">
+                                    <button type="button" class="btn-link-doc btn-simular-doc">Abrir</button>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <div class="doc-nome">
+                                        <span class="doc-icon">📝</span>
+                                        <div>
+                                            <strong>Procuração</strong>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="tipo-doc tipo-pdf">PDF</span></td>
+                                <td>Processo SEI</td>
+                                <td class="coluna-acao">
+                                    <button type="button" class="btn-link-doc btn-simular-doc">Abrir</button>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <div class="doc-nome">
+                                        <span class="doc-icon">🔎</span>
+                                        <div>
+                                            <strong>Comprovante de situação cadastral</strong>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="tipo-doc tipo-consulta">Consulta</span></td>
+                                <td>Sistemas Oficiais</td>
+                                <td class="coluna-acao">
+                                    <button type="button" class="btn-link-doc btn-simular-doc">Abrir</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Observações / Upload -->
+            <div class="form-group editavel">
+                <label for="obs_geral_01">Observações:</label>
+                <textarea id="obs_geral_01" name="obs_geral_01" placeholder=""></textarea>
+                <div class="dynamic-list-wrapper" style="flex: 1; display: flex; flex-direction: column; gap: 8px;">
+                    <button type="button" class="btn-add" id="btnAdicionarDocumento01" style="align-self: flex-start;">＋ Adicionar link/documento</button>
+                    <div id="documentos-list-01"></div>
+                </div>
+            </div>
+
+            <!-- Botões -->
+            <div class="button-group">
+                <button type="button" class="btn-secondary" id="btnLimpar">🗑️ Limpar</button>
+                <button type="button" id="btnImprimir" onclick="window.print()">🖨️ Imprimir</button>
+                <button type="submit" id="btnEnviar">✅ Salvar rascunho</button>
+            </div>
+
+        </form>
+    </div>
+
+    <!-- Modal de Simulação -->
+    <div id="modalSimulacao" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:2000; align-items:center; justify-content:center;">
+        <div style="background:white; padding:30px; border-radius:12px; max-width:400px; width:90%; box-shadow:0 10px 25px rgba(0,0,0,0.3); text-align:center; position:relative; border-top: 8px solid #0056b3;">
+            <div style="font-size:40px; margin-bottom:15px;">📁</div>
+            <h3 style="color:#1e3a5f; margin-bottom:15px;">Acesso ao Documento</h3>
+            <p style="color:#475569; line-height:1.6; font-size:0.95em;">Isso é uma simulação.</p>
+            <button type="button" id="btnFecharSimulacao" style="margin-top:25px; width:100%; background:#1e3a5f; color:white; border:none; padding:12px; border-radius:6px; cursor:pointer; font-weight:600;">Entendido</button>
+        </div>
+    </div>
+
+    <script src="formulario.js"></script>
+    <script src="hints.js"></script>
+    <script src="foco-01.js"></script>
+
+    <script>
+        // ================================================================
+        // LISTA DINÂMICA DE DOCUMENTOS — foco-01
+        // ================================================================
+        (function () {
+            const btn  = document.getElementById('btnAdicionarDocumento01');
+            const list = document.getElementById('documentos-list-01');
+
+            if (!btn || !list) return;
+
+            list.innerHTML = '';
+
+            btn.addEventListener('click', function () {
+                const item = document.createElement('div');
+                item.className = 'imagem-item';
+                item.style.cssText = 'display:flex; gap:8px; align-items:center; margin-top:6px;';
+                item.innerHTML = `
+                    <input
+                        type="text"
+                        name="docs_gerais_01[]"
+                        placeholder="Link/Documento Anexado"
+                        autocomplete="off"
+                        class="imagem-input"
+                        style="flex: 1;"
+                    >
+                    <button type="button" class="btn-remove-imagem" title="Remover">✕</button>
+                `;
+                list.appendChild(item);
+                item.querySelector('input').focus();
+                item.querySelector('.btn-remove-imagem')
+                    .addEventListener('click', () => item.remove());
+            });
+        })();
+    </script>
+
+</body>
+</html>
