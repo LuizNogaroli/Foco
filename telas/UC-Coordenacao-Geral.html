@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UC-Coordenação-Geral</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to the new CSS file -->
+</head>
+<body>
+    <div class="container">
+        <!--h1 class="titulo-pagina">UC-Coordenacao-Geral</h1-->
+
+
+
+        <!-- Coordenação-Geral - Expanded -->
+        <section class="card etapa-card">
+            <header class="card-header etapa-header">
+                <div class="titulo">
+                    <span class="icone">📋</span>
+                    <span>Coordenação-Geral</span>
+                </div>
+
+                <div class="acoes">
+                    <span class="status status-pendente">⏳ Pendente</span>
+                    <span class="seta">▲</span>
+                </div>
+            </header>
+
+            <div class="card-body etapa-body">
+                <div class="origem info-origem">
+                    Origem: <span style="font-weight: bold;">[Nome de quem enviou]</span>, em <span style="font-weight: bold;">[Timestamp de recebimento]</span>
+                </div>
+                
+                <div class="pergunta">Manifestação da Coordenação-Geral:</div>
+
+                <div class="opcoes radio-group">
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="manifestacao_coord_geral" value="suficiente_cde" />
+                            <span class="opcao-texto">Proposta reúne elementos suficientes para apreciação da CDE.</span>
+                        </label>
+                        <span class="opcao-descricao">
+                            [Detalhes: Proposta apta para envio à CDE.]
+                        </span>
+                    </div>
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="manifestacao_coord_geral" value="suficiente_condicionantes" />
+                            <span class="opcao-texto">Proposta reúne elementos suficientes com condicionantes.</span>
+                        </label>
+                        <span class="opcao-descricao">
+                            [Detalhes: Observações devem detalhar as condicionantes.]
+                        </span>
+                    </div>
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="manifestacao_coord_geral" value="necessita_complementacao" />
+                            <span class="opcao-texto">Proposta necessita de complementação antes de ser submetida à CDE.</span>
+                        </label>
+                        <span class="opcao-descricao">
+                            [Detalhes: Observações devem indicar quais informações ou documentos precisam ser complementados. Devolver para a Equipe Técnica.]
+                        </span>
+                    </div>
+                </div>
+
+                <div class="campo-observacoes">
+                    <label for="observacoes_coord_geral">Observações:</label>
+                    <textarea id="observacoes_coord_geral" placeholder="Registre eventuais ressalvas, condicionantes, inconsistências identificadas ou orientações para complementação da proposta."></textarea>
+                </div>
+
+                <button class="botao-concluir" type="button" disabled>
+                    ✍ Concluir manifestação
+                </button>
+            </div>
+        </section>
+
+
+    </div>
+    <script src="scripts.js"></script>
+</body>
+</html>

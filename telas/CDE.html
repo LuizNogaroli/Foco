@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CDE - Comissão de Destinações Especiais</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to the new CSS file -->
+</head>
+<body>
+    <div class="container">
+        <h1 class="titulo-pagina">CDE - Comissão de Destinações Especiais</h1>
+
+        <!-- Premissas da Deliberação - Section 1 -->
+        <section class="card etapa-card">
+            <header class="card-header etapa-header">
+                <div class="titulo">
+                    <span class="icone">📋</span>
+                    <span>Premissas da Deliberação</span>
+                    <span style="font-size: 0.85em; font-weight: normal; color: #cbd5e1; margin-left: 10px;">(Diretrizes fundamentais para a decisão)</span>
+                </div>
+                <div class="acoes">
+                    <span class="seta">▲</span>
+                </div>
+            </header>
+            <div class="card-body etapa-body">
+                <ol style="padding-left: 20px; margin-top: 0; margin-bottom: 0;">
+                    <li>A presente deliberação é proferida com base nas informações prestadas no formulário eletrônico e nas manifestações técnicas anteriores.</li>
+                    <li>Os dados cadastrais, dominiais e ambientais constantes do formulário são de responsabilidade da unidade de origem.</li>
+                    <li>A decisão considera a vinculação do uso pretendido às políticas públicas indicadas no processo.</li>
+                    <li>A deliberação pressupõe inexistência de fato novo relevante não informado no formulário.</li>
+                    <li>A decisão parte do pressuposto de que a situação fática do imóvel permanece conforme descrita.</li>
+                    <li>A escolha do destinatário é analisada conforme os fundamentos apresentados.</li>
+                    <li>O regime jurídico adotado é considerado instrumento adequado à finalidade pública declarada.</li>
+                    <li>Eventual alteração relevante das informações deverá ensejar nova submissão à instância competente.</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- ANÁLISE DO COMITÊ - Section 2 -->
+        <section class="card etapa-card" style="margin-top: 40px;">
+            <header class="card-header etapa-header">
+                <div class="titulo">
+                    <span class="icone">📋</span>
+                    <span>ANÁLISE DO COMITÊ</span>
+                </div>
+                <div class="acoes">
+                    <span class="status status-pendente">⏳ Pendente</span>
+                    <span class="seta">▲</span>
+                </div>
+            </header>
+            <div class="card-body etapa-body">
+                <!-- Aspectos de Interesse Público -->
+                <div class="pergunta">Aspectos de Interesse Público</div>
+                <div class="opcoes radio-group">
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="aspectos_interesse_publico" value="consistente" />
+                            <span class="opcao-texto">Evidenciado de forma consistente</span>
+                        </label>
+                        <span class="opcao-descricao">[Detalhes sobre a evidência consistente do interesse público.]</span>
+                    </div>
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="aspectos_interesse_publico" value="ajustes" />
+                            <span class="opcao-texto">Evidenciado com necessidade de ajustes</span>
+                        </label>
+                        <span class="opcao-descricao">[Detalhes sobre a necessidade de ajustes na evidência do interesse público.]</span>
+                    </div>
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="aspectos_interesse_publico" value="nao_demonstrado" />
+                            <span class="opcao-texto">Não suficientemente demonstrado</span>
+                        </label>
+                        <span class="opcao-descricao">[Detalhes sobre a insuficiência da demonstração do interesse público.]</span>
+                    </div>
+                </div>
+
+                <!-- Escolha do Destinatário -->
+                <div class="pergunta">Escolha do Destinatário</div>
+                <div class="opcoes radio-group">
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="escolha_destinatario" value="consistente" />
+                            <span class="opcao-texto">Fundamentação consistente</span>
+                        </label>
+                        <span class="opcao-descricao">[Detalhes sobre a fundamentação consistente da escolha.]</span>
+                    </div>
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="escolha_destinatario" value="ressalvas" />
+                            <span class="opcao-texto">Fundamentação suficiente com ressalvas</span>
+                        </label>
+                        <span class="opcao-descricao">[Detalhes sobre a fundamentação com ressalvas da escolha.]</span>
+                    </div>
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="escolha_destinatario" value="insuficiente" />
+                            <span class="opcao-texto">Fundamentação insuficiente</span>
+                        </label>
+                        <span class="opcao-descricao">[Detalhes sobre a insuficiência da fundamentação da escolha.]</span>
+                    </div>
+                </div>
+
+                <!-- Impactos Sociais, Territoriais e Ambientais -->
+                <div class="pergunta">Impactos Sociais, Territoriais e Ambientais</div>
+                <div class="opcoes radio-group">
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="impactos_sociais" value="positivo_relevante" />
+                            <span class="opcao-texto">Impacto positivo relevante</span>
+                        </label>
+                        <span class="opcao-descricao">[Detalhes sobre o impacto positivo relevante.]</span>
+                    </div>
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="impactos_sociais" value="positivo_moderado" />
+                            <span class="opcao-texto">Impacto positivo moderado</span>
+                        </label>
+                        <span class="opcao-descricao">[Detalhes sobre o impacto positivo moderado.]</span>
+                    </div>
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="impactos_sociais" value="neutro" />
+                            <span class="opcao-texto">Impacto neutro</span>
+                        </label>
+                        <span class="opcao-descricao">[Detalhes sobre o impacto neutro.]</span>
+                    </div>
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="impactos_sociais" value="adverso" />
+                            <span class="opcao-texto">Impacto potencialmente adverso</span>
+                        </label>
+                        <span class="opcao-descricao">[Detalhes sobre o impacto potencialmente adverso.]</span>
+                    </div>
+                </div>
+
+                <!-- Regime de Destinação -->
+                <div class="pergunta">Regime de Destinação</div>
+                <div class="opcoes radio-group">
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="regime_destinacao_cde" value="manter" />
+                            <span class="opcao-texto">Manter regime proposto</span>
+                        </label>
+                        <span class="opcao-descricao">[Detalhes sobre a manutenção do regime proposto.]</span>
+                    </div>
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="regime_destinacao_cde" value="alterar" />
+                            <span class="opcao-texto">Alterar regime</span>
+                        </label>
+                        <span class="opcao-descricao">
+                            [Detalhes: Esta opção aciona o campo 'ALTERAR PARA'.]
+                        </span>
+                    </div>
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="regime_destinacao_cde" value="reavaliar" />
+                            <span class="opcao-texto">Determinar reavaliação do regime</span>
+                        </label>
+                        <span class="opcao-descricao">[Detalhes sobre a determinação de reavaliação do regime.]</span>
+                    </div>
+                </div>
+
+                <!-- Campo condicional "ALTERAR PARA" -->
+                <div class="condicional-regime" style="margin-top: 20px;"> <!-- Placeholder for conditional section -->
+                    <hr style="margin-top: 20px; margin-bottom: 20px; border: 0; border-top: 1px dashed #ccc;">
+                    <p style="font-weight: bold; color: #555;">(Se 'Alterar regime' selecionado)</p>
+                    <div class="campo-observacoes"> <!-- Reusing styling -->
+                        <label for="alterar_para">ALTERAR PARA:</label>
+                        <textarea id="alterar_para" placeholder="Informe o novo regime jurídico proposto"></textarea>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DELIBERAÇÃO - Section 3 -->
+        <section class="card etapa-card" style="margin-top: 40px;">
+            <header class="card-header etapa-header">
+                <div class="titulo">
+                    <span class="icone">📋</span>
+                    <span>DELIBERAÇÃO</span>
+                </div>
+                <div class="acoes">
+                    <span class="status status-pendente">⏳ Pendente</span>
+                    <span class="seta">▲</span>
+                </div>
+            </header>
+            <div class="card-body etapa-body">
+                <div class="opcoes radio-group">
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="deliberacao_cde" value="aprovar_proposta" />
+                            <span class="opcao-texto">Aprovar a proposta, nos termos apresentados.</span>
+                        </label>
+                        <span class="opcao-descricao">[Detalhes sobre a aprovação da proposta.]</span>
+                    </div>
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="deliberacao_cde" value="aprovar_condicionantes" />
+                            <span class="opcao-texto">Aprovar com condicionantes, conforme abaixo:</span>
+                        </label>
+                        <span class="opcao-descricao">
+                            [Detalhes: Esta opção aciona o campo 'Observações sobre as condicionantes'.]
+                        </span>
+                    </div>
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="deliberacao_cde" value="diligencia" />
+                            <span class="opcao-texto">Determinar diligência complementar.</span>
+                        </label>
+                        <span class="opcao-descricao">[Detalhes sobre a diligência complementar.]</span>
+                    </div>
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="deliberacao_cde" value="indefiro" />
+                            <span class="opcao-texto">Indeferir a proposta.</span>
+                        </label>
+                        <span class="opcao-descricao">[Detalhes sobre o indeferimento da proposta.]</span>
+                    </div>
+                </div>
+
+                <!-- Campo condicional "Observações sobre as condicionantes" -->
+                <div class="condicional-condicionantes" style="margin-top: 20px;"> <!-- Placeholder for conditional section -->
+                    <hr style="margin-top: 20px; margin-bottom: 20px; border: 0; border-top: 1px dashed #ccc;">
+                    <p style="font-weight: bold; color: #555;">(Se 'Aprovar com condicionantes' selecionado)</p>
+                    <div class="campo-observacoes"> <!-- Reusing styling -->
+                        <label for="observacoes_condicionantes">Observações sobre as condicionantes:</label>
+                        <textarea id="observacoes_condicionantes" placeholder="Descreva as condicionantes, ressalvas ou observações relacionadas à aprovação da proposta..."></textarea>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ASSINATURAS DOS MEMBROS DO CDE - Section 4 -->
+        <section class="card etapa-card" style="margin-top: 40px;">
+            <header class="card-header etapa-header">
+                <div class="titulo">
+                    <span class="icone">✍</span>
+                    <span>ASSINATURAS DOS MEMBROS DO CDE</span>
+                </div>
+                <div class="acoes">
+                    <span class="status status-pendente">⏳ Pendente</span>
+                    <span class="seta">▲</span>
+                </div>
+            </header>
+            <div class="card-body etapa-body">
+                <p style="font-size: 0.9em; color: #475569; margin-bottom: 20px;">Cada membro do Comitê deve revisar a declaração, confirmar os itens pertinentes e registrar sua assinatura para validar esta deliberação.</p>
+                <!-- Grouping for visual consistency -->
+                <div style="padding: 15px;"> <!-- Smaller padding for signature cards -->
+                <!-- Presidente do CDE -->
+                <div class="card">
+                    <header class="card-header etapa-header" style="background-color: #f8fafc; color: #0f172a; cursor: pointer; padding: 10px 15px;">
+                        <div class="titulo">
+                            <span style="font-weight: bold;">P</span>
+                            <span style="margin-left: 10px;">Presidente do CDE</span>
+                        </div>
+                        <div class="acoes">
+                            <span class="status status-pendente">⏳ Pendente</span>
+                            <span class="seta">▼</span>
+                        </div>
+                    </header>
+                    <!-- Content for signature would be here if expanded -->
+                </div>
+
+                <!-- Membro 1 -->
+                <div class="card" style="margin-top: 10px;">
+                    <header class="card-header etapa-header" style="background-color: #f8fafc; color: #0f172a; cursor: pointer; padding: 10px 15px;">
+                        <div class="titulo">
+                            <span style="font-weight: bold;">1</span>
+                            <span style="margin-left: 10px;">Membro 1</span>
+                        </div>
+                        <div class="acoes">
+                            <span class="status status-pendente">⏳ Pendente</span>
+                            <span class="seta">▼</span>
+                        </div>
+                    </header>
+                </div>
+
+                <!-- Membro 2 -->
+                <div class="card" style="margin-top: 10px;">
+                    <header class="card-header etapa-header" style="background-color: #f8fafc; color: #0f172a; cursor: pointer; padding: 10px 15px;">
+                        <div class="titulo">
+                            <span style="font-weight: bold;">2</span>
+                            <span style="margin-left: 10px;">Membro 2</span>
+                        </div>
+                        <div class="acoes">
+                            <span class="status status-pendente">⏳ Pendente</span>
+                            <span class="seta">▼</span>
+                        </div>
+                    </header>
+                </div>
+
+                <!-- Membro 3 -->
+                <div class="card" style="margin-top: 10px;">
+                    <header class="card-header etapa-header" style="background-color: #f8fafc; color: #0f172a; cursor: pointer; padding: 10px 15px;">
+                        <div class="titulo">
+                            <span style="font-weight: bold;">3</span>
+                            <span style="margin-left: 10px;">Membro 3</span>
+                        </div>
+                        <div class="acoes">
+                            <span class="status status-pendente">⏳ Pendente</span>
+                            <span class="seta">▼</span>
+                        </div>
+                    </header>
+                </div>
+
+                <!-- Membro 4 -->
+                <div class="card" style="margin-top: 10px;">
+                    <header class="card-header etapa-header" style="background-color: #f8fafc; color: #0f172a; cursor: pointer; padding: 10px 15px;">
+                        <div class="titulo">
+                            <span style="font-weight: bold;">4</span>
+                            <span style="margin-left: 10px;">Membro 4</span>
+                        </div>
+                        <div class="acoes">
+                            <span class="status status-pendente">⏳ Pendente</span>
+                            <span class="seta">▼</span>
+                        </div>
+                    </header>
+                </div>
+            </div>
+        </section>
+
+        <!-- Botão Concluir Manifestação - Common pattern for all forms -->
+        <div style="margin-top: 30px; text-align: right;">
+            <button class="botao-concluir" type="button" disabled>
+                ✍ Concluir Manifestação
+            </button>
+        </div>
+    </div>
+    <script src="scripts.js"></script>
+</body>
+</html>

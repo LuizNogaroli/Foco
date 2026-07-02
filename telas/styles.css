@@ -1,0 +1,619 @@
+/* ================================
+   Base geral da página
+================================ */
+
+body {
+  margin: 0;
+  padding: 0;
+  background: #f3f6fa;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #0f172a;
+}
+
+.container,
+.page,
+main {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 28px 24px;
+}
+
+/* ================================
+   Título da tela
+================================ */
+
+h1,
+.titulo-pagina {
+  margin: 0 0 28px;
+  font-size: 34px;
+  font-weight: 700;
+  color: #0054a6;
+}
+
+/* ================================
+   Card principal
+================================ */
+
+.card,
+.etapa-card,
+.accordion-card {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 5px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+/* ================================
+   Cabeçalho do card
+================================ */
+
+.card-header,
+.etapa-header,
+.accordion-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+
+  background: #1f3f67;
+  color: #ffffff;
+
+  padding: 13px 18px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.card-header .titulo,
+.etapa-header .titulo,
+.accordion-header .titulo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Ícone da etapa */
+.card-header .icone,
+.etapa-header .icone,
+.accordion-header .icone {
+  font-size: 16px;
+}
+
+/* Área direita do cabeçalho */
+.card-header .acoes,
+.etapa-header .acoes,
+.accordion-header .acoes {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Badge de status */
+.status,
+.status-pendente,
+.badge-pendente {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+
+  padding: 4px 12px;
+  border-radius: 999px;
+
+  background: #fff3c4;
+  border: 1px solid #facc15;
+  color: #7c2d12;
+
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* Seta de expansão */
+.seta,
+.toggle,
+.accordion-toggle {
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* ================================
+   Corpo do card
+================================ */
+
+.card-body,
+.etapa-body,
+.accordion-body {
+  padding: 24px 20px;
+  background: #ffffff;
+}
+
+/* Remove o fundo azul antigo, caso exista */
+.bloco-azul,
+.caixa-info,
+.manifestacao-box {
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+/* ================================
+   Textos e labels
+================================ */
+
+label,
+.form-label,
+.section-label {
+  font-size: 15px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.declaro,
+.pergunta,
+fieldset legend {
+  display: block;
+  margin-bottom: 14px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #111827;
+}
+
+p {
+  line-height: 1.55;
+}
+
+/* ================================
+   Opções de declaração
+================================ */
+
+.opcoes,
+.radio-group,
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.opcao,
+.radio-option,
+.checkbox-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+
+  padding: 15px 15px;
+
+  background: #f8fafc;
+  border: 2px solid #cbd8e8;
+  border-radius: 6px;
+
+  cursor: pointer;
+  transition: all 0.18s ease-in-out;
+}
+
+/* Hover da opção */
+.opcao:hover,
+.radio-option:hover,
+.checkbox-option:hover {
+  background: #f1f7ff;
+  border-color: #8fb4df;
+}
+
+/* Inputs maiores */
+.opcao input[type="radio"],
+.opcao input[type="checkbox"],
+.radio-option input[type="radio"],
+.checkbox-option input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin-top: 1px;
+  accent-color: #1f66b1;
+  cursor: pointer;
+}
+
+/* Texto principal da opção */
+.opcao-texto,
+.radio-label,
+.checkbox-label {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.45;
+  color: #0f172a;
+}
+
+/* Caso a opção tenha texto complementar */
+.opcao-descricao,
+.option-description {
+  display: block;
+  margin-top: 8px;
+
+  font-size: 18px;
+  font-weight: 400;
+  color: #475569;
+  line-height: 1.5;
+}
+
+/* Quando a opção estiver selecionada usando :has */
+.opcao:has(input:checked),
+.radio-option:has(input:checked),
+.checkbox-option:has(input:checked) {
+  background: #eaf4ff;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.12);
+}
+
+/* ================================
+   Observações
+================================ */
+
+.form-group,
+.campo-observacoes {
+  margin-top: 22px;
+  margin-bottom: 24px;
+}
+
+.form-group label,
+.campo-observacoes label {
+  display: block;
+  margin-bottom: 8px;
+
+  font-size: 15px;
+  font-weight: 500;
+  color: #111827;
+}
+
+textarea,
+.form-textarea,
+.campo-texto {
+  width: 100%;
+  min-height: 80px;
+
+  padding: 12px 12px;
+
+  border: 1px solid #c5d2e3;
+  border-radius: 5px;
+
+  background: #ffffff;
+  color: #111827;
+
+  font-size: 14px;
+  font-family: Consolas, "Courier New", monospace;
+
+  resize: vertical;
+  box-sizing: border-box;
+  outline: none;
+}
+
+textarea::placeholder {
+  color: #64748b;
+}
+
+textarea:focus,
+.form-textarea:focus,
+.campo-texto:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+}
+
+/* ================================
+   Botão concluir manifestação
+================================ */
+
+button,
+.btn,
+.btn-primary,
+.botao-concluir {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+
+  padding: 10px 16px;
+
+  border: none;
+  border-radius: 5px;
+
+  background: #007bff;
+  color: #ffffff;
+
+  font-size: 16px;
+  font-weight: 700;
+
+  cursor: pointer;
+  transition: all 0.18s ease-in-out;
+}
+
+button:hover,
+.btn:hover,
+.btn-primary:hover,
+.botao-concluir:hover {
+  background: #0068d9;
+  transform: translateY(-1px);
+}
+
+button:active,
+.btn:active,
+.btn-primary:active,
+.botao-concluir:active {
+  transform: translateY(0);
+}
+
+/* Estado desabilitado, como aparece na segunda imagem */
+button:disabled,
+.btn:disabled,
+.btn.disabled,
+.botao-concluir:disabled,
+.botao-concluir.disabled {
+  background: #94a3b8;
+  color: #ffffff;
+  cursor: not-allowed;
+  transform: none;
+  opacity: 1;
+}
+
+/* ================================
+   Ajustes para textos antigos da primeira tela
+================================ */
+
+.origem,
+.info-origem {
+  margin-bottom: 24px;
+  padding: 12px 14px;
+
+  background: #f8fafc;
+  border-left: 4px solid #2563eb;
+  border-radius: 4px;
+
+  font-size: 14px;
+  color: #334155;
+}
+
+.destino,
+.acoes-fluxo,
+.texto-apoio {
+  display: none;
+}
+
+/* Caso queira manter destino/ações visíveis, remova o display:none acima
+   e use este estilo:
+
+.destino,
+.acoes-fluxo,
+.texto-apoio {
+  display: block;
+  margin-top: 8px;
+  font-size: 15px;
+  color: #475569;
+}
+
+*/
+
+/* ================================
+   Responsividade
+================================ */
+
+@media screen and (max-width: 640px) {
+  .container,
+  .page,
+  main {
+    padding: 20px 14px;
+  }
+
+  h1,
+  .titulo-pagina {
+    font-size: 28px;
+  }
+
+  .card-header,
+  .etapa-header,
+  .accordion-header {
+    padding: 12px 14px;
+    font-size: 15px;
+  }
+
+  .card-body,
+  .etapa-body,
+  .accordion-body {
+    padding: 20px 16px;
+  }
+
+  .opcao,
+  .radio-option,
+  .checkbox-option {
+    padding: 13px 12px;
+  }
+
+  button,
+  .btn,
+  .btn-primary,
+  .botao-concluir {
+    width: 100%;
+  }
+}
+
+/* Styling for dynamically appearing info box */
+.opcao-descricao {
+  display: none; /* Hidden by default */
+  padding: 15px;
+  margin-top: 10px;
+  background-color: #fffacd; /* Lighter canary yellow */
+  border: 1px solid #ffeb80; /* Slightly darker border */
+  border-radius: 4px;
+  font-size: 18px;
+  line-height: 1.8;
+  color: #333;
+  white-space: pre-wrap; /* Preserves line breaks */
+}
+
+/* Ensure visibility when active/selected (handled by JS) */
+.opcao-descricao.active {
+  display: block;
+}
+
+/* Edit Comment UI */
+.opcao-descricao {
+    position: relative;
+    padding-right: 40px !important; /* Make space for edit button */
+}
+
+.edit-comment-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 2px 5px;
+    border-radius: 3px;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+
+.edit-comment-btn:hover {
+    opacity: 1;
+    background-color: rgba(0,0,0,0.05);
+}
+
+.edit-textarea {
+    width: 100%;
+    min-height: 60px;
+    font-family: inherit;
+    font-size: 15px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-bottom: 5px;
+}
+
+.save-comment-btn {
+    font-size: 12px;
+    padding: 4px 8px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.save-comment-btn:hover {
+    background-color: #218838;
+}
+
+/* ================================
+   Menu de Navegação (Index)
+================================ */
+
+.navbar {
+  background: #1f3f67;
+  padding: 15px 0;
+  margin-bottom: 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: #cbd5e1;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  font-size: 11px;
+  width: 130px;
+  text-align: center;
+}
+
+.nav-item .dot {
+  width: 12px;
+  height: 12px;
+  background: #64748b;
+  border-radius: 50%;
+  margin-bottom: 5px;
+  border: 2px solid #1f3f67;
+  box-shadow: 0 0 0 2px #64748b;
+}
+
+.nav-item:hover {
+  color: #ffffff;
+}
+
+.nav-item:hover .dot {
+  background: #ffffff;
+  box-shadow: 0 0 0 2px #ffffff;
+}
+
+.nav-item.active {
+  color: #facc15;
+  font-weight: bold;
+}
+
+.nav-item.active .dot {
+  background: #facc15;
+  box-shadow: 0 0 0 2px #facc15;
+}
+
+/* Iframe container */
+#content-frame {
+  flex: 1;
+  width: 100%;
+  border: none;
+  background: #f3f6fa;
+}
+
+/* Adjustments for the content within iframe */
+body.hub-body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Custom style for Premissas da Deliberação header */
+.premissas-header {
+  background-color: #f8fafc; /* Light background from user's inline style */
+  color: #0f172a; /* Dark text from user's inline style */
+  border-bottom: 1px solid #e2e8f0; /* Add a subtle border for separation */
+}
+
+.premissas-header .titulo {
+  flex-direction: column; /* Stack title and subtitle */
+  align-items: flex-start;
+  gap: 0px; /* Remove gap between title and subtitle */
+}
+
+.premissas-header .titulo span:first-child {
+  font-size: 1.1em; /* Slightly smaller main title */
+  font-weight: 700;
+}
+
+.premissas-header .titulo span:last-child {
+  font-size: 0.85em; /* Smaller subtitle */
+  font-weight: normal;
+  color: #64748b; /* Lighter color for subtitle */
+}
+
+/* Ensure the expand/collapse arrow is visible against lighter background */
+.premissas-header .seta {
+  color: #1f3f67; /* Darker color for arrow */
+}
+

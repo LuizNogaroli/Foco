@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UF-Superintendência</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to the new CSS file -->
+</head>
+<body>
+    <div class="container">
+        <!--h1 class="titulo-pagina">UF-Superintendencia</h1-->
+
+
+
+        <!-- Superintendência - Expanded -->
+        <section class="card etapa-card">
+            <header class="card-header etapa-header">
+                <div class="titulo">
+                    <span class="icone">📋</span>
+                    <span>Superintendência</span>
+                </div>
+
+                <div class="acoes">
+                    <span class="status status-pendente">⏳ Pendente</span>
+                    <span class="seta">▲</span>
+                </div>
+            </header>
+
+            <div class="card-body etapa-body">
+                <div class="origem info-origem">
+                    Origem: <span style="font-weight: bold;">[Nome de quem enviou]</span>, em <span style="font-weight: bold;">[Timestamp de recebimento]</span>
+                </div>
+                
+              
+                <!-- Blocos da Variação 03 (Análise de Mérito e Deliberação) - Condicionais, mas incluídos para demonstração -->
+                <hr style="margin-top: 30px; margin-bottom: 30px; border: 0; border-top: 1px solid #eee;">
+                <!-- p style="font-weight: bold; color: #0054a6;">Blocos de Análise e Deliberação (Variação Completa)</p -->
+                
+                <!-- Aspectos de Interesse Público -->
+                <div class="pergunta">Aspectos de Interesse Público</div>
+                <div class="opcoes radio-group">
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="aspectos_interesse_publico" value="consistente" />
+                            <span class="opcao-texto">Evidenciado de forma consistente</span>
+                        </label>
+                        <span class="opcao-descricao">[Detalhes]</span>
+                    </div>
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="aspectos_interesse_publico" value="ajustes" />
+                            <span class="opcao-texto">Evidenciado com necessidade de ajustes</span>
+                        </label>
+                        <span class="opcao-descricao">[Detalhes]</span>
+                    </div>
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="aspectos_interesse_publico" value="nao_demonstrado" />
+                            <span class="opcao-texto">Não suficientemente demonstrado</span>
+                        </label>
+                        <span class="opcao-descricao">[Detalhes]</span>
+                    </div>
+                </div>
+
+                <!-- Escolha do Destinatário -->
+                <div class="pergunta">Escolha do Destinatário</div>
+                <div class="opcoes radio-group">
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="escolha_destinatario" value="consistente" />
+                            <span class="opcao-texto">Fundamentação consistente</span>
+                        </label>
+                        <span class="opcao-descricao">[Detalhes]</span>
+                    </div>
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="escolha_destinatario" value="ressalvas" />
+                            <span class="opcao-texto">Fundamentação suficiente com ressalvas</span>
+                        </label>
+                        <span class="opcao-descricao">[Detalhes]</span>
+                    </div>
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="escolha_destinatario" value="insuficiente" />
+                            <span class="opcao-texto">Fundamentação insuficiente</span>
+                        </label>
+                        <span class="opcao-descricao">[Detalhes]</span>
+                    </div>
+                </div>
+
+                <!-- Impactos sociais, territoriais e ambientais -->
+                <div class="pergunta">Impactos sociais, territoriais e ambientais</div>
+                <div class="opcoes radio-group">
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="impactos" value="positivo_relevante" />
+                            <span class="opcao-texto">Impacto positivo relevante</span>
+                        </label>
+                        <span class="opcao-descricao">[Detalhes]</span>
+                    </div>
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="impactos" value="positivo_moderado" />
+                            <span class="opcao-texto">Impacto positivo moderado</span>
+                        </label>
+                        <span class="opcao-descricao">[Detalhes]</span>
+                    </div>
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="impactos" value="neutro" />
+                            <span class="opcao-texto">Impacto neutro</span>
+                        </label>
+                        <span class="opcao-descricao">[Detalhes]</span>
+                    </div>
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="impactos" value="adverso" />
+                            <span class="opcao-texto">Impacto potencialmente adverso</span>
+                        </label>
+                        <span class="opcao-descricao">[Detalhes]</span>
+                    </div>
+                </div>
+
+                <!-- Regime de destinação -->
+                <div class="pergunta">Regime de destinação</div>
+                <div class="origem info-origem" style="margin-bottom: 20px;">
+                    ℹ Regime proposto pelo analista: Cessão de uso gratuita
+                </div>
+                <div class="opcoes radio-group">
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="regime_destinacao" value="concordo" />
+                            <span class="opcao-texto">Concordo.</span>
+                        </label>
+                        <span class="opcao-descricao">[Detalhes]</span>
+                    </div>
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="regime_destinacao" value="nao_concordo" />
+                            <span class="opcao-texto">Não concordo.</span>
+                        </label>
+                        <span class="opcao-descricao">
+                            [Detalhes: Este campo sugere que "Selecione o regime de destinação desejado" aparecerá condicionalmente.]
+                        </span>
+                    </div>
+                </div>
+                
+                <!-- Selecione o regime de destinação desejado -->
+                <div class="campo-observacoes"> <!-- Using campo-observacoes for styling, adjust if needed -->
+                    <label for="regime_desejado">Selecione o regime de destinação desejado:</label>
+                    <select id="regime_desejado" class="form-select"> <!-- Assuming a select input type -->
+                        <option value="">Selecione...</option>
+                        <option value="opcao1">Opção de Regime 1</option>
+                        <option value="opcao2">Opção de Regime 2</option>
+                    </select>
+                </div>
+
+                <!-- Deliberação -->
+                <div class="pergunta">Deliberação</div>
+                <div class="opcoes radio-group">
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="deliberacao" value="aprovo_proposta" />
+                            <span class="opcao-texto">Favorável à proposta.</span>
+                        </label>
+                        <span class="opcao-descricao">[Detalhes]</span>
+                    </div>
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="deliberacao" value="aprovo_condicionantes" />
+                            <span class="opcao-texto">Favorável, com ressalvas.</span>
+                        </label>
+                        <span class="opcao-descricao">
+                            [Detalhes: Este campo sugere que "Cadastrar condicionantes" aparecerá condicionalmente.]
+                        </span>
+                    </div>
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="deliberacao" value="diligencia" />
+                            <span class="opcao-texto">Necessária complementação de informações/documentos.</span>
+                        </label>
+                        <span class="opcao-descricao">[Detalhes]</span>
+                    </div>
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="deliberacao" value="indefiro" />
+                            <span class="opcao-texto">Cancelamento.</span>
+                        </label>
+                        <span class="opcao-descricao">[Detalhes]</span>
+                    </div>
+                </div>
+
+                <!-- Cadastrar condicionantes -->
+                <div class="campo-observacoes"> <!-- Reusing styling from campo-observacoes -->
+                    <label for="condicionantes">Cadastrar condicionantes:</label>
+                    <textarea id="condicionantes" placeholder="Descreva a condicionante..."></textarea>
+                    <button class="btn btn-primary" type="button" style="margin-top: 10px;">+ Adicionar</button>
+                </div>
+
+                <!-- Observações Comuns -->
+                <div class="campo-observacoes">
+                    <label for="observacoes_superintendencia">Observações:</label>
+                    <textarea id="observacoes_superintendencia" placeholder="Registre eventuais ressalvas, condicionantes, inconsistências identificadas ou orientações para complementação da proposta."></textarea>
+                </div>
+
+                <!-- Botão Comum -->
+                <button class="botao-concluir" type="button" disabled>
+                    ✍ Concluir manifestação
+                </button>
+            </div>
+        </section>
+    </div>
+    <script src="scripts.js"></script>
+</body>
+</html>

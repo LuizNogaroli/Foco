@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UC-Equipe-Técnica</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to the new CSS file -->
+</head>
+<body>
+    <div class="container">
+        <!--h1 class="titulo-pagina">UC-Equipe-Tecnica</h1-->
+
+        <!-- Equipe Técnica - Expanded -->
+        <section class="card etapa-card">
+            <header class="card-header etapa-header">
+                <div class="titulo">
+                    <span class="icone">📋</span>
+                    <span>Equipe Técnica</span>
+                </div>
+
+                <div class="acoes">
+                    <span class="status status-pendente">⏳ Pendente</span>
+                    <span class="seta">▲</span>
+                </div>
+            </header>
+
+            <div class="card-body etapa-body">
+                <h2 style="font-size: 20px; color: #0054a6; margin-bottom: 25px;">Análise da Proposta de Destinação</h2>
+                
+                <!-- Interesse público da destinação -->
+                <div class="pergunta">O interesse público da destinação foi demonstrado de forma suficiente?</div>
+                <div class="opcoes radio-group">
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="interesse_publico" value="demonstrado" />
+                            <span class="opcao-texto">Demonstrado.</span>
+                        </label>
+                        <span class="opcao-descricao">
+                            [Detalhes sobre a suficiência da demonstração do interesse público.]
+                        </span>
+                    </div>
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="interesse_publico" value="demonstrado_complementacao" />
+                            <span class="opcao-texto">Demonstrado, com ressalvas</span>
+                        </label>
+                        <span class="opcao-descricao">
+                            [Detalhes sobre a necessidade de complementação do interesse público.]
+                        </span>
+                    </div>
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="interesse_publico" value="nao_demonstrado" />
+                            <span class="opcao-texto">Não suficientemente demonstrado</span>
+                        </label>
+                        <span class="opcao-descricao">
+                            [Detalhes sobre a insuficiência da demonstração do interesse público.]
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Escolha do destinatário -->
+                <div class="pergunta">A escolha do destinatário foi devidamente justificada?</div>
+                <div class="opcoes radio-group">
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="escolha_destinatario" value="justificada" />
+                            <span class="opcao-texto">Justificada.</span>
+                        </label>
+                        <span class="opcao-descricao">
+                            [Detalhes sobre a justificativa da escolha do destinatário.]
+                        </span>
+                    </div>
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="escolha_destinatario" value="justificada_complementacao" />
+                            <span class="opcao-texto">Justificada, mas com necessidade de complementação</span>
+                        </label>
+                        <span class="opcao-descricao">
+                            [Detalhes sobre a necessidade de complementação da justificativa do destinatário.]
+                        </span>
+                    </div>
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="escolha_destinatario" value="nao_justificada" />
+                            <span class="opcao-texto">Não suficientemente justificada</span>
+                        </label>
+                        <span class="opcao-descricao">
+                            [Detalhes sobre a insuficiência da justificativa do destinatário.]
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Foram indicados impactos sociais, territoriais ou ambientais relevantes? -->
+                <div class="pergunta">Foram indicados impactos sociais, territoriais ou ambientais relevantes?</div>
+                <div class="opcoes radio-group">
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="impactos_relevantes" value="sim" />
+                            <span class="opcao-texto">Sim</span>
+                        </label>
+                        <span class="opcao-descricao">
+                            [Detalhes: Esta opção aciona os campos de Classificação e Justificativa de Impactos.]
+                        </span>
+                    </div>
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="impactos_relevantes" value="nao" />
+                            <span class="opcao-texto">Não</span>
+                        </label>
+                        <span class="opcao-descricao">
+                            [Detalhes: Esta opção oculta os campos de Classificação e Justificativa de Impactos.]
+                        </span>
+                    </div>
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="impactos_relevantes" value="nao_se_aplica" />
+                            <span class="opcao-texto">Não se aplica</span>
+                        </label>
+                        <span class="opcao-descricao">
+                            [Detalhes: Esta opção oculta os campos de Classificação e Justificativa de Impactos.]
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Classificação dos impactos indicados (CONDICIONAL) -->
+                <div class="condicional-impactos"> <!-- Placeholder for conditional section -->
+                    <hr style="margin-top: 20px; margin-bottom: 20px; border: 0; border-top: 1px dashed #ccc;">
+                    <p style="font-weight: bold; color: #555;">(Se 'Sim' em Impactos Relevantes)</p>
+                    <div class="pergunta">Classificação dos impactos indicados:</div>
+                    <div class="opcoes radio-group">
+                        <div>
+                            <label class="opcao radio-option">
+                                <input type="radio" name="classificacao_impactos" value="positivo_relevante" />
+                                <span class="opcao-texto">Impacto positivo relevante</span>
+                            </label>
+                            <span class="opcao-descricao">[Detalhes]</span>
+                        </div>
+                        <div>
+                            <label class="opcao radio-option">
+                                <input type="radio" name="classificacao_impactos" value="positivo_moderado" />
+                                <span class="opcao-texto">Impacto positivo moderado</span>
+                            </label>
+                            <span class="opcao-descricao">[Detalhes]</span>
+                        </div>
+                        <div>
+                            <label class="opcao radio-option">
+                                <input type="radio" name="classificacao_impactos" value="neutro" />
+                                <span class="opcao-texto">Impacto neutro</span>
+                            </label>
+                            <span class="opcao-descricao">[Detalhes]</span>
+                        </div>
+                        <div>
+                            <label class="opcao radio-option">
+                                <input type="radio" name="classificacao_impactos" value="adverso" />
+                                <span class="opcao-texto">Impacto potencialmente adverso</span>
+                            </label>
+                            <span class="opcao-descricao">[Detalhes]</span>
+                        </div>
+                    </div>
+
+                    <!-- A justificativa dos impactos indicados é suficiente? (CONDICIONAL) -->
+                    <div class="pergunta">A justificativa dos impactos indicados é suficiente?</div>
+                    <div class="opcoes radio-group">
+                        <div>
+                            <label class="opcao radio-option">
+                                <input type="radio" name="justificativa_impactos" value="suficiente" />
+                                <span class="opcao-texto">Justificativa suficiente</span>
+                            </label>
+                            <span class="opcao-descricao">[Detalhes]</span>
+                        </div>
+                        <div>
+                            <label class="opcao radio-option">
+                                <input type="radio" name="justificativa_impactos" value="ressalvas" />
+                                <span class="opcao-texto">Justificativa suficiente, com ressalvas</span>
+                            </label>
+                            <span class="opcao-descricao">[Detalhes]</span>
+                        </div>
+                        <div>
+                            <label class="opcao radio-option">
+                                <input type="radio" name="justificativa_impactos" value="insuficiente" />
+                                <span class="opcao-texto">Justificativa insuficiente</span>
+                            </label>
+                            <span class="opcao-descricao">[Detalhes]</span>
+                        </div>
+                    </div>
+                </div> <!-- Fim do Bloco condicional de Impactos -->
+
+
+                <!-- Regime de destinação -->
+                <div class="pergunta" style="margin-top: 25px;">Regime de destinação</div>
+                <div class="origem info-origem" style="margin-bottom: 20px;">
+                    ℹ Regime proposto pela superintendência: Cessão de uso gratuita
+                </div>
+                <div class="opcoes radio-group">
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="regime_compativel" value="sim" />
+                            <span class="opcao-texto">Sim, o regime proposto é compatível</span>
+                        </label>
+                        <span class="opcao-descricao">[Detalhes]</span>
+                    </div>
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="regime_compativel" value="nao" />
+                            <span class="opcao-texto">Não, o regime proposto deve ser ajustado</span>
+                        </label>
+                        <span class="opcao-descricao">
+                            [Detalhes: Esta opção aciona os campos de 'Regime de destinação sugerido' e 'Justificativa para alteração'.]
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Campos condicionais de ajuste de regime -->
+                <div class="condicional-regime"> <!-- Placeholder for conditional section -->
+                    <hr style="margin-top: 20px; margin-bottom: 20px; border: 0; border-top: 1px dashed #ccc;">
+                    <p style="font-weight: bold; color: #555;">(Se 'Não' em Compatibilidade de Regime)</p>
+                    <!-- Regime de destinação sugerido -->
+                    <div class="campo-observacoes"> <!-- Reusing styling from campo-observacoes -->
+                        <label for="regime_sugerido">Regime de destinação sugerido:</label>
+                        <select id="regime_sugerido" class="form-select">
+                            <option value="">Selecione...</option>
+                            <option value="opcao1">Opção de Regime 1</option>
+                            <option value="opcao2">Opção de Regime 2</option>
+                        </select>
+                    </div>
+
+                    <!-- Justificativa para alteração do regime -->
+                    <div class="campo-observacoes">
+                        <label for="justificativa_regime">Justificativa para alteração do regime:</label>
+                        <textarea id="justificativa_regime" placeholder="Informe a justificativa para a alteração do regime..."></textarea>
+                    </div>
+                </div> <!-- Fim do Bloco condicional de Regime -->
+
+                <!-- Conclusão da análise -->
+                <div class="pergunta" style="margin-top: 25px;">Conclusão da análise:</div>
+                <div class="opcoes radio-group">
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="conclusao_analise" value="apta_cde" />
+                            <span class="opcao-texto">A proposta está apta para apreciação pela Comissão de Destinações Especiais (CDE).</span>
+                        </label>
+                        <span class="opcao-descricao">
+                            [Detalhes sobre a aptidão para a CDE. Ex: Encaminhar para a CDE.]
+                        </span>
+                    </div>
+                    <div>
+                        <label class="opcao radio-option">
+                            <input type="radio" name="conclusao_analise" value="nao_apta_retornar" />
+                            <span class="opcao-texto">A proposta não está apta para apreciação pela CDE, devendo retornar à superintendência para complementação ou ajuste.</span>
+                        </label>
+                        <span class="opcao-descricao">
+                            [Detalhes sobre o retorno para complementação ou ajuste. Ex: Devolver para Superintendência.]
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Observações, ressalvas ou condicionantes -->
+                <div class="campo-observacoes">
+                    <label for="observacoes_equipe_tecnica">Observações, ressalvas ou condicionantes</label>
+                    <textarea id="observacoes_equipe_tecnica" placeholder="Registre eventuais ressalvas, condicionantes, inconsistências identificadas ou orientações para complementação da proposta."></textarea>
+                </div>
+
+                <!-- Ação - Concluir manifestação -->
+                <button class="botao-concluir" type="button" disabled>
+                    ✍ Concluir manifestação
+                </button>
+            </div>
+        </section>
+
+
+    </div>
+    <script src="scripts.js"></script>
+</body>
+</html>

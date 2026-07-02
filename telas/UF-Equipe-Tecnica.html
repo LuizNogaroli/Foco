@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UF-Equipe-Técnica</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to the new CSS file -->
+</head>
+<body>
+    <div class="container">
+        <!--h1 class="titulo-pagina">UF-Equipe-Técnica</h1-->
+
+        <section class="card etapa-card">
+            <header class="card-header etapa-header">
+                <div class="titulo">
+                    <span class="icone">📋</span>
+                    <span>UF-Equipe-Técnica</span>
+                </div>
+
+                <div class="acoes">
+                    <span class="status status-pendente">⏳ Pendente</span>
+                    <span class="seta">▲</span>
+                </div>
+            </header>
+
+            <div class="card-body etapa-body">
+                <!-- Removed "Origem" block as it's specific to Chefia receiving a process -->
+                
+                <div class="pergunta">Declaração</div>
+
+                <div class="opcoes checkbox-group">
+                    <div>
+                        <label class="opcao checkbox-option">
+                            <input type="checkbox" name="declaracao_confirmacao" value="concordo" />
+                            <span class="opcao-texto">
+                                Declaro que as informações consignadas neste formulário foram inseridas com base nos dados disponíveis nos sistemas oficiais, nos documentos constantes do processo e nas verificações realizadas no âmbito desta unidade, estando compatíveis com os elementos analisados.
+                            </span>
+                        </label>
+                        <!-- <span class="opcao-descricao">
+                            [Detalhes sobre a confirmação da UF-Equipe-Técnica. Por exemplo: "Ao confirmar, este processo será marcado como verificado e encaminhado para a próxima etapa."]
+                        </span> -->
+                    </div>
+                </div>
+
+                <div class="campo-observacoes">
+                    <label for="observacoes">Observações:</label>
+                    <textarea id="observacoes" placeholder="Registre eventuais ressalvas, condicionantes, inconsistências identificadas ou orientações para complementação da proposta."></textarea>
+                </div>
+
+                <button class="botao-concluir" type="button" disabled>
+                    Confirmar e Enviar
+                </button>
+            </div>
+        </section>
+    </div>
+    <script src="scripts.js"></script>
+</body>
+</html>

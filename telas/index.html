@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hub de Perfis - FOCO-07/08</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Specific override for hub body to handle iframe better */
+        body.hub-body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="hub-body">
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-item active" onclick="loadProfile('UF-Equipe-Tecnica.html', this)">
+                <div class="dot"></div>
+                <span>UF-Equipe-Tecnica</span>
+            </div>
+            <div class="nav-item" onclick="loadProfile('UF-Chefia.html', this)">
+                <div class="dot"></div>
+                <span>UF-Chefia</span>
+            </div>
+            <div class="nav-item" onclick="loadProfile('UF-Coordenacao.html', this)">
+                <div class="dot"></div>
+                <span>UF-Coordenacao</span>
+            </div>
+            <div class="nav-item" onclick="loadProfile('UF-Superintendencia.html', this)">
+                <div class="dot"></div>
+                <span>UF-Superintendencia</span>
+            </div>
+            <div class="nav-item" onclick="loadProfile('UC-Equipe-Tecnica.html', this)">
+                <div class="dot"></div>
+                <span>UC-Equipe-Tecnica</span>
+            </div>
+            <div class="nav-item" onclick="loadProfile('UC-Coordenacao-Geral.html', this)">
+                <div class="dot"></div>
+                <span>UC-Coordenacao-Geral</span>
+            </div>
+            <div class="nav-item" onclick="loadProfile('UC-Diretoria.html', this)">
+                <div class="dot"></div>
+                <span>UC-Diretoria</span>
+            </div>
+            <div class="nav-item" onclick="loadProfile('CDE.html', this)">
+                <div class="dot"></div>
+                <span>CDE</span>
+            </div>
+        </div>
+    </nav>
+
+    <iframe id="content-frame" src="UF-Equipe-Tecnica.html"></iframe>
+
+    <script>
+        function loadProfile(url, element) {
+            // Update iframe source
+            document.getElementById('content-frame').src = url;
+
+            // Update active state in menu
+            const items = document.querySelectorAll('.nav-item');
+            items.forEach(item => item.classList.remove('active'));
+            element.classList.add('active');
+        }
+    </script>
+</body>
+</html>
