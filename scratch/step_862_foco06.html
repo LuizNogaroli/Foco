@@ -1,0 +1,146 @@
+Created At: 2026-06-19T20:58:58Z
+Completed At: 2026-06-19T20:58:58Z
+File Path: `file:///c:/Users/luizn/.gemini/antigravity/brain/6ccc312e-0c28-45a5-8374-bac2789ad42a/implementation_plan.md`
+Total Lines: 138
+Total Bytes: 8074
+Showing lines 1 to 138
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+1: # Plano de Implementação: Reestruturação do Módulo de Análise de Destinações
+2: 
+3: Este plano consolida as alterações solicitadas no documento `observacoes_modulo_analise_destinacoes.docx` para alinhar os formulários e a listagem de processos aos fluxos de trabalho reais e nomenclaturas corretas da SPU.
+4: 
+5: ---
+6: 
+7: ## Modificações Propostas
+8: 
+9: ### 1. Grid de Destinações (index.html)
+10: Atualizaremos as colunas exibidas na tabela de processos para corresponder exatamente às diretrizes solicitadas:
+11: *   Número do Requerimento
+12: *   Data do Requerimento
+13: *   UF
+14: *   Município
+15: *   Nome do Interessado
+16: *   Natureza Jurídica do Interessado
+17: *   Número do Processo SEI
+18: *   Tipo de Uso Imobiliário (1º Nível)
+19: *   Tipo de Procedimento (Será incluído nos dados de simulação)
+20: *   Valor
+21: *   Área a ser destinada
+22: *   Status
+23: 
+24: ### 2. Aba 1 — Dados do Requerimento (foco-01.html)
+25: *   Substituir o título interno redundante "Dados do Requerimento" pelo nome descritivo do serviço: **"Solicitar imóvel para uso da Administração Pública e Entidades sem Fins Lucrativos"**.
+26: *   Remover títulos redundantes internos nas abas seguintes conforme a mesma lógica.
+27: 
+28: ### 3. Aba 2 — Dados do Imóvel (foco-02.html)
+29: *   **Novo Campo:** "Conceituação do imóvel a ser destinado" com seleção múltipla (checkboxes):
+30:     *   *Opções:* `Terreno/acrescido de marinha`, `Terreno/acrescido marginal`, `Nacional interior`, `Espelho d'água`, `Cavidades naturais`, `Mangue`, `Praia`.
+31: *   **Regra de Validação de RIP:**
+32:     *   Se selecionados *exclusivamente* `Espelho d'água`, `Cavidades naturais`, `Mangue` ou `Praia`, a inserção de RIP torna-se **dispensada** (opcional).
+33:     *   Se selecionado `Terreno/acrescido de marinha`, `Terreno/acrescido marginal` ou `Nacional interior`, a inclusão de pelo menos 1 RIP torna-se **obrigatória**.
+34: 
+35: ### 4. Renomeação das Abas (processo.html)
+36: *   Renomear "Análise do Imóvel" para **"Análise – Setor de Caracterização"**.
+37: *   Renomear "Análise do Destinatário" para **"Análise – Setor de Destinação"**.
+38: 
+39: ### 5. Reorganização dos Campos de Análise (foco-04.html e foco-05.html)
+40: 
+41: #### Setor de Caracterização (foco-04.html):
+42: *   **Novos Campos:**
+43:     *   "Condição da urbanização" (Opções: `Urbanizado`, `Urbanização parcial/precária`, `Não urbanizado`, `Sem informação`).
+44:     *   "Tipo de imóvel" (Opções: `Casa`, `Conjunto habitacional`, `Galpão`, `Garagem`, `Prédio`, `Sala/conjunto`, `Terreno`, `Não se aplica`).
+45: *   **Mover para o Setor de Destinação:**
+46:     *   Campos de restrição: `Área de regularização fundiária`, `Possui PDISP`, `Conflitos fundiários/sociais`, `Termo de Gestão de Praias/PGI`, `Ações judiciais ou de órgãos de controle`.
+47:     *   Seção de Outros Interessados.
+48:     *   Seção de Custos de Manutenção para a SPU.
+49: *   **Riscos:** A seção de riscos verificados continuará presente nesta aba.
+50: 
+51: #### Setor de Destinação (foco-05.html):
+52: *   **Novos Campos:**
+53:     *   CPF/CNPJ regular? (Campo único unificado, opções: `Sim`, `Não`, `Não se aplica`).
+54:     *   Natureza jurídica do destinatário.
+55:     *   Possui destinações ativas?
+56:     *   Anexo: Certidão atualizada da matrícula (não superior a 12 meses) — campo de arquivo.
+57:     *   Capacidade orçamentária/financeira demonstrada (Opções: `Demonstrada formalmente (documentação analisada)`, `Não demonstrada (documentação insuficiente)`, `Não se aplica`).
+58:     *   Fundamentação legal da destinação, se aplicada (campo de texto aberto).
+59: *   **Repetição de Riscos:** A seção de riscos verificados será duplicada nesta aba também.
+60: *   **Recebimento de Campos Movidos:** Receberá a seção de *Outros Interessados*, *Custos de Manutenção* e as restrições movidas do Setor de Caracterização.
+61: 
+62: ### 6. Aba Proposta de Destinação (foco-06.html)
+63: *   No quadro de Área e Valor, incluir os campos:
+64:     *   Área total do imóvel
+65:     *   Valor total do imóvel
+66:     *   (Garante a comparação direta entre a área/valor total do imóvel e a área/valor proposto para a destinação específica).
+67: 
+68: ---
+69: 
+70: ## User Review Required
+71: 
+72: > [!IMPORTANT]
+73: > **Validação de RIP em Tempo Real:**
+74: > Ajustaremos a tela de Imóveis para impedir a submissão do formulário caso o usuário selecione uma conceituação que exija RIP e nenhum RIP tenha sido cadastrado. A validação exibirá um alerta contextual claro.
+75: 
+76: ---
+77: 
+78: ## Open Questions
+79: 
+80: Não há dúvidas em aberto. O escopo das alterações está detalhado no documento anexado e o plano acima descreve a correta divisão de responsabilidades.
+81: 
+82: ---
+83: 
+84: ## Proposed Changes
+85: 
+86: ### Dashboard e Estrutura Principal
+87: 
+88: #### [MODIFY] [index.html](file:///c:/Users/luizn/Documents/0-GESTÃO/C01-TRABALHO-SPU/Projeto-Admissibilidade/Foco-08/index.html)
+89: Atualizar colunas da tabela de destinações no dashboard para refletir o novo grid.
+90: 
+91: #### [MODIFY] [processo.html](file:///c:/Users/luizn/Documents/0-GESTÃO/C01-TRABALHO-SPU/Projeto-Admissibilidade/Foco-08/processo.html)
+92: Renomear os nomes das etapas na barra superior de navegação para refletir os novos setores de análise.
+93: 
+94: ---
+95: 
+96: ### Formulários e Etapas
+97: 
+98: #### [MODIFY] [foco-01.html](file:///c:/Users/luizn/Documents/0-GESTÃO/C01-TRABALHO-SPU/Projeto-Admissibilidade/Foco-08/foco-01.html)
+99: Atualizar cabeçalho interno da página para exibir o nome descritivo do serviço.
+100: 
+101: #### [MODIFY] [foco-02.html](file:///c:/Users/luizn/Documents/0-GESTÃO/C01-TRABALHO-SPU/Projeto-Admissibilidade/Foco-08/foco-02.html)
+102: *   Remover título interno redundante.
+103: *   Incluir campo múltiplo de "Conceituação do imóvel".
+104: *   Atualizar a lógica de validação de obrigatoriedade de RIPs com base nas conceituações selecionadas.
+105: 
+106: #### [MODIFY] [foco-04.html](file:///c:/Users/luizn/Documents/0-GESTÃO/C01-TRABALHO-SPU/Projeto-Admissibilidade/Foco-08/foco-04.html)
+107: *   Remover título interno redundante.
+108: *   Incluir os novos campos "Condição da urbanização" e "Tipo de imóvel".
+109: *   Remover as restrições enviadas para a Etapa 05 e as seções de Outros Interessados e Custos.
+110: 
+111: #### [MODIFY] [foco-05.html](file:///c:/Users/luizn/Documents/0-GESTÃO/C01-TRABALHO-SPU/Projeto-Admissibilidade/Foco-08/foco-05.html)
+112: *   Remover título interno redundante.
+113: *   Inserir campos de CPF/CNPJ consolidados, Natureza Jurídica, Capacidade Orçamentária, Fundamentação Legal e campo para anexo de Certidão.
+114: *   Inserir seções duplicadas de Riscos Verificados e as seções/restrições movidas do Setor de Caracterização.
+115: 
+116: #### [MODIFY] [foco-06.html](file:///c:/Users/luizn/Documents/0-GESTÃO/C01-TRABALHO-SPU/Projeto-Admissibilidade/Foco-08/foco-06.html)
+117: *   Remover título interno redundante.
+118: *   Adicionar campos "Área total do imóvel" e "Valor total do imóvel" no bloco de Proposta.
+119: 
+120: ---
+121: 
+122: ### Scripts de Controle e Sincronização
+123: 
+124: #### [MODIFY] [foco-02.js](file:///c:/Users/luizn/Documents/0-GESTÃO/C01-TRABALHO-SPU/Projeto-Admissibilidade/Foco-08/foco-02.js)
+125: Implementar lógica de validação do formulário com base na seleção de conceituação e na existência de blocos RIP associados.
+126: 
+127: #### [MODIFY] [db.js](file:///c:/Users/luizn/Documents/0-GESTÃO/C01-TRABALHO-SPU/Projeto-Admissibilidade/Foco-08/db.js)
+128: Atualizar a carga de mock de seeding (`window.seedDatabase()`) para preencher as novas colunas e chaves JSON com valores de exemplo correspondentes aos novos campos.
+129: 
+130: ---
+131: 
+132: ## Verification Plan
+133: 
+134: ### Manual Verification
+135: 1.  **Regra de RIP no Imóvel:** No formulário da Etapa 2, marcar apenas "Espelho d'água" e tentar salvar sem cadastrar RIP (deve salvar com sucesso). Marcar "Terreno de marinha" e tentar salvar sem RIP (deve exibir erro exigindo o cadastro).
+136: 2.  **Verificação de Campos Movidos:** Garantir que no formulário do Setor de Destinação (Etapa 5) os campos de *Outros Interessados*, *Custos de Manutenção* e *Restrições Sociais/Controle* aparecem e funcionam perfeitamente.
+137: 3.  **Visualização do Dashboard:** Acessar a página inicial e atestar que as colunas exibem todas as informações corretas e o alinhamento da tabela está elegante.
+138: 
+The above content shows the entire, complete file contents of the requested file.

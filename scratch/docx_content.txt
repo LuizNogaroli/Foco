@@ -1,0 +1,328 @@
+Instrução Processual de Destinações
+Síntese das decisões
+As abas “Dados do Requerimento” e “Dados do Imóvel” devem ser avaliadas como uma etapa única, atualmente denominada “Indicação do Imóvel”. O nome pode voltar para “Análise Preliminar” se a aba receber outros campos de avaliação inicial.
+A aba “Análise - Setor de Caracterização” deve receber os dados do imóvel ou área indicados na etapa inicial, incluindo geolocalização com dados da Geovisão.
+A aba “Análise - Setor de Destinação” deve incorporar a antiga aba “Proposta de Destinação”, como uma seção interna denominada “Proposta de Destinação”.
+Os campos “Impacto social esperado” e “Impacto ambiental esperado” devem sair da seção de proposta e ser deslocados para a etapa da Coordenação da Superintendência.
+2. Mapa de telas e abas
+Tela/Aba atual
+Nome/Tratamento proposto
+Observação
+Programa Imóvel da Gente > Imóveis
+Instrução Processual - Destinações > Destinações
+Painel inicial de seleção e acompanhamento de processos.
+Dados do Requerimento + Dados do Imóvel
+Indicação do Imóvel
+Nome provisório. Voltar para “Análise Preliminar” se a aba passar a conter outros campos avaliativos.
+Geolocalização
+Avaliar incorporação à Caracterização
+A geolocalização deve aparecer junto dos dados do imóvel/área no setor de caracterização, com dados da Geovisão.
+Análise - Setor de Caracterização
+Análise - Setor de Caracterização
+Mantém-se como etapa técnica de caracterização do imóvel/área.
+Análise - Setor de Destinação + Proposta de Destinação
+Análise e Proposta de Destinação
+A proposta passa a ser seção interna da análise do setor de destinação.
+Resumo e Deliberações
+Resumo e Deliberações
+Ajustes não detalhados nesta rodada, salvo deslocamento de impactos para a coordenação da superintendência.
+3. Tela inicial - Painel de processos
+Print de referência - painel inicial
+3.1 Finalidade
+Tela inicial do módulo, utilizada pelo técnico para consultar, filtrar e acessar os processos de destinação nos quais atuará.
+3.2 Ajustes de nomenclatura e filtros
+Elemento
+Situação atual
+Ajuste definido
+Trilha de navegação
+Programa Imóvel da Gente > Imóveis
+Instrução Processual > Destinações
+Nome da listagem
+Imóveis
+Destinações
+Filtros atuais
+UF, Município e Status
+Manter e acrescentar nova linha de filtros.
+Novos filtros
+-
+Nome do interessado, Processo SEI, RIP e Uso imobiliário.
+Busca geral
+Pesquisar por denominação ou RIP
+Avaliar texto ampliado: Pesquisar por interessado, processo SEI, ou RIP.
+3.3 Ajustes do grid
+Coluna
+Ajuste
+Tipo de Uso
+Renomear para “Uso Imobiliário”. Usar exemplos de domínios reais de uso imobiliário.
+Regime Requerido
+Renomear para “Regime de Destinação”.
+Status
+Substituir “admissibilidade” por “viabilidade” em todos os status.
+Exemplos de uso imobiliário
+Exemplos de regime de destinação
+Habitacional; Regularização fundiária; Institucional; Infraestrutura; Desenvolvimento econômico; Preservação ambiental; Uso comunitário; Uso cultural; Uso educacional; Uso de saúde; Assistência social; Esporte e lazer.
+Cessão de uso gratuita; Cessão de uso onerosa; Inscrição de ocupação; Aforamento gratuito; Aforamento oneroso; Autorização de uso; Permissão de uso; Concessão de direito real de uso gratuita; Concessão de direito real de uso onerosa; Entrega; Doação.
+4. Aba - Indicação do Imóvel
+Print de referência - dados do requerimento
+Print de referência - documentos anexados ao requerimento
+Print de referência - dados do imóvel vinculados ao RIP
+Print de referência - indicação por conceituação sem RIP
+4.1 Nome da aba
+Nome atual proposto: “Indicação do Imóvel”.
+Observação: o nome poderá voltar para “Análise Preliminar” se a aba passar a reunir outros campos de avaliação inicial, além da indicação/vinculação do imóvel ou área ao requerimento.
+4.2 Estrutura da aba
+Bloco
+Comportamento
+Dados do requerimento
+Exibir dados oriundos do Portal de Serviços, em campos não editáveis. Manter o título do requerimento conforme registrado no Portal de Serviços.
+Documentos anexados ao requerimento
+Exibir documentos enviados pelo requerente, com ação de visualização.
+Indicação do imóvel/área
+Permitir informar se o imóvel possui RIP e vincular o RIP ou identificar a área sem RIP.
+Documentos e links complementares
+Permitir anexos ou links adicionados pela área de destinação. Remover qualquer referência à numeração antiga da aba.
+4.3 Regra inicial: existência de RIP
+Campo
+Tipo
+Opções
+Regra
+O imóvel/área objeto da destinação possui RIP?
+Rádio - seleção única
+Sim; Não
+Primeira pergunta da seção de indicação do imóvel.
+Se a resposta for “Sim”, o sistema deve exibir o campo “Digite o nº RIP do imóvel” e o botão “Pesquisar RIP”. Após a pesquisa, o sistema deve localizar e adicionar o RIP à indicação, carregando automaticamente os dados cadastrais do imóvel.
+Os dados de cada RIP devem ser exibidos em seção expansível/recolhível própria, inicialmente recolhida e identificada pelo número do RIP. Ao clicar no número do RIP, a seção deve expandir e exibir os dados cadastrais do imóvel.
+Se houver mais de um RIP, cada RIP deve possuir seção própria e independente.
+4.4 Regra para resposta “Não possui RIP”
+Se a resposta for “Não”, o sistema deve exibir o campo “Conceituação do imóvel a ser destinado”, em formato de seleção múltipla.
+Opções da conceituação
+Regra interna
+Terreno/acrescido de marinha
+Exige RIP. Se selecionado após resposta “Não”, exibir diálogo informando necessidade de cadastro do RIP no módulo Cadastro do SPUNET.
+Terreno/acrescido marginal
+Exige RIP. Mesma regra acima.
+Nacional interior
+Exige RIP. Mesma regra acima.
+Espelho d’água
+Dispensado de RIP. Exibir campos complementares de identificação da área.
+Cavidades naturais
+Dispensado de RIP. Exibir campos complementares de identificação da área.
+Mangue
+Dispensado de RIP. Exibir campos complementares de identificação da área.
+Praia
+Dispensado de RIP. Exibir campos complementares de identificação da área.
+As expressões “Exige RIP” e “Dispensado de RIP” não devem aparecer no texto das opções. Essas informações devem funcionar apenas como regra interna do sistema.
+Mensagem sugerida para opções que exigem RIP: “A conceituação selecionada exige a existência de RIP. O cadastro do RIP deve ser realizado previamente no módulo Cadastro do SPUNET.”
+4.5 Campos para áreas dispensadas de RIP
+Campo
+Regra
+CEP
+Campo com máscara. Deve permitir preenchimento automático dos dados básicos do endereço, quando disponível.
+Logradouro
+Preenchimento automático a partir do CEP, quando possível.
+Município
+Preenchimento automático a partir do CEP, quando possível.
+UF
+Preenchimento automático a partir do CEP, quando possível.
+Número
+Preenchimento manual.
+Complemento
+Preenchimento manual, quando aplicável.
+Área a ser destinada
+Campo obrigatório para áreas dispensadas de RIP.
+Arquivo memorial descritivo/planta geolocalizada se já não estiver no requerimento. 
+Campo Observações sobre localização, descrição da área.
+Aba - Análise - Setor de Caracterização
+Print de referência - caracterização: ocupação e incidência ambiental
+Print de referência - caracterização: riscos e restrições
+Print de referência - caracterização: restrições e documentos
+5.1 Dados do imóvel/área e geolocalização
+A aba deve trazer os dados dos imóveis ou áreas indicados na etapa “Indicação do Imóvel”.
+Origem
+Exibição esperada
+Imóvel com RIP
+Uma seção expansível/recolhível por RIP, inicialmente recolhida, identificada pelo número do RIP.
+Área sem RIP
+Uma seção expansível/recolhível identificada como “Área sem RIP” ou “Imóvel sem RIP”, com os dados informados na etapa inicial.
+Sempre que possível, a geolocalização deve aparecer ao lado dos dados do imóvel/área. Para imóveis com RIP, o mapa deve usar os dados geoespaciais consumidos da ferramenta Geovisão. Para áreas sem RIP, o mapa deve utilizar o endereço informado para gerar localização aproximada, exibindo ponto no mapa. Caso não seja possível localizar automaticamente, o sistema deve permitir ajuste manual ou registrar pendência de geolocalização.
+5.2 Matrícula atualizada
+Quando o imóvel possuir RIP, a seção expansível correspondente deve conter campo específico para anexação da matrícula atualizada do imóvel, preferencialmente ao final dos dados cadastrais. O texto de apoio sugerido é: “Anexar certidão atualizada da matrícula do imóvel, emitida há no máximo 12 meses.”
+Para áreas ou imóveis sem RIP, esse campo não deve ser exibido.
+5.3 Campos da caracterização
+Campo/Seção
+Tratamento
+Situação ocupacional
+Manter na aba, com opções: Desocupado; Ocupado regularmente; Ocupado irregularmente; Não há informação.
+Tempo de desocupação / dados de ocupação
+Manter comportamento condicional conforme situação ocupacional.
+Condição da urbanização
+Manter na aba.
+Tipo de imóvel
+Remover do preenchimento da caracterização. Deve compor os dados cadastrais do imóvel, carregados do SPUNET.
+Documentos e links
+Renomear para “Documentos e links complementares da caracterização”.
+5.4 Incidência ambiental
+Campo
+Tipo
+Opções/Regra
+Há incidência ambiental sobre o imóvel?
+Rádio
+Sim; Não; Não há informação suficiente.
+Incidências ambientais verificadas
+Checkbox
+Exibir apenas se a resposta for “Sim”. Opções: APP - Área de Preservação Permanente; Unidade de Conservação Federal, Estadual ou Municipal; Área de risco - geotécnica, inundação etc.; Área contaminada - passivo ambiental; Outra situação ambiental.
+Observações sobre incidência ambiental
+Texto longo
+Exibir quando a resposta for “Sim” ou “Não há informação suficiente”. Obrigatório quando marcada “Outra situação ambiental” e recomendável como obrigatório sempre que houver incidência.
+Remover a opção “Nenhuma incidência identificada” da lista de checkboxes, pois essa informação passa a ser capturada pela resposta “Não” à pergunta inicial.
+5.5 Riscos
+Campo
+Tipo
+Opções/Regra
+Há riscos verificados sobre o imóvel?
+Rádio
+Sim; Não; Não há informação suficiente.
+Riscos verificados
+Checkbox
+Exibir apenas se a resposta for “Sim”. Opções: Risco de invasão/esbulho; Risco à segurança/saúde pública; Risco estrutural ou de desabamento; Risco de depredação, vandalismo ou deterioração; Outro risco identificado.
+Observações sobre riscos
+Texto longo
+Exibir quando a resposta for “Sim” ou “Não há informação suficiente”. Obrigatório quando marcada “Outro risco identificado” e recomendável como obrigatório sempre que houver risco.
+Remover a opção “Nenhum risco identificado” da lista de checkboxes.
+5.6 Restrições e condições limitadoras
+Campo
+Tipo
+Opções/Regra
+Há alguma situação ou condição relativa ao imóvel que impeça ou limite a destinação?
+Rádio
+Sim; Não; Não há informação suficiente.
+Situações ou condições verificadas
+Checkbox
+Exibir apenas se a resposta for “Sim”. Opções: Faixa de fronteira; Faixa de segurança; Faixa de domínio de ferrovia ou rodovia; Faixa de 100 metros ao longo da costa marítima; Circunferência de 1.320 metros em torno de instalações militares; Terra indígena; Território quilombola ou área de comunidade tradicional; Zona/Área de Interesse Social - ZEIS; Área non aedificandi; Restrição de uso ou ocupação incidente sobre o imóvel; Imóvel tombado como patrimônio histórico, artístico ou cultural; Poligonal de Porto Organizado; Área operacional da RFFSA; Ilha oceânica ou costeira sem sede de município; Ilha fluvial ou lacustre; Imóvel localizado em loteamento; Outra situação ou condição restritiva.
+Observações sobre situações ou condições restritivas
+Texto longo
+Exibir quando a resposta for “Sim” ou “Não há informação suficiente”. Obrigatório quando marcada “Outra situação ou condição restritiva” e recomendável como obrigatório sempre que houver restrição.
+Remover a opção “Nenhuma restrição identificada” da lista de checkboxes.
+6. Aba - Análise e Proposta de Destinação
+Print de referência - análise do setor de destinação
+Print de referência - riscos e restrições da destinação
+Print de referência - ações judiciais, manutenção e interessados
+Print de referência - proposta de destinação: parte 1
+Print de referência - proposta de destinação: parte 2
+Print de referência - proposta de destinação: parte 3
+6.1 Consolidação de abas
+As abas “Análise - Setor de Destinação” e “Proposta de Destinação” devem ser consolidadas em uma única aba. A antiga aba “Proposta de Destinação” passa a ser uma seção interna denominada “Proposta de Destinação”.
+6.2 Regularidade cadastral e natureza jurídica
+Campo
+Regra
+CPF/CNPJ regular?
+Rótulo dinâmico. Se destinatário for pessoa física, exibir “CPF regular?”. Se for pessoa jurídica, exibir “CNPJ regular?”. Opções: Sim; Não. Remover “Não se aplica”.
+Natureza Jurídica do Destinatário
+Exibir apenas para pessoa jurídica/CNPJ. Não exibir para pessoa física/CPF. Incluir tooltip: “Consultar a natureza jurídica a partir do CNPJ do destinatário, conforme cadastro da Receita Federal/IBGE.”
+6.3 Contratos e atos de destinação ativos no MGC
+Remover a pergunta “Possui destinações ativas?”. Essa informação deve ser obtida automaticamente a partir do MGC.
+Criar a seção “Contratos e atos de destinação ativos no MGC”. Cada contrato ou ato ativo deve ser apresentado em seção expansível/recolhível própria, identificada pelo respectivo número.
+Dados mínimos por contrato/ato
+Número do contrato/ato
+Nome do destinatário
+Endereço do imóvel
+Regime de destinação
+Prazo de vigência
+6.4 Pendências contratuais
+Campo
+Tipo
+Regra
+Há pendências contratuais identificadas em contratos ou atos de destinação ativos?
+Rádio
+Sim; Não; Não há informação suficiente.
+Pendências identificadas
+Checkbox
+Exibir apenas se a resposta for “Sim”. Opções: Inadimplência financeira; Pendências contratuais; Irregularidade cadastral; Uso em desacordo com o autorizado; Outras pendências.
+Observações sobre pendências contratuais
+Texto longo
+Obrigatório se marcada “Outras pendências” e recomendável como obrigatório para qualquer pendência selecionada.
+6.5 Certidão da matrícula e capacidade orçamentária/financeira
+Remover desta aba o campo “Certidão atualizada da matrícula”. Esse documento deve ser tratado no setor de caracterização, vinculado à seção do respectivo RIP.
+Manter “Capacidade orçamentária/financeira demonstrada”. O campo “Observações sobre a capacidade orçamentária/financeira” deve ser exibido apenas quando o usuário selecionar “Não demonstrada”. Nesse caso, as observações devem ser obrigatórias.
+6.6 Fundamentação legal da destinação
+Remover o campo “Fundamentação legal da destinação, se aplicada” da posição atual. Esse campo será tratado em etapa posterior do fluxo, em posição mais próxima da consolidação/validação da proposta.
+6.7 Riscos e restrições da destinação
+Aplicar o mesmo modelo definido para a caracterização, com pergunta inicial e abertura condicional de lista e observações.
+Seção
+Pergunta inicial
+Lista exibida se “Sim”
+Riscos
+Há riscos verificados sobre o imóvel ou sobre a destinação pretendida?
+Risco de invasão/esbulho; Risco à segurança/saúde pública; Risco de depredação, vandalismo ou deterioração; Outro risco identificado.
+Restrições e condicionantes
+Há alguma situação ou condição relativa ao imóvel que impeça ou limite a destinação?
+Área de regularização fundiária; Possui PDISP; Conflitos fundiários/sociais; Termo de Gestão de Praias/PGI; Outra situação ou condição restritiva.
+6.8 Seção interna: Proposta de Destinação
+A seção “Proposta de Destinação” deve aparecer dentro da aba “Análise e Proposta de Destinação”, em ordem própria.
+Ordem
+Campo/Seção
+Tratamento
+1
+Tipo de procedimento
+Manter.
+2
+Uso imobiliário pretendido
+Renomear de “Tipo de uso imobiliário pretendido” para “Uso imobiliário pretendido”.
+3
+Regime de destinação proposto
+Manter logo após o uso imobiliário pretendido.
+4
+Área a ser destinada
+Renomear a seção “Dados de Comparação de Área e Valor” para “Área a ser destinada”.
+Remover da seção o campo “Informações complementares”.
+6.9 Seção “Área a ser destinada”
+Campo
+Comportamento
+Área total do imóvel
+Preenchimento automático a partir dos dados do RIP/imóvel.
+Área de terreno do imóvel
+Preenchimento automático a partir dos dados do RIP/imóvel.
+Área construída do imóvel
+Preenchimento automático a partir dos dados do RIP/imóvel.
+Valor total do imóvel
+Preenchimento automático a partir dos dados do RIP/imóvel.
+Área de terreno a ser destinada
+Preenchimento pelo técnico.
+Área construída a ser destinada
+Preenchimento pelo técnico.
+Valor da área a ser destinada
+Preenchimento pelo técnico ou cálculo, conforme regra de negócio a definir.
+A definição fina de rótulos, domínios e regras condicionais dessa etapa deverá ser detalhada em revisão posterior da aba correspondente.
+8. Checklist consolidado para implementação
+Item
+Implementação
+1
+Renomear painel e trilha para Instrução Processual - Destinações.
+2
+Adicionar filtros: interessado, processo SEI, RIP e uso imobiliário.
+3
+Substituir “admissibilidade” por “viabilidade” nos status.
+4
+Criar aba “Indicação do Imóvel”, com regra inicial de existência de RIP.
+5
+Exibir dados de cada RIP em seção expansível/recolhível.
+6
+Tratar áreas sem RIP com campos de endereço e área a ser destinada.
+7
+Na caracterização, carregar imóveis/RIPs e áreas sem RIP indicados na etapa anterior.
+8
+Na caracterização, exibir geolocalização ao lado dos dados usando Geovisão.
+9
+Exigir matrícula atualizada por RIP na caracterização; não exigir para área sem RIP.
+10
+Trocar listas com opção “Nenhum” por perguntas iniciais em incidência ambiental, riscos e restrições.
+11
+Consolidar análise do setor de destinação e proposta em uma única aba.
+12
+Consultar contratos/atos ativos no MGC e exibir em seções expansíveis.
+13
+Remover certidão da matrícula da aba de destinação.
+14
+Reordenar seção “Proposta de Destinação” conforme definido.
+15
+Mover impacto social esperado e impacto ambiental esperado para a Coordenação da Superintendência.

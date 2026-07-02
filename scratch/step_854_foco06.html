@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Proposta de Destinação - Maquete SPU</title>
+
+  <link rel="stylesheet" href="styles-forms.css" />
+  <link rel="stylesheet" href="hints.css" />
+</head>
+
+<body>
+  <div class="form-container">
+    <h2>Proposta de Destinação</h2>
+
+    <form id="form06" novalidate>
+
+      <!-- Tipo de Procedimento -->
+      <div class="form-group editavel">
+        <label for="campo51">Tipo de procedimento:</label>
+        <select id="campo51" name="tipo_procedimento" required>
+          <option value="">Selecione...</option>
+          <option value="Nova destinação">Nova destinação</option>
+          <option value="Renovação/alteração contratual">Renovação/alteração contratual</option>
+          <option value="Regularização de uso">Regularização de uso</option>
+        </select>
+
+        <!-- SEÇÃO CONDICIONAL: Contratos Anteriores (Mockup) -->
+        <div
+          id="bloco_contratos_anteriores"
+          style="display: none; margin-top: 15px; padding-top: 15px; border-top: 1px dashed #cbd5e1;"
+        >
+          <h3 style="text-align: left; margin-bottom: 12px; color: #1e3a5f; font-size: 0.95rem; font-weight: bold;">
+            Contratos vigentes
+          </h3>
+
+          <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+            <div style="background: #ffffff; border: 1px solid #cbd5e1; padding: 8px 12px; border-radius: 8px; font-size: 0.85rem; color: #334155; box-shadow: 0 1px 2px rgba(0,0,0,0.05); flex: 1 1 100%; width: 100%; min-width: 100%;">
+              <strong style="display: block; color: #1e293b; margin-bottom: 2px;">
+                Contrato nº 123/2020
+              </strong>
+              <span style="font-size: 0.8em; color: #64748b;">
+                Vigência: 01/01/2020 a 31/12/2027
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Uso Imobiliário -->
+      <div class="form-group editavel">
+        <label for="campo52">Uso imobiliário pretendido:</label>
+        <select id="campo52" name="tipo_uso_imobiliario" required>
+          <option value="">Selecione...</option>
+          <option value="0101">01.01 Uso administrativo e representativo</option>
+          <option value="0102">01.02 Uso para agropecuária, aquicultura, produção florestal e pesca</option>
+          <option value="0103">01.03 Uso ambiental e dos recursos naturais</option>
+          <option value="0104">01.04 Uso cultural, esportivo e de lazer</option>
+          <option value="0106">01.06 Uso habitacional</option>
+          <option value="0111">01.11 Uso por povos originários e comunidades tradicionais</option>
+        </select>
+      </div>
+
+      <!-- Uso Específico -->
+      <div class="form-group editavel">
+        <label for="campo53">Uso específico pretendido:</label>
+        <select id="campo53" name="tipo_uso_especifico" required disabled>
+          <option value="">Selecione primeiro o uso imobiliário pretendido...</option>
+        </select>
+      </div>
+
+      <!-- Área a ser destinada -->
+      <div class="form-section area-destinada-box">
+        <h3>Área a ser destinada:</h3>
+
+        <div class="area-destinada-linha" style="margin-left: 20px;">
+          <label for="area_terreno_destinada">Área do terreno a ser destinada:</label>
+          <input
+            type="text"
+            id="area_terreno_destinada"
+            name="area_terreno_destinada"
+            placeholder="Informe a área em m²"
+          />
+        </div>
+
+        <div class="area-destinada-linha" style="margin-left: 20px;">
+          <label for="area_construida_destinada">Área construída a ser destinada:</label>
+          <input
+            type="text"
+            id="area_construida_destinada"
+            name="area_construida_destinada"
+            placeholder="Informe a área em m²"
+          />
+        </div>
+
+        <div class="area-destinada-linha" style="margin-left: 20px;">
+          <label for="valor_area_destinada">Valor da área a ser destinada:</label>
+          <input
+            type="text"
+            id="valor_area_destinada"
+            name="valor_area_destinada"
+            placeholder="Informe o valor da área"
+          />
+        </div>
+      </div>
+
+      <!-- Novas Seções conforme demanda -->
+      <!-- 5.4 Haverá modificação do terreno/edificação? -->
+      <div class="form-group editavel">
+        <label>
+          Há previsão de modificação do terreno, aterro ou retirada de material, que acresça ou diminua a área?
+          <span class="hint-semaforo">
+            <span class="hint-icon" data-hint-tipo="verde"
+              data-hint="Indique se a destinação proposta implica modificações físicas no terreno ou na edificação existente."
+              role="tooltip" tabindex="0" aria-label="Ajuda: Modificação do terreno/edificação">?</span>
+          </span>
+        </label>
+        <div class="radio-group" id="group-campo54">
+          <label class="radio-option"><input type="radio" name="campo54" value="Sim" required> Sim</label>
+          <label class="radio-option"><input type="radio" name="campo54" value="Não"> Não</label>
+          <label class="radio-option"><input type="radio" name="campo54" value="Sem informação"> Sem informação</label>
+        </div>
+        <span class="error-msg" id="err54" style="display:none;">Selecione uma opção.</span>
+        <div id="bloco54" style="display:none;">
+          <label for="campo54_desc">
+            Descrição da modificação prevista:
+            <span class="hint-semaforo">
+              <span class="hint-icon" data-hint-tipo="verde"
+                data-hint="Descreva as modificações físicas previstas no terreno ou na edificação."
+                role="tooltip" tabindex="0" aria-label="Ajuda: Descrição da modificação">?</span>
+            </span>
+          </label>
+          <textarea id="campo54_desc" name="campo54_desc" placeholder="Descreva as modificações previstas no terreno ou na edificação..."></textarea>
+        </div>
+      </div>
+
+      <!-- 5.5 Compatibilidade urbanística -->
+      <div class="form-group editavel">
+        <label for="campo55">
+          Compatibilidade urbanística:
+          <span class="hint-semaforo">
+            <span class="hint-icon" data-hint-tipo="verde"
+              data-hint="Avalie a compatibilidade do uso proposto com as normas urbanísticas municipais vigentes (Plano Diretor, zoneamento, etc.)."
+              role="tooltip" tabindex="0" aria-label="Ajuda: Compatibilidade urbanística">?</span>
+          </span>
+        </label>
+        <select id="campo55" name="compatibilidade_urbanistica" required>
+          <option value="" selected>Selecione...</option>
+          <option value="Compatível">Compatível: uso proposto está em conformidade com o zoneamento e normas urbanísticas vigentes</option>
+          <option value="Compatível com restrições">Compatível com restrições: uso admitido com condicionantes ou mediante aprovação específica</option>
