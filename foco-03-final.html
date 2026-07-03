@@ -71,7 +71,7 @@
           <label for="natureza_juridica">Natureza Jurídica do Destinatário:</label>
           <select id="natureza_juridica" name="natureza_juridica">
               <option value="">Selecione a Natureza Jurídica...</option>
-              <option value="101-5">101-5 - órgão Público do Poder Executivo Federal</option>
+              <option value="101-5">101-5 - Órgão Público do Poder Executivo Federal</option>
               <option value="206-2">206-2 - Sociedade Empresária Limitada</option>
               <option value="399-9">399-9 - Associação Privada</option>
           </select>
@@ -86,7 +86,7 @@
           </div>
           <div id="bloco-destinacao-ativa" style="display: none; margin-top: 10px; flex-direction: column; gap: 8px;">
               <label for="contratos_destinacao_ativa">Contratos relacionados à destinação ativa <span class="hint-badge" data-hint="Informe os contratos vigentes, incluindo número, tipo e vigência.">?</span></label>
-              <textaárea id="contratos_destinacao_ativa" name="contratos_destinacao_ativa" rows="4" placeholder="Ex: Contrato de Cessão de Uso nº 001/2020, vigência até 12/2025..."></textaárea>
+              <textarea id="contratos_destinacao_ativa" name="contratos_destinacao_ativa" rows="4" placeholder="Ex: Contrato de Cessão de Uso nº 001/2020, vigência até 12/2025..."></textarea>
           </div>
       </div>
 
@@ -103,7 +103,7 @@
           </div>
           <div style="margin-top: 10px;">
               <label for="obs_pendencias" style="font-weight: bold;">Observações complementares:</label>
-              <textaárea id="obs_pendencias" name="obs_pendencias" rows="3" placeholder="Descreva as pendências identificadas..."></textaárea>
+              <textarea id="obs_pendencias" name="obs_pendencias" rows="3" placeholder="Descreva as pendências identificadas..."></textarea>
           </div>
       </div>
 
@@ -123,7 +123,7 @@
       <h4 class="section-title">Ações, Custos e Interessados</h4>
       <div class="form-group editavel">
           <label for="acao_jud">Ações judiciais ou órgãos de controle associados:</label>
-          <textaárea id="acao_jud" name="acao_jud" placeholder="Descreva as principais informações..."></textaárea>
+          <textarea id="acao_jud" name="acao_jud" placeholder="Descreva as principais informações..."></textarea>
       </div>
       <div class="form-group editavel">
           <label>Imóvel gera custos de manutenção para a SPU?</label>
@@ -149,15 +149,15 @@
     </label>
     <select id="campo51" name="tipo_procedimento" required>
       <option value="">Selecione...</option>
-      <option value="Nãova destinao">Nãova destinao: primeiro instrumento formal de destinao para o imvel</option>
+      <option value="Nova destinao">Nova destinao: primeiro instrumento formal de destinao para o imvel</option>
       <option value="Renovao">Renovao: continuidade de instrumento vigente com as mesmas condies</option>
-      <option value="Alterao">Alterao: modificao de condies, finalidade ou área em instrumento vigente</option>
+      <option value="Alterao">Alterao: modificao de condies, finalidade ou rea em instrumento vigente</option>
       <option value="Regularizao">Regularizao: formalizao de uso preexistente sem instrumento vigente</option>
     </select>
     <span class="error-msg" id="err51" style="display:none;">Selecione o tipo de procedimento.</span>
     <div id="bloco51_obs" style="display:none;margin-top:8px;">
-      <label for="campo51_obs">Informações complementares:</label>
-      <textaárea id="campo51_obs" name="campo51_obs" placeholder="Informações complementares ao tipo de procedimento..."></textaárea>
+      <label for="campo51_obs">Informaes complementares:</label>
+      <textarea id="campo51_obs" name="campo51_obs" placeholder="Informaes complementares ao tipo de procedimento..."></textarea>
     </div>
   </div>
 
@@ -168,24 +168,24 @@
     <select id="campo52" name="tipo_uso_imobiliario" required data-no-custom>
       <option value="">Selecione...</option>
       <option value="0101">01.01 Uso administrativo e representativo</option>
-      <option value="0102">01.02 Uso para agropecuária, aquicultura, produção florestal e pesca</option>
+      <option value="0102">01.02 Uso para agropecuria, aquicultura, produo florestal e pesca</option>
       <option value="0103">01.03 Uso ambiental e dos recursos naturais</option>
       <option value="0104">01.04 Uso cultural, esportivo e de lazer</option>
-      <option value="0105">01.05 Uso em eventos de curta duração</option>
+      <option value="0105">01.05 Uso em eventos de curta durao</option>
       <option value="0106">01.06 Uso habitacional</option>
-      <option value="0107">01.07 Uso industrial, comercial ou de prestação de serviços</option>
-      <option value="0108">01.08 Uso em infraestrutura de serviços públicos</option>
+      <option value="0107">01.07 Uso industrial, comercial ou de prestao de servios</option>
+      <option value="0108">01.08 Uso em infraestrutura de servios pblicos</option>
       <option value="0109">01.09 Uso em infraestrutura de transportes</option>
-      <option value="0110">01.10 Uso multifinalitário em projeto de requalificação urbana</option>
-      <option value="0111">01.11 Uso por povos originários e comunidades tradicionais</option>
-      <option value="0112">01.12 Uso em servio de ensino, pesquisa e extensão</option>
-      <option value="0113">01.13 Uso em servio socioassistêncial e de cidadania</option>
-      <option value="0114">01.14 Uso em serviços de saúde</option>
+      <option value="0110">01.10 Uso multifinalitrio em projeto de requalificao urbana</option>
+      <option value="0111">01.11 Uso por povos originrios e comunidades tradicionais</option>
+      <option value="0112">01.12 Uso em servio de ensino, pesquisa e extenso</option>
+      <option value="0113">01.13 Uso em servio socioassistencial e de cidadania</option>
+      <option value="0114">01.14 Uso em servios de sade</option>
       <option value="0115">01.15 Uso residencial para servidor</option>
-      <option value="0116">01.16 Uso para segurança pública e defesa nacional</option>
+      <option value="0116">01.16 Uso para segurana pblica e defesa nacional</option>
       <option value="0117">01.17 Uso religioso</option>
-      <option value="0118">01.18 Sem informação</option>
-      <option value="0119">01.19 Sem uso definido/vinculação</option>
+      <option value="0118">01.18 Sem informao</option>
+      <option value="0119">01.19 Sem uso definido/vinculado</option>
     </select>
     <span class="error-msg" id="err52" style="display:none;">Selecione o tipo de uso imobilirio.</span>
   </div>
@@ -201,97 +201,97 @@
   </div>
 
   <div class="form-group editavel">
-    <label>Há previsão de modificação do terreno, aterro ou retirada de material, que acresça ou diminua a áárea?
+    <label>H previso de modificao do terreno, aterro ou retirada de material, que acresa ou diminua a rea?
       <span class="hint-semaforo"><span class="hint-icon" data-hint-tipo="verde" data-hint="Indique se a destinao proposta implica modificaes fsicas no terreno ou na edificao." role="tooltip" tabindex="0" aria-label="Ajuda: Modificao do terreno/edificao">?</span></span>
     </label>
     <div class="radio-group" id="group-campo54">
       <label class="radio-option"><input type="radio" name="campo54" value="Sim"> Sim</label>
-      <label class="radio-option"><input type="radio" name="campo54" value="Não"> Não</label>
-      <label class="radio-option"><input type="radio" name="campo54" value="Sem informação"> Sem informação</label>
+      <label class="radio-option"><input type="radio" name="campo54" value="No"> No</label>
+      <label class="radio-option"><input type="radio" name="campo54" value="Sem informao"> Sem informao</label>
     </div>
-    <span class="error-msg" id="err54" style="display:none;">Selecione uma opção.</span>
+    <span class="error-msg" id="err54" style="display:none;">Selecione uma opo.</span>
     <div id="bloco54" style="display:none;margin-top:8px;">
-      <label for="campo54_desc">Descrição da modificação prevista:
+      <label for="campo54_desc">Descrio da modificao prevista:
         <span class="hint-semaforo"><span class="hint-icon" data-hint-tipo="verde" data-hint="Descreva as modificaes fsicas previstas no terreno ou na edificao." role="tooltip" tabindex="0" aria-label="Ajuda: Descrio da modificao">?</span></span>
       </label>
-      <textaárea id="campo54_desc" name="campo54_desc" placeholder="Descreva as modificaes previstas no terreno ou na edificao..."></textaárea>
+      <textarea id="campo54_desc" name="campo54_desc" placeholder="Descreva as modificaes previstas no terreno ou na edificao..."></textarea>
     </div>
   </div>
 
   <div class="form-group editavel">
-    <label for="campo55">Compatibilidade urbanística [Catlogo: Conflito (incompatibilidade de zoneamento)]:
-      <span class="hint-semaforo"><span class="hint-icon" data-hint-tipo="verde" data-hint="Avalie a compatibilidade do uso proposto com as normas urbansticas municipais vigentes (Plano Diretor, zoneamento, etc.)." role="tooltip" tabindex="0" aria-label="Ajuda: Compatibilidade urbanística">?</span></span>
+    <label for="campo55">Compatibilidade urbanstica [Catlogo: Conflito (incompatibilidade de zoneamento)]:
+      <span class="hint-semaforo"><span class="hint-icon" data-hint-tipo="verde" data-hint="Avalie a compatibilidade do uso proposto com as normas urbansticas municipais vigentes (Plano Diretor, zoneamento, etc.)." role="tooltip" tabindex="0" aria-label="Ajuda: Compatibilidade urbanstica">?</span></span>
     </label>
     <select id="campo55" name="compatibilidade_urbanistica" required>
       <option value="">Selecione...</option>
       <option value="Compatvel">Compatvel: uso proposto est em conformidade com o zoneamento e normas urbansticas vigentes</option>
       <option value="Compatvel com restries">Compatvel com restries: uso admitido com condicionantes ou mediante aprovao especfica</option>
       <option value="Incompatvel">Incompatvel: uso contrrio s normas urbansticas vigentes</option>
-      <option value="Não foi possvel verificar">Não foi possvel verificar: ausncia de informaes ou acesso s normas municipais</option>
+      <option value="No foi possvel verificar">No foi possvel verificar: ausncia de informaes ou acesso s normas municipais</option>
     </select>
     <span class="error-msg" id="err55" style="display:none;">Selecione a compatibilidade urbanstica.</span>
   </div>
 
   <div class="form-group editavel">
-    <label>Há vinculação com Programas/Estratégias de governo?
-      <span class="hint-semaforo"><span class="hint-icon" data-hint-tipo="verde" data-hint="Indique se a destinao proposta est vinculada a programas ou estratgias governamentais." role="tooltip" tabindex="0" aria-label="Ajuda: Vinculação estratgica">?</span></span>
+    <label>H vinculao com Programas/Estratgias de governo?
+      <span class="hint-semaforo"><span class="hint-icon" data-hint-tipo="verde" data-hint="Indique se a destinao proposta est vinculada a programas ou estratgias governamentais." role="tooltip" tabindex="0" aria-label="Ajuda: Vinculao estratgica">?</span></span>
     </label>
     <div class="radio-group" id="group-campo56-radio">
       <label class="radio-option"><input type="radio" name="campo56_radio" value="Sim" required> Sim</label>
-      <label class="radio-option"><input type="radio" name="campo56_radio" value="Não"> Não</label>
-      <label class="radio-option"><input type="radio" name="campo56_radio" value="Sem informação"> Sem informação</label>
+      <label class="radio-option"><input type="radio" name="campo56_radio" value="No"> No</label>
+      <label class="radio-option"><input type="radio" name="campo56_radio" value="Sem informao"> Sem informao</label>
     </div>
-    <span class="error-msg" id="err56" style="display:none;">Selecione uma opção.</span>
+    <span class="error-msg" id="err56" style="display:none;">Selecione uma opo.</span>
     <div id="group-campo56" style="display:none;margin-top:8px;">
       <div class="checkbox-group">
         <label class="checkbox-option"><input type="checkbox" name="campo56[]" value="Programa Minha Casa Minha Vida" /> Programa Minha Casa Minha Vida</label>
-        <label class="checkbox-option"><input type="checkbox" name="campo56[]" value="Programa de Regularização Fundiária (REURB)" /> Programa de Regularização Fundiária (REURB)</label>
-        <label class="checkbox-option"><input type="checkbox" name="campo56[]" value="Programa de Desestatização/Privatização" /> Programa de Desestatização/Privatização</label>
+        <label class="checkbox-option"><input type="checkbox" name="campo56[]" value="Programa de Regularizao Fundiria (REURB)" /> Programa de Regularizao Fundiria (REURB)</label>
+        <label class="checkbox-option"><input type="checkbox" name="campo56[]" value="Programa de Desestatizao/Privatizao" /> Programa de Desestatizao/Privatizao</label>
         <label class="checkbox-option"><input type="checkbox" name="campo56[]" value="Programa de infraestrutura federal" /> Programa de infraestrutura federal</label>
         <label class="checkbox-option"><input type="checkbox" name="campo56[]" value="Plano de desenvolvimento regional" /> Plano de desenvolvimento regional</label>
-        <label class="checkbox-option"><input type="checkbox" name="campo56[]" value="Outro programa ou estratégia" /> Outro programa ou estratégia (descrever nas observaes)</label>
+        <label class="checkbox-option"><input type="checkbox" name="campo56[]" value="Outro programa ou estratgia" /> Outro programa ou estratgia (descrever nas observaes)</label>
       </div>
-      <label for="campo56_obs">Observações complementares:</label>
-      <textaárea id="campo56_obs" name="campo56_obs" placeholder="Descreva a vinculação estratgica..."></textaárea>
+      <label for="campo56_obs">Observaes complementares:</label>
+      <textarea id="campo56_obs" name="campo56_obs" placeholder="Descreva a vinculao estratgica..."></textarea>
     </div>
   </div>
 
   <div class="form-group editavel">
-    <label>Há vinculação com Políticas Públicas?
-      <span class="hint-semaforo"><span class="hint-icon" data-hint-tipo="verde" data-hint="Indique as políticas públicas às quais a destinação proposta se vincula." role="tooltip" tabindex="0" aria-label="Ajuda: Polticas vinculadas">?</span></span>
+    <label>H vinculao com Polticas Pblicas?
+      <span class="hint-semaforo"><span class="hint-icon" data-hint-tipo="verde" data-hint="Indique as polticas pblicas s quais a destinao proposta se vincula." role="tooltip" tabindex="0" aria-label="Ajuda: Polticas vinculadas">?</span></span>
     </label>
     <div class="radio-group" id="group-campo57-radio">
       <label class="radio-option"><input type="radio" name="campo57_radio" value="Sim" required> Sim</label>
-      <label class="radio-option"><input type="radio" name="campo57_radio" value="Não"> Não</label>
-      <label class="radio-option"><input type="radio" name="campo57_radio" value="Sem informação"> Sem informação</label>
+      <label class="radio-option"><input type="radio" name="campo57_radio" value="No"> No</label>
+      <label class="radio-option"><input type="radio" name="campo57_radio" value="Sem informao"> Sem informao</label>
     </div>
-    <span class="error-msg" id="err57" style="display:none;">Selecione uma opção.</span>
+    <span class="error-msg" id="err57" style="display:none;">Selecione uma opo.</span>
     <div id="group-campo57" style="display:none;margin-top:8px;">
       <div class="checkbox-group">
-        <label class="checkbox-option"><input type="checkbox" name="campo57[]" value="Política Nacional de Habitação" /> Política Nacional de Habitação</label>
-        <label class="checkbox-option"><input type="checkbox" name="campo57[]" value="Política Nacional de Mobilidade Urbana" /> Política Nacional de Mobilidade Urbana</label>
-        <label class="checkbox-option"><input type="checkbox" name="campo57[]" value="Política Nacional de Meio Ambiente" /> Política Nacional de Meio Ambiente</label>
-        <label class="checkbox-option"><input type="checkbox" name="campo57[]" value="Política Nacional de Segurança Pública" /> Política Nacional de Segurança Pública</label>
-        <label class="checkbox-option"><input type="checkbox" name="campo57[]" value="Política Nacional de Defesa Nacional" /> Política Nacional de Defesa Nacional</label>
-        <label class="checkbox-option"><input type="checkbox" name="campo57[]" value="Política Nacional de Saúde" /> Política Nacional de Saúde</label>
-        <label class="checkbox-option"><input type="checkbox" name="campo57[]" value="Política Nacional de Educação" /> Política Nacional de Educação</label>
-        <label class="checkbox-option"><input type="checkbox" name="campo57[]" value="Outra política pública" /> Outra política pública (descrever nas observaes)</label>
+        <label class="checkbox-option"><input type="checkbox" name="campo57[]" value="Poltica Nacional de Habitao" /> Poltica Nacional de Habitao</label>
+        <label class="checkbox-option"><input type="checkbox" name="campo57[]" value="Poltica Nacional de Mobilidade Urbana" /> Poltica Nacional de Mobilidade Urbana</label>
+        <label class="checkbox-option"><input type="checkbox" name="campo57[]" value="Poltica Nacional de Meio Ambiente" /> Poltica Nacional de Meio Ambiente</label>
+        <label class="checkbox-option"><input type="checkbox" name="campo57[]" value="Poltica Nacional de Segurana Pblica" /> Poltica Nacional de Segurana Pblica</label>
+        <label class="checkbox-option"><input type="checkbox" name="campo57[]" value="Poltica Nacional de Defesa Nacional" /> Poltica Nacional de Defesa Nacional</label>
+        <label class="checkbox-option"><input type="checkbox" name="campo57[]" value="Poltica Nacional de Sade" /> Poltica Nacional de Sade</label>
+        <label class="checkbox-option"><input type="checkbox" name="campo57[]" value="Poltica Nacional de Educao" /> Poltica Nacional de Educao</label>
+        <label class="checkbox-option"><input type="checkbox" name="campo57[]" value="Outra poltica pblica" /> Outra poltica pblica (descrever nas observaes)</label>
       </div>
       <label for="campo57_obs">Especificar:</label>
-      <textaárea id="campo57_obs" name="campo57_obs" placeholder="Especifique as polticas vinculadas..."></textaárea>
+      <textarea id="campo57_obs" name="campo57_obs" placeholder="Especifique as polticas vinculadas..."></textarea>
     </div>
   </div>
 
   <div class="form-group editavel">
-    <label>Há expectativa de impacto social?
+    <label>H expectativa de impacto social?
       <span class="hint-semaforo"><span class="hint-icon" data-hint-tipo="verde" data-hint="Avalie o impacto social esperado da destinao proposta para a populao beneficiada." role="tooltip" tabindex="0" aria-label="Ajuda: Impacto social esperado">?</span></span>
     </label>
     <div class="radio-group" id="group-campo58-radio">
       <label class="radio-option"><input type="radio" name="campo58_radio" value="Sim" required> Sim</label>
-      <label class="radio-option"><input type="radio" name="campo58_radio" value="Não"> Não</label>
-      <label class="radio-option"><input type="radio" name="campo58_radio" value="Sem informação"> Sem informação</label>
+      <label class="radio-option"><input type="radio" name="campo58_radio" value="No"> No</label>
+      <label class="radio-option"><input type="radio" name="campo58_radio" value="Sem informao"> Sem informao</label>
     </div>
-    <span class="error-msg" id="err58" style="display:none;">Selecione uma opção.</span>
+    <span class="error-msg" id="err58" style="display:none;">Selecione uma opo.</span>
     <div id="group-campo58" style="display:none;margin-top:8px;">
       <label for="campo58">Impacto:</label>
       <select id="campo58" name="impacto_social" data-no-custom>
@@ -302,13 +302,13 @@
         <option value="Sem impacto social relevante">Sem impacto social relevante: destinao sem reflexo significativo sobre a coletividade</option>
         <option value="Impacto social negativo">Impacto social negativo: destinao pode gerar prejuzo social identificado</option>
       </select>
-      <label for="campo58_obs" style="margin-top:8px;">Observações complementares:</label>
-      <textaárea id="campo58_obs" name="impacto_social_obs" placeholder="Observaes sobre o impacto social esperado..."></textaárea>
+      <label for="campo58_obs" style="margin-top:8px;">Observaes complementares:</label>
+      <textarea id="campo58_obs" name="impacto_social_obs" placeholder="Observaes sobre o impacto social esperado..."></textarea>
     </div>
   </div>
 
   <div class="form-group editavel">
-    <label for="campo59">Número estimado de beneficiários em potencial:
+    <label for="campo59">Nmero estimado de beneficirios em potencial:
       <span class="hint-semaforo"><span class="hint-icon" data-hint-tipo="verde" data-hint="Informe o nmero estimado de pessoas ou famlias beneficiadas diretamente pela destinao proposta." role="tooltip" tabindex="0" aria-label="Ajuda: Nmero estimado de beneficirios">?</span></span>
     </label>
     <input type="number" id="campo59" name="num_beneficiarios" placeholder="0" min="0" autocomplete="off" required />
@@ -316,26 +316,26 @@
   </div>
 
   <div class="form-group editavel">
-    <label>Há expectativa de impacto ambiental?
+    <label>H expectativa de impacto ambiental?
       <span class="hint-semaforo"><span class="hint-icon" data-hint-tipo="verde" data-hint="Avalie o impacto ambiental esperado da destinao proposta sobre o meio ambiente local e regional." role="tooltip" tabindex="0" aria-label="Ajuda: Impacto ambiental esperado">?</span></span>
     </label>
     <div class="radio-group" id="group-campo510-radio">
       <label class="radio-option"><input type="radio" name="campo510_radio" value="Sim" required> Sim</label>
-      <label class="radio-option"><input type="radio" name="campo510_radio" value="Não"> Não</label>
-      <label class="radio-option"><input type="radio" name="campo510_radio" value="Sem informação"> Sem informação</label>
+      <label class="radio-option"><input type="radio" name="campo510_radio" value="No"> No</label>
+      <label class="radio-option"><input type="radio" name="campo510_radio" value="Sem informao"> Sem informao</label>
     </div>
-    <span class="error-msg" id="err510" style="display:none;">Selecione uma opção.</span>
+    <span class="error-msg" id="err510" style="display:none;">Selecione uma opo.</span>
     <div id="group-campo510" style="display:none;margin-top:8px;">
       <label for="campo510">Impacto:</label>
       <select id="campo510" name="impacto_ambiental" data-no-custom>
         <option value="">Selecione...</option>
-        <option value="Impacto positivo">Impacto positivo: destinao contribui para recuperação ou preservação ambiental</option>
+        <option value="Impacto positivo">Impacto positivo: destinao contribui para recuperao ou preservao ambiental</option>
         <option value="Sem impacto ambiental relevante">Sem impacto ambiental relevante: destinao no altera significativamente o meio ambiente</option>
         <option value="Impacto negativo mitigvel">Impacto negativo mitigvel: impacto identificado, passvel de controle por medidas mitigadoras</option>
         <option value="Impacto negativo relevante">Impacto negativo relevante: impacto significativo com necessidade de licenciamento ambiental</option>
       </select>
-      <label for="campo510_obs" style="margin-top:8px;">Observações complementares:</label>
-      <textaárea id="campo510_obs" name="impacto_ambiental_obs" placeholder="Observaes sobre o impacto ambiental esperado..."></textaárea>
+      <label for="campo510_obs" style="margin-top:8px;">Observaes complementares:</label>
+      <textarea id="campo510_obs" name="impacto_ambiental_obs" placeholder="Observaes sobre o impacto ambiental esperado..."></textarea>
     </div>
   </div>
 
@@ -358,48 +358,48 @@
   <select id="campo511" name="regime_destinacao" required data-no-custom>
     <option value="">Selecione...</option>
 
-    <option value="Acordo de Cooperação Técnica para Regularização Fundiária Urbana (ACT-Reurb)">Acordo de Cooperação Técnica para Regularização Fundiária Urbana (ACT-Reurb)</option>
-    <option value="Afetação">Afetação</option>
+    <option value="Acordo de Cooperao Tcnica para Regularizao Fundiria Urbana (ACT-Reurb)">Acordo de Cooperao Tcnica para Regularizao Fundiria Urbana (ACT-Reurb)</option>
+    <option value="Afetao">Afetao</option>
     <option value="Aforamento gratuito">Aforamento gratuito</option>
     <option value="Aforamento oneroso">Aforamento oneroso</option>
     <option value="Arrendamento">Arrendamento</option>
-    <option value="Autorização de obras">Autorização de obras</option>
-    <option value="Autorização de passagem gratuita">Autorização de passagem gratuita</option>
-    <option value="Autorização de passagem onerosa">Autorização de passagem onerosa</option>
-    <option value="Autorização de uso para fins comerciais">Autorização de uso para fins comerciais</option>
-    <option value="Autorização de uso sustentável">Autorização de uso sustentável</option>
+    <option value="Autorizao de obras">Autorizao de obras</option>
+    <option value="Autorizao de passagem gratuita">Autorizao de passagem gratuita</option>
+    <option value="Autorizao de passagem onerosa">Autorizao de passagem onerosa</option>
+    <option value="Autorizao de uso para fins comerciais">Autorizao de uso para fins comerciais</option>
+    <option value="Autorizao de uso sustentvel">Autorizao de uso sustentvel</option>
 
-    <option value="Cessão de Uso gratuita  entidade s/ fins lucrativos">Cessão de Uso gratuita  entidade s/ fins lucrativos</option>
-    <option value="Cessão de uso em condies especiais">Cessão de uso em condies especiais</option>
-    <option value="Cessão de uso gratuita">Cessão de uso gratuita</option>
-    <option value="Cessão de uso onerosa">Cessão de uso onerosa</option>
-    <option value="Cessão de uso provisória">Cessão de uso provisória</option>
+    <option value="Cesso de Uso gratuita  entidade s/ fins lucrativos">Cesso de Uso gratuita  entidade s/ fins lucrativos</option>
+    <option value="Cesso de uso em condies especiais">Cesso de uso em condies especiais</option>
+    <option value="Cesso de uso gratuita">Cesso de uso gratuita</option>
+    <option value="Cesso de uso onerosa">Cesso de uso onerosa</option>
+    <option value="Cesso de uso provisria">Cesso de uso provisria</option>
 
-    <option value="Concessão de Direito de Superfície Gratuita">Concessão de Direito de Superfície Gratuita</option>
-    <option value="Concessão de Direito de Superfície Onerosa">Concessão de Direito de Superfície Onerosa</option>
-    <option value="Concessão de Direito Áreal de Laje Gratuita">Concessão de Direito Áreal de Laje Gratuita</option>
-    <option value="Concessão de Direito Áreal de Laje Onerosa">Concessão de Direito Áreal de Laje Onerosa</option>
-    <option value="Concessão de Direito Áreal de Uso Gratuita">Concessão de Direito Áreal de Uso Gratuita</option>
-    <option value="Concessão de Direito Áreal de Uso Onerosa">Concessão de Direito Áreal de Uso Onerosa</option>
-    <option value="Concessão de uso especial para fins de moradia (CUEM)">Concessão de uso especial para fins de moradia (CUEM)</option>
+    <option value="Concesso de Direito de Superfcie Gratuita">Concesso de Direito de Superfcie Gratuita</option>
+    <option value="Concesso de Direito de Superfcie Onerosa">Concesso de Direito de Superfcie Onerosa</option>
+    <option value="Concesso de Direito Real de Laje Gratuita">Concesso de Direito Real de Laje Gratuita</option>
+    <option value="Concesso de Direito Real de Laje Onerosa">Concesso de Direito Real de Laje Onerosa</option>
+    <option value="Concesso de Direito Real de Uso Gratuita">Concesso de Direito Real de Uso Gratuita</option>
+    <option value="Concesso de Direito Real de Uso Onerosa">Concesso de Direito Real de Uso Onerosa</option>
+    <option value="Concesso de uso especial para fins de moradia (CUEM)">Concesso de uso especial para fins de moradia (CUEM)</option>
 
-    <option value="Dação em pagamento">Dação em pagamento</option>
-    <option value="Declaração de Interesse do Serviço Público">Declaração de Interesse do Serviço Público</option>
-    <option value="Doação">Doação</option>
+    <option value="Dao em pagamento">Dao em pagamento</option>
+    <option value="Declarao de Interesse do Servio Pblico">Declarao de Interesse do Servio Pblico</option>
+    <option value="Doao">Doao</option>
     <option value="Entrega">Entrega</option>
-    <option value="Entrega provisória">Entrega provisória</option>
-    <option value="Áááguarda Provisria">Áááguarda Provisria</option>
-    <option value="Inscrição de ocupação">Inscrição de ocupação</option>
-    <option value="Integralização de cotas em Fundo de Investimento Imobiliário">Integralização de cotas em Fundo de Investimento Imobiliário</option>
+    <option value="Entrega provisria">Entrega provisria</option>
+    <option value="Guarda Provisria">Guarda Provisria</option>
+    <option value="Inscrio de ocupao">Inscrio de ocupao</option>
+    <option value="Integralizao de cotas em Fundo de Investimento Imobilirio">Integralizao de cotas em Fundo de Investimento Imobilirio</option>
     <option value="Investidura">Investidura</option>
-    <option value="Locação para terceiros">Locação para terceiros</option>
-    <option value="Permissão de uso para eventos de curta duração">Permissão de uso para eventos de curta duração</option>
-    <option value="Permissão de uso para fins residenciais">Permissão de uso para fins residenciais</option>
+    <option value="Locao para terceiros">Locao para terceiros</option>
+    <option value="Permisso de uso para eventos de curta durao">Permisso de uso para eventos de curta durao</option>
+    <option value="Permisso de uso para fins residenciais">Permisso de uso para fins residenciais</option>
     <option value="Permuta">Permuta</option>
-    <option value="Promessaúde compra e venda">Promessaúde compra e venda</option>
+    <option value="Promessa de compra e venda">Promessa de compra e venda</option>
     <option value="Remio do foro">Remio do foro</option>
     <option value="Transferncia de gesto de orlas e praias">Transferncia de gesto de orlas e praias</option>
-    <option value="Transferncia de direito áreal de uso para Reurb-S">Transferncia de direito áreal de uso para Reurb-S</option>
+    <option value="Transferncia de direito real de uso para Reurb-S">Transferncia de direito real de uso para Reurb-S</option>
     <option value="Transferncia de propriedade para fins de Reurb-S">Transferncia de propriedade para fins de Reurb-S</option>
     <option value="Transferncia gratuita da posse">Transferncia gratuita da posse</option>
     <option value="Transferncia onerosa da posse">Transferncia onerosa da posse</option>
@@ -411,12 +411,12 @@
   </span>
 
   <div id="bloco511_obs" style="display:none; margin-top:8px;">
-    <label for="campo511_obs">Observações complementares:</label>
-    <textaárea
+    <label for="campo511_obs">Observaes complementares:</label>
+    <textarea
       id="campo511_obs"
       name="campo511_obs"
       placeholder="Observaes sobre o regime de destinao proposto..."
-    ></textaárea>
+    ></textarea>
   </div>
 </div>
 
@@ -433,7 +433,7 @@
       <div class="decl-checks">
         <label class="decl-check-item">
           <input type="checkbox" id="decl-check1" name="decl_check1" />
-          <span>As informaes consignadas no referido formulrio foram inseridas com base nos dados disponveis nos sistemas oficiais e nas verificaes árealizadas no mbito desta unidade.</span>
+          <span>As informaes consignadas no referido formulrio foram inseridas com base nos dados disponveis nos sistemas oficiais e nas verificaes realizadas no mbito desta unidade.</span>
         </label>
       </div>
       <span class="error-msg" id="err-decl" style="display:none;">A declarao deve ser concluda antes de enviar.</span>
@@ -452,7 +452,7 @@
 
   <div class="form-group editavel">
     <label for="obs224_0">Observaes:</label>
-    <textaárea id="obs224_0" name="imoveis[0][obs_geral_ident]" placeholder=""></textaárea>
+    <textarea id="obs224_0" name="imoveis[0][obs_geral_ident]" placeholder=""></textarea>
     <div class="dynamic-list-wrapper" style="flex:1;display:flex;flex-direction:column;gap:8px;">
       <button type="button" class="btn-add" id="btnAdicionarImagemIdent_0" style="align-self:flex-start;">+ Adicionar link/documento</button>
       <div id="imagens-list-ident_0"></div>
@@ -468,8 +468,8 @@
               <label class="radio-option"><input type="radio" name="tem_contrapartida" value="Não" checked onclick="document.getElementById('bloco-contrapartida').style.display='none'"> Não</label>
           </div>
           <div id="bloco-contrapartida" style="display:none; margin-top: 10px; flex-direction: column; gap: 8px;">
-              <label for="desc_contrapartida">Descrição da Contrapartida / Encaórgãos:</label>
-              <textaárea id="desc_contrapartida" name="desc_contrapartida" placeholder="Descreva os encaórgãos, obras ou melhorias assumidas pelo destinatário..."></textaárea>
+              <label for="desc_contrapartida">Descrição da Contrapartida / Encargos:</label>
+              <textarea id="desc_contrapartida" name="desc_contrapartida" placeholder="Descreva os encargos, obras ou melhorias assumidas pelo destinatário..."></textarea>
           </div>
       </div>
 
@@ -498,6 +498,23 @@
 
       document.getElementById('form03').addEventListener('submit', function(e) {
           e.preventDefault();
+          
+          // Validaao da declarao
+          const declFlag = document.getElementById('decl-assinado-flag');
+          if (declFlag && declFlag.value !== '1') {
+              alert(' Voc precisa assinar o Termo de Declarao antes de salvar e avanar.');
+              const errDecl = document.getElementById('err-decl');
+              if (errDecl) errDecl.style.display = 'block';
+              
+              const wrapperDecl = document.getElementById('acordeao-declaracao');
+              if (wrapperDecl && !wrapperDecl.classList.contains('aberto')) {
+                  wrapperDecl.classList.add('aberto');
+                  document.getElementById('acordeao-header-declaracao').setAttribute('aria-expanded', 'true');
+              }
+              document.getElementById('decl-check1').scrollIntoView({behavior: 'smooth', block: 'center'});
+              return;
+          }
+          
           const form = e.target;
           if (form.checkValidity()) {
               const rootWindow = window.parent?.parent || window.parent || window;
@@ -533,7 +550,7 @@
     c53.innerHTML = '<option value="">Selecione...</option>';
     if (usoEspecificoMap[tipoImobiliario]) {
         usoEspecificoMap[tipoImobiliario].forEach(item => {
-            const opt = document.cáreateElement('option');
+            const opt = document.createElement('option');
             opt.value = item[0];
             opt.textContent = item[1];
             c53.appendChild(opt);
@@ -548,25 +565,25 @@
   }
 
 const usoEspecificoMap={
-"0101":[["010101","01.01.01  Sede ou escritório de órgão ou entidade pública federal"],["010102","01.01.02  Sede ou escritório de órgão ou entidade pública estadual ou distrital"],["010103","01.01.03  Sede ou escritório de órgão ou entidade pública municipal"],["010104","01.01.04  Representação diplomática ou consular"],["010105","01.01.05  Sede de organismo internacional"],["010199","01.01.99  Outro uso administrativo e representativo"]],
-"0102":[["010201","01.02.01  Agricultura"],["010202","01.02.02  Pecuária"],["010203","01.02.03  Aquicultura"],["010204","01.02.04  Produção florestal"],["010205","01.02.05  Pesca"],["010299","01.02.99  Outro uso agropecuário, aquicultura, florestal ou pesqueiro"]],
-"0103":[["010301","01.03.01  Unidade de conservação"],["010302","01.03.02  áááárea de preservação permanente"],["010303","01.03.03  Reserva legal"],["010304","01.03.04  áááárea de reflorestamento ou recuperação ambiental"],["010305","01.03.05  áááárea de manejo de recursos naturais"],["010399","01.03.99  Outro uso ambiental e de recursos naturais"]],
-"0104":[["010401","01.04.01  Equipamento cultural (museu, teatro, biblioteca, etc.)"],["010402","01.04.02  Equipamento esportivo (estádio, ginásio, quadra, etc.)"],["010403","01.04.03  áááárea de lazer e recáreação pública"],["010404","01.04.04  Parque urbano ou área verde pública"],["010499","01.04.99  Outro uso cultural, esportivo ou de lazer"]],
-"0105":[["010501","01.05.01  Evento cultural"],["010502","01.05.02  Evento esportivo"],["010503","01.05.03  Evento comercial ou feira"],["010504","01.05.04  Evento institucional ou cívico"],["010599","01.05.99  Outro uso em evento de curta duração"]],
-"0106":[["010601","01.06.01  Habitação de interesse social (HIS)"],["010602","01.06.02  Habitação de mercado popular"],["010603","01.06.03  Habitação para segmentos específicos (idosos, pessoas com deficiência, etc.)"],["010604","01.06.04  Habitação em assentamento informal consolidado"],["010699","01.06.99  Outro uso habitacional"]],
-"0107":[["010701","01.07.01  Uso industrial"],["010702","01.07.02  Uso comercial varejista"],["010703","01.07.03  Uso comercial atacadista"],["010704","01.07.04  Prestação de serviços"],["010705","01.07.05  Uso misto (comercial/serviços/residencial)"],["010799","01.07.99  Outro uso industrial, comercial ou de serviços"]],
-"0108":[["010801","01.08.01  Abastecimento de ááágua"],["010802","01.08.02  Esgotamento sanitário"],["010803","01.08.03  Energia elétrica"],["010804","01.08.04  Gás canalizado"],["010805","01.08.05  Telecomunicações"],["010806","01.08.06  Resíduos sólidos"],["010899","01.08.99  Outro uso em infraestrutura de serviços públicos"]],
-"0109":[["010901","01.09.01  Rodovia"],["010902","01.09.02  Ferrovia"],["010903","01.09.03  Porto ou instalação portuária"],["010904","01.09.04  Aeroporto ou aeródromo"],["010905","01.09.05  Hidrovia"],["010906","01.09.06  Mobilidade urbana (metrôôôô, BRT, ciclovia, etc.)"],["010999","01.09.99  Outro uso em infraestrutura de transportes"]],
-"0110":[["011001","01.10.01  Projeto de requalificação urbana integrada"],["011002","01.10.02  Operação urbana consorciada"],["011003","01.10.03  Projeto de revitalização de áárea portuária ou industrial"],["011099","01.10.99  Outro uso multifinalitário em requalificação urbana"]],
-"0111":[["011101","01.11.01  Terra indígena"],["011102","01.11.02  Território quilombola"],["011103","01.11.03  áááárea de comunidade tradicional (ribeirinhos, extrativistas, etc.)"],["011199","01.11.99  Outro uso por povos originários ou comunidades tradicionais"]],
-"0112":[["011201","01.12.01  Instituição de ensino federal"],["011202","01.12.02  Instituição de ensino estadual ou municipal"],["011203","01.12.03  Instituição de pesquisa"],["011204","01.12.04  Centro de extensão ou capacitação"],["011299","01.12.99  Outro uso em ensino, pesquisa e extensão"]],
-"0113":[["011301","01.13.01  Centro de assistência social (CRAS, CREAS, etc.)"],["011302","01.13.02  Abrigo ou albergue"],["011303","01.13.03  Centro de cidadania ou atendimento ao cidadão"],["011304","01.13.04  Entidade filantrópica ou sem fins lucrativos"],["011399","01.13.99  Outro uso socioassistêncial e de cidadania"]],
-"0114":[["011401","01.14.01  Hospital ou unidade hospitalar"],["011402","01.14.02  Unidade básica de saúde (UBS/UPA)"],["011403","01.14.03  Laboratório ou centro de pesquisa em saúde"],["011499","01.14.99  Outro uso em serviços de saúde"]],
-"0115":[["011501","01.15.01  Residência funcional de servidor federal"],["011502","01.15.02  Alojamento coletivo de servidores"],["011599","01.15.99  Outro uso residencial para servidor"]],
-"0116":[["011601","01.16.01  Instalação militar"],["011602","01.16.02  Delegacia, presídio ou unidade de custódia"],["011603","01.16.03  Corpo de bombeiros"],["011604","01.16.04  Base ou infraestrutura de defesa nacional"],["011699","01.16.99  Outro uso em segurança pública e defesa nacional"]],
-"0117":[["011701","01.17.01  Templo, igreja ou espaço de culto religioso"],["011702","01.17.02  Cemitério ou crematório de vinculação religiosa"],["011799","01.17.99  Outro uso religioso"]],
-"0118":[["011800","01.18.00  Sem informação"]],
-"0119":[["011900","01.19.00  Sem uso definido/vinculação"]]
+"0101":[["010101","01.01.01  Sede ou escritrio de rgo ou entidade pblica federal"],["010102","01.01.02  Sede ou escritrio de rgo ou entidade pblica estadual ou distrital"],["010103","01.01.03  Sede ou escritrio de rgo ou entidade pblica municipal"],["010104","01.01.04  Representao diplomtica ou consular"],["010105","01.01.05  Sede de organismo internacional"],["010199","01.01.99  Outro uso administrativo e representativo"]],
+"0102":[["010201","01.02.01  Agricultura"],["010202","01.02.02  Pecuria"],["010203","01.02.03  Aquicultura"],["010204","01.02.04  Produo florestal"],["010205","01.02.05  Pesca"],["010299","01.02.99  Outro uso agropecurio, aquicultura, florestal ou pesqueiro"]],
+"0103":[["010301","01.03.01  Unidade de conservao"],["010302","01.03.02  rea de preservao permanente"],["010303","01.03.03  Reserva legal"],["010304","01.03.04  rea de reflorestamento ou recuperao ambiental"],["010305","01.03.05  rea de manejo de recursos naturais"],["010399","01.03.99  Outro uso ambiental e de recursos naturais"]],
+"0104":[["010401","01.04.01  Equipamento cultural (museu, teatro, biblioteca, etc.)"],["010402","01.04.02  Equipamento esportivo (estdio, ginsio, quadra, etc.)"],["010403","01.04.03  rea de lazer e recreao pblica"],["010404","01.04.04  Parque urbano ou rea verde pblica"],["010499","01.04.99  Outro uso cultural, esportivo ou de lazer"]],
+"0105":[["010501","01.05.01  Evento cultural"],["010502","01.05.02  Evento esportivo"],["010503","01.05.03  Evento comercial ou feira"],["010504","01.05.04  Evento institucional ou cvico"],["010599","01.05.99  Outro uso em evento de curta durao"]],
+"0106":[["010601","01.06.01  Habitao de interesse social (HIS)"],["010602","01.06.02  Habitao de mercado popular"],["010603","01.06.03  Habitao para segmentos especficos (idosos, pessoas com deficincia, etc.)"],["010604","01.06.04  Habitao em assentamento informal consolidado"],["010699","01.06.99  Outro uso habitacional"]],
+"0107":[["010701","01.07.01  Uso industrial"],["010702","01.07.02  Uso comercial varejista"],["010703","01.07.03  Uso comercial atacadista"],["010704","01.07.04  Prestao de servios"],["010705","01.07.05  Uso misto (comercial/servios/residencial)"],["010799","01.07.99  Outro uso industrial, comercial ou de servios"]],
+"0108":[["010801","01.08.01  Abastecimento de gua"],["010802","01.08.02  Esgotamento sanitrio"],["010803","01.08.03  Energia eltrica"],["010804","01.08.04  Gs canalizado"],["010805","01.08.05  Telecomunicaes"],["010806","01.08.06  Resduos slidos"],["010899","01.08.99  Outro uso em infraestrutura de servios pblicos"]],
+"0109":[["010901","01.09.01  Rodovia"],["010902","01.09.02  Ferrovia"],["010903","01.09.03  Porto ou instalao porturia"],["010904","01.09.04  Aeroporto ou aerdromo"],["010905","01.09.05  Hidrovia"],["010906","01.09.06  Mobilidade urbana (metr, BRT, ciclovia, etc.)"],["010999","01.09.99  Outro uso em infraestrutura de transportes"]],
+"0110":[["011001","01.10.01  Projeto de requalificao urbana integrada"],["011002","01.10.02  Operao urbana consorciada"],["011003","01.10.03  Projeto de revitalizao de rea porturia ou industrial"],["011099","01.10.99  Outro uso multifinalitrio em requalificao urbana"]],
+"0111":[["011101","01.11.01  Terra indgena"],["011102","01.11.02  Territrio quilombola"],["011103","01.11.03  rea de comunidade tradicional (ribeirinhos, extrativistas, etc.)"],["011199","01.11.99  Outro uso por povos originrios ou comunidades tradicionais"]],
+"0112":[["011201","01.12.01  Instituio de ensino federal"],["011202","01.12.02  Instituio de ensino estadual ou municipal"],["011203","01.12.03  Instituio de pesquisa"],["011204","01.12.04  Centro de extenso ou capacitao"],["011299","01.12.99  Outro uso em ensino, pesquisa e extenso"]],
+"0113":[["011301","01.13.01  Centro de assistncia social (CRAS, CREAS, etc.)"],["011302","01.13.02  Abrigo ou albergue"],["011303","01.13.03  Centro de cidadania ou atendimento ao cidado"],["011304","01.13.04  Entidade filantrpica ou sem fins lucrativos"],["011399","01.13.99  Outro uso socioassistencial e de cidadania"]],
+"0114":[["011401","01.14.01  Hospital ou unidade hospitalar"],["011402","01.14.02  Unidade bsica de sade (UBS/UPA)"],["011403","01.14.03  Laboratrio ou centro de pesquisa em sade"],["011499","01.14.99  Outro uso em servios de sade"]],
+"0115":[["011501","01.15.01  Residncia funcional de servidor federal"],["011502","01.15.02  Alojamento coletivo de servidores"],["011599","01.15.99  Outro uso residencial para servidor"]],
+"0116":[["011601","01.16.01  Instalao militar"],["011602","01.16.02  Delegacia, presdio ou unidade de custdia"],["011603","01.16.03  Corpo de bombeiros"],["011604","01.16.04  Base ou infraestrutura de defesa nacional"],["011699","01.16.99  Outro uso em segurana pblica e defesa nacional"]],
+"0117":[["011701","01.17.01  Templo, igreja ou espao de culto religioso"],["011702","01.17.02  Cemitrio ou crematrio de vinculao religiosa"],["011799","01.17.99  Outro uso religioso"]],
+"0118":[["011800","01.18.00  Sem informao"]],
+"0119":[["011900","01.19.00  Sem uso definido/vinculado"]]
 };
 
 function toggleBloco(id,exibir){const el=document.getElementById(id);if(el)el.style.display=exibir?'':'none'}
@@ -579,20 +596,20 @@ function popularCampo53(valor){
   campo53.disabled=true;
 
   if(!valor||!usoEspecificoMap[valor]){
-    const opt=document.cáreateElement('option');
+    const opt=document.createElement('option');
     opt.value='';
     opt.textContent='Selecione primeiro o tipo de uso imobilirio...';
     campo53.appendChild(opt);
     return;
   }
 
-  const optDefault=document.cáreateElement('option');
+  const optDefault=document.createElement('option');
   optDefault.value='';
   optDefault.textContent='Selecione o tipo de uso especfico...';
   campo53.appendChild(optDefault);
 
   usoEspecificoMap[valor].forEach(([value,label])=>{
-    const opt=document.cáreateElement('option');
+    const opt=document.createElement('option');
     opt.value=value;
     opt.textContent=label;
     campo53.appendChild(opt);
@@ -729,7 +746,7 @@ document.addEventListener('DOMContentLoaded',function(){
 
         if(!exibir){
           document.querySelectorAll(`#${cfg.grupo} input[type="checkbox"], #${cfg.grupo} input[type="radio"]`).forEach(cb=>cb.checked=false);
-          document.querySelectorAll(`#${cfg.grupo} textaárea`).forEach(t=>t.value='');
+          document.querySelectorAll(`#${cfg.grupo} textarea`).forEach(t=>t.value='');
           document.querySelectorAll(`#${cfg.grupo} select`).forEach(s=>s.value='');
         }
 
@@ -796,12 +813,12 @@ if (campo511) {
     btnAss.disabled=!ck1.checked||flag.value==='1';
   }
 
-  function setÁreadonlyDecl(áreadonly){
-    ck1.disabled=áreadonly;
+  function setReadonlyDecl(readonly){
+    ck1.disabled=readonly;
     const item=ck1.closest('.decl-check-item');
     if(item){
-      item.style.opacity=áreadonly?'0.7':'';
-      item.style.cursor=áreadonly?'not-allowed':'';
+      item.style.opacity=readonly?'0.7':'';
+      item.style.cursor=readonly?'not-allowed':'';
     }
   }
 
@@ -816,7 +833,7 @@ if (campo511) {
     status.classList.add('visivel');
     overlay.classList.add('visivel');
     resumo.textContent='Manifestao registrada com sucesso.';
-    setÁreadonlyDecl(true);
+    setReadonlyDecl(true);
     btnAss.style.display='none';
     btnLimDecl.style.display='';
     verificarHabilitacao();
@@ -829,7 +846,7 @@ if (campo511) {
     status.classList.remove('visivel');
     overlay.classList.remove('visivel');
     resumo.textContent='';
-    setÁreadonlyDecl(false);
+    setReadonlyDecl(false);
     btnAss.style.display='';
     btnLimDecl.style.display='none';
     verificarHabilitacao();

@@ -118,6 +118,10 @@
             if (!input.name || input.type === 'submit' || input.type === 'button' || input.type === 'hidden' || input.type === 'file') {
                 return false;
             }
+            // Não bloquear inputs dentro do modal de Cadastro Mínimo
+            if (input.closest('#modalCadastroMinimo')) {
+                return false;
+            }
             return input.closest('.editavel') === null;
         }
 
@@ -206,6 +210,12 @@
                         const tempOpt = input.querySelector('.temp-loading-option');
                         if (tempOpt) tempOpt.remove();
                     }
+                }
+
+                
+                // IGNORAR CHECKBOX DE CONCEITUAÇÃO
+                if (input.name === 'conceituacao[]') {
+                    return;
                 }
 
                 const value = state[input.name];
