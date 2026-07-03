@@ -22,10 +22,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const checkState = () => {
         let ok = false;
         allInputs.forEach(i => { if(i.checked) ok = true; });
+        
+        // Verifica selects tambem
+        const selects = document.querySelectorAll('select');
+        selects.forEach(s => { if(s.value !== '') ok = true; });
+        
         if(submitButton) submitButton.disabled = !ok;
     };
 
     allInputs.forEach(i => i.addEventListener('change', checkState));
+    document.querySelectorAll('select').forEach(s => s.addEventListener('change', checkState));
 
     if (submitButton) {
         submitButton.addEventListener('click', () => {
