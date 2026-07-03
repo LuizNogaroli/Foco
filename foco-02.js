@@ -193,7 +193,7 @@ window.adicionarTagRIP = function(rip, dados) {
     
     div.innerHTML = `
         <span><strong style="color: #2e7d32; font-size: 1.1em;">RIP: ${rip}</strong> - ${dados ? (dados.natureza || dados.natureza_terreno || 'Terreno Importado') : 'Terreno Importado'}</span>
-        <button type="button" onclick="this.parentElement.remove(); window.atualizarRipsOcultos(); document.querySelector('.imovel-block[data-rip=\'${rip}\']')?.remove();" style="background: none; border: none; color: #d32f2f; font-weight: bold; cursor: pointer; font-size: 1.1em;" title="Remover RIP">&times;</button>
+        <button type="button" onclick="this.parentElement.remove(); window.atualizarRipsOcultos(); document.querySelector('.imovel-block[data-rip='${rip}']')?.remove();" style="background: none; border: none; color: #d32f2f; font-weight: bold; cursor: pointer; font-size: 1.1em;" title="Remover RIP">&times;</button>
     `;
     if (lista) lista.appendChild(div);
 };
@@ -240,7 +240,7 @@ window.criarBlocoImovel = function(rip, dados) {
             <div id="secao-identificacao-${rip}">
             <h4 style="margin: 0 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
               Identificação do Imóvel
-              <button type="button" id="icone-edicao-id-${rip}" onclick="habilitarEdicaoSecao('secao-identificacao-${rip}', 'icone-edicao-id-${rip}')" title="Habilitar edição desta seção" style="background: none; border: none; cursor: pointer; font-size: 18px; color: #94a3b8; transition: color 0.2s;">🔒</button>
+              <button type="button" id="icone-edicao-id-${rip}" onclick="habilitarEdicaoSecao('secao-identificacao-${rip}', 'icone-edicao-id-${rip}')" title="Habilitar edição desta seção" style="background-color: #22c55e; border: 1px solid #16a34a; border-radius: 4px; padding: 4px 10px; cursor: pointer; font-size: 12px; font-weight: bold; color: #ffffff; text-decoration: none; transition: all 0.2s;" onmouseover="this.style.backgroundColor='#16a34a'" onmouseout="this.style.backgroundColor='#22c55e'">Abre Edição</button>
             </h4>
             
             ${buildField('Conceituação do Imóvel', 'conceituacao', dados.conceituacao || dados.descricao)}
@@ -863,45 +863,72 @@ window.habilitarEdicaoSecao = function(secaoId, btnId) {
     const secao = document.getElementById(secaoId);
     if (!secao) return;
 
-    // Troca o 🔒 por ✏️ e muda cor para verde
     const btn = document.getElementById(btnId);
+    let isEditing = false;
+    
     if (btn) {
-        btn.textContent = '✏️';
-        btn.style.color = '#22c55e';
-        btn.title = 'Seção em modo de correção';
-        btn.onclick = null;
+        if (btn.dataset.editando === 'true') {
+            isEditing = true;
+        }
+        
+        if (isEditing) {
+            // FECHAR EDICAO
+            btn.dataset.editando = 'false';
+            btn.textContent = 'Abre Edição'; // Lápis
+            btn.style.backgroundColor = '#22c55e'; btn.style.color = '#ffffff'; btn.style.borderColor = '#16a34a'; btn.onmouseout = function(){this.style.backgroundColor='#22c55e'}; btn.onmouseover = function(){this.style.backgroundColor='#16a34a'};
+            btn.title = 'Habilitar edição desta seção';
+        } else {
+            // ABRIR EDICAO
+            btn.dataset.editando = 'true';
+            btn.textContent = 'Fecha Edição'; // Check
+            btn.style.backgroundColor = '#ef4444'; btn.style.color = '#ffffff'; btn.style.borderColor = '#dc2626'; btn.onmouseout = function(){this.style.backgroundColor='#ef4444'}; btn.onmouseover = function(){this.style.backgroundColor='#dc2626'};
+            btn.title = 'Concluir edição desta seção';
+        }
     }
 
-    // Desbloqueia todos os campos da seção
     const inputs = secao.querySelectorAll('input, select, textarea');
     inputs.forEach(input => {
         if (input.type === 'button' || input.type === 'submit' || input.type === 'hidden') return;
 
-        input.removeAttribute('readonly');
-        input.removeAttribute('disabled');
+        if (isEditing) {
+            // VOLTAR PARA MODO LEITURA
+            if (input.tagName === 'SELECT' || input.type === 'checkbox' || input.type === 'radio') {
+                input.setAttribute('disabled', 'true');
+            } else {
+                input.setAttribute('readonly', 'true');
+            }
+            input.classList.add('auto-loaded-field');
+            
+            input.style.backgroundColor = '#f8f9fa';
+            input.style.color = '#495057';
+            input.style.border = '1px solid #ccc';
+            input.style.cursor = 'default';
+        } else {
+            // HABILITAR EDICAO
+            input.removeAttribute('readonly');
+            input.removeAttribute('disabled');
+            input.classList.remove('auto-loaded-field');
 
-        // Remove a classe que controla o estilo de campo bloqueado
-        input.classList.remove('auto-loaded-field');
+            input.style.cssText = input.style.cssText
+                .replace(/background-color\s*:\s*[^;]+;?/gi, '')
+                .replace(/background\s*:\s*[^;]+;?/gi, '')
+                .replace(/color\s*:\s*[^;]+;?/gi, '');
 
-        // Sobrescreve TODOS os estilos inline que possam impor o fundo cinza
-        input.style.cssText = input.style.cssText
-            .replace(/background-color\s*:\s*[^;]+;?/gi, '')
-            .replace(/background\s*:\s*[^;]+;?/gi, '')
-            .replace(/color\s*:\s*[^;]+;?/gi, '');
+            input.style.backgroundColor = '#ffffff';
+            input.style.color = '#1e293b';
+            input.style.border = '1px solid #94a3b8';
+            input.style.cursor = 'text';
 
-        // Aplica o visual de campo editável
-        input.style.backgroundColor = '#ffffff';
-        input.style.color = '#1e293b';
-        input.style.border = '1px solid #94a3b8';
-        input.style.cursor = 'text';
-
-        input.addEventListener('input', verificarMudancaInline);
-        input.addEventListener('change', verificarMudancaInline);
+            input.addEventListener('input', verificarMudancaInline);
+            input.addEventListener('change', verificarMudancaInline);
+        }
     });
 
-    // Transforma inputs em selects onde houver opções configuradas
-    transformarCamposComOpcoes(secao);
+    if (!isEditing) {
+        transformarCamposComOpcoes(secao);
+    }
 };
+
 // ==================== Fim Habilitar Edição por Seção ====================
 
 
