@@ -240,7 +240,7 @@ window.criarBlocoImovel = function(rip, dados) {
             <div id="secao-identificacao-${rip}">
             <h4 style="margin: 0 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
               Identificação do Imóvel
-              <button type="button" id="icone-edicao-id-${rip}" onclick="habilitarEdicaoSecao('secao-identificacao-${rip}', 'icone-edicao-id-${rip}')" title="Habilitar edição desta seção" style="background-color: #22c55e; border: 1px solid #16a34a; border-radius: 4px; padding: 4px 10px; cursor: pointer; font-size: 12px; font-weight: bold; color: #ffffff; text-decoration: none; transition: all 0.2s;" onmouseover="this.style.backgroundColor='#16a34a'" onmouseout="this.style.backgroundColor='#22c55e'">Abre Edição</button>
+              <label class="edit-toggle"><span class="toggle-label-left">Consulta</span><div class="switch"><input type="checkbox" id="icone-edicao-id-${rip}" onchange="habilitarEdicaoSecao('secao-identificacao-${rip}', 'icone-edicao-id-${rip}')"><span class="slider round"></span></div><span class="toggle-label-right">Edição</span></label>
             </h4>
             
             ${buildField('Conceituação do Imóvel', 'conceituacao', dados.conceituacao || dados.descricao)}
@@ -867,31 +867,22 @@ window.habilitarEdicaoSecao = function(secaoId, btnId) {
     let isEditing = false;
     
     if (btn) {
-        if (btn.dataset.editando === 'true') {
-            isEditing = true;
-        }
+        // btn is now the checkbox
+        isEditing = !btn.checked; // if checked (ON), we are opening edit mode, so isEditing becomes false (we WERE NOT editing before, now we are. Wait, the logic below says if (isEditing) { fechar } else { abrir }.
+        // If btn.checked is true, we just turned it ON, so we want to OPEN edit. Therefore isEditing should be false so it runs the 'else' block (ABRIR).
+        // If btn.checked is false, we just turned it OFF, so we want to CLOSE edit. Therefore isEditing should be true so it runs the 'if' block (FECHAR).
+        // That means isEditing = !btn.checked; is perfectly correct.
+        isEditing = !btn.checked;
         
-        if (isEditing) {
-            // FECHAR EDICAO
-            btn.dataset.editando = 'false';
-            btn.textContent = 'Abre Edição'; // Lápis
-            btn.style.backgroundColor = '#22c55e'; btn.style.color = '#ffffff'; btn.style.borderColor = '#16a34a'; btn.onmouseout = function(){this.style.backgroundColor='#22c55e'}; btn.onmouseover = function(){this.style.backgroundColor='#16a34a'};
-            btn.title = 'Habilitar edição desta seção';
-        } else {
-            // ABRIR EDICAO
-            btn.dataset.editando = 'true';
-            btn.textContent = 'Fecha Edição'; // Check
-            btn.style.backgroundColor = '#ef4444'; btn.style.color = '#ffffff'; btn.style.borderColor = '#dc2626'; btn.onmouseout = function(){this.style.backgroundColor='#ef4444'}; btn.onmouseover = function(){this.style.backgroundColor='#dc2626'};
-            btn.title = 'Concluir edição desta seção';
-        }
+        
     }
 
     const inputs = secao.querySelectorAll('input, select, textarea');
     inputs.forEach(input => {
-        if (input.type === 'button' || input.type === 'submit' || input.type === 'hidden') return;
+        if (input.type === 'button' || input.type === 'submit' || input.type === 'hidden' || input.id === btnId) return;
 
         if (isEditing) {
-            // VOLTAR PARA MODO LEITURA
+            // VOLTAR PARA MODO LEITURA (Fechou)
             if (input.tagName === 'SELECT' || input.type === 'checkbox' || input.type === 'radio') {
                 input.setAttribute('disabled', 'true');
             } else {
@@ -904,7 +895,7 @@ window.habilitarEdicaoSecao = function(secaoId, btnId) {
             input.style.border = '1px solid #ccc';
             input.style.cursor = 'default';
         } else {
-            // HABILITAR EDICAO
+            // HABILITAR EDICAO (Abriu)
             input.removeAttribute('readonly');
             input.removeAttribute('disabled');
             input.classList.remove('auto-loaded-field');
@@ -928,6 +919,7 @@ window.habilitarEdicaoSecao = function(secaoId, btnId) {
         transformarCamposComOpcoes(secao);
     }
 };
+
 
 // ==================== Fim Habilitar Edição por Seção ====================
 
