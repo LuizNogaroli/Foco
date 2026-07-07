@@ -1,0 +1,10 @@
+tabela_atribuicao
+
+{
+  "servidor_atribuido": "João Silva",
+  "data_atribuicao": "06/07/2026",
+  "setor_responsavel": "SPU/PR - Destinação",
+  "historico_atribuicoes": [
+     {"servidor": "Maria Souza", "data": "02/07/2026"}
+  ]
+}

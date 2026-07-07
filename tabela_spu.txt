@@ -1,0 +1,14 @@
+tabela_spu
+
+
+{
+  "numero_rip": "0000000001",
+  "endereco": "Rua Exemplo, 123",
+  "municipio": "Curitiba",
+  "uf": "PR",
+  "area_terreno": "5000.00",
+  "area_construida": "1200.00",
+  "valor_imovel": "1500000.00",
+  "regime_atual": "Vago / Sem Destinação",
+  "vocacao": "Uso Institucional"
+}

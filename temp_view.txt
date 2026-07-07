@@ -1,0 +1,70 @@
+750:       
+751:             <!-- ========== GEOLOCALIZAÇÃO ========== -->
+752:             <div id="secao-geolocalizacao-${rip}">
+753:                 <h4 style="margin: 24px 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 8px;">
+754:                   Geolocalização
+755:                 </h4>
+756:                 <div class="form-group editavel">
+757:                     <label for="cep_${rip}">Localizar por CEP:</label>
+758:                     <div class="cep-row">
+759:                         <input type="text" id="cep_${rip}" name="imoveis[${index}][geo_cep]" class="mask-cep" placeholder="00000-000" maxlength="9" value="${dados.geo_cep || ''}">
+760:                         <button type="button" class="btn-search">🔍 Buscar</button>
+761:                     </div>
+762:                 </div>
+763:                 <div class="form-group editavel">
+764:                     <div class="cep-row">
+765:                         <div style="flex: 1;">
+766:                             <label for="latitude_${rip}" style="font-weight: bold; font-size: 0.9em; display: block; margin-bottom: 5px;">Latitude:</label>
+767:                             <input type="text" id="latitude_${rip}" name="imoveis[${index}][latitude]" placeholder="-15.793889" style="width: 100%;" value="${dados.latitude || ''}">
+768:                         </div>
+769:                         <div style="flex: 1;">
+770:                             <label for="longitude_${rip}" style="font-weight: bold; font-size: 0.9em; display: block; margin-bottom: 5px;">Longitude:</label>
+771:                             <input type="text" id="longitude_${rip}" name="imoveis[${index}][longitude]" placeholder="-47.882778" style="width: 100%;" value="${dados.longitude || ''}">
+772:                         </div>
+773:                     </div>
+774:                 </div>
+775:                 <div class="form-group" style="background: transparent; border: none; padding: 0; display: flex; justify-content: center; margin-top: 10px;">
+776:                     <button type="button" class="btn-primary" style="padding: 12px 24px; font-size: 1em; width: auto;" onclick="document.getElementById('geoModal').style.display='flex'">
+777:                         🗺️ Abrir Mapa Interativo e Demarcar
+778:                     </button>
+779:                 </div>
+780:             </div>
+781: 
+782:     `;
+783: 
+784:     container.appendChild(div);
+785: 
+786:     // ---- Tira o snapshot dos valores originais assim que o bloco é criado ----
+787:     setTimeout(() => {
+788:         const inputs = div.querySelectorAll('input, select, textarea');
+789:         inputs.forEach(input => {
+790:             const key = input.id || input.name;
+791:             if (key && input.type !== 'button' && input.type !== 'submit') {
+792:                 if (input.type === 'checkbox' || input.type === 'radio') {
+793:                     window.originalRipData[key] = input.checked ? (input.value || 'on') : '';
+794:                 } else {
+795:                     window.originalRipData[key] = input.value || '';
+796:                 }
+797:             }
+798:         });
+799:     }, 300);
+800: };
+801: 
+802: 
+803: window.openCadastroMinimo = function() {
+804:     document.getElementById('modalCadastroMinimo').style.display = 'flex';
+805: };
+806: 
+807: window.closeCadastroMinimo = function() {
+808:     document.getElementById('modalCadastroMinimo').style.display = 'none';
+809: };
+810: 
+811: let arquivoBase64 = null;
+812: let arquivoNome = null;
+813: 
+814: window.handleArquivoMinimo = function(input) {
+815:     const file = input.files[0];
+816:     if (file) {
+817:         arquivoNome = file.name;
+818:         const statusDiv = document.getElementById('arquivo_minimo_status');
+819:         statusDiv.innerHTML = 'Carregando arquivo...';

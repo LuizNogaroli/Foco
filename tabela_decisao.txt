@@ -1,0 +1,19 @@
+tabela_decisao
+
+{
+  "decisao_final": "Pendente",
+  "instancias": [
+    {
+      "nome_instancia": "Chefia SPU/PR",
+      "decisao": "Favorável",
+      "data_decisao": "04/07/2026",
+      "observacao": "De acordo com o parecer técnico."
+    },
+    {
+      "nome_instancia": "Secretaria Central",
+      "decisao": "Pendente",
+      "data_decisao": null,
+      "observacao": null
+    }
+  ]
+}

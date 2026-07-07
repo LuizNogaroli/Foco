@@ -205,8 +205,9 @@
                         <th style="width: 150px;">Município</th>
                         <th>Interessado</th>
                         <th style="width: 160px;">Processo SEI</th>
-                                                                        <th style="width: 170px;">Regime requerido</th>
-                        <th style="width: 160px;">Checkpoint</th>
+                        <th style="width: 120px;">RIP(s)</th>
+                        <th style="width: 170px;">Regime de Destinação</th>
+                        <th style="width: 160px;">Instância</th>
                         <th style="width: 200px;">Atribuído para</th>
                         <th style="width: 120px;">Status</th>
                         <th style="width: 70px; text-align: center;">Ação</th>
@@ -214,7 +215,7 @@
                 </thead>
                 <tbody id="tableBody">
                     <tr>
-                        <td colspan="9" class="empty-state">Carregando processos do banco de dados...</td>
+                        <td colspan="12" class="empty-state">Carregando processos do banco de dados...</td>
                     </tr>
                 </tbody>
             </table>
@@ -257,8 +258,10 @@
             }
 
             try {
-                const urlPortal = 'https://rzdmnzuweyzhilfcungl.supabase.co/rest/v1/portal_servicos?select=*&order=id.desc';
-                const urlDrafts = 'https://rzdmnzuweyzhilfcungl.supabase.co/rest/v1/foco_drafts?select=*';
+                const urlReq = 'https://rzdmnzuweyzhilfcungl.supabase.co/rest/v1/tabela_requerimentos?select=*&order=numero_requerimento.asc';
+                const urlStatus = 'https://rzdmnzuweyzhilfcungl.supabase.co/rest/v1/tabela_status_fluxo?select=*';
+                const urlAtr = 'https://rzdmnzuweyzhilfcungl.supabase.co/rest/v1/tabela_atribuicao?select=*';
+                
                 const options = {
                     method: 'GET',
                     headers: {
@@ -267,60 +270,54 @@
                     }
                 };
 
-                const [resPortal, resDrafts] = await Promise.all([
-                    fetch(urlPortal, options),
-                    fetch(urlDrafts, options)
+                const [resReq, resStatus, resAtr] = await Promise.all([
+                    fetch(urlReq, options),
+                    fetch(urlStatus, options),
+                    fetch(urlAtr, options)
                 ]);
 
-                if (!resPortal.ok) throw new Error('Falha ao buscar portal_servicos');
-                const dataPortal = await resPortal.json();
+                if (!resReq.ok) throw new Error('Falha ao buscar tabela_requerimentos');
                 
-                let dataDrafts = [];
-                if (resDrafts.ok) {
-                    dataDrafts = await resDrafts.json();
-                }
+                const dataReq = await resReq.json();
+                const dataStatus = resStatus.ok ? await resStatus.json() : [];
+                const dataAtr = resAtr.ok ? await resAtr.json() : [];
 
-                // Create a map of drafts by process_id
-                const draftMap = {};
-                dataDrafts.forEach(d => {
-                    draftMap[d.process_id] = d.form_data || {};
-                });
+                const statusMap = {};
+                dataStatus.forEach(d => { statusMap[d.numero_requerimento] = d.dados_json || {}; });
+                
+                const atrMap = {};
+                dataAtr.forEach(d => { atrMap[d.numero_requerimento] = d.dados_json || {}; });
 
-                const processes = dataPortal.map(row => {
-                    const portal = row.form_data || {};
-                    const draft = draftMap[row.process_id] || {};
-
-                    const uf = portal.uf || portal.uf_sem_rip || portal['imoveis[0][uf]'] || portal['imoveis[1][uf]'] || '-';
-                    let rawMunicipio = portal.municipio || portal.municipio_sem_rip || portal['imoveis[0][municipio]'] || portal['imoveis[1][municipio]'] || '-';
+                const processes = dataReq.map(row => {
+                    const req = row.dados_json || {};
+                    const num = row.numero_requerimento;
+                    const stat = statusMap[num] || {};
+                    const atr = atrMap[num] || {};
+                    
+                    let rawMunicipio = req.municipio || '-';
                     if (rawMunicipio !== '-') {
                         const parts = rawMunicipio.split('/');
                         if (parts.length > 0) {
-                            // Converte a cidade para Title Case (ex: BRASÍLIA -> Brasília)
                             parts[0] = parts[0].toLowerCase().replace(/(^\w|\s\w)/g, m => m.toUpperCase());
                             rawMunicipio = parts.join('/');
                         }
                     }
-                    const municipio = rawMunicipio;
 
                     return {
-                        id: row.process_id,
-                        requerimento: portal.campo11 || '-',
-                        data_req: portal.campo12 || '-',
-                        uf: uf,
-                        municipio: municipio,
-                        sei: portal.campo13 || '-',
-                        interessado: portal.campo15 || '-',
-                        
-                        // Regime requerido (pode vir do procedimento no portal)
-                        procedimento: portal.procedimento || 'Cessão Onerosa',
-                        
-                        // Checkpoint SPU/UF
-                        checkpoint: draft.status_flow || (uf !== '-' ? 'SPU/' + uf : 'SPU/BR'),
-
-                        // Dados Operacionais (Vêm do foco_drafts, caso não existam caem no fallback)
-                        status: draft.status || 'Aguardando Análise',
-                        atribuido_para: draft.atribuido_para || '',
-                        prioridade: portal.prioridade_legal && portal.prioridade_legal !== 'Não se aplica' ? true : false,
+                        id: num,
+                        requerimento: num,
+                        data_req: req.data_req || '-',
+                        uf: req.uf || '-',
+                        municipio: rawMunicipio,
+                        sei: req.processo_sei || '-',
+                        interessado: req.interessado || '-',
+                        rips: req.rips || '-', // Preencheremos via tabela_spu futuramente
+                        uso: req.regime_requerido || '-',
+                        procedimento: req.regime_requerido || 'Cessão Onerosa',
+                        checkpoint: stat.checkpoint || '-',
+                        status: stat.status_geral || 'Aguardando Análise',
+                        atribuido_para: atr.atribuido_para || '',
+                        prioridade: false
                     };
                 });
                 
@@ -372,7 +369,7 @@
             tableBody.innerHTML = '';
 
             if (list.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="11" class="empty-state">Nenhum processo encontrado.</td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="12" class="empty-state">Nenhum processo encontrado.</td></tr>`;
                 return;
             }
 
@@ -392,6 +389,12 @@
 
                 let statusFlowHtml = `<span>${proc.checkpoint}</span>`;
 
+                // Badge estilizado para os RIPs
+                let ripsHtml = '-';
+                if (proc.rips && proc.rips !== '-') {
+                    ripsHtml = proc.rips.split(',').map(r => `<span style="background-color: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 12px; display: inline-block; margin: 2px 0;">${r.trim()}</span>`).join(' ');
+                }
+
                 tr.innerHTML = `
                     <td>${proc.requerimento}</td>
                     <td>${proc.data_req}</td>
@@ -401,6 +404,7 @@
                         <div>${proc.interessado}</div>
                     </td>
                     <td><span>${proc.sei}</span></td>
+                    <td><div style="display: flex; flex-direction: column; gap: 4px;">${ripsHtml}</div></td>
                     <td>${proc.procedimento}</td>
                     <td>${statusFlowHtml}</td>
                     <td>
@@ -511,15 +515,35 @@
                 const matchStatus = !status || proc.status === status;
                 const matchInteressado = !interessado || proc.interessado.toLowerCase().includes(interessado);
                 const matchSei = !sei || proc.sei.toLowerCase().includes(sei);
-                // Filters removed for RIP and Uso
+                
+                // Filtro por RIP
+                const matchRip = !ripQuery || (proc.rips && proc.rips.toLowerCase().includes(ripQuery));
+                
+                // Filtro por Uso Imobiliário
+                const procUso = (proc.uso || '').toLowerCase();
+                const matchUso = !uso || procUso.includes(uso) || (
+                    uso === 'habitacional' && (procUso.includes('habitacion') || procUso.includes('habita'))
+                ) || (
+                    uso === 'regularização fundiária' && procUso.includes('regulariza')
+                ) || (
+                    uso === 'institucional' && (procUso.includes('sede') || procUso.includes('instituc'))
+                ) || (
+                    uso === 'uso comunitário' && procUso.includes('comunit')
+                ) || (
+                    uso === 'uso cultural' && procUso.includes('cultur')
+                ) || (
+                    uso === 'infraestrutura' && (procUso.includes('infra') || procUso.includes('logíst'))
+                );
+
+                // Filtro por busca geral (Query)
                 const matchQuery = !query || 
                                    proc.id.toLowerCase().includes(query) || 
                                    proc.interessado.toLowerCase().includes(query) || 
                                    proc.sei.toLowerCase().includes(query) || 
-
+                                   (proc.rips && proc.rips.toLowerCase().includes(query)) ||
                                    proc.requerimento.toLowerCase().includes(query);
 
-                return matchUf && matchMuni && matchStatus && matchInteressado && matchSei && matchQuery;
+                return matchUf && matchMuni && matchStatus && matchInteressado && matchSei && matchRip && matchUso && matchQuery;
             });
 
             sortProcesses(filtered);

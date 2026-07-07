@@ -14,6 +14,8 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css?v=1782355313469" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-draw@1.0.4/dist/leaflet.draw.css?v=1782355313469" />
   <style>
+  .custom-empty-select { background-color: #ffffff !important; border: 1px solid #3b82f6 !important; box-shadow: 0 0 4px rgba(59,130,246,0.3) !important; }
+
 
 .switch { position: relative; display: inline-block; width: 34px; height: 20px; }
 .switch input { opacity: 0; width: 0; height: 0; }
@@ -113,380 +115,82 @@ input:checked + .slider:before { transform: translateX(14px); }
     <h2>Análise - Setor de Caracterização</h2>
     <form id="form02" novalidate>
       
-      <!-- ========== CONCEITUAÇÃO DO IMÓVEL ========== -->
-      <div class="form-group editavel" style="border-top: 1px dashed #e2e8f0; padding-top: 10px; margin-bottom: 20px;">
-          <label style="font-size: 1.1em; color: #1e3a5f; font-weight: bold;">Conceituação do imóvel</label>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px; background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">
-              <!-- Coluna Exige RIP -->
-              <div>
-                  <h5 style="margin: 0 0 10px 0; color: #2563eb; font-size: 0.95em;">Terrenos que Exigem RIP</h5>
-                  <div class="checkbox-group" style="display: flex; flex-direction: column; gap: 8px;">
-                      <label class="checkbox-option"><input type="checkbox" name="conceituacao[]" value="terreno_marinha" onchange="verificarConceituacao()"> Terreno de marinha e acrescido</label>
-                      <label class="checkbox-option"><input type="checkbox" name="conceituacao[]" value="terreno_nacional_interior" onchange="verificarConceituacao()"> Terreno Nacional Interior</label>
-                      <label class="checkbox-option"><input type="checkbox" name="conceituacao[]" value="imovel_dominio_uniao" onchange="verificarConceituacao()"> Imóvel de Domínio da União</label>
-                      <label class="checkbox-option"><input type="checkbox" name="conceituacao[]" value="gleba_assentamento" onchange="verificarConceituacao()"> Gleba destinada a assentamento</label>
-                      <label class="checkbox-option"><input type="checkbox" name="conceituacao[]" value="ilha_oceanica" onchange="verificarConceituacao()"> Ilha oceânica ou costeira</label>
-                      <label class="checkbox-option"><input type="checkbox" name="conceituacao[]" value="ilha_fluvial" onchange="verificarConceituacao()"> Ilha fluvial ou lacustre</label>
-                  </div>
-              </div>
-              <!-- Coluna Dispensado de RIP -->
-              <div>
-                    <h5 style="margin: 0 0 10px 0; color: #ea580c; font-size: 0.95em;">Terrenos Dispensados de RIP</h5>
-                    <div style="margin-top: 10px;">
-                        <button type="button" onclick="openCadastroMinimo()" style="padding: 10px 15px; border-radius: 6px; background-color: #ea580c; color: white; border: none; cursor: pointer; font-weight: bold; width: 100%; text-align: left;">📝 Preencher Cadastro Mínimo</button>
-                        <div id="cadastro-minimo-status" style="margin-top: 8px; font-size: 0.9em; color: #16a34a; display: none;">✅ Cadastro preenchido</div>
-                    </div>
-                </div>
+      <!-- ========== ACCORDION INDICAÇÕES ========== -->
+      <style>
+  .custom-empty-select { background-color: #ffffff !important; border: 1px solid #3b82f6 !important; box-shadow: 0 0 4px rgba(59,130,246,0.3) !important; }
+
+          .accordion-container {
+              display: flex;
+              flex-direction: column;
+              gap: 15px;
+              margin-bottom: 25px;
+          }
+          .accordion-item {
+              border: 1px solid #cbd5e1;
+              border-radius: 8px;
+              overflow: hidden;
+              background: #fff;
+              box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+          }
+          .accordion-header {
+              padding: 15px 20px;
+              cursor: pointer;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              font-weight: bold;
+              font-size: 1.1em;
+              transition: background 0.2s;
+          }
+          .accordion-header.type-rip {
+              background: #eff6ff;
+              color: #1e40af;
+              border-left: 5px solid #3b82f6;
+          }
+          .accordion-header.type-cadastro {
+              background: #f0fdf4;
+              color: #166534;
+              border-left: 5px solid #22c55e;
+          }
+          .accordion-header:hover {
+              filter: brightness(0.95);
+          }
+          .accordion-body {
+              display: none;
+              padding: 20px;
+              border-top: 1px solid #cbd5e1;
+          }
+          .accordion-body.active {
+              display: block;
+          }
+          .accordion-icon {
+              font-size: 1.2em;
+              transition: transform 0.3s;
+          }
+          .active .accordion-icon {
+              transform: rotate(180deg);
+          }
+          /* Ocultar botões de consulta/edição conforme solicitado */
+          .edit-toggle {
+              display: none !important;
+          }
+      </style>
+
+      <!-- Tags visuais dos RIPs associados -->
+      <div id="listaRIPsAssociados" style="display:none; flex-wrap:wrap; gap:8px; margin-bottom:12px; padding:8px 0;"></div>
+
+      <div id="accordion-indicacoes" class="accordion-container">
+          <div style="text-align: center; padding: 30px; color: #64748b;">
+              <i>Carregando indicações (RIPs e Cadastros Mínimos) da Aba 1...</i>
           </div>
       </div>
+      <!-- ========== FIM ACCORDION INDICAÇÕES ========== -->
 
-      <!-- ========== PESQUISA DE RIP ========== -->
-      <div id="secaoPesquisaRip" style="display: none; padding: 20px; border: 1px solid #cbd5e1; border-radius: 8px; background: #f8fafc; margin-bottom: 20px;">
-          <h4 style="margin: 0 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 8px;">Pesquisa no Datalake SPUnet</h4>
-          <div class="form-group" style="display: flex; gap: 10px; align-items: flex-end;">
-              <div style="flex: 1;">
-                  <label for="rip_pesquisa">Consultar RIP:</label>
-                  <input type="text" id="rip_pesquisa" placeholder="Digite o RIP com 7 a 11 dígitos" maxlength="11" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-              </div>
-              <button type="button" class="btn-action" onclick="pesquisarRip()" style="padding: 12px 24px; border-radius: 6px; background-color: #2563eb; color: white; border: none; cursor: pointer; height: 44px; margin-bottom: 5px;">🔍 Buscar e Adicionar</button>
-          </div>
-
-          <div class="form-group" style="text-align: center; margin-top: 20px;">
-              <div id="listaRIPsAssociados" style="display: none; flex-direction: column; gap: 6px; margin: 0 auto; max-width: 500px;"></div>
-          </div>
-
-          <input type="hidden" id="hidden_lista_rips" name="lista_rips" value="">
-
-          <div id="imoveis-container"></div>
-      </div>
-      <!-- ========== FIM PESQUISA DE RIP ========== -->
-
-      <!-- ========== MODAL CADASTRO MÍNIMO ========== -->
-<div id="modalCadastroMinimo" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; justify-content: center; align-items: center;">
-    <div style="background: white; border-radius: 12px; width: 850px; max-width: 90%; max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.2); position: relative;">
-        <!-- Header -->
-        <div style="padding: 20px 30px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: white; z-index: 10;">
-            <h3 style="margin: 0; color: #ea580c; font-size: 1.4em;">Cadastro Mínimo para Áreas sem RIP</h3>
-            <button type="button" onclick="closeCadastroMinimo()" style="background: none; border: none; font-size: 1.5em; cursor: pointer; color: #64748b;">&times;</button>
-        </div>
-        
-        <!-- Body -->
-        <div style="padding: 30px; background: #f8fafc;">
-            
-            <div style="margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid #cbd5e1;">
-                <h5 style="margin: 0 0 15px 0; color: #334155; font-size: 1.1em;">Selecione o tipo de terreno dispensado:</h5>
-                <div class="checkbox-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 8px; background: #fff; border: 1px solid #cbd5e1; border-radius: 4px;">
-                        <input type="checkbox" name="modal_conceituacao[]" value="espelho_dagua" style="width: 18px; height: 18px; cursor: pointer;"> Espelho d'água
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 8px; background: #fff; border: 1px solid #cbd5e1; border-radius: 4px;">
-                        <input type="checkbox" name="modal_conceituacao[]" value="cavidades_naturais" style="width: 18px; height: 18px; cursor: pointer;"> Cavidades naturais subterrâneas
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 8px; background: #fff; border: 1px solid #cbd5e1; border-radius: 4px;">
-                        <input type="checkbox" name="modal_conceituacao[]" value="manguezal" style="width: 18px; height: 18px; cursor: pointer;"> Manguezal
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 8px; background: #fff; border: 1px solid #cbd5e1; border-radius: 4px;">
-                        <input type="checkbox" name="modal_conceituacao[]" value="praia_mar" style="width: 18px; height: 18px; cursor: pointer;"> Praia marítima
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 8px; background: #fff; border: 1px solid #cbd5e1; border-radius: 4px;">
-                        <input type="checkbox" name="modal_conceituacao[]" value="praia_rio" style="width: 18px; height: 18px; cursor: pointer;"> Praia fluvial ou lacustre
-                    </label>
-                </div>
-            </div>
-
-            <style>
-
-.switch { position: relative; display: inline-block; width: 34px; height: 20px; }
-.switch input { opacity: 0; width: 0; height: 0; }
-.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #22c55e; transition: .4s; }
-.slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 2px; bottom: 2px; background-color: white; transition: .4s; }
-input:checked + .slider { background-color: #ef4444; }
-input:checked + .slider:before { transform: translateX(14px); }
-.slider.round { border-radius: 20px; }
-.slider.round:before { border-radius: 50%; }
-.edit-toggle { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: bold; cursor: pointer; margin: 0; }
-.toggle-label-left { color: #16a34a; transition: opacity 0.3s; opacity: 1; }
-.toggle-label-right { color: #dc2626; transition: opacity 0.3s; opacity: 0.4; }
-.edit-toggle:has(input:checked) .toggle-label-left { opacity: 0.4; }
-.edit-toggle:has(input:checked) .toggle-label-right { opacity: 1; }
-
-                .modal-group { background: #f0f4f8; border-radius: 6px; padding: 12px 16px; border-left: 5px solid #0056b3; }
-                .modal-group label { display: block; margin-bottom: 6px; font-weight: bold; color: #000; font-size: 0.9em; }
-                .modal-group input[type="text"], .modal-group input[type="number"], .modal-group textarea { width: 100%; border: 1px solid #28a745; border-radius: 4px; padding: 8px; font-size: 0.95em; outline: none; }
-                .modal-group input:focus, .modal-group textarea:focus { border-color: #218838; box-shadow: 0 0 0 2px rgba(40,167,69,0.25); }
-                .btn-add-doc { background: transparent; border: 1px dashed #0056b3; color: #0056b3; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-size: 0.9em; font-weight: 500; }
-                .btn-add-doc:hover { background: #e6f0fa; }
-            </style>
-
-            <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 15px; margin-bottom: 15px;">
-                <div class="modal-group">
-                    <label for="cep_sem_rip">CEP <span style="color:red">*</span>:</label>
-                    <input type="text" id="cep_sem_rip" placeholder="00000-000" onblur="buscarCep(this.value)" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\d{5})(\d{3})/, '$1-$2')" maxlength="9">
-                </div>
-                <div class="modal-group">
-                    <label for="logradouro_sem_rip">Logradouro:</label>
-                    <input type="text" id="logradouro_sem_rip" placeholder="Preenchimento automático">
-                </div>
-            </div>
-
-            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 15px; margin-bottom: 15px;">
-                <div class="modal-group">
-                    <label for="municipio_sem_rip">Município:</label>
-                    <input type="text" id="municipio_sem_rip" placeholder="Preenchimento automático">
-                </div>
-                <div class="modal-group">
-                    <label for="uf_sem_rip">UF:</label>
-                    <input type="text" id="uf_sem_rip" placeholder="RJ">
-                </div>
-            </div>
-
-            <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 15px; margin-bottom: 15px;">
-                <div class="modal-group">
-                    <label for="numero_sem_rip">Número:</label>
-                    <input type="text" id="numero_sem_rip" placeholder="515">
-                </div>
-                <div class="modal-group">
-                    <label for="complemento_sem_rip">Complemento:</label>
-                    <input type="text" id="complemento_sem_rip" placeholder="Casa 102">
-                </div>
-            </div>
-
-            <div class="modal-group" style="margin-bottom: 15px;">
-                <label for="area_sem_rip">Área a ser destinada (m²) <span style="color:red">*</span>:</label>
-                <input type="number" id="area_sem_rip" placeholder="Ex: 5000">
-            </div>
-            
-            <div class="modal-group">
-                <label for="obs_geral_01">Observações:</label>
-                <textarea id="obs_geral_01" rows="3" placeholder="Escreva observações aqui..."></textarea>
-                
-                <div style="margin-top: 15px;">
-                    <input type="file" id="arquivo_minimo" accept=".pdf, .png, .jpg, .jpeg" style="display: none;" onchange="handleArquivoMinimo(this)">
-                    <button type="button" class="btn-add-doc" onclick="document.getElementById('arquivo_minimo').click()">+ Adicionar link/documento</button>
-                    <div id="arquivo_minimo_status" style="margin-top: 10px; font-size: 0.85em; color: #0056b3;"></div>
-                </div>
-            </div>
-            
-        </div>
-        
-        <!-- Footer -->
-        <div style="padding: 20px 30px; border-top: 1px solid #e2e8f0; background: white; text-align: right; border-radius: 0 0 12px 12px;">
-            <button type="button" onclick="closeCadastroMinimo()" style="padding: 10px 20px; border: 1px solid #cbd5e1; background: #f1f5f9; color: #334155; border-radius: 6px; cursor: pointer; margin-right: 10px; font-weight: 600; font-size: 0.95em;">Cancelar</button>
-            <button type="button" onclick="salvarCadastroMinimo()" style="padding: 10px 20px; border: none; background: #28a745; color: white; border-radius: 6px; cursor: pointer; font-weight: bold;">Salvar Cadastro</button>
-        </div>
-    </div>
-</div>
-<!-- ========== FIM MODAL CADASTRO MÍNIMO ========== -->
 
         
-      <div id="global-sections-container" style="display: none;">
-      <!-- Avaliação -->
-      <div id="secao-avaliacao">
-      <h4 style="margin: 24px 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
-        Avaliação do Imóvel
-        <label class="edit-toggle"><span class="toggle-label-left">Consulta</span><div class="switch"><input type="checkbox" id="icone-edicao-avaliacao" onchange="habilitarEdicaoSecao('secao-avaliacao', 'icone-edicao-avaliacao')"><span class="slider round"></span></div><span class="toggle-label-right">Edição</span></label>
-      </h4>
-      <div class="form-group editavel">
-          <label>Valor da Avaliação (R$): </label>
-          <input type="text" id="valor_avaliacao" name="valor_avaliacao" readonly class="auto-loaded-field" style="width: 100%; border: 1px solid #ccc; padding: 8px; border-radius: 4px; background-color: #f8f9fa; color: #495057;">
+      <div id="global-sections-container">
+          <!-- As seções globais foram movidas para dentro de foco-02.js (window.criarBlocoImovel) -->
       </div>
-      <div class="form-group editavel">
-          <label>Data da Avaliação: </label>
-          <input type="text" id="data_avaliacao" name="data_avaliacao" readonly class="auto-loaded-field" style="width: 100%; border: 1px solid #ccc; padding: 8px; border-radius: 4px; background-color: #f8f9fa; color: #495057;">
-      </div>
-      <div class="form-group editavel">
-          <label>Instrumento de Avaliação: </label>
-          <input type="text" id="instrumento_avaliacao" name="instrumento_avaliacao" readonly class="auto-loaded-field" style="width: 100%; border: 1px solid #ccc; padding: 8px; border-radius: 4px; background-color: #f8f9fa; color: #495057;">
-          <div class="dynamic-list-wrapper" style="margin-top: 10px; flex: 1; display: flex; flex-direction: column; gap: 8px;">
-              <button type="button" class="btn-add" id="btnAdicionarDocumentoAvaliacao" style="align-self: flex-start;">＋ Anexar Instrumento de Avaliação (Digitalizado)</button>
-              <div id="documentos-list-avaliacao"></div>
-          </div>
-      </div>
-      
-      <!-- Bloco Justificativa da Avaliação -->
-      <div id="blocoJustificativa_secao-avaliacao" class="bloco-justificativa-secao" style="display: none; margin-top: 15px; padding: 15px; border: 1px solid #fdba74; border-radius: 6px; background: #fff7ed;">
-          <h4 style="margin-top: 0; color: #c2410c; font-size: 1.05em; border-bottom: 1px solid #fed7aa; padding-bottom: 6px;">Justificativa para Avaliação do Imóvel</h4>
-          <div style="margin-bottom: 10px;">
-              <label style="font-weight: bold; display: block; margin-bottom: 3px; font-size: 0.9em; color: #9a3412;">Justificativa (Obrigatório) *</label>
-              <textarea name="justificativa_secao-avaliacao" id="justificativa_secao-avaliacao" rows="3" placeholder="Por que você está corrigindo os dados de avaliação do imóvel?" style="width: 100%; border: 1px solid #cbd5e1; padding: 8px; border-radius: 4px; font-size: 0.9em; background: #ffffff; color: #1e293b; resize: vertical;"></textarea>
-          </div>
-          <div>
-              <label style="font-weight: bold; display: block; margin-bottom: 3px; font-size: 0.9em; color: #9a3412;">Fundamentação Legal (Opcional)</label>
-              <textarea name="fundamentacao_secao-avaliacao" id="fundamentacao_secao-avaliacao" rows="2" placeholder="Ex: Decreto 9.760/46, art. ..." style="width: 100%; border: 1px solid #cbd5e1; padding: 8px; border-radius: 4px; font-size: 0.9em; background: #ffffff; color: #1e293b; resize: vertical;"></textarea>
-          </div>
-      </div>
-
-      </div><!-- /secao-avaliacao -->
-
-      <!-- Ocupação -->
-      <div id="secao-ocupacao">
-      <h4 style="margin: 24px 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
-        Ocupação
-        <label class="edit-toggle"><span class="toggle-label-left">Consulta</span><div class="switch"><input type="checkbox" id="icone-edicao-ocupacao" onchange="habilitarEdicaoSecao('secao-ocupacao', 'icone-edicao-ocupacao')"><span class="slider round"></span></div><span class="toggle-label-right">Edição</span></label>
-      </h4>
-      <div class="form-group editavel">
-          <label>Situação ocupacional: </label>
-          <input type="text" id="situacao_ocupacional" name="situacao_ocupacional" data-field-key="situacao_ocupacional" readonly class="auto-loaded-field" style="width: 100%; border: 1px solid #ccc; padding: 8px; border-radius: 4px; background-color: #f8f9fa; color: #495057;">
-          
-          <div class="bloco-condicional" data-controlled-by="situacao_ocupacional" data-show-when="Desocupado" style="display: none; flex-direction: column; gap: 6px; margin-top: 8px;">
-              <label>Tempo de desocupação: </label>
-              <input type="text" id="tempo_desocupacao" name="tempo_desocupacao" readonly class="auto-loaded-field" placeholder="Ex: 05 anos, desde 03/2010 ou desde 2010" style="width: 100%; border: 1px solid #ccc; padding: 8px; border-radius: 4px; background-color: #f8f9fa; color: #495057;">
-          </div>
-          
-          <div class="bloco-condicional" data-controlled-by="situacao_ocupacional" data-show-when="Ocupado regularmente" style="display: none; flex-direction: column; gap: 6px; margin-top: 8px;">
-              <label>Data de conhecimento da ocupação: </label>
-              <input type="text" id="data_ocupacao" name="data_ocupacao" readonly class="auto-loaded-field" style="width: 100%; border: 1px solid #ccc; padding: 8px; border-radius: 4px; background-color: #f8f9fa; color: #495057;">
-          </div>
-
-          <div class="bloco-condicional" data-controlled-by="situacao_ocupacional" data-show-when="Ocupado irregularmente" style="display: none; flex-direction: column; gap: 6px; margin-top: 8px;">
-              <label>Data de conhecimento da ocupação irregular: </label>
-              <input type="text" id="data_ocupacao_irregular" name="data_ocupacao_irregular" readonly class="auto-loaded-field" style="width: 100%; border: 1px solid #ccc; padding: 8px; border-radius: 4px; background-color: #f8f9fa; color: #495057;">
-          </div>
-
-          <div class="bloco-condicional" data-controlled-by="situacao_ocupacional" data-show-when="Desocupado,Ocupado regularmente,Ocupado irregularmente" style="display: none; flex-direction: column; gap: 6px; margin-top: 8px;">
-              <label>Observações: </label>
-              <textarea id="obs_ocupado" name="obs_ocupado" readonly class="auto-loaded-field" style="width: 100%; border: 1px solid #ccc; padding: 8px; border-radius: 4px; background-color: #f8f9fa; color: #495057;" rows="2"></textarea>
-          </div>
-      </div>
-
-      <div class="form-group editavel">
-          <label>Condição da urbanização: </label>
-          <input type="text" id="condicao_urbanizacao" name="condicao_urbanizacao" readonly class="auto-loaded-field" style="width: 100%; border: 1px solid #ccc; padding: 8px; border-radius: 4px; background-color: #f8f9fa; color: #495057;">
-      </div>
-
-      <div class="form-group editavel">
-          <label>Tipo de imóvel: </label>
-          <input type="text" id="tipo_imovel_global" name="tipo_imovel_global" readonly class="auto-loaded-field" style="width: 100%; border: 1px solid #ccc; padding: 8px; border-radius: 4px; background-color: #f8f9fa; color: #495057;">
-      </div>
-      
-      <!-- Bloco Justificativa da Ocupação -->
-      <div id="blocoJustificativa_secao-ocupacao" class="bloco-justificativa-secao" style="display: none; margin-top: 15px; padding: 15px; border: 1px solid #fdba74; border-radius: 6px; background: #fff7ed;">
-          <h4 style="margin-top: 0; color: #c2410c; font-size: 1.05em; border-bottom: 1px solid #fed7aa; padding-bottom: 6px;">Justificativa para Ocupação do Imóvel</h4>
-          <div style="margin-bottom: 10px;">
-              <label style="font-weight: bold; display: block; margin-bottom: 3px; font-size: 0.9em; color: #9a3412;">Justificativa (Obrigatório) *</label>
-              <textarea name="justificativa_secao-ocupacao" id="justificativa_secao-ocupacao" rows="3" placeholder="Por que você está corrigindo os dados de ocupação do imóvel?" style="width: 100%; border: 1px solid #cbd5e1; padding: 8px; border-radius: 4px; font-size: 0.9em; background: #ffffff; color: #1e293b; resize: vertical;"></textarea>
-          </div>
-          <div>
-              <label style="font-weight: bold; display: block; margin-bottom: 3px; font-size: 0.9em; color: #9a3412;">Fundamentação Legal (Opcional)</label>
-              <textarea name="fundamentacao_secao-ocupacao" id="fundamentacao_secao-ocupacao" rows="2" placeholder="Ex: Decreto 9.760/46, art. ..." style="width: 100%; border: 1px solid #cbd5e1; padding: 8px; border-radius: 4px; font-size: 0.9em; background: #ffffff; color: #1e293b; resize: vertical;"></textarea>
-          </div>
-      </div>
-
-      </div><!-- /secao-ocupacao -->
-
-      <!-- Riscos e Restrições -->
-      <div id="secao-riscos">
-      <h4 style="margin: 24px 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
-        Riscos e Restrições
-        <label class="edit-toggle"><span class="toggle-label-left">Consulta</span><div class="switch"><input type="checkbox" id="icone-edicao-riscos" onchange="habilitarEdicaoSecao('secao-riscos', 'icone-edicao-riscos')"><span class="slider round"></span></div><span class="toggle-label-right">Edição</span></label>
-      </h4>
-      <div class="form-group editavel">
-          <label>Riscos verificados: </label>
-          <textarea id="riscos_verificados" name="riscos_verificados" readonly class="auto-loaded-field" style="width: 100%; border: 1px solid #ccc; padding: 8px; border-radius: 4px; background-color: #f8f9fa; color: #495057;" rows="3"></textarea>
-          
-          <div id="bloco-obs-riscos" style="display: flex; flex-direction: column; gap: 6px; margin-top: 8px;">
-              <label>Observações sobre riscos: </label>
-              <textarea id="obs_riscos" name="obs_riscos" readonly class="auto-loaded-field" style="width: 100%; border: 1px solid #ccc; padding: 8px; border-radius: 4px; background-color: #f8f9fa; color: #495057;"></textarea>
-          </div>
-      </div>
-      <div class="form-group editavel">
-          <label>Restrições verificadas: </label>
-          <textarea id="restricoes_verificadas" name="restricoes_verificadas" readonly class="auto-loaded-field" style="width: 100%; border: 1px solid #ccc; padding: 8px; border-radius: 4px; background-color: #f8f9fa; color: #495057;" rows="3"></textarea>
-          
-          <div id="bloco-obs-restricoes" style="display: flex; flex-direction: column; gap: 6px; margin-top: 8px;">
-              <label>Observações sobre as restrições: </label>
-              <textarea id="obs_restricoes" name="obs_restricoes" readonly class="auto-loaded-field" style="width: 100%; border: 1px solid #ccc; padding: 8px; border-radius: 4px; background-color: #f8f9fa; color: #495057;"></textarea>
-          </div>
-      </div>
-      
-      <div class="form-group editavel" id="bloco-incidencia-ambiental">
-          <label style="font-weight: bold; display: block; margin-bottom: 5px;">Incidência ambiental:</label>
-          <div class="checkbox-group-container" style="display: flex; flex-direction: column; gap: 8px; padding: 12px; border: 1px solid #cbd5e1; border-radius: 6px; background-color: #f8fafc;">
-              <label style="display: flex; align-items: center; gap: 8px; font-weight: normal; font-size: 0.95em; cursor: pointer; color: #1e293b; margin: 0; text-align: left; width: 100%; justify-content: flex-start;"><input type="checkbox" name="incidencia_ambiental[]" value="Nenhuma incidência identificada" disabled class="auto-loaded-field" style="margin: 0; width: 16px; height: 16px; min-width: 16px;"> Nenhuma incidência identificada</label>
-              <label style="display: flex; align-items: center; gap: 8px; font-weight: normal; font-size: 0.95em; cursor: pointer; color: #1e293b; margin: 0; text-align: left; width: 100%; justify-content: flex-start;"><input type="checkbox" name="incidencia_ambiental[]" value="APP — Área de Preservação Permanente" disabled class="auto-loaded-field" style="margin: 0; width: 16px; height: 16px; min-width: 16px;"> APP — Área de Preservação Permanente</label>
-              <label style="display: flex; align-items: center; gap: 8px; font-weight: normal; font-size: 0.95em; cursor: pointer; color: #1e293b; margin: 0; text-align: left; width: 100%; justify-content: flex-start;"><input type="checkbox" name="incidencia_ambiental[]" value="Unidade de Conservação Federal, Estadual ou Municipal" disabled class="auto-loaded-field" style="margin: 0; width: 16px; height: 16px; min-width: 16px;"> Unidade de Conservação Federal, Estadual ou Municipal</label>
-              <label style="display: flex; align-items: center; gap: 8px; font-weight: normal; font-size: 0.95em; cursor: pointer; color: #1e293b; margin: 0; text-align: left; width: 100%; justify-content: flex-start;"><input type="checkbox" name="incidencia_ambiental[]" value="Área de risco — geotécnica, inundação, etc." disabled class="auto-loaded-field" style="margin: 0; width: 16px; height: 16px; min-width: 16px;"> Área de risco — geotécnica, inundação, etc.</label>
-              <label style="display: flex; align-items: center; gap: 8px; font-weight: normal; font-size: 0.95em; cursor: pointer; color: #1e293b; margin: 0; text-align: left; width: 100%; justify-content: flex-start;"><input type="checkbox" name="incidencia_ambiental[]" value="Área contaminada — passivo ambiental" disabled class="auto-loaded-field" style="margin: 0; width: 16px; height: 16px; min-width: 16px;"> Área contaminada — passivo ambiental</label>
-              <label style="display: flex; align-items: center; gap: 8px; font-weight: normal; font-size: 0.95em; cursor: pointer; color: #1e293b; margin: 0; text-align: left; width: 100%; justify-content: flex-start;"><input type="checkbox" name="incidencia_ambiental[]" value="Outra situação ambiental" disabled class="auto-loaded-field" style="margin: 0; width: 16px; height: 16px; min-width: 16px;"> Outra situação ambiental</label>
-          </div>
-          
-          <div id="bloco-obs-incidencia" style="display: none; flex-direction: column; gap: 6px; margin-top: 8px;">
-              <label>Observações sobre incidência ambiental: </label>
-              <textarea id="obs_incidencia_ambiental" name="obs_incidencia_ambiental" readonly class="auto-loaded-field" style="width: 100%; border: 1px solid #ccc; padding: 8px; border-radius: 4px; background-color: #f8f9fa; color: #495057;" rows="2"></textarea>
-          </div>
-      </div>
-
-      <div class="form-group editavel">
-          <label>Há custos de manutenção para a SPU? </label>
-          <input type="text" id="custos_manutencao" name="custos_manutencao" data-field-key="custos_manutencao" readonly class="auto-loaded-field" style="width: 100%; border: 1px solid #ccc; padding: 8px; border-radius: 4px; background-color: #f8f9fa; color: #495057;">
-          
-          <div class="bloco-condicional" data-controlled-by="custos_manutencao" data-show-when="Sim" style="display: none; flex-direction: column; gap: 6px; margin-top: 8px;">
-              <label>Estimativa de custos anuais — R$: </label>
-              <input type="text" id="estimativa_custos" name="estimativa_custos" readonly class="auto-loaded-field" style="width: 100%; border: 1px solid #ccc; padding: 8px; border-radius: 4px; background-color: #f8f9fa; color: #495057;">
-          </div>
-      </div>
-      
-      <!-- Bloco Justificativa de Riscos e Restrições -->
-      <div id="blocoJustificativa_secao-riscos" class="bloco-justificativa-secao" style="display: none; margin-top: 15px; padding: 15px; border: 1px solid #fdba74; border-radius: 6px; background: #fff7ed;">
-          <h4 style="margin-top: 0; color: #c2410c; font-size: 1.05em; border-bottom: 1px solid #fed7aa; padding-bottom: 6px;">Justificativa para Riscos e Restrições</h4>
-          <div style="margin-bottom: 10px;">
-              <label style="font-weight: bold; display: block; margin-bottom: 3px; font-size: 0.9em; color: #9a3412;">Justificativa (Obrigatório) *</label>
-              <textarea name="justificativa_secao-riscos" id="justificativa_secao-riscos" rows="3" placeholder="Por que você está corrigindo os dados de riscos e restrições?" style="width: 100%; border: 1px solid #cbd5e1; padding: 8px; border-radius: 4px; font-size: 0.9em; background: #ffffff; color: #1e293b; resize: vertical;"></textarea>
-          </div>
-          <div>
-              <label style="font-weight: bold; display: block; margin-bottom: 3px; font-size: 0.9em; color: #9a3412;">Fundamentação Legal (Opcional)</label>
-              <textarea name="fundamentacao_secao-riscos" id="fundamentacao_secao-riscos" rows="2" placeholder="Ex: Decreto 9.760/46, art. ..." style="width: 100%; border: 1px solid #cbd5e1; padding: 8px; border-radius: 4px; font-size: 0.9em; background: #ffffff; color: #1e293b; resize: vertical;"></textarea>
-          </div>
-      </div>
-
-      </div><!-- /secao-riscos -->
-
-      <!-- Geolocalização -->
-      <div id="secao-geolocalizacao">
-      <h4 style="margin: 24px 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
-        Geolocalização
-        <label class="edit-toggle"><span class="toggle-label-left">Consulta</span><div class="switch"><input type="checkbox" id="icone-edicao-geo" onchange="habilitarEdicaoSecao('secao-geolocalizacao', 'icone-edicao-geo')"><span class="slider round"></span></div><span class="toggle-label-right">Edição</span></label>
-      </h4>
-      <div class="form-group editavel">
-          <label for="cep">Localizar por CEP:</label>
-          <div class="cep-row">
-              <input type="text" id="cep" name="cep" class="mask-cep" placeholder="00000-000" maxlength="9">
-              <button type="button" id="buscar-cep" class="btn-search">🔍 Buscar</button>
-          </div>
-          <div id="cep-info"></div>
-      </div>
-      <div class="form-group editavel">
-          <div class="cep-row">
-              <div style="flex: 1;">
-                  <label for="latitude" style="font-weight: bold; font-size: 0.9em; display: block; margin-bottom: 5px;">Latitude:</label>
-                  <input type="text" id="latitude" name="latitude" placeholder="-15.793889" style="width: 100%;">
-              </div>
-              <div style="flex: 1;">
-                  <label for="longitude" style="font-weight: bold; font-size: 0.9em; display: block; margin-bottom: 5px;">Longitude:</label>
-                  <input type="text" id="longitude" name="longitude" placeholder="-47.882778" style="width: 100%;">
-              </div>
-          </div>
-      </div>
-      <div class="form-group" style="background: transparent; border: none; padding: 0; display: flex; justify-content: center; margin-top: 10px;">
-          <button type="button" id="btn-open-geo-modal" class="btn-primary" style="padding: 12px 24px; font-size: 1em; width: auto;">
-              🗺️ Abrir Mapa Interativo e Demarcar
-          </button>
-      </div>
-      
-      <!-- Bloco Justificativa de Geolocalização -->
-      <div id="blocoJustificativa_secao-geolocalizacao" class="bloco-justificativa-secao" style="display: none; margin-top: 15px; padding: 15px; border: 1px solid #fdba74; border-radius: 6px; background: #fff7ed;">
-          <h4 style="margin-top: 0; color: #c2410c; font-size: 1.05em; border-bottom: 1px solid #fed7aa; padding-bottom: 6px;">Justificativa para Geolocalização</h4>
-          <div style="margin-bottom: 10px;">
-              <label style="font-weight: bold; display: block; margin-bottom: 3px; font-size: 0.9em; color: #9a3412;">Justificativa (Obrigatório) *</label>
-              <textarea name="justificativa_secao-geolocalizacao" id="justificativa_secao-geolocalizacao" rows="3" placeholder="Por que você está corrigindo os dados de geolocalização?" style="width: 100%; border: 1px solid #cbd5e1; padding: 8px; border-radius: 4px; font-size: 0.9em; background: #ffffff; color: #1e293b; resize: vertical;"></textarea>
-          </div>
-          <div>
-              <label style="font-weight: bold; display: block; margin-bottom: 3px; font-size: 0.9em; color: #9a3412;">Fundamentação Legal (Opcional)</label>
-              <textarea name="fundamentacao_secao-geolocalizacao" id="fundamentacao_secao-geolocalizacao" rows="2" placeholder="Ex: Decreto 9.760/46, art. ..." style="width: 100%; border: 1px solid #cbd5e1; padding: 8px; border-radius: 4px; font-size: 0.9em; background: #ffffff; color: #1e293b; resize: vertical;"></textarea>
-          </div>
-      </div>
-
-      </div><!-- /secao-geolocalizacao -->
 
       <!-- MODAL GEO -->
       <div id="geoModal" class="geo-modal-overlay">
@@ -515,6 +219,24 @@ input:checked + .slider:before { transform: translateX(14px); }
       
 
 
+      <!-- Observações e Documentos da Aba 2 (Geral) -->
+      <div style="margin-top: 30px; margin-bottom: 20px;">
+          <!-- Observações (Geral) -->
+          <div class="form-group editavel" style="margin-bottom: 20px;">
+              <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 0.95em; color: #1e1b4b;">Observações da Caracterização:</label>
+              <textarea name="observacoes_aba2" id="observacoes_aba2" rows="4" placeholder="Insira aqui as observações gerais da análise desta aba..." style="width: 100%; border: 1px solid #cbd5e1; padding: 10px; border-radius: 4px; font-size: 0.95em; background: #ffffff; color: #1e293b; resize: vertical;"></textarea>
+          </div>
+
+          <!-- Documentos e Links Anexados -->
+          <div class="form-group editavel">
+              <label style="font-weight: bold; display: block; margin-bottom: 10px; font-size: 0.95em; color: #1e1b4b;">Documentos e Links Anexados</label>
+              <div id="documentos-list-aba2" class="documentos-container">
+                  <!-- Lista de documentos injetada aqui pelo dinâmico -->
+              </div>
+              <button type="button" class="btn btn-outline-success btn-sm mt-2" id="btnAdicionarDocAba2">+ Adicionar link/documento</button>
+          </div>
+      </div>
+
       <!-- Botões -->
             <div class="button-group" style="margin-top: 40px; display: flex; justify-content: flex-end; gap: 15px; border-top: 1px solid #ccc; padding-top: 20px;">
                 <button type="button" class="btn-secondary" id="btnLimpar" style="font-size: 1.1em; padding: 12px 24px; border-radius: 6px;">🗑️ Limpar</button>
@@ -531,6 +253,11 @@ input:checked + .slider:before { transform: translateX(14px); }
   <script src="hints.js?v=1782355313469"></script>
   
   <script>
+      // Inicializa a lista de documentos para a Aba 2
+      if (typeof window.inicializarListaDocumentosDinamica === 'function') {
+          window.inicializarListaDocumentosDinamica('aba2', 'btnAdicionarDocAba2', 'documentos-list-aba2');
+      }
+
       function toggleMatricula() {
           const sim = document.querySelector('input[name="tem_matricula"][value="Sim"]').checked;
           document.getElementById('bloco-matricula').style.display = sim ? 'flex' : 'none';
@@ -579,37 +306,6 @@ input:checked + .slider:before { transform: translateX(14px); }
           });
       }
 
-      function abrirGeoModal() {
-          document.getElementById('geoModal').style.display = 'flex';
-          inicializarMapa();
-          
-          const latInput = document.getElementById('latitude').value;
-          const lonInput = document.getElementById('longitude').value;
-          const lat = parseFloat(latInput);
-          const lon = parseFloat(lonInput);
-          
-          if (!isNaN(lat) && !isNaN(lon)) {
-              // Se já temos lat/lon preenchidos, coloca o pin
-              if (drawnItems) {
-                  drawnItems.clearLayers();
-                  const marker = L.marker([lat, lon]);
-                  drawnItems.addLayer(marker);
-                  
-                  // Atualiza a visualização do mapa para focar no pin, timeout para dar tempo da DIV renderizar
-                  setTimeout(() => { 
-                      map.setView([lat, lon], 16); 
-                  }, 400);
-              }
-          } else {
-              // Caso não tenha coordenadas, tenta buscar pelo CEP para dar um zoom inicial
-              const cepStr = document.getElementById('cep').value;
-              if (cepStr && (!drawnItems || drawnItems.getLayers().length === 0)) {
-                  document.getElementById('modal-search-input').value = cepStr;
-                  buscarNoModal();
-              }
-          }
-      }
-
       function fecharGeoModal() {
           document.getElementById('geoModal').style.display = 'none';
       }
@@ -620,6 +316,13 @@ input:checked + .slider:before { transform: translateX(14px); }
               const lat = parseFloat(geo[0].lat);
               const lon = parseFloat(geo[0].lon);
               map.setView([lat, lon], 15);
+
+              // Posiciona automaticamente um pin no resultado da busca
+              if (drawnItems) {
+                  drawnItems.clearLayers();
+                  const marker = L.marker([lat, lon]);
+                  drawnItems.addLayer(marker);
+              }
           } else {
               // Tenta fallback se falhou
               tentaProximaBusca();
@@ -724,21 +427,10 @@ input:checked + .slider:before { transform: translateX(14px); }
           }
       }
 
-      // Adiciona o listener para o botão de abrir Modal
-      document.addEventListener('DOMContentLoaded', () => {
-          const btnOpen = document.getElementById('btn-open-geo-modal');
-          if (btnOpen) {
-              btnOpen.addEventListener('click', abrirGeoModal);
-          }
-          const btnBuscarCep = document.getElementById('buscar-cep');
-          if (btnBuscarCep) {
-              btnBuscarCep.addEventListener('click', abrirGeoModal);
-          }
-      });
-      
       // Removido listener inline para submit, pois já está no foco-02.js
   </script>
-  <script src="foco-02.js?v=1783051434300"></script>
-  <script src="sync.js?v=1783051434300"></script>
+  <script src="scripts/fetch_spu.js?v=99999_4"></script>
+<script src="foco-02.js?v=99999_22"></script>
+  <script src="sync.js?v=99999_11"></script>
 </body>
 </html>

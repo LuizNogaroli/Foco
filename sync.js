@@ -13,7 +13,9 @@
         // Estado inicial do banco e controle de carregamento
         let dbState = {};
         if (window.parent && window.parent.formDataState) {
-            console.log("🌱 [sync.js] Estado encontrado imediatamente:", window.parent.formDataState);
+            console.log("🌱 [sync.js] Estado encontrado imediatamente. Keys:", Object.keys(window.parent.formDataState));
+            console.log("🌱 [sync.js] formDataState.rips:", window.parent.formDataState['rips']);
+            console.log("🌱 [sync.js] formDataState._ripsPesquisados:", window.parent.formDataState['_ripsPesquisados']);
             dbState = window.parent.formDataState;
         } else {
             console.log("🌱 [sync.js] Estado ainda não disponível, aguardando DATABASE_LOADED.");
@@ -184,14 +186,20 @@
         });
         console.log(`🚩 [sync.js] ${loadingFieldsCount} campos estáticos colocados em estado de carregamento.`);
 
+        // Helper: verifica se a página atual corresponde a um nome (com ou sem .html)
+        function isCurrentPage(name) {
+            return new RegExp('/' + name + '(\\.html)?$').test(window.location.pathname);
+        }
+
         // Função para preencher os campos do formulário atual com o estado central
         function populateForm(state) {
             console.log("🚩 [sync.js] populateForm chamado. Estado:", state);
             if (!state) return;
 
-            // 1. Caso especial: foco-02.html (Imóveis dinâmicos)
-            if (window.location.pathname.includes('foco-02.html')) {
-                console.log("🚩 [sync.js] foco-02.html detectado. Restaurando blocos dinâmicos.");
+            // 1. Caso especial: foco-02 (Imóveis dinâmicos)
+            console.log('📝 [sync.js] pathname:', window.location.pathname, 'isAba2:', isCurrentPage('foco-02'));
+            if (isCurrentPage('foco-02')) {
+                console.log("🚩 [sync.js] foco-02 detectado. Restaurando blocos dinâmicos.");
                 restoreFoco02DynamicBlocks(state);
             }
 
@@ -214,7 +222,7 @@
 
                 
                 // IGNORAR CHECKBOX DE CONCEITUAÇÃO
-                if (input.name === 'conceituacao[]') {
+                if (input.name === 'conceituacao[]' || input.name === 'conceituacao_rip[]' || input.name === 'conceituacao_dispensado[]') {
                     return;
                 }
 
@@ -333,12 +341,50 @@
             }
         }
 
-        // Restaura blocos dinâmicos do foco-02.html
         function restoreFoco02DynamicBlocks(state) {
-            const savedRips = state['_ripsPesquisados'];
-            console.log("🚩 [sync.js] RIPs recuperados do estado central:", savedRips);
-            if (savedRips && typeof window.criarBlocoImovel === 'function' && typeof window.adicionarTagRIP === 'function') {
-                const container = document.getElementById('imoveis-container');
+            console.log('📝 [sync.js] restoreFoco02DynamicBlocks state keys:', Object.keys(state || {}));
+            console.log('📝 [sync.js] state._ripsPesquisados:', state?.['_ripsPesquisados']);
+            console.log('📝 [sync.js] state.rips:', state?.['rips']);
+            let savedRips = state['_ripsPesquisados'];
+
+            // Sempre mescla RIPs do array flat 'rips' (salvo pelo foco-01.js via updateField)
+            // com os _ripsPesquisados existentes. Resolve o caso de RIPs adicionados na Aba 1
+            // que ainda não foram persistidos em _ripsPesquisados.
+            const rawRips = state['rips'] || state['ripsPendentes'] || [];
+            console.log('📝 [sync.js] rawRips extraído:', rawRips);
+            const ripArray = Array.isArray(rawRips) ? rawRips :
+                             (typeof rawRips === 'string' ? rawRips.split(',').map(r => r.trim()).filter(Boolean) : []);
+
+            if (ripArray.length > 0) {
+                if (!savedRips || Object.keys(savedRips).length === 0) savedRips = {};
+
+                // Se a Aba 1 informou explicitamente a lista de RIPs, ela é a fonte da verdade.
+                // Remove RIPs antigos que já não constam mais no array flat.
+                Object.keys(savedRips).forEach(key => {
+                    if (!ripArray.includes(key)) {
+                        delete savedRips[key];
+                    }
+                });
+
+                ripArray.forEach(rip => {
+                    if (rip && !savedRips[rip]) {
+                        savedRips[rip] = {
+                            rip: rip,
+                            natureza: '',
+                            descricao: 'Imóvel ' + rip,
+                            municipio: state['municipio'] || '',
+                            uf: state['uf'] || '',
+                            cep: '',
+                            endereco: '',
+                            area_total: '',
+                        };
+                    }
+                });
+            }
+
+            console.log("🚩 [sync.js] RIPs para restaurar na Aba 2:", savedRips);
+            if (savedRips && Object.keys(savedRips).length > 0 && typeof window.criarBlocoImovel === 'function' && typeof window.adicionarTagRIP === 'function') {
+                const container = document.getElementById('accordion-indicacoes');
                 const listaTags = document.getElementById('listaRIPsAssociados');
                 if (container) container.innerHTML = '';
                 if (listaTags) {
@@ -356,9 +402,13 @@
                     console.log("🚩 [sync.js] Recriando bloco para RIP:", rip);
                     window.adicionarTagRIP(rip, dados);
                     window.criarBlocoImovel(rip, dados);
+                    // Após criar o bloco, busca dados do SPU e preenche/tranca campos
+                    if (typeof window.carregarCamposRIP === 'function') {
+                        window.carregarCamposRIP(rip);
+                    }
                 }
             } else {
-                console.log("🚩 [sync.js] Nenhuma função de criação de bloco disponível ou nenhum RIP salvo.");
+                console.log("🚩 [sync.js] Nenhum RIP encontrado para restaurar na Aba 2.");
             }
         }
 
@@ -433,11 +483,18 @@
         });
 
         // Força salvar TODOS os campos ao submeter o formulário (garante que campos intocados com value padrão sejam salvos)
-        document.addEventListener('submit', () => {
-            console.log("🔄 [sync.js] Form submetido. Forçando salvamento de todos os campos.");
+        document.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            console.log("🔥 [sync.js] Form submetido. Forçando salvamento de todos os campos (com filtro para Aba 2).");
             const inputs = document.querySelectorAll('input, select, textarea');
             inputs.forEach(input => {
                 if (input.name && input.type !== 'submit' && input.type !== 'button') {
+                    // REGRA DE NEGÓCIO ABA 2: Só salva campos modificados/preenchidos pelo usuário
+                    if (isCurrentPage('foco-02')) {
+                        if (input.hasAttribute('readonly') || input.disabled) {
+                            return;
+                        }
+                    }
                     saveField(input);
                 }
             });
@@ -447,18 +504,50 @@
                 const uf = window.parent.formDataState.uf || '-';
                 const basePrefix = uf !== '-' ? 'SPU/' + uf : 'SPU/BR';
                 
-                if (window.location.pathname.includes('foco-01.html')) {
+                if (isCurrentPage('foco-01')) {
                     window.parent.updateField('status_flow', basePrefix + ' - Caracterização');
-                } else if (window.location.pathname.includes('foco-02.html')) {
+                } else if (isCurrentPage('foco-02')) {
                     window.parent.updateField('status_flow', basePrefix + ' - Destinação');
-                } else if (window.location.pathname.includes('foco-03.html')) {
+                } else if (isCurrentPage('foco-03')) {
                     window.parent.updateField('status_flow', basePrefix + ' - Superintendência');
                 }
             }
 
             // Força o envio pro banco imediatamente após o sweep
             if (window.parent && typeof window.parent.forceSaveDraft === 'function') {
-                window.parent.forceSaveDraft();
+                await window.parent.forceSaveDraft();
+            }
+
+            // Aba 3: também salva na tabela foco_final
+            if (isCurrentPage('foco-03') && window.parent && typeof window.parent.saveToFinal === 'function') {
+                await window.parent.saveToFinal();
+            }
+
+            // Aba 3: atualiza status para "Aguardando deliberação SPU/XX"
+            if (isCurrentPage('foco-03') && window.parent && typeof window.parent.updateStatusFluxo === 'function') {
+                const uf = window.parent.formDataState.uf || 'BR';
+                const processId = localStorage.getItem('CURRENT_PROCESS_ID');
+                if (processId) {
+                    await window.parent.updateStatusFluxo(processId, 'SPU/' + uf, 'Aguardando deliberação SPU/' + uf);
+                }
+            }
+
+            // Navega para próxima aba SOMENTE após o save completo
+            var nextTabMap = { 'foco-01': 'foco-02.html', 'foco-02': 'foco-03.html', 'foco-03': 'deliberacao-spu-uf.html' };
+            var currentTab = '';
+            if (isCurrentPage('foco-01')) currentTab = 'foco-01';
+            else if (isCurrentPage('foco-02')) currentTab = 'foco-02';
+            else if (isCurrentPage('foco-03')) currentTab = 'foco-03';
+            else if (isCurrentPage('foco-04')) currentTab = 'foco-04';
+            else if (isCurrentPage('foco-05')) currentTab = 'foco-05';
+            else if (isCurrentPage('foco-06')) currentTab = 'foco-06';
+            var nextUrl = nextTabMap[currentTab];
+            if (nextUrl) {
+                var rootWindow = window.parent?.parent || window.parent || window;
+                var btnTabNext = rootWindow.document?.querySelector('button[data-url="' + nextUrl + '"]');
+                if (btnTabNext) {
+                    btnTabNext.click();
+                }
             }
         });
 
@@ -481,13 +570,13 @@
                 window.parent.updateField(element.name, element.value);
             }
 
-            if (window.location.pathname.includes('foco-02.html') && typeof window.ripsPesquisados !== 'undefined') {
+            if (isCurrentPage('foco-02') && typeof window.ripsPesquisados !== 'undefined') {
                 window.parent.updateField('_ripsPesquisados', window.ripsPesquisados);
             }
         }
 
-        // Sobrescreve a função original de remoção de RIP no foco-02.html para atualizar o banco
-        if (window.location.pathname.includes('foco-02.html')) {
+        // Sobrescreve a função original de remoção de RIP no foco-02 para atualizar o banco
+        if (isCurrentPage('foco-02')) {
             const originalRemoverRIP = window.removerRIP;
             if (typeof originalRemoverRIP === 'function') {
                 window.removerRIP = function(rip) {

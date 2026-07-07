@@ -1,5 +1,4 @@
-// ============================== Documentos Dinâmicos ==============================
-    if (typeof window.inicializarListaDocumentosDinamica === 'function') {
+if (typeof window.inicializarListaDocumentosDinamica === 'function') {
         window.inicializarListaDocumentosDinamica('aba2_avaliacao', 'btnAdicionarDocumentoAvaliacao', 'documentos-list-avaliacao');
     }
 
@@ -174,6 +173,34 @@ window.atualizarRipsOcultos = function() {
     }
 };
 
+window.removerRIP = function(rip) {
+    if (!rip) return;
+
+    const tag = document.querySelector('.rip-tag[data-rip="' + rip + '"]');
+    if (tag) tag.remove();
+
+    const bloco = document.querySelector('.imovel-block[data-rip="' + rip + '"]');
+    if (bloco) bloco.remove();
+
+    if (window.ripsPesquisados && window.ripsPesquisados[rip]) {
+        delete window.ripsPesquisados[rip];
+    }
+
+    if (typeof window.atualizarRipsOcultos === 'function') {
+        window.atualizarRipsOcultos();
+    }
+
+    const lista = document.getElementById('listaRIPsAssociados');
+    if (lista && lista.querySelectorAll('.rip-tag').length === 0) {
+        lista.style.display = 'none';
+    }
+
+    if (window.parent && typeof window.parent.updateField === 'function') {
+        window.parent.updateField('_ripsPesquisados', window.ripsPesquisados || {});
+        window.parent.updateField('rips', Object.keys(window.ripsPesquisados || {}));
+    }
+};
+
 window.adicionarTagRIP = function(rip, dados) {
     const lista = document.getElementById('listaRIPsAssociados');
     if (lista) lista.style.display = 'flex';
@@ -193,17 +220,20 @@ window.adicionarTagRIP = function(rip, dados) {
     
     div.innerHTML = `
         <span><strong style="color: #2e7d32; font-size: 1.1em;">RIP: ${rip}</strong> - ${dados ? (dados.natureza || dados.natureza_terreno || 'Terreno Importado') : 'Terreno Importado'}</span>
-        <button type="button" onclick="this.parentElement.remove(); window.atualizarRipsOcultos(); document.querySelector('.imovel-block[data-rip='${rip}']')?.remove();" style="background: none; border: none; color: #d32f2f; font-weight: bold; cursor: pointer; font-size: 1.1em;" title="Remover RIP">&times;</button>
+        <button type="button" onclick="window.removerRIP('${rip}')" style="background: none; border: none; color: #d32f2f; font-weight: bold; cursor: pointer; font-size: 1.1em;" title="Remover RIP">&times;</button>
     `;
     if (lista) lista.appendChild(div);
 };
 
 window.criarBlocoImovel = function(rip, dados) {
-    dados = dados || {};
-    const container = document.getElementById('imoveis-container');
-    if (!container) return;
+        dados = dados || {};
+        const container = document.getElementById('accordion-indicacoes');
+        if (!container) {
+            console.error('[foco-02.js] Container accordion-indicacoes não encontrado!');
+            return;
+        }
 
-    if (document.querySelector(`.imovel-block[data-rip="${rip}"]`)) return;
+        if (document.querySelector(`.imovel-block[data-rip="${rip}"]`)) return;
 
     const index = document.querySelectorAll('.imovel-block').length;
     const div = document.createElement('div');
@@ -215,16 +245,69 @@ window.criarBlocoImovel = function(rip, dados) {
     div.style.boxShadow = '0 2px 4px rgba(0,0,0,0.05)';
     
     function buildField(label, name, value) {
-        let valStr = value || '';
-        let iconHtml = ``;
+        let valStr = (value !== null && value !== undefined) ? value : '';
+        let iconHtml = '';
+        
         let placeholderAttr = '';
-        if (name === 'numero_processo') placeholderAttr = 'placeholder="1234.56790/2026-00"';
-        else if (name === 'matricula') placeholderAttr = 'placeholder="123.456 - 1ª CRI SP"';
+        if (name === 'cep') placeholderAttr = 'placeholder="00000-000" maxlength="9" oninput="this.value = this.value.replace(/[^0-9]/g, \'\').replace(/^(\\d{5})(\\d)/, \'$1-$2\')"';
+        else if (name === 'area_total' || name === 'area_uniao' || name.startsWith('area_')) placeholderAttr = 'placeholder="Ex: 1250.50"';
         else if (name === 'cartorio') placeholderAttr = 'placeholder="Ex: 1º CRI SP"';
+        
+        let readonlyAttr = 'readonly';
+        let emptyClass = '';
+        let styleInline = 'width: 100%; border: 1px solid #ccc; padding: 8px; border-radius: 4px; background-color: #f8f9fa; color: #495057;';
+        
+        if (String(valStr).trim() === '') {
+            readonlyAttr = '';
+            emptyClass = 'custom-empty-select';
+            styleInline = 'width: 100%; padding: 8px; border-radius: 4px;';
+        }
+        
+        const config = typeof CAMPOS_COM_OPCOES !== 'undefined' ? CAMPOS_COM_OPCOES[name] : null;
+        if (config && String(valStr).trim() === '') {
+            const opcoes = Array.isArray(config) ? config : config.opcoes;
+            const condicional = Array.isArray(config) ? null : config.condicional;
+            let selectOptionsHtml = `<option value="">-- Selecione --</option>`;
+            opcoes.forEach(opt => {
+                const selected = (opt.toLowerCase() === String(valStr).toLowerCase()) ? 'selected' : '';
+                selectOptionsHtml += `<option value="${opt}" ${selected}>${opt}</option>`;
+            });
+            
+            let disabledAttr = readonlyAttr === 'readonly' ? 'disabled' : '';
+            
+            let blocoCondicionalHtml = '';
+            if (condicional) {
+                blocoCondicionalHtml = `
+                    <div id="${condicional.campo_id}" class="bloco-condicional" data-controlled-by="${name}" data-show-when="${condicional.valor}" style="display:none; margin-top:10px;">
+                        <label style="display:block; margin-bottom:5px; font-weight:600; color:#1e293b;">
+                            ${condicional.label}
+                        </label>
+                        <textarea
+                            name="${condicional.field_key}"
+                            data-field-key="${condicional.field_key}"
+                            rows="3"
+                            placeholder="Descreva aqui..."
+                            style="width:100%; padding:8px; border:1px solid #94a3b8; border-radius:4px; background:#ffffff; color:#1e293b; resize:vertical;"
+                        ></textarea>
+                    </div>
+                `;
+            }
+
+            return `
+                <div class="form-group editavel" style="margin-bottom: 15px;">
+                    <label style="display:block; margin-bottom: 5px; font-weight: 600;">${label} ${iconHtml}</label>
+                    <select name="imoveis[${index}][${name}]" data-field-key="${name}" class="auto-loaded-field ${emptyClass}" style="${styleInline}" ${disabledAttr}>
+                        ${selectOptionsHtml}
+                    </select>
+                    ${blocoCondicionalHtml}
+                </div>
+            `;
+        }
+        
         return `
             <div class="form-group editavel" style="margin-bottom: 15px;">
                 <label style="display:block; margin-bottom: 5px; font-weight: 600;">${label} ${iconHtml}</label>
-                <input type="text" name="imoveis[${index}][${name}]" data-field-key="${name}" value="${valStr}" ${placeholderAttr} readonly class="auto-loaded-field" style="width: 100%; border: 1px solid #ccc; padding: 8px; border-radius: 4px; background-color: #f8f9fa; color: #495057;">
+                <input type="text" name="imoveis[${index}][${name}]" data-field-key="${name}" value="${valStr}" ${placeholderAttr} ${readonlyAttr} class="auto-loaded-field ${emptyClass}" style="${styleInline}">
             </div>
         `;
     }
@@ -240,7 +323,7 @@ window.criarBlocoImovel = function(rip, dados) {
             <div id="secao-identificacao-${rip}">
             <h4 style="margin: 0 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
               Identificação do Imóvel
-              <label class="edit-toggle"><span class="toggle-label-left">Consulta</span><div class="switch"><input type="checkbox" id="icone-edicao-id-${rip}" onchange="habilitarEdicaoSecao('secao-identificacao-${rip}', 'icone-edicao-id-${rip}')"><span class="slider round"></span></div><span class="toggle-label-right">Edição</span></label>
+              
             </h4>
             
             ${buildField('Conceituação do Imóvel', 'conceituacao', dados.conceituacao || dados.descricao)}
@@ -258,9 +341,6 @@ window.criarBlocoImovel = function(rip, dados) {
             ${buildField('Área construída disponível (m²)', 'area_construida_disponivel', dados.area_construida_disponivel)}
             ${buildField('Área de terreno disponível (m²)', 'area_terreno_disponivel', dados.area_terreno_disponivel)}
             ${buildField('Situação da Incorporação', 'situacao_incorporacao', dados.situacao_incorporacao || dados.situacao)}
-            ${buildField('Valor avaliado (R$)', 'valor_avaliado', dados.valor_avaliado || dados.valor_imovel)}
-            ${buildField('Data da avaliação', 'data_avaliacao', dados.data_avaliacao)}
-            ${buildField('Instrumento de avaliação', 'instrumento_avaliacao', dados.instrumento_avaliacao)}
             ${buildField('LPM/1831 ou LMEO homologadas?', 'lpm_homologada', dados.lpm_homologada)}
             ${buildField('Processo de incorp.?', 'processo_incorporacao', dados.processo_incorporacao)}
             <div class="bloco-condicional" data-controlled-by="processo_incorporacao" data-show-when="Sim" style="display:none; padding-left:16px; border-left:3px solid #94a3b8; margin-top:4px;">
@@ -270,22 +350,626 @@ window.criarBlocoImovel = function(rip, dados) {
             </div>
             
             <!-- Bloco Justificativa da Identificação -->
-            <div id="blocoJustificativa_secao-identificacao-${rip}" class="bloco-justificativa-secao" style="display: none; margin-top: 15px; padding: 15px; border: 1px solid #fdba74; border-radius: 6px; background: #fff7ed;">
-                <h4 style="margin-top: 0; color: #c2410c; font-size: 1.05em; border-bottom: 1px solid #fed7aa; padding-bottom: 6px;">Justificativa para Identificação do Imóvel</h4>
-                <div style="margin-bottom: 10px;">
-                    <label style="font-weight: bold; display: block; margin-bottom: 3px; font-size: 0.9em; color: #9a3412;">Justificativa (Obrigatório) *</label>
-                    <textarea name="justificativa_secao-identificacao-${rip}" id="justificativa_secao-identificacao-${rip}" rows="3" placeholder="Por que você está corrigindo os dados de identificação do imóvel?" style="width: 100%; border: 1px solid #cbd5e1; padding: 8px; border-radius: 4px; font-size: 0.9em; background: #ffffff; color: #1e293b; resize: vertical;"></textarea>
-                </div>
-                <div>
-                    <label style="font-weight: bold; display: block; margin-bottom: 3px; font-size: 0.9em; color: #9a3412;">Fundamentação Legal (Opcional)</label>
-                    <textarea name="fundamentacao_secao-identificacao-${rip}" id="fundamentacao_secao-identificacao-${rip}" rows="2" placeholder="Ex: Decreto 9.760/46, art. ..." style="width: 100%; border: 1px solid #cbd5e1; padding: 8px; border-radius: 4px; font-size: 0.9em; background: #ffffff; color: #1e293b; resize: vertical;"></textarea>
+            <!-- /secao-identificacao -->
+        </div>
+
+            <!-- ========== AVALIAÇÃO DO IMÓVEL ========== -->
+            <div id="secao-avaliacao-${rip}">
+                <h4 style="margin: 24px 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 8px;">
+                  Avaliação do Imóvel
+                </h4>
+                ${buildField('Valor da Avaliação (R$)', 'valor_avaliacao', dados.valor_avaliacao)}
+                ${buildField('Data da Avaliação', 'data_avaliacao', dados.data_avaliacao)}
+                ${buildField('Instrumento de Avaliação', 'instrumento_avaliacao', dados.instrumento_avaliacao)}
+                
+                <div class="form-group editavel">
+                    <div class="dynamic-list-wrapper" style="margin-top: 10px; flex: 1; display: flex; flex-direction: column; gap: 8px;">
+                        <button type="button" class="btn-add" id="btnAdicionarDocumentoAvaliacao_${rip}" style="align-self: flex-start;" onclick="if(typeof window.adicionarDocumentoDinamico === 'function') window.adicionarDocumentoDinamico('documentos-list-avaliacao_${rip}')">＋ Anexar Instrumento de Avaliação (Digitalizado)</button>
+                        <div id="documentos-list-avaliacao_${rip}"></div>
+                    </div>
                 </div>
             </div>
-            </div><!-- /secao-identificacao -->
-        </div>
+<!-- ==================== OCUPAÇÃO ==================== -->
+          <h4 style="margin: 24px 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 8px;">
+            Ocupação
+          </h4>
+
+          <!-- 3.1 Situação ocupacional -->
+          <div class="form-group editavel">
+            <label>Situação ocupacional:</label>
+
+            <div class="radio-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-items: center;">
+              <label class="radio-option">
+                <input type="radio" name="imoveis[${index}][situacao_ocupacional]" value="Desocupado" required />
+                Desocupado
+              </label>
+
+              <label class="radio-option">
+                <input type="radio" name="imoveis[${index}][situacao_ocupacional]" value="Ocupado regularmente" />
+                Ocupado regularmente
+              </label>
+
+              <label class="radio-option">
+                <input type="radio" name="imoveis[${index}][situacao_ocupacional]" value="Ocupado irregularmente" />
+                Ocupado irregularmente
+              </label>
+
+              <label class="radio-option">
+                <input type="radio" name="imoveis[${index}][situacao_ocupacional]" value="Não há informação" />
+                Não há informação
+              </label>
+            </div>
+
+            <!-- Campos exibidos quando Desocupado -->
+            <div id="bloco-desocupado_${rip}" style="display: none; flex-direction: column; gap: 6px; margin-top: 8px;">
+              <label for="campo-tempo-desocupacao_${rip}">Tempo de desocupação:</label>
+              <input
+                type="text"
+                id="campo-tempo-desocupacao_${rip}"
+                name="imoveis[${index}][tempo_desocupacao]"
+                placeholder="Ex: 05 anos, desde 03/2010 ou desde 2010"
+              />
+
+              <label for="obs-desocupado_${rip}">Observações:</label>
+              <textarea
+                id="obs-desocupado_${rip}"
+                name="imoveis[${index}][obs_desocupado]"
+                placeholder="Observações sobre a desocupação..."
+              ></textarea>
+            </div>
+
+            <!-- Campos exibidos quando Ocupado regularmente ou Ocupado irregularmente -->
+            <div id="bloco-ocupado_${rip}" style="display: none; flex-direction: column; gap: 6px; margin-top: 8px;">
+              <label for="campo-data-conhecimento-ocupacao_${rip}">Data de conhecimento da ocupação:</label>
+              <input
+                type="text"
+                id="campo-data-conhecimento-ocupacao_${rip}"
+                name="imoveis[${index}][data_conhecimento_ocupacao]"
+                placeholder="Ex: 03/2010 ou 2010"
+              />
+
+              <label for="obs-ocupado_${rip}">Observações:</label>
+              <textarea
+                id="obs-ocupado_${rip}"
+                name="imoveis[${index}][obs_ocupado]"
+                placeholder="Informar dados do ocupante e indicar se a ocupação é parcial ou integral."
+              ></textarea>
+            </div>
+          </div>
+
+          <!-- Campos exibidos apenas quando Ocupado regularmente ou Ocupado irregularmente -->
+          <div id="bloco-uso-atual_${rip}" style="display: none; flex-direction: column; gap: 0;">
+
+            <!-- 3.2 Uso imobiliário atual -->
+            <div class="form-group editavel">
+              <label for="campo32_${rip}">Uso imobiliário atual:</label>
+              <select id="campo32_${rip}" name="imoveis[${index}][tipo_uso_atual]">
+                <option value="">Selecione...</option>
+                <option value="0101">01.01 Uso administrativo e representativo</option>
+                <option value="0102">01.02 Uso para agropecuária, aquicultura, produção florestal e pesca</option>
+                <option value="0103">01.03 Uso ambiental e dos recursos naturais</option>
+                <option value="0104">01.04 Uso cultural, esportivo e de lazer</option>
+                <option value="0106">01.06 Uso habitacional</option>
+                <option value="0111">01.11 Uso por povos originários e comunidades tradicionais</option>
+              </select>
+            </div>
+
+            <!-- 3.3 Uso específico atual -->
+            <div class="form-group editavel">
+              <label for="campo33_${rip}">Uso específico atual:</label>
+              <select id="campo33_${rip}" name="imoveis[${index}][tipo_uso_especifico_atual]" disabled>
+                <option value="">Selecione primeiro o uso imobiliário atual...</option>
+              </select>
+            </div>
+
+          </div>
+
+          <!-- ==================== INCIDÊNCIA AMBIENTAL ==================== -->
+          <div class="form-group editavel">
+            <label>Incidência ambiental:</label>
+
+            <div class="checkbox-group" id="group-incidencia_${rip}" class="checkbox-group">
+
+              <label class="checkbox-option">
+                <input
+                  type="checkbox"
+                  name="imoveis[${index}][incidencia_ambiental][]"
+                  value="Nenhuma incidência identificada"
+                />
+                Nenhuma incidência identificada
+                <span class="hint-semaforo">
+                  <span
+                    class="hint-icon"
+                    data-hint="Não foi identificada incidência ambiental relevante sobre o imóvel."
+                    data-hint-tipo="verde"
+                  >?</span>
+                </span>
+              </label>
+
+              <label class="checkbox-option">
+                <input
+                  type="checkbox"
+                  name="imoveis[${index}][incidencia_ambiental][]"
+                  value="APP"
+                />
+                APP — Área de Preservação Permanente
+                <span class="hint-semaforo">
+                  <span
+                    class="hint-icon"
+                    data-hint="Área protegida por legislação específica com restrições severas."
+                    data-hint-tipo="vermelho"
+                  >?</span>
+                </span>
+              </label>
+
+              <label class="checkbox-option">
+                <input
+                  type="checkbox"
+                  name="imoveis[${index}][incidencia_ambiental][]"
+                  value="Unidade de Conservação"
+                />
+                Unidade de Conservação Federal, Estadual ou Municipal
+                <span class="hint-semaforo">
+                  <span
+                    class="hint-icon"
+                    data-hint="Sujeito a regime próprio de proteção."
+                    data-hint-tipo="amarelo"
+                  >?</span>
+                </span>
+              </label>
+
+              <label class="checkbox-option">
+                <input
+                  type="checkbox"
+                  name="imoveis[${index}][incidencia_ambiental][]"
+                  value="Área de risco"
+                />
+                Área de risco — geotécnica, inundação, etc.
+              </label>
+
+              <label class="checkbox-option">
+                <input
+                  type="checkbox"
+                  name="imoveis[${index}][incidencia_ambiental][]"
+                  value="Área contaminada"
+                />
+                Área contaminada — passivo ambiental
+              </label>
+
+              <label class="checkbox-option">
+                <input
+                  type="checkbox"
+                  name="imoveis[${index}][incidencia_ambiental][]"
+                  value="Outra situação ambiental"
+                />
+                Outra situação ambiental
+              </label>
+
+            </div>
+
+            <div id="bloco-obs35_${rip}" style="display: none; flex-direction: column; gap: 6px; margin-top: 8px;">
+              <label for="obs35_${rip}">Observações sobre incidência ambiental:</label>
+              <textarea
+                id="obs35_${rip}"
+                name="imoveis[${index}][obs_incidencia_ambiental]"
+                placeholder="Descreva informações complementares sobre incidência ambiental..."
+              ></textarea>
+            </div>
+          </div>
+
+          <!-- ==================== RISCOS ==================== -->
+          <h4 style="margin: 24px 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 8px;">
+            Riscos
+          </h4>
+
+          <div class="form-group editavel">
+            <label>Há riscos identificado?</label>
+
+            <div id="group-pergunta-riscos_${rip}" class="checkbox-group" style="display:flex; flex-direction:row; gap:32px; flex-wrap:wrap; margin-bottom:10px; align-items:center;">
+              <label class="checkbox-option" style="display:inline-flex; align-items:center; gap:6px; margin:0;"><input type="checkbox" name="imoveis[${index}][ha_riscos][]" value="Sim" /> Sim</label>
+              <label class="checkbox-option" style="display:inline-flex; align-items:center; gap:6px; margin:0;"><input type="checkbox" name="imoveis[${index}][ha_riscos][]" value="Não" /> Não</label>
+              <label class="checkbox-option" style="display:inline-flex; align-items:center; gap:6px; margin:0;"><input type="checkbox" name="imoveis[${index}][ha_riscos][]" value="Não há informação suficiente" /> Não há informação suficiente</label>
+            </div>
+
+            <div id="bloco-riscos-itens_${rip}" style="display:none;">
+              <label style="margin-top:4px;">Riscos verificados:</label>
+
+              <div class="checkbox-group" id="group-riscos_${rip}" class="checkbox-group">
+
+              <label class="checkbox-option">
+                <input
+                  type="checkbox"
+                  name="imoveis[${index}][riscos][]"
+                  value="Risco de invasão/esbulho"
+                />
+                Risco de invasão/esbulho
+              </label>
+
+              <label class="checkbox-option">
+                <input
+                  type="checkbox"
+                  name="imoveis[${index}][riscos][]"
+                  value="Risco à segurança/saúde pública"
+                />
+                Risco à segurança/saúde pública
+              </label>
+
+              <label class="checkbox-option">
+                <input
+                  type="checkbox"
+                  name="imoveis[${index}][riscos][]"
+                  value="Risco estrutural ou de desabamento"
+                />
+                Risco estrutural ou de desabamento
+              </label>
+
+              <label class="checkbox-option">
+                <input
+                  type="checkbox"
+                  name="imoveis[${index}][riscos][]"
+                  value="Risco de depredação, vandalismo ou deterioração"
+                />
+                Risco de depredação, vandalismo ou deterioração
+              </label>
+
+              <label class="checkbox-option">
+                <input
+                  type="checkbox"
+                  name="imoveis[${index}][riscos][]"
+                  value="Outro risco identificado"
+                />
+                Outro risco identificado
+              </label>
+
+            </div>
+
+            <div id="bloco-obs-riscos_${rip}" style="display: none; flex-direction: column; gap: 6px; margin-top: 8px;">
+              <label for="obs-riscos_${rip}">Observações sobre riscos:</label>
+              <textarea
+                id="obs-riscos_${rip}"
+                name="imoveis[${index}][obs_riscos]"
+                placeholder="Descreva informações complementares sobre os riscos verificados..."
+              ></textarea>
+            </div>
+          </div>
+          </div>
+
+          <!-- ==================== RESTRIÇÕES ==================== -->
+          <h4 style="margin: 24px 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 8px;">
+            Restrições
+          </h4>
+
+          <div class="form-group editavel">
+            <label>Há restrições e condições limitadoras?</label>
+
+            <div id="group-pergunta-restricoes_${rip}" class="checkbox-group" style="display:flex; flex-direction:row; gap:32px; flex-wrap:wrap; margin-bottom:10px; align-items:center;">
+              <label class="checkbox-option" style="display:inline-flex; align-items:center; gap:6px; margin:0;"><input type="checkbox" name="imoveis[${index}][ha_restricoes][]" value="Sim" /> Sim</label>
+              <label class="checkbox-option" style="display:inline-flex; align-items:center; gap:6px; margin:0;"><input type="checkbox" name="imoveis[${index}][ha_restricoes][]" value="Não" /> Não</label>
+              <label class="checkbox-option" style="display:inline-flex; align-items:center; gap:6px; margin:0;"><input type="checkbox" name="imoveis[${index}][ha_restricoes][]" value="Não há informação suficiente" /> Não há informação suficiente</label>
+              </div>
+
+            <div id="bloco-restricoes-itens_${rip}" style="display:none;">
+              <label style="margin-top:4px;">Restrições verificadas:</label>
+
+              <div class="checkbox-group" id="group-restricoes_${rip}" class="checkbox-group">
+
+              <label class="checkbox-option">
+                <input type="checkbox" name="imoveis[${index}][restricoes][]" value="Faixa de fronteira" />
+                Faixa de fronteira
+              </label>
+
+              <label class="checkbox-option">
+                <input type="checkbox" name="imoveis[${index}][restricoes][]" value="Faixa de segurança" />
+                Faixa de segurança
+              </label>
+
+              <label class="checkbox-option">
+                <input type="checkbox" name="imoveis[${index}][restricoes][]" value="Faixa de domínio Ferrovia/Rodovia" />
+                Faixa de domínio Ferrovia/Rodovia
+              </label>
+
+              <label class="checkbox-option">
+                <input type="checkbox" name="imoveis[${index}][restricoes][]" value="Faixa de 100 metros ao longo da costa marítima" />
+                Faixa de 100 metros ao longo da costa marítima
+              </label>
+
+              <label class="checkbox-option">
+                <input type="checkbox" name="imoveis[${index}][restricoes][]" value="Circunferência de 1.320 metros em torno de instalações militares" />
+                Circunferência de 1.320 metros em torno de instalações militares
+              </label>
+
+              <label class="checkbox-option">
+                <input type="checkbox" name="imoveis[${index}][restricoes][]" value="Terra indígena" />
+                Terra indígena
+              </label>
+
+              <label class="checkbox-option">
+                <input type="checkbox" name="imoveis[${index}][restricoes][]" value="Território quilombola ou área de comunidade tradicional" />
+                Território quilombola ou área de comunidade tradicional
+              </label>
+
+              <label class="checkbox-option">
+                <input type="checkbox" name="imoveis[${index}][restricoes][]" value="Zona/Área de Interesse Social (ZEIS)" />
+                Zona/Área de Interesse Social — ZEIS
+              </label>
+
+              <label class="checkbox-option">
+                <input type="checkbox" name="imoveis[${index}][restricoes][]" value="Área de segurança" />
+                Área de segurança
+              </label>
+
+              <label class="checkbox-option">
+                <input type="checkbox" name="imoveis[${index}][restricoes][]" value="Área Non Aedificandi" />
+                Área Non Aedificandi
+              </label>
+
+              <label class="checkbox-option">
+                <input type="checkbox" name="imoveis[${index}][restricoes][]" value="Restrição de uso/ocupação incidente sobre o imóvel" />
+                Restrição de uso/ocupação incidente sobre o imóvel
+              </label>
+
+              <label class="checkbox-option">
+                <input type="checkbox" name="imoveis[${index}][restricoes][]" value="Tombado como patrimônio histórico, artístico e/ou cultural" />
+                Tombado como patrimônio histórico, artístico e/ou cultural
+              </label>
+
+              <label class="checkbox-option">
+                <input type="checkbox" name="imoveis[${index}][restricoes][]" value="Poligonal de Porto Organizado" />
+                Poligonal de Porto Organizado
+              </label>
+
+              <label class="checkbox-option">
+                <input type="checkbox" name="imoveis[${index}][restricoes][]" value="Área operacional da RFFSA" />
+                Área operacional da RFFSA
+              </label>
+
+              <label class="checkbox-option">
+                <input type="checkbox" name="imoveis[${index}][restricoes][]" value="Ilha oceânica ou costeira sem sede de município" />
+                Ilha oceânica ou costeira sem sede de município
+              </label>
+
+              <label class="checkbox-option">
+                <input type="checkbox" name="imoveis[${index}][restricoes][]" value="Ilha fluvial ou lacustre" />
+                Ilha fluvial ou lacustre
+              </label>
+
+              <label class="checkbox-option">
+                <input type="checkbox" name="imoveis[${index}][restricoes][]" value="Localizada em loteamento" />
+                Localizada em loteamento
+              </label>
+
+              <label class="checkbox-option">
+                <input
+                  type="checkbox"
+                  name="imoveis[${index}][restricoes][]"
+                  value="Outra restrição identificada"
+                />
+                Outra restrição identificada
+              </label>
+
+              </div>
+            </div>
+
+            <div id="bloco-obs-restricoes_${rip}" style="display: none; flex-direction: column; gap: 6px; margin-top: 16px;">
+              <label for="obs-restricoes_${rip}">Observações sobre as restrições:</label>
+              <textarea
+                id="obs-restricoes_${rip}"
+                name="imoveis[${index}][obs_restricoes]"
+                placeholder="Descreva informações complementares sobre as restrições verificadas..."
+              ></textarea>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      
+            <!-- ========== GEOLOCALIZAÇÃO ========== -->
+            <div id="secao-geolocalizacao-${rip}">
+                <h4 style="margin: 24px 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 8px;">
+                  Geolocalização
+                </h4>
+                <div class="form-group editavel">
+                    <label for="cep_${rip}">Localizar por CEP:</label>
+                    <div class="cep-row">
+                        <input type="text" id="cep_${rip}" name="imoveis[${index}][geo_cep]" class="mask-cep" placeholder="00000-000" maxlength="9" value="${dados.geo_cep || dados.cep || ''}">
+                        <button type="button" class="btn-search">🔍 Buscar</button>
+                    </div>
+                </div>
+                <div class="form-group editavel">
+                    <div class="cep-row">
+                        <div style="flex: 1;">
+                            <label for="latitude_${rip}" style="font-weight: bold; font-size: 0.9em; display: block; margin-bottom: 5px;">Latitude:</label>
+                            <input type="text" id="latitude_${rip}" name="imoveis[${index}][latitude]" placeholder="-15.793889" style="width: 100%;" value="${dados.latitude || ''}">
+                        </div>
+                        <div style="flex: 1;">
+                            <label for="longitude_${rip}" style="font-weight: bold; font-size: 0.9em; display: block; margin-bottom: 5px;">Longitude:</label>
+                            <input type="text" id="longitude_${rip}" name="imoveis[${index}][longitude]" placeholder="-47.882778" style="width: 100%;" value="${dados.longitude || ''}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
     `;
 
     container.appendChild(div);
+
+    // Inicializa a lista dinâmica de anexos da seção de avaliação para este RIP
+    if (typeof window.inicializarListaDocumentosDinamica === 'function') {
+        const btnIdDocsAvaliacao = `btnAdicionarDocumentoAvaliacao_${rip}`;
+        const listIdDocsAvaliacao = `documentos-list-avaliacao_${rip}`;
+        const btnDocs = document.getElementById(btnIdDocsAvaliacao);
+        if (btnDocs && btnDocs.dataset.docsInit !== '1') {
+            window.inicializarListaDocumentosDinamica(`aba2_avaliacao_${rip}`, btnIdDocsAvaliacao, listIdDocsAvaliacao);
+            btnDocs.dataset.docsInit = '1';
+        }
+    }
+
+    // Busca geográfica por CEP: usa o CEP já carregado para abrir o modal e executar a busca
+    (function() {
+        var inputCepGeo = div.querySelector('#cep_' + rip);
+        var btnBuscarGeo = div.querySelector('.btn-search');
+        if (!inputCepGeo || !btnBuscarGeo) return;
+
+        btnBuscarGeo.addEventListener('click', function() {
+            var geoModal = document.getElementById('geoModal');
+            if (geoModal) {
+                geoModal.style.display = 'flex';
+            }
+            if (typeof window.inicializarMapa === 'function') {
+                window.inicializarMapa();
+            }
+
+            var modalSearchInput = document.getElementById('modal-search-input');
+            if (modalSearchInput) {
+                modalSearchInput.value = inputCepGeo.value || '';
+                if (modalSearchInput.value && typeof window.buscarNoModal === 'function') {
+                    window.buscarNoModal();
+                }
+            }
+        });
+    })();
+
+    // ---- Situação Ocupacional: show/hide condicional ----
+    (function() {
+        var radioName = 'imoveis[' + index + '][situacao_ocupacional]';
+        function atualizarOcupacao() {
+            var blocoDesocupado = document.getElementById('bloco-desocupado_' + rip);
+            var blocoOcupado = document.getElementById('bloco-ocupado_' + rip);
+            var blocoUsoAtual = document.getElementById('bloco-uso-atual_' + rip);
+            if (!blocoDesocupado) return;
+            var checked = div.querySelector('[name="' + radioName + '"]:checked');
+            var val = checked ? checked.value : '';
+            blocoDesocupado.style.display = (val === 'Desocupado') ? 'flex' : 'none';
+            blocoOcupado.style.display = (val === 'Ocupado regularmente' || val === 'Ocupado irregularmente') ? 'flex' : 'none';
+            if (blocoUsoAtual) blocoUsoAtual.style.display = (val === 'Ocupado regularmente' || val === 'Ocupado irregularmente') ? 'flex' : 'none';
+        }
+        div.querySelectorAll('[name="' + radioName + '"]').forEach(function(radio) {
+            radio.addEventListener('change', atualizarOcupacao);
+        });
+        setTimeout(atualizarOcupacao, 0);
+    })();
+
+    // ---- Incidência Ambiental: cada opção (exceto "Nenhuma...") abre seu campo de observação ----
+    (function() {
+        var group = div.querySelector('#group-incidencia_' + rip);
+        if (!group) return;
+
+        var blocoObs = div.querySelector('#bloco-obs35_' + rip);
+        var checkboxes = group.querySelectorAll('input[type="checkbox"]');
+        var cbNenhuma = group.querySelector('input[value="Nenhuma incidência identificada"]');
+
+        function atualizarIncidenciaAmbiental(changed) {
+            var mudouNenhuma = changed && changed.value === 'Nenhuma incidência identificada';
+
+            if (mudouNenhuma && changed.checked) {
+                checkboxes.forEach(function(cb) {
+                    if (cb !== changed) cb.checked = false;
+                });
+            }
+
+            if (!mudouNenhuma) {
+                var algumaNaoNenhumaMarcada = false;
+                checkboxes.forEach(function(cb) {
+                    if (cb.value !== 'Nenhuma incidência identificada' && cb.checked) {
+                        algumaNaoNenhumaMarcada = true;
+                    }
+                });
+                if (algumaNaoNenhumaMarcada && cbNenhuma) cbNenhuma.checked = false;
+            }
+
+            var mostrarContainerObs = false;
+            checkboxes.forEach(function(cb) {
+                if (cb.checked) mostrarContainerObs = true;
+            });
+
+            if (blocoObs) {
+                blocoObs.style.display = mostrarContainerObs ? 'flex' : 'none';
+            }
+        }
+
+        checkboxes.forEach(function(cb) {
+            cb.addEventListener('change', function() {
+                atualizarIncidenciaAmbiental(cb);
+            });
+        });
+
+        setTimeout(function() { atualizarIncidenciaAmbiental(null); }, 0);
+    })();
+
+    // ---- Riscos/Restrições: pergunta de triagem (Sim/Não/Não há informação) ----
+    (function() {
+        function initPerguntaComMulticheck(config) {
+            var grupoPergunta = div.querySelector(config.perguntaSelector);
+            var grupoItens = div.querySelector(config.itensSelector);
+            var blocoObs = div.querySelector(config.obsSelector);
+            if (!grupoPergunta || !grupoItens) return;
+
+            var checksPergunta = grupoPergunta.querySelectorAll('input[type="checkbox"]');
+            var checksItens = grupoItens.querySelectorAll('input[type="checkbox"]');
+
+            function valorPerguntaSelecionado() {
+                for (var i = 0; i < checksPergunta.length; i++) {
+                    if (checksPergunta[i].checked) return checksPergunta[i].value;
+                }
+                return '';
+            }
+
+            function atualizar(changedPergunta) {
+                if (changedPergunta) {
+                    checksPergunta.forEach(function(cb) {
+                        if (cb !== changedPergunta) cb.checked = false;
+                    });
+                }
+
+                var valorPergunta = valorPerguntaSelecionado();
+                var mostrarItens = valorPergunta === 'Sim';
+
+                if (!valorPergunta) {
+                    var algumItemMarcado = false;
+                    checksItens.forEach(function(cb) {
+                        if (cb.checked) algumItemMarcado = true;
+                    });
+                    if (algumItemMarcado) {
+                        checksPergunta.forEach(function(cb) {
+                            cb.checked = (cb.value === 'Sim');
+                        });
+                        mostrarItens = true;
+                    }
+                }
+
+                grupoItens.style.display = mostrarItens ? 'block' : 'none';
+
+                var algumMarcado = false;
+                checksItens.forEach(function(cb) {
+                    if (cb.checked) algumMarcado = true;
+                });
+                if (blocoObs) {
+                    blocoObs.style.display = (mostrarItens && algumMarcado) ? 'flex' : 'none';
+                }
+            }
+
+            checksPergunta.forEach(function(cb) {
+                cb.addEventListener('change', function() { atualizar(cb); });
+            });
+            checksItens.forEach(function(cb) {
+                cb.addEventListener('change', function() { atualizar(null); });
+            });
+
+            setTimeout(function() { atualizar(null); }, 0);
+        }
+
+        initPerguntaComMulticheck({
+            perguntaSelector: '#group-pergunta-riscos_' + rip,
+            itensSelector: '#bloco-riscos-itens_' + rip,
+            obsSelector: '#bloco-obs-riscos_' + rip
+        });
+
+        initPerguntaComMulticheck({
+            perguntaSelector: '#group-pergunta-restricoes_' + rip,
+            itensSelector: '#bloco-restricoes-itens_' + rip,
+            obsSelector: '#bloco-obs-restricoes_' + rip
+        });
+    })();
 
     // ---- Tira o snapshot dos valores originais assim que o bloco é criado ----
     setTimeout(() => {
@@ -413,31 +1097,8 @@ window.preencherCamposGlobais = function(dados) {
     fill('data_avaliacao', dados.data_avaliacao);
     fill('instrumento_avaliacao', dados.instrumento_avaliacao);
     
-    const ocup = dados.situacao_ocupacional || dados.ocupacao || '';
-    fill('situacao_ocupacional', ocup);
-    
-    // Atualiza visibilidade dos blocos de ocupação
-    const valOcup = ocup.toLowerCase();
-    const blocoDesocupado = document.getElementById('bloco-desocupado');
-    const blocoRegular = document.getElementById('bloco-ocupado-regular');
-    const blocoIrregular = document.getElementById('bloco-ocupado-irregular');
-    const blocoObsOcup = document.getElementById('bloco-observacoes-ocupacao');
+    // Situação ocupacional é tratada dinamicamente por RIP em criarBlocoImovel
 
-    if (blocoDesocupado) blocoDesocupado.style.display = (valOcup === 'desocupado') ? 'flex' : 'none';
-    if (blocoRegular) blocoRegular.style.display = (valOcup === 'ocupado regularmente') ? 'flex' : 'none';
-    if (blocoIrregular) blocoIrregular.style.display = (valOcup === 'ocupado irregularmente') ? 'flex' : 'none';
-    if (blocoObsOcup) {
-        blocoObsOcup.style.display = (valOcup === 'desocupado' || valOcup === 'ocupado regularmente' || valOcup === 'ocupado irregularmente') ? 'flex' : 'none';
-    }
-    
-    fill('tempo_desocupacao', dados.tempo_desocupacao);
-    fill('data_ocupacao', dados.data_ocupacao);
-    fill('data_ocupacao_irregular', dados.data_ocupacao_irregular || dados.data_ocupacao);
-    fill('obs_ocupado', dados.obs_ocupado);
-    
-    fill('condicao_urbanizacao', dados.condicao_urbanizacao);
-    fill('tipo_imovel_global', dados.tipo_imovel);
-    
     // Riscos e restricoes (array or string)
     let riscos = dados.riscos_verificados || dados.riscos;
     if (Array.isArray(riscos)) riscos = riscos.join(', ');
@@ -708,6 +1369,7 @@ const CAMPOS_COM_OPCOES = {
     ],
     'situacao_incorporacao': [
         'Em processo de incorporação',
+        'Incorporado',
         'Outros'
     ],
     'processo_incorporacao': [
@@ -830,11 +1492,6 @@ function transformarCamposComOpcoes(secao) {
                         // Desbloqueia os inputs internos do bloco revelado
                         const inputsInternos = bloco.querySelectorAll('input, select, textarea');
                         inputsInternos.forEach(ii => {
-                            ii.removeAttribute('readonly');
-                            ii.removeAttribute('disabled');
-                            ii.style.backgroundColor = '#ffffff';
-                            ii.style.color = '#1e293b';
-                            ii.style.border = '1px solid #94a3b8';
                             ii.style.cursor = 'text';
                             ii.addEventListener('input', verificarMudancaInline);
                             ii.addEventListener('change', verificarMudancaInline);
@@ -857,258 +1514,16 @@ function transformarCamposComOpcoes(secao) {
 }
 // ==================== Fim Motor de Regras ====================
 
-// ==================== Habilitar Edição por Seção ====================
-window.habilitarEdicaoSecao = function(secaoId, btnId) {
-    modoEdicaoAtivo = true;
-    const secao = document.getElementById(secaoId);
-    if (!secao) return;
 
-    const btn = document.getElementById(btnId);
-    let isEditing = false;
-    
-    if (btn) {
-        // btn is now the checkbox
-        isEditing = !btn.checked; // if checked (ON), we are opening edit mode, so isEditing becomes false (we WERE NOT editing before, now we are. Wait, the logic below says if (isEditing) { fechar } else { abrir }.
-        // If btn.checked is true, we just turned it ON, so we want to OPEN edit. Therefore isEditing should be false so it runs the 'else' block (ABRIR).
-        // If btn.checked is false, we just turned it OFF, so we want to CLOSE edit. Therefore isEditing should be true so it runs the 'if' block (FECHAR).
-        // That means isEditing = !btn.checked; is perfectly correct.
-        isEditing = !btn.checked;
-        
-        
-    }
-
-    const inputs = secao.querySelectorAll('input, select, textarea');
-    inputs.forEach(input => {
-        if (input.type === 'button' || input.type === 'submit' || input.type === 'hidden' || input.id === btnId) return;
-
-        if (isEditing) {
-            // VOLTAR PARA MODO LEITURA (Fechou)
-            if (input.tagName === 'SELECT' || input.type === 'checkbox' || input.type === 'radio') {
-                input.setAttribute('disabled', 'true');
-            } else {
-                input.setAttribute('readonly', 'true');
-            }
-            input.classList.add('auto-loaded-field');
-            
-            input.style.backgroundColor = '#f8f9fa';
-            input.style.color = '#495057';
-            input.style.border = '1px solid #ccc';
-            input.style.cursor = 'default';
-        } else {
-            // HABILITAR EDICAO (Abriu)
-            input.removeAttribute('readonly');
-            input.removeAttribute('disabled');
-            input.classList.remove('auto-loaded-field');
-
-            input.style.cssText = input.style.cssText
-                .replace(/background-color\s*:\s*[^;]+;?/gi, '')
-                .replace(/background\s*:\s*[^;]+;?/gi, '')
-                .replace(/color\s*:\s*[^;]+;?/gi, '');
-
-            input.style.backgroundColor = '#ffffff';
-            input.style.color = '#1e293b';
-            input.style.border = '1px solid #94a3b8';
-            input.style.cursor = 'text';
-
-            input.addEventListener('input', verificarMudancaInline);
-            input.addEventListener('change', verificarMudancaInline);
-        }
-    });
-
-    if (!isEditing) {
-        transformarCamposComOpcoes(secao);
-    }
-};
-
-
-// ==================== Fim Habilitar Edição por Seção ====================
 
 
 window.originalRipData = {};
 let modoEdicaoAtivo = false;
 
-
-function atualizarVisibilidadeJustificativaSecao(secaoElement) {
-    if (!secaoElement) return;
-    const temCamposAlterados = secaoElement.querySelectorAll('.campo-alterado').length > 0;
-    const blocoJust = secaoElement.querySelector('.bloco-justificativa-secao');
-    if (blocoJust) {
-        blocoJust.style.display = temCamposAlterados ? 'block' : 'none';
-        if (!temCamposAlterados) {
-            blocoJust.querySelectorAll('textarea').forEach(t => t.value = '');
-        }
-    }
-}
-
-function verificarMudancaInline(e) {
-    const el = e.target;
-    const key = el.id || el.name;
-    if (!key) return;
-    
-    // Qual era o valor original?
-    const valorOriginal = window.originalRipData[key] || '';
-    
-    let valorAtual = '';
-    if (el.type === 'checkbox' || el.type === 'radio') {
-        valorAtual = el.checked ? (el.value || 'on') : '';
-    } else {
-        valorAtual = el.value || '';
-    }
-    
-    const alterado = (String(valorAtual).trim() !== String(valorOriginal).trim());
-    
-    let hintEl = el.parentNode.querySelector('.valor-original-hint');
-    
-    if (alterado) {
-        el.classList.add('campo-alterado');
-        if (!hintEl) {
-            hintEl = document.createElement('span');
-            hintEl.className = 'valor-original-hint';
-            el.parentNode.insertBefore(hintEl, el.nextSibling);
-        }
-        hintEl.textContent = valorOriginal ? `Original: ${valorOriginal}` : 'Original: (vazio)';
-    } else {
-        el.classList.remove('campo-alterado');
-        if (hintEl) {
-            hintEl.remove();
-        }
-    }
-
-    // Atualiza visibilidade do bloco de justificativa da seção pai
-    const secaoPai = el.closest('[id^="secao-"]');
-    if (secaoPai) {
-        atualizarVisibilidadeJustificativaSecao(secaoPai);
-    }
-}
-
-// Intercepta a pesquisa para salvar o estado original
-const pesquisarRipOriginal = window.pesquisarRip;
-window.pesquisarRip = function() {
-    const inputRip = document.getElementById('rip-search-input');
-    const rip = inputRip ? inputRip.value.trim() : '';
-    const ripData = window.ripsPesquisados ? window.ripsPesquisados[rip] : null;
-    
-    if (ripData) {
-        // Mostra o botão de habilitar edição
-        const containerBtn = document.getElementById('container-btn-edicao');
-        if(containerBtn) containerBtn.style.display = 'block';
-    }
-    
-    // Executa a busca normal
-    if (typeof pesquisarRipOriginal === 'function') {
-        pesquisarRipOriginal();
-    }
-    
-    // Captura o estado dos campos LOGO APÓS o preenchimento pelo motor do FOCO
-    setTimeout(() => {
-        const inputs = document.querySelectorAll('#accordionIdentificacao input, #accordionIdentificacao select, #global-sections-container input, #global-sections-container select');
-        inputs.forEach(input => {
-            const key = input.id || input.name;
-            if (key) {
-                if (input.type === 'checkbox' || input.type === 'radio') {
-                    window.originalRipData[key] = input.checked ? (input.value || 'on') : '';
-                } else {
-                    window.originalRipData[key] = input.value || '';
-                }
-            }
-        });
-    }, 500);
-};
-
 // ==================== Fim Modo de Edição ====================
 
 // ==================== Salvar e Avançar ====================
-document.addEventListener('DOMContentLoaded', function() {
-    const form02 = document.getElementById('form02');
-    if (form02) {
-        form02.addEventListener('submit', function(e) {
-            e.preventDefault();
-            // Coleta divergências (diff)
-            const divergencias = [];
-            if (modoEdicaoAtivo) {
-                const inputs = document.querySelectorAll('#accordionIdentificacao input, #accordionIdentificacao select, #global-sections-container input, #global-sections-container select');
-                inputs.forEach(input => {
-                    const key = input.id || input.name;
-                    if (key && input.type !== 'button' && input.type !== 'submit') {
-                        const original = String(window.originalRipData[key] || '').trim();
-                        let atual = '';
-                        if (input.type === 'checkbox' || input.type === 'radio') {
-                            atual = input.checked ? (input.value || 'on') : '';
-                        } else {
-                            atual = String(input.value || '').trim();
-                        }
-                        
-                        if (original !== atual) {
-                            divergencias.push({
-                                campo: key,
-                                valor_original: original === '' ? null : original,
-                                valor_sugerido: atual,
-                                status: original === '' ? 'preenchido' : 'alterado'
-                            });
-                        }
-                    }
-                });
-            }
-            
-                        // Valida se as justificativas das seções alteradas estão preenchidas
-            let justificativasValidas = true;
-            const secoes = document.querySelectorAll('[id^="secao-"]');
-            const justificativasSecao = {};
-
-            secoes.forEach(sec => {
-                const alterados = sec.querySelectorAll('.campo-alterado');
-                if (alterados.length > 0) {
-                    const blocoJust = sec.querySelector('.bloco-justificativa-secao');
-                    if (blocoJust) {
-                        const justTextarea = blocoJust.querySelector('textarea[name^="justificativa_"]');
-                        const justText = justTextarea ? justTextarea.value.trim() : '';
-                        const fundText = blocoJust.querySelector('textarea[name^="fundamentacao_"]')?.value.trim() || '';
-                        
-                        if (!justText) {
-                            justificativasValidas = false;
-                        }
-                        
-                        // Vincula o ID legível da seção no objeto de retorno
-                        justificativasSecao[sec.id] = {
-                            justificativa: justText,
-                            fundamentacao: fundText
-                        };
-                    }
-                }
-            });
-
-            if (divergencias.length > 0 && !justificativasValidas) {
-                alert('⚠️ Você realizou alterações em dados do cadastro. É obrigatório preencher a "Justificativa" de cada seção alterada antes de salvar.');
-                return; // Bloqueia o avanço
-            }
-            
-            // Aqui enviaria 'divergencias' via postMessage para o sync.js salvar no foco_drafts
-            console.log("Divergências detectadas:", divergencias);
-            if (window.parent && window.parent.postMessage) {
-                window.parent.postMessage({
-                    type: 'DIVERGENCIAS_CADASTRO',
-                    aba: 'foco-02',
-                    data: divergencias,
-                    justificativas: justificativasSecao
-                }, '*');
-            }
-            
-            // Simula salvamento
-            console.log("Formulário Foco-02 salvo.");
-            
-            // Avança para a aba 3
-            const rootWindow = window.parent?.parent || window.parent || window;
-            const btnTabNext = rootWindow.document?.querySelector('button[data-url="foco-03.html"]');
-            
-            if (btnTabNext) {
-                alert("Salvo com sucesso! (Avançando para Aba 3)");
-                setTimeout(() => btnTabNext.click(), 200);
-            } else {
-                alert("Salvo com sucesso! (Não foi possível encontrar o botão da Aba 3)");
-            }
-        });
-    }
-});
+// Removido: handler duplicado. A navegação é feita pelo sync.js após o save completo.
 
 
 // Garante que a seção do RIP abra se os checkboxes vierem preenchidos pelo banco
@@ -1141,9 +1556,249 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 800); // 800ms para rodar DEPOIS do sync.js, garantindo que vai zerar mesmo se o sync tentar preencher
 });
 
-// Listener para monitorar a seleção de incidências ambientais
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('input[name="incidencia_ambiental[]"]').forEach(cb => {
         cb.addEventListener('change', window.verificarVisibilidadeIncidencia);
     });
 });
+
+// ============================================================================================
+// carregarCamposRIP(rip)
+// Busca dados do RIP na tabela_spu (Supabase) e preenche os campos do bloco dinâmico.
+// Campos com dados vindos do banco ficam TRANCADOS (readonly/disabled).
+// Campos sem dados ficam ABERTOS para edição.
+// Regras condicionais (regras_preenchimento.md) são aplicadas após o preenchimento.
+// ============================================================================================
+window.carregarCamposRIP = async function(rip) {
+    console.log(`🔄 [carregarCamposRIP] Iniciando para RIP: ${rip}`);
+
+    // Garante que fetchSPU esteja disponível (carregado via scripts/fetch_spu.js)
+    if (typeof window.fetchSPU !== 'function') {
+        console.warn('[carregarCamposRIP] window.fetchSPU não disponível. Abortando.');
+        return;
+    }
+
+    // Busca dados do RIP na tabela_spu
+    let dadosSPU = {};
+    try {
+        dadosSPU = await window.fetchSPU(rip);
+        console.log(`✅ [carregarCamposRIP] Dados recebidos para RIP ${rip}:`, dadosSPU);
+    } catch (e) {
+        console.error(`❌ [carregarCamposRIP] Erro ao buscar dados do RIP ${rip}:`, e);
+        return;
+    }
+
+    if (!dadosSPU || Object.keys(dadosSPU).length === 0) {
+        console.log(`ℹ️ [carregarCamposRIP] Nenhum dado encontrado na tabela_spu para RIP ${rip}. Todos os campos ficarão abertos.`);
+        return;
+    }
+
+    // Mapeamento: chave do dados_json no Supabase → data-field-key no DOM
+    const MAPA_CAMPOS = {
+        'conceituacao':               'conceituacao',
+        'condicao_urbanizacao':       'condicao_urbanizacao',
+        'natureza_terreno':           'natureza',
+        'tipo_imovel':                'tipo_imovel',
+        'cep':                        'cep',
+        'uf':                         'uf',
+        'municipio':                  'municipio',
+        'logradouro':                 'endereco',
+        'area_total':                 'area_total',
+        'area_uniao':                 'area_uniao',
+        'benfeitorias':               'benfeitorias',
+        'area_construida_total':      'area_construida_total',
+        'area_construida_disponivel': 'area_construida_disponivel',
+        'area_terreno_disponivel':    'area_terreno_disponivel',
+        'situacao_incorporacao':      'situacao_incorporacao',
+        'valor_avaliado':             'valor_avaliado',
+        'data_avaliacao':             'data_avaliacao',
+        'instrumento_avaliacao':      'instrumento_avaliacao',
+        'lpm_homologada':             'lpm_homologada',
+        'processo_incorporacao':      'processo_incorporacao',
+        'numero_processo':            'numero_processo',
+        'cartorio':                   'cartorio',
+        'matricula':                  'matricula'
+    };
+
+    // Localiza o bloco do imóvel no DOM
+    const bloco = document.querySelector(`.imovel-block[data-rip="${rip}"]`);
+    if (!bloco) {
+        console.warn(`[carregarCamposRIP] Bloco DOM para RIP ${rip} não encontrado.`);
+        return;
+    }
+
+    let camposPreenchidos = 0;
+    let camposAbertos = 0;
+
+    // Itera sobre o mapeamento e preenche/tranca cada campo
+    for (const [chaveSPU, chaveDOM] of Object.entries(MAPA_CAMPOS)) {
+        const valor = dadosSPU[chaveSPU];
+        const valorStr = (valor !== null && valor !== undefined) ? String(valor) : '';
+
+        // Busca o elemento no bloco pelo data-field-key
+        const campo = bloco.querySelector(`[data-field-key="${chaveDOM}"]`);
+        if (!campo) continue;
+
+        if (valorStr.trim() !== '') {
+            // ===== CAMPO COM DADOS: preencher e TRANCAR =====
+            camposPreenchidos++;
+
+            if (campo.tagName === 'SELECT') {
+                // Garante que a opção exista no select
+                let optionExists = false;
+                for (const opt of campo.options) {
+                    if (opt.value === valorStr) {
+                        optionExists = true;
+                        break;
+                    }
+                }
+                if (!optionExists) {
+                    const newOpt = document.createElement('option');
+                    newOpt.value = valorStr;
+                    newOpt.text = valorStr;
+                    campo.appendChild(newOpt);
+                }
+                campo.value = valorStr;
+                campo.disabled = true;
+                campo.classList.remove('custom-empty-select');
+            } else {
+                // INPUT text
+                campo.value = valorStr;
+                campo.readOnly = true;
+                campo.disabled = false;
+            }
+
+            // Estilo visual de campo trancado (vindo do datalake)
+            campo.style.backgroundColor = '#f1f5f9';
+            campo.style.border = '1px solid #cbd5e1';
+            campo.style.color = '#334155';
+            campo.style.cursor = 'not-allowed';
+            campo.classList.add('auto-loaded-field');
+            campo.classList.remove('custom-empty-select');
+
+            // Adiciona ícone de cadeado no label
+            const formGroup = campo.closest('.form-group');
+            if (formGroup) {
+                const label = formGroup.querySelector('label');
+                if (label && !label.querySelector('.lock-icon')) {
+                    const lockSpan = document.createElement('span');
+                    lockSpan.className = 'lock-icon';
+                    lockSpan.title = 'Dado importado do Datalake SPUnet (somente leitura)';
+                    lockSpan.style.marginLeft = '6px';
+                    lockSpan.style.fontSize = '0.85em';
+                    lockSpan.style.color = '#64748b';
+                    lockSpan.innerHTML = '🔒';
+                    label.appendChild(lockSpan);
+                }
+            }
+
+            // Dispara change para acionar lógicas condicionais
+            campo.dispatchEvent(new Event('change', { bubbles: true }));
+
+        } else {
+            // ===== CAMPO SEM DADOS: deixar ABERTO para edição =====
+            camposAbertos++;
+
+            if (campo.tagName === 'SELECT') {
+                campo.disabled = false;
+                campo.classList.add('custom-empty-select');
+            } else {
+                campo.readOnly = false;
+                campo.disabled = false;
+            }
+            campo.style.backgroundColor = '';
+            campo.style.border = '';
+            campo.style.color = '';
+            campo.style.cursor = '';
+            campo.classList.remove('auto-loaded-field');
+
+            // Remove ícone de cadeado quando o campo vier vazio do banco
+            const formGroup = campo.closest('.form-group');
+            if (formGroup) {
+                const label = formGroup.querySelector('label');
+                const lock = label ? label.querySelector('.lock-icon') : null;
+                if (lock) lock.remove();
+            }
+        }
+    }
+
+    // ===== REGRAS CONDICIONAIS (regras_preenchimento.md) =====
+
+    // CEP da geolocalização: prioriza geo_cep e usa cep como fallback
+    const campoGeoCep = bloco.querySelector(`#cep_${rip}`);
+    if (campoGeoCep) {
+        const geoCep = (dadosSPU.geo_cep !== null && dadosSPU.geo_cep !== undefined) ? String(dadosSPU.geo_cep).trim() : '';
+        const cepFallback = (dadosSPU.cep !== null && dadosSPU.cep !== undefined) ? String(dadosSPU.cep).trim() : '';
+        const valorCepGeo = geoCep || cepFallback;
+        if (valorCepGeo) {
+            campoGeoCep.value = valorCepGeo;
+        }
+    }
+
+    // 1. Situação da Incorporação = "Outros" → abre campo de observação
+    const sitIncorp = bloco.querySelector('[data-field-key="situacao_incorporacao"]');
+    if (sitIncorp) {
+        sitIncorp.addEventListener('change', function() {
+            const obsBloco = bloco.querySelector('[data-controlled-by="situacao_incorporacao"]');
+            if (obsBloco) {
+                obsBloco.style.display = (this.value === 'Outros') ? 'block' : 'none';
+            }
+        });
+        // Aplica estado inicial
+        const obsBloco = bloco.querySelector('[data-controlled-by="situacao_incorporacao"]');
+        if (obsBloco) {
+            obsBloco.style.display = (sitIncorp.value === 'Outros') ? 'block' : 'none';
+        }
+    }
+
+    // 2. Processo de Incorporação = "Sim" → abre bloco de número/cartório/matrícula
+    const procIncorp = bloco.querySelector('[data-field-key="processo_incorporacao"]');
+    if (procIncorp) {
+        procIncorp.addEventListener('change', function() {
+            const subBloco = bloco.querySelector('[data-controlled-by="processo_incorporacao"]');
+            if (subBloco) {
+                subBloco.style.display = (this.value === 'Sim') ? 'block' : 'none';
+            }
+        });
+        // Aplica estado inicial
+        const subBloco = bloco.querySelector('[data-controlled-by="processo_incorporacao"]');
+        if (subBloco) {
+            subBloco.style.display = (procIncorp.value === 'Sim') ? 'block' : 'none';
+        }
+    }
+
+    // 3. Benfeitorias = "Sim" → abre descrição de benfeitorias
+    const benfeit = bloco.querySelector('[data-field-key="benfeitorias"]');
+    if (benfeit) {
+        benfeit.addEventListener('change', function() {
+            const descBloco = bloco.querySelector(`#bloco-benfeitorias-descricao, [data-controlled-by="benfeitorias"]`);
+            if (descBloco) {
+                descBloco.style.display = (this.value === 'Sim') ? 'block' : 'none';
+            }
+        });
+    }
+
+    // Atualiza também o _ripsPesquisados no formDataState do parent
+    try {
+        if (window.parent && window.parent.formDataState) {
+            if (!window.parent.formDataState._ripsPesquisados) {
+                window.parent.formDataState._ripsPesquisados = {};
+            }
+            // Merge os dados do SPU nos dados do RIP
+            const existing = window.parent.formDataState._ripsPesquisados[rip] || {};
+            window.parent.formDataState._ripsPesquisados[rip] = {
+                ...existing,
+                ...dadosSPU,
+                rip: rip,
+                // Garante mapeamentos de alias
+                natureza: dadosSPU.natureza_terreno || existing.natureza || '',
+                endereco: dadosSPU.logradouro || existing.endereco || '',
+                natureza_terreno: dadosSPU.natureza_terreno || existing.natureza_terreno || ''
+            };
+        }
+    } catch (e) {
+        console.warn('[carregarCamposRIP] Não foi possível atualizar formDataState:', e);
+    }
+
+    console.log(`✅ [carregarCamposRIP] RIP ${rip} concluído: ${camposPreenchidos} campos trancados, ${camposAbertos} campos abertos para edição.`);
+};

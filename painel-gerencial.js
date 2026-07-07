@@ -25,30 +25,36 @@ let charts = {}; // Armazena instâncias para destruição ao atualizar
 
 async function carregarDados() {
     try {
-        const { data: drafts, error: err1 } = await window.supabaseClient
-            .from('foco_drafts')
+        const { data: reqs, error: err1 } = await window.supabaseClient
+            .from('tabela_requerimentos')
             .select('*');
             
-        const { data: finals, error: err2 } = await window.supabaseClient
-            .from('foco_final')
+        const { data: statusFluxo, error: err2 } = await window.supabaseClient
+            .from('tabela_status_fluxo')
             .select('*');
 
         if (err1) throw err1;
 
-        // Mescla dando prioridade para a tabela final
-        const mergedMap = new Map();
-        
-        // Primeiro coloca os drafts
-        if (drafts) {
-            drafts.forEach(p => mergedMap.set(p.id, { ...p, db_source: 'foco_drafts' }));
-        }
-        
-        // Depois sobrescreve com os finals se existirem
-        if (finals) {
-            finals.forEach(p => mergedMap.set(p.id, { ...p, db_source: 'foco_final' }));
+        const statusMap = {};
+        if (statusFluxo) {
+            statusFluxo.forEach(s => statusMap[s.numero_requerimento] = s.dados_json || {});
         }
 
-        const data = Array.from(mergedMap.values());
+        const data = reqs.map(r => {
+            const fd = r.dados_json || {};
+            const st = statusMap[r.numero_requerimento] || {};
+            return {
+                updated_at: r.updated_at,
+                form_data: {
+                    status: st.status_geral || 'Aguardando Análise',
+                    status_flow: st.checkpoint || 'SPU/' + (fd.uf || 'ND'),
+                    uf: fd.uf || 'ND',
+                    tipo_procedimento: fd.regime_requerido || 'Cessão Onerosa',
+                    campo12: fd.data_req || ''
+                }
+            };
+        });
+
         processarMetricas(data);
     } catch (e) {
         console.error("Erro ao carregar dados:", e);

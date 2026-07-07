@@ -3,6 +3,13 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Salva process_id da URL no localStorage para as iframes acessarem
+    const urlParams = new URLSearchParams(window.location.search);
+    const processIdFromUrl = urlParams.get('process_id');
+    if (processIdFromUrl) {
+        localStorage.setItem('CURRENT_PROCESS_ID', processIdFromUrl);
+    }
+
     const buttons = document.querySelectorAll('.circle-btn');
     const iframe = document.getElementById('frame');
     const btnReturnEdit = document.getElementById('btnReturnEdit');

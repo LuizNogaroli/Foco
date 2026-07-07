@@ -1,0 +1,20 @@
+260:                 }
+261:             });
+262: 
+263:             // Força atualização da visibilidade dos blocos após popular
+264:             if (typeof window.verificarConceituacao === 'function') {
+265:                 window.verificarConceituacao();
+266:             }
+267: 
+268:             // 3. Caso de Somente Leitura Global (Readonly)
+269:             try {
+270:                 const parentParams = new URLSearchParams(window.parent.location.search);
+271:                 const isReadonly = parentParams.get('readonly') === 'true';
+272:                 if (isReadonly) {
+273:                     console.log("🚩 [sync.js] Modo Somente Leitura ativado.");
+274:                     inputs.forEach(input => {
+275:                         input.disabled = true;
+276:                     });
+277:                     
+278:                     const buttons = document.querySelectorAll('button, input[type="submit"], input[type="button"], .btn-remove-imovel, .btn-remove-rip');
+279:                     buttons.forEach(btn => {

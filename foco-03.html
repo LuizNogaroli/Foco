@@ -68,42 +68,156 @@
           </div>
       </div>
       <div class="form-group editavel">
-          <label for="natureza_juridica">Natureza Jurídica do Destinatário:</label>
-          <select id="natureza_juridica" name="natureza_juridica">
+          <label for="campo16">Natureza Jurídica do Destinatário:</label>
+          <select id="campo16" name="campo16">
               <option value="">Selecione a Natureza Jurídica...</option>
-              <option value="101-5">101-5 - órgão Público do Poder Executivo Federal</option>
-              <option value="206-2">206-2 - Sociedade Empresária Limitada</option>
-              <option value="399-9">399-9 - Associação Privada</option>
+              <optgroup label="1. Administração Pública">
+                  <option value="101-5">101-5 - Órgão Público do Poder Executivo Federal</option>
+                  <option value="102-3">102-3 - Órgão Público do Poder Executivo Estadual ou do Distrito Federal</option>
+                  <option value="103-1">103-1 - Órgão Público do Poder Executivo Municipal</option>
+                  <option value="104-0">104-0 - Órgão Público do Poder Legislativo Federal</option>
+                  <option value="105-8">105-8 - Órgão Público do Poder Legislativo Estadual ou do Distrito Federal</option>
+                  <option value="106-6">106-6 - Órgão Público do Poder Legislativo Municipal</option>
+                  <option value="107-4">107-4 - Órgão Público do Poder Judiciário Federal</option>
+                  <option value="108-2">108-2 - Órgão Público do Poder Judiciário Estadual</option>
+                  <option value="110-4">110-4 - Autarquia Federal</option>
+                  <option value="111-2">111-2 - Autarquia Estadual ou do Distrito Federal</option>
+                  <option value="112-0">112-0 - Autarquia Municipal</option>
+                  <option value="113-9">113-9 - Fundação Pública de Direito Público Federal</option>
+                  <option value="114-7">114-7 - Fundação Pública de Direito Público Estadual ou do Distrito Federal</option>
+                  <option value="115-5">115-5 - Fundação Pública de Direito Público Municipal</option>
+                  <option value="116-3">116-3 - Órgão Público Autônomo Federal</option>
+                  <option value="117-1">117-1 - Órgão Público Autônomo Estadual ou do Distrito Federal</option>
+                  <option value="118-0">118-0 - Órgão Público Autônomo Municipal</option>
+                  <option value="119-8">119-8 - Commission Polinacional</option>
+                  <option value="121-0">121-0 - Consórcio Público de Direito Público (Associação Pública)</option>
+                  <option value="122-8">122-8 - Consórcio Público de Direito Privado</option>
+                  <option value="123-6">123-6 - Estado ou Distrito Federal</option>
+                  <option value="124-4">124-4 - Município</option>
+                  <option value="125-2">125-2 - Fundação Pública de Direito Privado Federal</option>
+                  <option value="126-0">126-0 - Fundação Pública de Direito Privado Estadual ou do Distrito Federal</option>
+                  <option value="127-9">127-9 - Fundação Pública de Direito Privado Municipal</option>
+                  <option value="128-7">128-7 - Fundo Público da Administração Indireta Federal</option>
+                  <option value="129-5">129-5 - Fundo Público da Administração Indireta Estadual ou do Distrito Federal</option>
+                  <option value="130-9">130-9 - Fundo Público da Administração Indireta Municipal</option>
+                  <option value="131-7">131-7 - Fundo Público da Administração Direta Federal</option>
+                  <option value="132-5">132-5 - Fundo Público da Administração Direta Estadual ou do Distrito Federal</option>
+                  <option value="133-3">133-3 - Fundo Público da Administração Direta Municipal</option>
+                  <option value="134-1">134-1 - União</option>
+              </optgroup>
+              <optgroup label="2. Entidades Empresariais">
+                  <option value="201-1">201-1 - Empresa Pública</option>
+                  <option value="203-8">203-8 - Sociedade de Economia Mista</option>
+                  <option value="204-6">204-6 - Sociedade Anônima Aberta</option>
+                  <option value="205-4">205-4 - Sociedade Anônima Fechada</option>
+                  <option value="206-2" selected>206-2 - Sociedade Empresária Limitada</option>
+                  <option value="207-0">207-0 - Sociedade Empresária em Nome Coletivo</option>
+                  <option value="208-9">208-9 - Sociedade Empresária em Comandita Simples</option>
+                  <option value="209-7">209-7 - Sociedade Empresária em Comandita por Ações</option>
+                  <option value="212-7">212-7 - Sociedade em Conta de Participação</option>
+                  <option value="213-5">213-5 - Empresário (Individual)</option>
+                  <option value="214-3">214-3 - Cooperativa</option>
+                  <option value="215-1">215-1 - Consórcio de Sociedades</option>
+                  <option value="216-0">216-0 - Grupo de Sociedades</option>
+                  <option value="217-8">217-8 - Estabelecimento, no Brasil, de Sociedade Estrangeira</option>
+                  <option value="219-4">219-4 - Estabelecimento, no Brasil, de Empresa Binacional Argentino-Brasileira</option>
+                  <option value="221-6">221-6 - Empresa Domiciliada no Exterior</option>
+                  <option value="222-4">222-4 - Clube/Fundo de Investimento</option>
+                  <option value="223-2">223-2 - Sociedade Simples Pura</option>
+                  <option value="224-0">224-0 - Sociedade Simples Limitada</option>
+                  <option value="225-9">225-9 - Sociedade Simples em Nome Coletivo</option>
+                  <option value="226-7">226-7 - Sociedade Simples em Comandita Simples</option>
+                  <option value="227-5">227-5 - Empresa Binacional</option>
+                  <option value="228-3">228-3 - Consórcio de Empregadores</option>
+                  <option value="229-1">229-1 - Consórcio Simples</option>
+                  <option value="230-5">230-5 - Empresa Individual de Responsabilidade Limitada (de Natureza Empresária)</option>
+                  <option value="231-3">231-3 - Empresa Individual de Responsabilidade Limitada (de Natureza Simples)</option>
+                  <option value="232-1">232-1 - Sociedade Unipessoal de Advogados</option>
+                  <option value="233-0">233-0 - Cooperativas de Consumo</option>
+                  <option value="234-8">234-8 - Empresa Simples de Inovação - Inova Simples</option>
+                  <option value="235-6">235-6 - Investidor Não Residente</option>
+              </optgroup>
+              <optgroup label="3. Entidades sem Fins Lucrativos">
+                  <option value="303-4">303-4 - Serviço Notarial e Registral (Cartório)</option>
+                  <option value="306-9">306-9 - Fundação Privada</option>
+                  <option value="307-7">307-7 - Serviço Social Autônomo</option>
+                  <option value="308-5">308-5 - Condomínio Edilício</option>
+                  <option value="310-7">310-7 - Comissão de Conciliação Prévia</option>
+                  <option value="311-5">311-5 - Entidade de Mediação e Arbitragem</option>
+                  <option value="313-1">313-1 - Entidade Sindical</option>
+                  <option value="320-4">320-4 - Estabelecimento, no Brasil, de Fundação ou Associação Estrangeiras</option>
+                  <option value="321-2">321-2 - Fundação ou Associação Domiciliada no Exterior</option>
+                  <option value="322-0">322-0 - Organização Religiosa</option>
+                  <option value="323-9">323-9 - Comunidade Indígena</option>
+                  <option value="324-7">324-7 - Fundo Privado</option>
+                  <option value="325-5">325-5 - Órgão de Direção Nacional de Partido Político</option>
+                  <option value="326-3">326-3 - Órgão de Direção Regional de Partido Político</option>
+                  <option value="327-1">327-1 - Órgão de Direção Local de Partido Político</option>
+                  <option value="328-0">328-0 - Comitê Financeiro de Partido Político</option>
+                  <option value="329-8">329-8 - Frente Plebiscitária ou Referendária</option>
+                  <option value="330-1">330-1 - Organização Social (OS)</option>
+                  <option value="331-0">331-0 - Demais Condomínios</option>
+                  <option value="332-8">332-8 - Plano de Benefícios de Previdência Complementar Fechada</option>
+                  <option value="399-9">399-9 - Associação Privada</option>
+              </optgroup>
+              <optgroup label="4. Pessoas Físicas">
+                  <option value="401-4">401-4 - Empresa Individual Imobiliária</option>
+                  <option value="402-2">402-2 - Segurado Especial</option>
+                  <option value="408-1">408-1 - Contribuinte individual</option>
+                  <option value="409-0">409-0 - Candidato a Cargo Político Eletivo</option>
+                  <option value="411-1">411-1 - Leiloeiro</option>
+                  <option value="412-0">412-0 - Produtor Rural (Pessoa Física)</option>
+              </optgroup>
+              <optgroup label="5. Organizações Internacionais">
+                  <option value="501-0">501-0 - Organização Internacional</option>
+                  <option value="502-9">502-9 - Representação Diplomática Estrangeira</option>
+                  <option value="503-7">503-7 - Outras Instituições Extraterritoriais</option>
+              </optgroup>
           </select>
       </div>
 
-      <!-- Destinação Ativa -->
+
+            <!-- Destinação Ativa -->
       <div class="form-group editavel">
-          <label>Requerente/interessado possui destinação ativa? <span class="hint-badge" data-hint="Verifique se há contratos vigentes no SPUnet ou em sistemas legados.">?</span></label>
+          <label>Possui destinações ativas <span class="hint-badge" data-hint="Verifique se há contratos vigentes no SPUnet ou em sistemas legados.">?</span></label>
           <div class="radio-group">
               <label class="radio-option"><input type="radio" name="destinacao_ativa" value="Sim" onclick="document.getElementById('bloco-destinacao-ativa').style.display='flex'"> Sim</label>
               <label class="radio-option"><input type="radio" name="destinacao_ativa" value="Não" onclick="document.getElementById('bloco-destinacao-ativa').style.display='none'"> Não</label>
           </div>
           <div id="bloco-destinacao-ativa" style="display: none; margin-top: 10px; flex-direction: column; gap: 8px;">
-              <label for="contratos_destinacao_ativa">Contratos relacionados à destinação ativa <span class="hint-badge" data-hint="Informe os contratos vigentes, incluindo número, tipo e vigência.">?</span></label>
-              <textaárea id="contratos_destinacao_ativa" name="contratos_destinacao_ativa" rows="4" placeholder="Ex: Contrato de Cessão de Uso nº 001/2020, vigência até 12/2025..."></textaárea>
+              <label for="contratos_destinacao_ativa">Contratos/Instrumentos relacionados à destinação ativa:</label>
+              <textarea id="contratos_destinacao_ativa" name="contratos_destinacao_ativa" rows="4" placeholder="Ex: Contrato de Cessão de Uso nº 001/2020, vigêencia até 12/2025..."></textarea>
           </div>
       </div>
 
       <!-- Pendências Contratuais -->
       <div class="form-group editavel">
-          <label>Requerente/interessado apresenta algum tipo de pendência contratual (destinações ativas ou não)? <span class="hint-badge" data-hint="Avalie inadimplências, irregularidades cadastrais ou pendências em contratos vigentes ou encerrados.">?</span></label>
-          <div class="checkbox-group" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 8px;">
+          <label>Pendências contratuais identificadas (Ativas ou não):</label>
+          <div class="checkbox-group" style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
               <label class="checkbox-option"><input type="checkbox" name="pendencias[]" value="Nenhuma identificada" onchange="toggleNenhumaPendencia(this)"> Nenhuma identificada</label>
-              <label class="checkbox-option"><input type="checkbox" name="pendencias[]" value="Inadimplência financeira"> Inadimplência financeira</label>
-              <label class="checkbox-option"><input type="checkbox" name="pendencias[]" value="Pendências contratuais"> Pendências contratuais</label>
-              <label class="checkbox-option"><input type="checkbox" name="pendencias[]" value="Irregularidade cadastral"> Irregularidade cadastral</label>
-              <label class="checkbox-option"><input type="checkbox" name="pendencias[]" value="Uso em desacordo com o autorizado"> Uso em desacordo com o autorizado</label>
-              <label class="checkbox-option"><input type="checkbox" name="pendencias[]" value="Outras"> Outras</label>
+              <label class="checkbox-option"><input type="checkbox" name="pendencias[]" value="Inadimplência financeira" onchange="toggleNenhumaPendencia(this)"> Inadimplência financeira</label>
+              <label class="checkbox-option"><input type="checkbox" name="pendencias[]" value="Pendências contratuais" onchange="toggleNenhumaPendencia(this)"> Pendências contratuais</label>
+              <label class="checkbox-option"><input type="checkbox" name="pendencias[]" value="Irregularidade cadastral" onchange="toggleNenhumaPendencia(this)"> Irregularidade cadastral</label>
+              <label class="checkbox-option"><input type="checkbox" name="pendencias[]" value="Uso em desacordo com o autorizado" onchange="toggleNenhumaPendencia(this)"> Uso em desacordo com o autorizado</label>
+              <label class="checkbox-option"><input type="checkbox" name="pendencias[]" value="Outras" onchange="toggleNenhumaPendencia(this)"> Outras</label>
           </div>
-          <div style="margin-top: 10px;">
-              <label for="obs_pendencias" style="font-weight: bold;">Observações complementares:</label>
-              <textaárea id="obs_pendencias" name="obs_pendencias" rows="3" placeholder="Descreva as pendências identificadas..."></textaárea>
+          <div id="bloco-obs-pendencias" style="display: none; margin-top: 10px;">
+              <label for="obs_pendencias">Observações sobre pendências:</label>
+              <textarea id="obs_pendencias" name="obs_pendencias" rows="3" placeholder="Descreva as pendências identificadas..."></textarea>
+          </div>
+      </div>
+
+      <!-- Certidão atualizada da matrícula -->
+      <div class="form-group editavel">
+          <label for="val_anexo_matricula">Certidão atualizada da matrícula (não superior a 12 meses):</label>
+          <input type="hidden" name="anexo_matricula" id="val_anexo_matricula">
+          <input type="hidden" name="filename_anexo_matricula" id="val_filename_anexo_matricula">
+          <input type="file" id="file_anexo_matricula" style="display:none;" onchange="handleFileUpload('anexo_matricula')" accept=".pdf,.doc,.docx,.jpg,.png">
+          <div id="actions_anexo_matricula" style="margin-top: 8px; display: flex; align-items: center; gap: 8px;">
+              <span id="filename_anexo_matricula" style="display:none; font-size: 0.85em; color: #475569; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></span>
+              <button type="button" class="btn-link-doc btn-upload" onclick="triggerUpload('anexo_matricula')" style="background-color: #2e7d32; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">📂 Carregar arquivo</button>
+              <button type="button" class="btn-link-doc btn-view" style="display:none; background-color: #0284c7; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;" onclick="visualizarDoc('anexo_matricula')" title="Visualizar">👁️ Visualizar</button>
+              <button type="button" class="btn-link-doc btn-remove" style="display:none; background-color: #dc2626; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;" onclick="removerDoc('anexo_matricula')" title="Remover">🗑️ Excluir</button>
           </div>
       </div>
 
@@ -119,25 +233,50 @@
           </select>
       </div>
 
-      <!-- Outros Fatores -->
-      <h4 class="section-title">Ações, Custos e Interessados</h4>
+      <!-- Ações judiciais ou órgãos de controle -->
+      <h4 class="section-title">Ações judiciais ou órgãos de controle</h4>
       <div class="form-group editavel">
-          <label for="acao_jud">Ações judiciais ou órgãos de controle associados:</label>
-          <textaárea id="acao_jud" name="acao_jud" placeholder="Descreva as principais informações..."></textaárea>
+          <label>NUP SEI:</label>
+          <input type="text" id="nup_sei" name="nup_sei" readonly style="background:#f1f5f9; color:#475569;">
       </div>
+      <div class="form-group editavel">
+          <label>Tipo de Processo:</label>
+          <input type="text" id="tipo_processo" name="tipo_processo" readonly style="background:#f1f5f9; color:#475569;">
+      </div>
+      <div class="form-group editavel">
+          <label>Resumo:</label>
+          <input type="text" id="resumo_acao" name="resumo_acao" readonly style="background:#f1f5f9; color:#475569;">
+      </div>
+      <div class="form-group editavel">
+          <label>Descrição:</label>
+          <textarea id="descricao_acao" name="descricao_acao" rows="4" readonly style="background:#f1f5f9; color:#475569; resize:none;"></textarea>
+      </div>
+
+      <!-- Custos de Manutenção para a SPU -->
+      <h4 class="section-title">Custos de Manutenção para a SPU</h4>
       <div class="form-group editavel">
           <label>Imóvel gera custos de manutenção para a SPU?</label>
           <div class="radio-group">
-              <label class="radio-option"><input type="radio" name="custos_manutencao" value="Sim" onclick="document.getElementById('custos_valor').style.display='block'"> Sim</label>
-              <label class="radio-option"><input type="radio" name="custos_manutencao" value="Não" checked onclick="document.getElementById('custos_valor').style.display='none'"> Não</label>
+              <label class="radio-option"><input type="radio" name="custos_manutencao" value="Sim" onclick="document.getElementById('bloco-custos-manutencao').style.display='block'"> Sim</label>
+              <label class="radio-option"><input type="radio" name="custos_manutencao" value="Não" checked onclick="document.getElementById('bloco-custos-manutencao').style.display='none'"> Não</label>
           </div>
-          <input type="text" id="custos_valor" name="custos_valor" class="mask-moeda" placeholder="Valor Anual R$ 0,00" style="display:none; margin-top: 10px;">
+          <div id="bloco-custos-manutencao" style="display:none; margin-top:10px;">
+              <label for="custos_valor">Valor Anual:</label>
+              <input type="text" id="custos_valor" name="custos_valor" class="mask-moeda" placeholder="R$ 0,00">
+          </div>
       </div>
+
+      <!-- Outros Interessados -->
+      <h4 class="section-title">Outros Interessados</h4>
       <div class="form-group editavel">
           <label>Há outros interessados no imóvel?</label>
           <div class="radio-group">
-              <label class="radio-option"><input type="radio" name="outros_interessados" value="Sim"> Sim</label>
-              <label class="radio-option"><input type="radio" name="outros_interessados" value="Não" checked> Não</label>
+              <label class="radio-option"><input type="radio" name="outros_interessados" value="Sim" onclick="document.getElementById('bloco-outros-interessados').style.display='block'"> Sim</label>
+              <label class="radio-option"><input type="radio" name="outros_interessados" value="Não" checked onclick="document.getElementById('bloco-outros-interessados').style.display='none'"> Não</label>
+          </div>
+          <div id="bloco-outros-interessados" style="display: none; margin-top: 10px;">
+              <label for="obs_outros_interessados">Observações sobre outros interessados:</label>
+              <textarea id="obs_outros_interessados" name="obs_outros_interessados" rows="3" placeholder="Descreva os outros interessados identificados..."></textarea>
           </div>
       </div>
 
@@ -145,25 +284,25 @@
       <h4 class="section-title">Proposta de Destinação e Impactos</h4>
       <div class="form-group editavel">
     <label for="campo51">Tipo de procedimento pretendido:
-      <span class="hint-semaforo"><span class="hint-icon" data-hint-tipo="verde" data-hint="Selecione o tipo de procedimento administrativo que origina esta anlise de destinao." role="tooltip" tabindex="0" aria-label="Ajuda: Tipo de procedimento">?</span></span>
+      <span class="hint-semaforo"><span class="hint-icon" data-hint-tipo="verde" data-hint="Selecione o tipo de procedimento administrativo que origina esta anlise de destinação." role="tooltip" tabindex="0" aria-label="Ajuda: Tipo de procedimento">?</span></span>
     </label>
     <select id="campo51" name="tipo_procedimento" required>
       <option value="">Selecione...</option>
-      <option value="Nãova destinao">Nãova destinao: primeiro instrumento formal de destinao para o imvel</option>
-      <option value="Renovao">Renovao: continuidade de instrumento vigente com as mesmas condies</option>
-      <option value="Alterao">Alterao: modificao de condies, finalidade ou área em instrumento vigente</option>
-      <option value="Regularizao">Regularizao: formalizao de uso preexistente sem instrumento vigente</option>
+      <option value="Nova destinação">Nova destinação: primeiro instrumento formal de destinação para o imóvel</option>
+      <option value="Renovação">Renovação: continuidade de instrumento vigente com as mesmas condições</option>
+      <option value="Alteração">Alteração: modificação de condições, finalidade ou área em instrumento vigente</option>
+      <option value="Regularização">Regularização: formalização de uso preexistente sem instrumento vigente</option>
     </select>
     <span class="error-msg" id="err51" style="display:none;">Selecione o tipo de procedimento.</span>
     <div id="bloco51_obs" style="display:none;margin-top:8px;">
       <label for="campo51_obs">Informações complementares:</label>
-      <textaárea id="campo51_obs" name="campo51_obs" placeholder="Informações complementares ao tipo de procedimento..."></textaárea>
+      <textarea id="campo51_obs" name="campo51_obs" placeholder="Informações complementares ao tipo de procedimento..."></textarea>
     </div>
   </div>
 
   <div class="form-group editavel">
-    <label for="campo52">Tipo de uso imobilirio pretendido:
-      <span class="hint-semaforo"><span class="hint-icon" data-hint-tipo="verde" data-hint="Selecione o tipo de uso imobilirio pretendido conforme Tabela Taxonmica RESOLUO COMGC/SPU/MGI N 3/2025." role="tooltip" tabindex="0" aria-label="Ajuda: Tipo de uso imobilirio pretendido">?</span></span>
+    <label for="campo52">Tipo de uso imobiliário pretendido:
+      <span class="hint-semaforo"><span class="hint-icon" data-hint-tipo="verde" data-hint="Selecione o tipo de uso imobiliário pretendido conforme Tabela Taxonmica RESOLUO COMGC/SPU/MGI N 3/2025." role="tooltip" tabindex="0" aria-label="Ajuda: Tipo de uso imobiliário pretendido">?</span></span>
     </label>
     <select id="campo52" name="tipo_uso_imobiliario" required data-no-custom>
       <option value="">Selecione...</option>
@@ -187,54 +326,58 @@
       <option value="0118">01.18 Sem informação</option>
       <option value="0119">01.19 Sem uso definido/vinculação</option>
     </select>
-    <span class="error-msg" id="err52" style="display:none;">Selecione o tipo de uso imobilirio.</span>
+    <span class="error-msg" id="err52" style="display:none;">Selecione o tipo de uso imobiliário.</span>
   </div>
 
   <div class="form-group editavel">
-    <label for="campo53">Tipo de uso especfico pretendido:
-      <span class="hint-semaforo"><span class="hint-icon" data-hint-tipo="verde" data-hint="Selecione o tipo de uso especfico pretendido conforme Tabela Taxonmica RESOLUO COMGC/SPU/MGI N 3/2025." role="tooltip" tabindex="0" aria-label="Ajuda: Tipo de uso especfico pretendido">?</span></span>
+    <label for="campo53">Tipo de uso específico pretendido:
+      <span class="hint-semaforo"><span class="hint-icon" data-hint-tipo="verde" data-hint="Selecione o tipo de uso específico pretendido conforme Tabela Taxonmica RESOLUO COMGC/SPU/MGI N 3/2025." role="tooltip" tabindex="0" aria-label="Ajuda: Tipo de uso específico pretendido">?</span></span>
     </label>
     <select id="campo53" name="tipo_uso_especifico" required data-no-custom>
-      <option value="">Selecione primeiro o tipo de uso imobilirio...</option>
+      <option value="">Selecione primeiro o tipo de uso imobiliário...</option>
     </select>
-    <span class="error-msg" id="err53" style="display:none;">Selecione o tipo de uso especfico.</span>
+    <span class="error-msg" id="err53" style="display:none;">Selecione o tipo de uso específico.</span>
   </div>
 
   <div class="form-group editavel">
-    <label>Há previsão de modificação do terreno, aterro ou retirada de material, que acresça ou diminua a áárea?
-      <span class="hint-semaforo"><span class="hint-icon" data-hint-tipo="verde" data-hint="Indique se a destinao proposta implica modificaes fsicas no terreno ou na edificao." role="tooltip" tabindex="0" aria-label="Ajuda: Modificao do terreno/edificao">?</span></span>
+    <label>Há previsão de modificação do terreno, aterro ou retirada de material, que acresça ou diminua a área?
+      <span class="hint-semaforo"><span class="hint-icon" data-hint-tipo="verde" data-hint="Indique se a destinação proposta implica modificações físicas no terreno ou na edificação." role="tooltip" tabindex="0" aria-label="Ajuda: Modificação do terreno/edificação">?</span></span>
     </label>
     <div class="radio-group" id="group-campo54">
-      <label class="radio-option"><input type="radio" name="campo54" value="Sim"> Sim</label>
-      <label class="radio-option"><input type="radio" name="campo54" value="Não"> Não</label>
-      <label class="radio-option"><input type="radio" name="campo54" value="Sem informação"> Sem informação</label>
+      <label class="radio-option"><input type="radio" name="campo54" value="Sim" onclick="document.getElementById('bloco54').style.display='block'"> Sim</label>
+      <label class="radio-option"><input type="radio" name="campo54" value="Não" onclick="document.getElementById('bloco54').style.display='none'"> Não</label>
+      <label class="radio-option"><input type="radio" name="campo54" value="Sem informação" onclick="document.getElementById('bloco54').style.display='none'"> Sem informação</label>
     </div>
     <span class="error-msg" id="err54" style="display:none;">Selecione uma opção.</span>
     <div id="bloco54" style="display:none;margin-top:8px;">
       <label for="campo54_desc">Descrição da modificação prevista:
-        <span class="hint-semaforo"><span class="hint-icon" data-hint-tipo="verde" data-hint="Descreva as modificaes fsicas previstas no terreno ou na edificao." role="tooltip" tabindex="0" aria-label="Ajuda: Descrio da modificao">?</span></span>
+        <span class="hint-semaforo"><span class="hint-icon" data-hint-tipo="verde" data-hint="Descreva as modificações físicas previstas no terreno ou na edificação." role="tooltip" tabindex="0" aria-label="Ajuda: Descrição da modificação">?</span></span>
       </label>
-      <textaárea id="campo54_desc" name="campo54_desc" placeholder="Descreva as modificaes previstas no terreno ou na edificao..."></textaárea>
+      <textarea id="campo54_desc" name="campo54_desc" placeholder="Descreva as modificações previstas no terreno ou na edificação..."></textarea>
     </div>
   </div>
 
   <div class="form-group editavel">
-    <label for="campo55">Compatibilidade urbanística [Catlogo: Conflito (incompatibilidade de zoneamento)]:
-      <span class="hint-semaforo"><span class="hint-icon" data-hint-tipo="verde" data-hint="Avalie a compatibilidade do uso proposto com as normas urbansticas municipais vigentes (Plano Diretor, zoneamento, etc.)." role="tooltip" tabindex="0" aria-label="Ajuda: Compatibilidade urbanística">?</span></span>
+    <label for="campo55">Compatibilidade urbanística:
+      <span class="hint-semaforo"><span class="hint-icon" data-hint-tipo="verde" data-hint="Avalie a compatibilidade do uso proposto com as normas urbanísticas municipais vigentes (Plano Diretor, zoneamento, etc.)." role="tooltip" tabindex="0" aria-label="Ajuda: Compatibilidade urbanística">?</span></span>
     </label>
     <select id="campo55" name="compatibilidade_urbanistica" required>
-      <option value="">Selecione...</option>
-      <option value="Compatvel">Compatvel: uso proposto est em conformidade com o zoneamento e normas urbansticas vigentes</option>
-      <option value="Compatvel com restries">Compatvel com restries: uso admitido com condicionantes ou mediante aprovao especfica</option>
-      <option value="Incompatvel">Incompatvel: uso contrrio s normas urbansticas vigentes</option>
-      <option value="Não foi possvel verificar">Não foi possvel verificar: ausncia de informaes ou acesso s normas municipais</option>
+      <option value="" selected>Selecione...</option>
+      <option value="Compatível">Compatível: uso proposto está em conformidade com o zoneamento e normas urbanísticas vigentes</option>
+      <option value="Compatível com restrições">Compatível com restrições: uso admitido com condicionantes ou mediante aprovação específica</option>
+      <option value="Incompatível">Incompatível: uso contrário às normas urbanísticas vigentes</option>
+      <option value="Não foi possível verificar">Não foi possível verificar: ausência de informações ou acesso às normas municipais</option>
     </select>
-    <span class="error-msg" id="err55" style="display:none;">Selecione a compatibilidade urbanstica.</span>
+    <span class="error-msg" id="err55" style="display:none;">Selecione a compatibilidade urbanística.</span>
+    <div id="bloco55_obs" style="display:none;margin-top:8px;">
+      <label for="campo55_obs">Observações complementares:</label>
+      <textarea id="campo55_obs" name="campo55_obs" placeholder="Observações sobre a compatibilidade urbanística..."></textarea>
+    </div>
   </div>
 
   <div class="form-group editavel">
     <label>Há vinculação com Programas/Estratégias de governo?
-      <span class="hint-semaforo"><span class="hint-icon" data-hint-tipo="verde" data-hint="Indique se a destinao proposta est vinculada a programas ou estratgias governamentais." role="tooltip" tabindex="0" aria-label="Ajuda: Vinculação estratgica">?</span></span>
+      <span class="hint-semaforo"><span class="hint-icon" data-hint-tipo="verde" data-hint="Indique se a destinação proposta está vinculada a programas ou estratégias governamentais." role="tooltip" tabindex="0" aria-label="Ajuda: Vinculação estratégica">?</span></span>
     </label>
     <div class="radio-group" id="group-campo56-radio">
       <label class="radio-option"><input type="radio" name="campo56_radio" value="Sim" required> Sim</label>
@@ -243,22 +386,24 @@
     </div>
     <span class="error-msg" id="err56" style="display:none;">Selecione uma opção.</span>
     <div id="group-campo56" style="display:none;margin-top:8px;">
-      <div class="checkbox-group">
-        <label class="checkbox-option"><input type="checkbox" name="campo56[]" value="Programa Minha Casa Minha Vida" /> Programa Minha Casa Minha Vida</label>
-        <label class="checkbox-option"><input type="checkbox" name="campo56[]" value="Programa de Regularização Fundiária (REURB)" /> Programa de Regularização Fundiária (REURB)</label>
-        <label class="checkbox-option"><input type="checkbox" name="campo56[]" value="Programa de Desestatização/Privatização" /> Programa de Desestatização/Privatização</label>
-        <label class="checkbox-option"><input type="checkbox" name="campo56[]" value="Programa de infraestrutura federal" /> Programa de infraestrutura federal</label>
-        <label class="checkbox-option"><input type="checkbox" name="campo56[]" value="Plano de desenvolvimento regional" /> Plano de desenvolvimento regional</label>
-        <label class="checkbox-option"><input type="checkbox" name="campo56[]" value="Outro programa ou estratégia" /> Outro programa ou estratégia (descrever nas observaes)</label>
+      <div class="checkbox-group" id="campo56-checks">
+        <label class="checkbox-option"><input type="checkbox" name="campo56[]" value="Programa Minha Casa Minha Vida" onchange="toggleObs56()" /> Programa Minha Casa Minha Vida</label>
+        <label class="checkbox-option"><input type="checkbox" name="campo56[]" value="Programa de Regularização Fundiária (REURB)" onchange="toggleObs56()" /> Programa de Regularização Fundiária (REURB)</label>
+        <label class="checkbox-option"><input type="checkbox" name="campo56[]" value="Programa de Desestatização/Privatização" onchange="toggleObs56()" /> Programa de Desestatização/Privatização</label>
+        <label class="checkbox-option"><input type="checkbox" name="campo56[]" value="Programa de infraestrutura federal" onchange="toggleObs56()" /> Programa de infraestrutura federal</label>
+        <label class="checkbox-option"><input type="checkbox" name="campo56[]" value="Plano de desenvolvimento regional" onchange="toggleObs56()" /> Plano de desenvolvimento regional</label>
+        <label class="checkbox-option"><input type="checkbox" name="campo56[]" value="Outro programa ou estratégia" onchange="toggleObs56()" /> Outro programa ou estratégia (descrever nas observações)</label>
       </div>
-      <label for="campo56_obs">Observações complementares:</label>
-      <textaárea id="campo56_obs" name="campo56_obs" placeholder="Descreva a vinculação estratgica..."></textaárea>
+      <div id="bloco56_obs" style="display:none;margin-top:8px;">
+        <label for="campo56_obs">Observações complementares:</label>
+        <textarea id="campo56_obs" name="campo56_obs" placeholder="Descreva a vinculação estratégica..."></textarea>
+      </div>
     </div>
   </div>
 
   <div class="form-group editavel">
     <label>Há vinculação com Políticas Públicas?
-      <span class="hint-semaforo"><span class="hint-icon" data-hint-tipo="verde" data-hint="Indique as políticas públicas às quais a destinação proposta se vincula." role="tooltip" tabindex="0" aria-label="Ajuda: Polticas vinculadas">?</span></span>
+      <span class="hint-semaforo"><span class="hint-icon" data-hint-tipo="verde" data-hint="Indique as políticas públicas às quais a destinação proposta se vincula." role="tooltip" tabindex="0" aria-label="Ajuda: Políticas vinculadas">?</span></span>
     </label>
     <div class="radio-group" id="group-campo57-radio">
       <label class="radio-option"><input type="radio" name="campo57_radio" value="Sim" required> Sim</label>
@@ -267,24 +412,26 @@
     </div>
     <span class="error-msg" id="err57" style="display:none;">Selecione uma opção.</span>
     <div id="group-campo57" style="display:none;margin-top:8px;">
-      <div class="checkbox-group">
-        <label class="checkbox-option"><input type="checkbox" name="campo57[]" value="Política Nacional de Habitação" /> Política Nacional de Habitação</label>
-        <label class="checkbox-option"><input type="checkbox" name="campo57[]" value="Política Nacional de Mobilidade Urbana" /> Política Nacional de Mobilidade Urbana</label>
-        <label class="checkbox-option"><input type="checkbox" name="campo57[]" value="Política Nacional de Meio Ambiente" /> Política Nacional de Meio Ambiente</label>
-        <label class="checkbox-option"><input type="checkbox" name="campo57[]" value="Política Nacional de Segurança Pública" /> Política Nacional de Segurança Pública</label>
-        <label class="checkbox-option"><input type="checkbox" name="campo57[]" value="Política Nacional de Defesa Nacional" /> Política Nacional de Defesa Nacional</label>
-        <label class="checkbox-option"><input type="checkbox" name="campo57[]" value="Política Nacional de Saúde" /> Política Nacional de Saúde</label>
-        <label class="checkbox-option"><input type="checkbox" name="campo57[]" value="Política Nacional de Educação" /> Política Nacional de Educação</label>
-        <label class="checkbox-option"><input type="checkbox" name="campo57[]" value="Outra política pública" /> Outra política pública (descrever nas observaes)</label>
+      <div class="checkbox-group" id="campo57-checks">
+        <label class="checkbox-option"><input type="checkbox" name="campo57[]" value="Política Nacional de Habitação" onchange="toggleObs57()" /> Política Nacional de Habitação</label>
+        <label class="checkbox-option"><input type="checkbox" name="campo57[]" value="Política Nacional de Mobilidade Urbana" onchange="toggleObs57()" /> Política Nacional de Mobilidade Urbana</label>
+        <label class="checkbox-option"><input type="checkbox" name="campo57[]" value="Política Nacional de Meio Ambiente" onchange="toggleObs57()" /> Política Nacional de Meio Ambiente</label>
+        <label class="checkbox-option"><input type="checkbox" name="campo57[]" value="Política Nacional de Segurança Pública" onchange="toggleObs57()" /> Política Nacional de Segurança Pública</label>
+        <label class="checkbox-option"><input type="checkbox" name="campo57[]" value="Política Nacional de Defesa Nacional" onchange="toggleObs57()" /> Política Nacional de Defesa Nacional</label>
+        <label class="checkbox-option"><input type="checkbox" name="campo57[]" value="Política Nacional de Saúde" onchange="toggleObs57()" /> Política Nacional de Saúde</label>
+        <label class="checkbox-option"><input type="checkbox" name="campo57[]" value="Política Nacional de Educação" onchange="toggleObs57()" /> Política Nacional de Educação</label>
+        <label class="checkbox-option"><input type="checkbox" name="campo57[]" value="Outra política pública" onchange="toggleObs57()" /> Outra política pública (descrever nas observações)</label>
       </div>
-      <label for="campo57_obs">Especificar:</label>
-      <textaárea id="campo57_obs" name="campo57_obs" placeholder="Especifique as polticas vinculadas..."></textaárea>
+      <div id="bloco57_obs" style="display:none;margin-top:8px;">
+        <label for="campo57_obs">Especificar:</label>
+        <textarea id="campo57_obs" name="campo57_obs" placeholder="Especifique as políticas vinculadas..."></textarea>
+      </div>
     </div>
   </div>
 
   <div class="form-group editavel">
     <label>Há expectativa de impacto social?
-      <span class="hint-semaforo"><span class="hint-icon" data-hint-tipo="verde" data-hint="Avalie o impacto social esperado da destinao proposta para a populao beneficiada." role="tooltip" tabindex="0" aria-label="Ajuda: Impacto social esperado">?</span></span>
+      <span class="hint-semaforo"><span class="hint-icon" data-hint-tipo="verde" data-hint="Avalie o impacto social esperado da destinação proposta para a populao beneficiada." role="tooltip" tabindex="0" aria-label="Ajuda: Impacto social esperado">?</span></span>
     </label>
     <div class="radio-group" id="group-campo58-radio">
       <label class="radio-option"><input type="radio" name="campo58_radio" value="Sim" required> Sim</label>
@@ -294,22 +441,25 @@
     <span class="error-msg" id="err58" style="display:none;">Selecione uma opção.</span>
     <div id="group-campo58" style="display:none;margin-top:8px;">
       <label for="campo58">Impacto:</label>
-      <select id="campo58" name="impacto_social" data-no-custom>
+      <select id="campo58" name="impacto_social" data-no-custom onchange="toggleBloco('bloco58_obs',this.value && this.value!=='Não foi possível avaliar')">
         <option value="">Selecione...</option>
-        <option value="Alto impacto positivo">Alto impacto positivo: benefcio expressivo e direto para a coletividade</option>
-        <option value="Mdio impacto positivo">Mdio impacto positivo: benefcio moderado ou indireto para a coletividade</option>
-        <option value="Baixo impacto positivo">Baixo impacto positivo: benefcio restrito ou pouco expressivo</option>
-        <option value="Sem impacto social relevante">Sem impacto social relevante: destinao sem reflexo significativo sobre a coletividade</option>
-        <option value="Impacto social negativo">Impacto social negativo: destinao pode gerar prejuzo social identificado</option>
+        <option value="Alto impacto positivo">Alto impacto positivo: benefício expressivo e direto para a coletividade</option>
+        <option value="Médio impacto positivo">Médio impacto positivo: benefício moderado ou indireto para a coletividade</option>
+        <option value="Baixo impacto positivo">Baixo impacto positivo: benefício restrito ou pouco expressivo</option>
+        <option value="Sem impacto social relevante">Sem impacto social relevante: destinação sem reflexo significativo sobre a coletividade</option>
+        <option value="Impacto social negativo">Impacto social negativo: destinação pode gerar prejuízo social identificado</option>
+        <option value="Não foi possível avaliar">Não foi possível avaliar: ausência de informações suficientes</option>
       </select>
-      <label for="campo58_obs" style="margin-top:8px;">Observações complementares:</label>
-      <textaárea id="campo58_obs" name="impacto_social_obs" placeholder="Observaes sobre o impacto social esperado..."></textaárea>
+      <div id="bloco58_obs" style="display:none;margin-top:8px;">
+        <label for="campo58_obs">Observações complementares:</label>
+        <textarea id="campo58_obs" name="impacto_social_obs" placeholder="Observações sobre o impacto social esperado..."></textarea>
+      </div>
     </div>
   </div>
 
   <div class="form-group editavel">
     <label for="campo59">Número estimado de beneficiários em potencial:
-      <span class="hint-semaforo"><span class="hint-icon" data-hint-tipo="verde" data-hint="Informe o nmero estimado de pessoas ou famlias beneficiadas diretamente pela destinao proposta." role="tooltip" tabindex="0" aria-label="Ajuda: Nmero estimado de beneficirios">?</span></span>
+      <span class="hint-semaforo"><span class="hint-icon" data-hint-tipo="verde" data-hint="Informe o nmero estimado de pessoas ou famlias beneficiadas diretamente pela destinação proposta." role="tooltip" tabindex="0" aria-label="Ajuda: Nmero estimado de beneficirios">?</span></span>
     </label>
     <input type="number" id="campo59" name="num_beneficiarios" placeholder="0" min="0" autocomplete="off" required />
     <span class="error-msg" id="err59" style="display:none;">Informe o nmero de beneficirios (mnimo 0).</span>
@@ -317,7 +467,7 @@
 
   <div class="form-group editavel">
     <label>Há expectativa de impacto ambiental?
-      <span class="hint-semaforo"><span class="hint-icon" data-hint-tipo="verde" data-hint="Avalie o impacto ambiental esperado da destinao proposta sobre o meio ambiente local e regional." role="tooltip" tabindex="0" aria-label="Ajuda: Impacto ambiental esperado">?</span></span>
+      <span class="hint-semaforo"><span class="hint-icon" data-hint-tipo="verde" data-hint="Avalie o impacto ambiental esperado da destinação proposta sobre o meio ambiente local e regional." role="tooltip" tabindex="0" aria-label="Ajuda: Impacto ambiental esperado">?</span></span>
     </label>
     <div class="radio-group" id="group-campo510-radio">
       <label class="radio-option"><input type="radio" name="campo510_radio" value="Sim" required> Sim</label>
@@ -327,30 +477,33 @@
     <span class="error-msg" id="err510" style="display:none;">Selecione uma opção.</span>
     <div id="group-campo510" style="display:none;margin-top:8px;">
       <label for="campo510">Impacto:</label>
-      <select id="campo510" name="impacto_ambiental" data-no-custom>
+      <select id="campo510" name="impacto_ambiental" data-no-custom onchange="toggleBloco('bloco510_obs',this.value && this.value!=='Não foi possível avaliar')">
         <option value="">Selecione...</option>
-        <option value="Impacto positivo">Impacto positivo: destinao contribui para recuperação ou preservação ambiental</option>
-        <option value="Sem impacto ambiental relevante">Sem impacto ambiental relevante: destinao no altera significativamente o meio ambiente</option>
-        <option value="Impacto negativo mitigvel">Impacto negativo mitigvel: impacto identificado, passvel de controle por medidas mitigadoras</option>
+        <option value="Impacto positivo">Impacto positivo: destinação contribui para recuperação ou preservação ambiental</option>
+        <option value="Sem impacto ambiental relevante">Sem impacto ambiental relevante: destinação não altera significativamente o meio ambiente</option>
+        <option value="Impacto negativo mitigável">Impacto negativo mitigável: impacto identificado, passível de controle por medidas mitigadoras</option>
         <option value="Impacto negativo relevante">Impacto negativo relevante: impacto significativo com necessidade de licenciamento ambiental</option>
+        <option value="Não foi possível avaliar">Não foi possível avaliar: ausência de informações suficientes</option>
       </select>
-      <label for="campo510_obs" style="margin-top:8px;">Observações complementares:</label>
-      <textaárea id="campo510_obs" name="impacto_ambiental_obs" placeholder="Observaes sobre o impacto ambiental esperado..."></textaárea>
+      <div id="bloco510_obs" style="display:none;margin-top:8px;">
+        <label for="campo510_obs">Observações complementares:</label>
+        <textarea id="campo510_obs" name="impacto_ambiental_obs" placeholder="Observações sobre o impacto ambiental esperado..."></textarea>
+      </div>
     </div>
   </div>
 
 
 <div class="form-group editavel">
   <label for="campo511">
-    Regime de destinao proposto:
+    Regime de destinação proposto:
     <span class="hint-semaforo">
       <span
         class="hint-icon"
         data-hint-tipo="verde"
-        data-hint="Selecione o regime de destinao proposto conforme Tabela RESOLUO COMGC/SPU/MGI N 3/2025."
+        data-hint="Selecione o regime de destinação proposto conforme Tabela RESOLUO COMGC/SPU/MGI N 3/2025."
         role="tooltip"
         tabindex="0"
-        aria-label="Ajuda: Regime de destinao proposto"
+        aria-label="Ajuda: Regime de destinação proposto"
       >?</span>
     </span>
   </label>
@@ -388,7 +541,7 @@
     <option value="Doação">Doação</option>
     <option value="Entrega">Entrega</option>
     <option value="Entrega provisória">Entrega provisória</option>
-    <option value="Áááguarda Provisria">Áááguarda Provisria</option>
+    <option value="Guarda Provisória">Guarda Provisória</option>
     <option value="Inscrição de ocupação">Inscrição de ocupação</option>
     <option value="Integralização de cotas em Fundo de Investimento Imobiliário">Integralização de cotas em Fundo de Investimento Imobiliário</option>
     <option value="Investidura">Investidura</option>
@@ -407,7 +560,7 @@
   </select>
 
   <span class="error-msg" id="err511" style="display:none;">
-    Selecione o regime de destinao.
+    Selecione o regime de destinação.
   </span>
 
   <div id="bloco511_obs" style="display:none; margin-top:8px;">
@@ -415,7 +568,7 @@
     <textaárea
       id="campo511_obs"
       name="campo511_obs"
-      placeholder="Observaes sobre o regime de destinao proposto..."
+      placeholder="Observações sobre o regime de destinação proposto..."
     ></textaárea>
   </div>
 </div>
@@ -423,35 +576,8 @@
 
 
 
-  <div class="acordeao-wrapper aberto" id="acordeao-declaracao">
-    <div class="acordeao-header" id="acordeao-header-declaracao" role="button" tabindex="0" aria-expanded="true" aria-controls="acordeao-corpo-declaracao">
-      <div class="acordeao-titulo">?? Tcnico Responsvel <span class="acordeao-badge-ok" id="badge-declaracao-ok">Concludo</span></div>
-      <span class="acordeao-seta">?</span>
-    </div>
-    <div class="acordeao-corpo" id="acordeao-corpo-declaracao">
-      <p class="decl-intro">Declaro que:</p>
-      <div class="decl-checks">
-        <label class="decl-check-item">
-          <input type="checkbox" id="decl-check1" name="decl_check1" />
-          <span>As informaes consignadas no referido formulrio foram inseridas com base nos dados disponveis nos sistemas oficiais e nas verificaes árealizadas no mbito desta unidade.</span>
-        </label>
-      </div>
-      <span class="error-msg" id="err-decl" style="display:none;">A declarao deve ser concluda antes de enviar.</span>
-      <div class="decl-btn-assinar">
-        <button type="button" class="btn-assinar" id="btn-assinar-decl" disabled>?? Concluir Manifestao</button>
-        <button type="button" class="btn-limpar-decl" id="btn-limpar-decl" style="display:none;">??? Desfazer Manifestao</button>
-        <span class="decl-status-assinado" id="decl-status-assinado">Manifestao registrada</span>
-      </div>
-      <div class="decl-assinado-overlay" id="decl-assinado-overlay">
-        <strong>? Manifestao registrada</strong>
-        <span id="decl-resumo-texto"></span>
-      </div>
-      <input type="hidden" id="decl-assinado-flag" name="decl_assinado" value="0" />
-    </div>
-  </div>
-
-  <div class="form-group editavel">
-    <label for="obs224_0">Observaes:</label>
+    <div class="form-group editavel">
+    <label for="obs224_0">Observações:</label>
     <textaárea id="obs224_0" name="imoveis[0][obs_geral_ident]" placeholder=""></textaárea>
     <div class="dynamic-list-wrapper" style="flex:1;display:flex;flex-direction:column;gap:8px;">
       <button type="button" class="btn-add" id="btnAdicionarImagemIdent_0" style="align-self:flex-start;">+ Adicionar link/documento</button>
@@ -468,8 +594,8 @@
               <label class="radio-option"><input type="radio" name="tem_contrapartida" value="Não" checked onclick="document.getElementById('bloco-contrapartida').style.display='none'"> Não</label>
           </div>
           <div id="bloco-contrapartida" style="display:none; margin-top: 10px; flex-direction: column; gap: 8px;">
-              <label for="desc_contrapartida">Descrição da Contrapartida / Encaórgãos:</label>
-              <textaárea id="desc_contrapartida" name="desc_contrapartida" placeholder="Descreva os encaórgãos, obras ou melhorias assumidas pelo destinatário..."></textaárea>
+              <label for="desc_contrapartida">Descrição da Contrapartida / Encargos:</label>
+              <textarea id="desc_contrapartida" name="desc_contrapartida" placeholder="Descreva os encargos, obras ou melhorias assumidas pelo destinatário..."></textarea>
           </div>
       </div>
 
@@ -482,17 +608,22 @@
 </form>
   </div>
 
+  <script src="scripts/fetch_acoes.js?v=99999_1"></script>
   <script src="formulario.js?v=1782355313469"></script>
   <script src="hints.js?v=1782355313469"></script>
   <script>
       // Toggle "Nenhuma identificada" — desmarca as demais e vice-versa
       function toggleNenhumaPendencia(checkbox) {
           const allChecks = document.querySelectorAll('input[name="pendencias[]"]');
+          const blocoObs = document.getElementById('bloco-obs-pendencias');
           if (checkbox.value === 'Nenhuma identificada' && checkbox.checked) {
               allChecks.forEach(cb => { if (cb.value !== 'Nenhuma identificada') cb.checked = false; });
+              if (blocoObs) blocoObs.style.display = 'none';
           } else {
               const nenhuma = document.querySelector('input[name="pendencias[]"][value="Nenhuma identificada"]');
               if (nenhuma) nenhuma.checked = false;
+              const temSelecionado = Array.from(allChecks).some(cb => cb.checked && cb.value !== 'Nenhuma identificada');
+              if (blocoObs) blocoObs.style.display = temSelecionado ? 'block' : 'none';
           }
       }
 
@@ -527,20 +658,6 @@
     if(el) el.style.display = mostrar ? 'flex' : 'none';
   }
   
-  function popularCampo53(tipoImobiliario) {
-    const c53 = document.getElementById('campo53');
-    if(!c53) return;
-    c53.innerHTML = '<option value="">Selecione...</option>';
-    if (usoEspecificoMap[tipoImobiliario]) {
-        usoEspecificoMap[tipoImobiliario].forEach(item => {
-            const opt = document.cáreateElement('option');
-            opt.value = item[0];
-            opt.textContent = item[1];
-            c53.appendChild(opt);
-        });
-    }
-  }
-
   function limparErro(el, idErr) {
     const err = document.getElementById(idErr);
     if(err) err.style.display = 'none';
@@ -550,15 +667,15 @@
 const usoEspecificoMap={
 "0101":[["010101","01.01.01  Sede ou escritório de órgão ou entidade pública federal"],["010102","01.01.02  Sede ou escritório de órgão ou entidade pública estadual ou distrital"],["010103","01.01.03  Sede ou escritório de órgão ou entidade pública municipal"],["010104","01.01.04  Representação diplomática ou consular"],["010105","01.01.05  Sede de organismo internacional"],["010199","01.01.99  Outro uso administrativo e representativo"]],
 "0102":[["010201","01.02.01  Agricultura"],["010202","01.02.02  Pecuária"],["010203","01.02.03  Aquicultura"],["010204","01.02.04  Produção florestal"],["010205","01.02.05  Pesca"],["010299","01.02.99  Outro uso agropecuário, aquicultura, florestal ou pesqueiro"]],
-"0103":[["010301","01.03.01  Unidade de conservação"],["010302","01.03.02  áááárea de preservação permanente"],["010303","01.03.03  Reserva legal"],["010304","01.03.04  áááárea de reflorestamento ou recuperação ambiental"],["010305","01.03.05  áááárea de manejo de recursos naturais"],["010399","01.03.99  Outro uso ambiental e de recursos naturais"]],
-"0104":[["010401","01.04.01  Equipamento cultural (museu, teatro, biblioteca, etc.)"],["010402","01.04.02  Equipamento esportivo (estádio, ginásio, quadra, etc.)"],["010403","01.04.03  áááárea de lazer e recáreação pública"],["010404","01.04.04  Parque urbano ou área verde pública"],["010499","01.04.99  Outro uso cultural, esportivo ou de lazer"]],
+"0103":[["010301","01.03.01  Unidade de conservação"],["010302","01.03.02  área de preservação permanente"],["010303","01.03.03  Reserva legal"],["010304","01.03.04  área de reflorestamento ou recuperação ambiental"],["010305","01.03.05  área de manejo de recursos naturais"],["010399","01.03.99  Outro uso ambiental e de recursos naturais"]],
+"0104":[["010401","01.04.01  Equipamento cultural (museu, teatro, biblioteca, etc.)"],["010402","01.04.02  Equipamento esportivo (estádio, ginásio, quadra, etc.)"],["010403","01.04.03  área de lazer e recreação pública"],["010404","01.04.04  Parque urbano ou área verde pública"],["010499","01.04.99  Outro uso cultural, esportivo ou de lazer"]],
 "0105":[["010501","01.05.01  Evento cultural"],["010502","01.05.02  Evento esportivo"],["010503","01.05.03  Evento comercial ou feira"],["010504","01.05.04  Evento institucional ou cívico"],["010599","01.05.99  Outro uso em evento de curta duração"]],
 "0106":[["010601","01.06.01  Habitação de interesse social (HIS)"],["010602","01.06.02  Habitação de mercado popular"],["010603","01.06.03  Habitação para segmentos específicos (idosos, pessoas com deficiência, etc.)"],["010604","01.06.04  Habitação em assentamento informal consolidado"],["010699","01.06.99  Outro uso habitacional"]],
 "0107":[["010701","01.07.01  Uso industrial"],["010702","01.07.02  Uso comercial varejista"],["010703","01.07.03  Uso comercial atacadista"],["010704","01.07.04  Prestação de serviços"],["010705","01.07.05  Uso misto (comercial/serviços/residencial)"],["010799","01.07.99  Outro uso industrial, comercial ou de serviços"]],
-"0108":[["010801","01.08.01  Abastecimento de ááágua"],["010802","01.08.02  Esgotamento sanitário"],["010803","01.08.03  Energia elétrica"],["010804","01.08.04  Gás canalizado"],["010805","01.08.05  Telecomunicações"],["010806","01.08.06  Resíduos sólidos"],["010899","01.08.99  Outro uso em infraestrutura de serviços públicos"]],
-"0109":[["010901","01.09.01  Rodovia"],["010902","01.09.02  Ferrovia"],["010903","01.09.03  Porto ou instalação portuária"],["010904","01.09.04  Aeroporto ou aeródromo"],["010905","01.09.05  Hidrovia"],["010906","01.09.06  Mobilidade urbana (metrôôôô, BRT, ciclovia, etc.)"],["010999","01.09.99  Outro uso em infraestrutura de transportes"]],
-"0110":[["011001","01.10.01  Projeto de requalificação urbana integrada"],["011002","01.10.02  Operação urbana consorciada"],["011003","01.10.03  Projeto de revitalização de áárea portuária ou industrial"],["011099","01.10.99  Outro uso multifinalitário em requalificação urbana"]],
-"0111":[["011101","01.11.01  Terra indígena"],["011102","01.11.02  Território quilombola"],["011103","01.11.03  áááárea de comunidade tradicional (ribeirinhos, extrativistas, etc.)"],["011199","01.11.99  Outro uso por povos originários ou comunidades tradicionais"]],
+"0108":[["010801","01.08.01  Abastecimento de água"],["010802","01.08.02  Esgotamento sanitário"],["010803","01.08.03  Energia elétrica"],["010804","01.08.04  Gás canalizado"],["010805","01.08.05  Telecomunicações"],["010806","01.08.06  Resíduos sólidos"],["010899","01.08.99  Outro uso em infraestrutura de serviços públicos"]],
+"0109":[["010901","01.09.01  Rodovia"],["010902","01.09.02  Ferrovia"],["010903","01.09.03  Porto ou instalação portuária"],["010904","01.09.04  Aeroporto ou aeródromo"],["010905","01.09.05  Hidrovia"],["010906","01.09.06  Mobilidade urbana (metrô, BRT, ciclovia, etc.)"],["010999","01.09.99  Outro uso em infraestrutura de transportes"]],
+"0110":[["011001","01.10.01  Projeto de requalificação urbana integrada"],["011002","01.10.02  Operação urbana consorciada"],["011003","01.10.03  Projeto de revitalização de área portuária ou industrial"],["011099","01.10.99  Outro uso multifinalitário em requalificação urbana"]],
+"0111":[["011101","01.11.01  Terra indígena"],["011102","01.11.02  Território quilombola"],["011103","01.11.03  área de comunidade tradicional (ribeirinhos, extrativistas, etc.)"],["011199","01.11.99  Outro uso por povos originários ou comunidades tradicionais"]],
 "0112":[["011201","01.12.01  Instituição de ensino federal"],["011202","01.12.02  Instituição de ensino estadual ou municipal"],["011203","01.12.03  Instituição de pesquisa"],["011204","01.12.04  Centro de extensão ou capacitação"],["011299","01.12.99  Outro uso em ensino, pesquisa e extensão"]],
 "0113":[["011301","01.13.01  Centro de assistência social (CRAS, CREAS, etc.)"],["011302","01.13.02  Abrigo ou albergue"],["011303","01.13.03  Centro de cidadania ou atendimento ao cidadão"],["011304","01.13.04  Entidade filantrópica ou sem fins lucrativos"],["011399","01.13.99  Outro uso socioassistêncial e de cidadania"]],
 "0114":[["011401","01.14.01  Hospital ou unidade hospitalar"],["011402","01.14.02  Unidade básica de saúde (UBS/UPA)"],["011403","01.14.03  Laboratório ou centro de pesquisa em saúde"],["011499","01.14.99  Outro uso em serviços de saúde"]],
@@ -568,6 +685,18 @@ const usoEspecificoMap={
 "0118":[["011800","01.18.00  Sem informação"]],
 "0119":[["011900","01.19.00  Sem uso definido/vinculação"]]
 };
+
+function toggleObs56(){
+  const checks=document.querySelectorAll('#campo56-checks input[type="checkbox"]');
+  const temSelecionado=Array.from(checks).some(cb=>cb.checked);
+  toggleBloco('bloco56_obs',temSelecionado);
+}
+
+function toggleObs57(){
+  const checks=document.querySelectorAll('#campo57-checks input[type="checkbox"]');
+  const temSelecionado=Array.from(checks).some(cb=>cb.checked);
+  toggleBloco('bloco57_obs',temSelecionado);
+}
 
 function toggleBloco(id,exibir){const el=document.getElementById(id);if(el)el.style.display=exibir?'':'none'}
 function limparErro(el,errId){if(el)el.style.borderColor='';const errEl=document.getElementById(errId);if(errEl)errEl.style.display='none'}
@@ -579,20 +708,20 @@ function popularCampo53(valor){
   campo53.disabled=true;
 
   if(!valor||!usoEspecificoMap[valor]){
-    const opt=document.cáreateElement('option');
+    const opt=document.createElement('option');
     opt.value='';
-    opt.textContent='Selecione primeiro o tipo de uso imobilirio...';
+    opt.textContent='Selecione primeiro o tipo de uso imobiliário...';
     campo53.appendChild(opt);
     return;
   }
 
-  const optDefault=document.cáreateElement('option');
+  const optDefault=document.createElement('option');
   optDefault.value='';
-  optDefault.textContent='Selecione o tipo de uso especfico...';
+  optDefault.textContent='Selecione o tipo de uso específico...';
   campo53.appendChild(optDefault);
 
   usoEspecificoMap[valor].forEach(([value,label])=>{
-    const opt=document.cáreateElement('option');
+    const opt=document.createElement('option');
     opt.value=value;
     opt.textContent=label;
     campo53.appendChild(opt);
@@ -660,19 +789,7 @@ if (!valorCampo511) {
 
 
 
-  const declFlag=document.getElementById('decl-assinado-flag');
-  if(declFlag.value!=='1'){
-    const errDecl=document.getElementById('err-decl');
-    if(errDecl)errDecl.style.display='block';
-
-    const wrapperDecl=document.getElementById('acordeao-declaracao');
-    if(wrapperDecl&&!wrapperDecl.classList.contains('aberto'))wrapperDecl.classList.add('aberto');
-
-    if(!primeiro)primeiro=document.getElementById('decl-check1');
-    valido=false;
-  }
-
-  return{valido,primeiroInvalido:primeiro};
+  
 }
 
 function focarPrimeiro(el){
@@ -685,6 +802,26 @@ document.addEventListener('DOMContentLoaded',function(){
   document.querySelectorAll('select:not([data-no-custom])').forEach(el=>{
     if(typeof initCustomSelect==='function')initCustomSelect(el);
   });
+
+  // Carregar ações judiciais da tabela_acoes
+  (async function() {
+    const rip = localStorage.getItem('CURRENT_PROCESS_ID') || window.processId;
+    console.log(`[foco-03] RIP para ações: "${rip}", fetchAcoes existe: ${typeof window.fetchAcoes}`);
+    if (!rip || typeof window.fetchAcoes !== 'function') {
+      console.warn('[foco-03] RIP ou fetchAcoes não disponível');
+      return;
+    }
+    try {
+      const acoes = await window.fetchAcoes(rip);
+      console.log('[foco-03] Resultado fetchAcoes:', acoes);
+      if (acoes) {
+        document.getElementById('nup_sei').value = acoes.nup_sei || '';
+        document.getElementById('tipo_processo').value = acoes.tipo_processo || '';
+        document.getElementById('resumo_acao').value = acoes.resumo || '';
+        document.getElementById('descricao_acao').value = acoes.descricao || '';
+      }
+    } catch(e) { console.error('[foco-03] Erro ao carregar ações:', e); }
+  })();
 
   document.getElementById('campo51').addEventListener('change',function(){
     toggleBloco('bloco51_obs',!!this.value);
@@ -714,6 +851,7 @@ document.addEventListener('DOMContentLoaded',function(){
 
   document.getElementById('campo55').addEventListener('change',function(){
     limparErro(this,'err55');
+    toggleBloco('bloco55_obs',!!this.value);
   });
 
   [
@@ -767,77 +905,7 @@ if (campo511) {
 
 
 
-  const wrapperDecl=document.getElementById('acordeao-declaracao');
-  const headerDecl=document.getElementById('acordeao-header-declaracao');
-
-  headerDecl.addEventListener('click',function(){
-    const aberto=wrapperDecl.classList.toggle('aberto');
-    headerDecl.setAttribute('aria-expanded',String(aberto));
-  });
-
-  headerDecl.addEventListener('keydown',function(e){
-    if(e.key==='Enter'||e.key===' '){
-      e.preventDefault();
-      const aberto=wrapperDecl.classList.toggle('aberto');
-      headerDecl.setAttribute('aria-expanded',String(aberto));
-    }
-  });
-
-  const ck1=document.getElementById('decl-check1');
-  const btnAss=document.getElementById('btn-assinar-decl');
-  const btnLimDecl=document.getElementById('btn-limpar-decl');
-  const flag=document.getElementById('decl-assinado-flag');
-  const badge=document.getElementById('badge-declaracao-ok');
-  const status=document.getElementById('decl-status-assinado');
-  const overlay=document.getElementById('decl-assinado-overlay');
-  const resumo=document.getElementById('decl-resumo-texto');
-
-  function verificarHabilitacao(){
-    btnAss.disabled=!ck1.checked||flag.value==='1';
-  }
-
-  function setÁreadonlyDecl(áreadonly){
-    ck1.disabled=áreadonly;
-    const item=ck1.closest('.decl-check-item');
-    if(item){
-      item.style.opacity=áreadonly?'0.7':'';
-      item.style.cursor=áreadonly?'not-allowed':'';
-    }
-  }
-
-  ck1.addEventListener('change',function(){
-    verificarHabilitacao();
-    limparErro(null,'err-decl');
-  });
-
-  btnAss.addEventListener('click',function(){
-    flag.value='1';
-    badge.classList.add('visivel');
-    status.classList.add('visivel');
-    overlay.classList.add('visivel');
-    resumo.textContent='Manifestao registrada com sucesso.';
-    setÁreadonlyDecl(true);
-    btnAss.style.display='none';
-    btnLimDecl.style.display='';
-    verificarHabilitacao();
-    limparErro(null,'err-decl');
-  });
-
-  btnLimDecl.addEventListener('click',function(){
-    flag.value='0';
-    badge.classList.remove('visivel');
-    status.classList.remove('visivel');
-    overlay.classList.remove('visivel');
-    resumo.textContent='';
-    setÁreadonlyDecl(false);
-    btnAss.style.display='';
-    btnLimDecl.style.display='none';
-    verificarHabilitacao();
-  });
-
-  
-
-  /*
+    /*
     CORREO APLICADA:
     O boto "Salvar e Enviar SPU/UF" agora valida o formulrio e,
     se estiver tudo correto, navega diretamente para foco-07.html,

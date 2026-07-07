@@ -1,0 +1,13 @@
+tabela_foco
+
+{
+  "analise_aba_1": {
+      "decisao": "Deferido",
+      "justificativa": "O requerimento atende aos requisitos X e Y...",
+      "data_analise": "06/07/2026"
+  },
+  "dados_aba_2": {
+      "rip_vinculado": "0000000001",
+      "confirmacao_area": true
+  }
+}

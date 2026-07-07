@@ -1,0 +1,17 @@
+tabela_requerimentos
+
+{
+  "numero_requerimento": "PR2026001",
+  "data_req": "01/01/2026",
+  "uf": "PR",
+  "municipio": "Curitiba/PR",
+  "interessado": "Prefeitura Municipal A",
+  "processo_sei": "10480.002401/2026-66",
+  "regime_requerido": "Cessão Onerosa",
+  "checkpoint": "SPU/PR - Destinação",
+  "atribuido_para": "Não atribuído",
+  "status": "Aguardando Análise"
+}
+
+
+

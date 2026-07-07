@@ -1,0 +1,8 @@
+tabela_status_fluxo
+
+{
+  "checkpoint_atual": "Análise Técnica - Aba 1",
+  "status_geral": "Em andamento",
+  "data_entrada_checkpoint": "05/07/2026",
+  "prazo_vencimento": "15/07/2026"
+}

@@ -54,86 +54,70 @@ async function loadDraftFromDB() {
             'Content-Type': 'application/json'
         };
 
-        // 1. Tenta buscar da foco_drafts
-        const draftUrl = SUPABASE_URL + '/rest/v1/foco_drafts?select=form_data&process_id=eq.' + PROCESS_ID;
-        let res = await fetch(draftUrl, { headers });
-        let data = await res.json();
+        // 1. Tenta buscar da tabela_foco (dados das abas 2 em diante)
+        const focoUrl = SUPABASE_URL + '/rest/v1/tabela_foco?select=dados_json&numero_requerimento=eq.' + PROCESS_ID;
+        let resFoco = await fetch(focoUrl, { headers });
+        let dataFoco = await resFoco.json();
+        let focoJson = (dataFoco && dataFoco.length > 0) ? dataFoco[0].dados_json : {};
 
-        if (data && data.length > 0) {
-            window.formDataState = data[0].form_data;
-            console.log('Rascunho carregado da foco_drafts:', window.formDataState);
+        // 2. Busca da tabela_requerimentos (Aba 1)
+        const reqUrl = SUPABASE_URL + '/rest/v1/tabela_requerimentos?select=dados_json&numero_requerimento=eq.' + PROCESS_ID;
+        let resReq = await fetch(reqUrl, { headers });
+        let dataReq = await resReq.json();
 
-            // Transição de Status: Se abrir e estiver "Aguardando análise", muda para "Em análise"
-            if (window.formDataState.status === 'Aguardando análise' || window.formDataState.status === 'Aguardando Análise') {
+        if (dataReq && dataReq.length > 0) {
+            const reqJson = dataReq[0].dados_json || {};
+            
+            // Busca status do fluxo
+            const statusUrl = SUPABASE_URL + '/rest/v1/tabela_status_fluxo?select=dados_json&numero_requerimento=eq.' + PROCESS_ID;
+            let resStatus = await fetch(statusUrl, { headers });
+            let dataStatus = await resStatus.json();
+            let statusJson = (dataStatus && dataStatus.length > 0) ? dataStatus[0].dados_json : {};
+
+            // Mapeia o novo modelo pro formato que o frontend antigo espera nas views html!
+            window.formDataState = {
+                ...focoJson,
+                campo11: PROCESS_ID,
+                campo12: reqJson.data_req || '',
+                campo13: reqJson.processo_sei || '',
+                campo14: reqJson.cpf_cnpj || '',
+                campo15: reqJson.interessado || '',
+                campo19: reqJson.telefone || '',
+                campo17: reqJson.pessoa_estrangeira || 'Não',
+                prioridade_legal: reqJson.prioridade_legal || 'Não se aplica',
+                campo14_rep: reqJson.cpf_cnpj_rep || '',
+                campo15_rep: reqJson.nome_rep || '',
+                campo19_rep: reqJson.telefone_rep || '',
+                uf: reqJson.uf || '',
+                municipio: reqJson.municipio || '',
+                procedimento: reqJson.regime_requerido || '',
+                documentos_anexados: reqJson.documentos_anexados || [],
+                
+                status: statusJson.status_geral || 'Aguardando Análise',
+                status_flow: statusJson.checkpoint || 'SPU/' + (reqJson.uf || 'ND')
+            };
+
+            console.log('Dados carregados da nova arquitetura:', window.formDataState);
+            
+            // Transição de Status
+            if (window.formDataState.status === 'Aguardando Análise' || window.formDataState.status === 'Aguardando análise') {
                 window.formDataState.status = 'Em análise';
-                // Salva a nova transição de status no rascunho
-                await fetch(SUPABASE_URL + '/rest/v1/foco_drafts', {
-                    method: 'POST',
-                    headers: {
-                        'apikey': SUPABASE_ANON_KEY,
-                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
-                        'Content-Type': 'application/json',
-                        'Prefer': 'resolution=merge-duplicates'
-                    },
-                    body: JSON.stringify({
-                        process_id: PROCESS_ID,
-                        form_data: window.formDataState
-                    })
-                });
+                // Salvar a transição de status na tabela nova
+                // TODO: Fazer update real na tabela de status depois.
             }
         } else {
-            // 2. Não achou rascunho. Busca da portal_servicos
-            console.log('Nenhum rascunho encontrado. Buscando da portal_servicos...');
-            const portalUrl = SUPABASE_URL + '/rest/v1/portal_servicos?select=form_data&process_id=eq.' + PROCESS_ID;
-            let resPortal = await fetch(portalUrl, { headers });
-            let dataPortal = await resPortal.json();
-
-            if (dataPortal && dataPortal.length > 0) {
-                window.formDataState = dataPortal[0].form_data;
-                
-                // Transição de Status
-                if (window.formDataState.status === 'Aguardando análise' || window.formDataState.status === 'Aguardando Análise') {
-                    window.formDataState.status = 'Em análise';
-                }
-
-                console.log('Dados importados do Portal! Iniciando novo rascunho.');
-                
-                // Dispara o evento para os iframes ANTES de qualquer coisa
-                const iframe = document.getElementById('frame');
-                if (iframe && iframe.contentWindow) {
-                    iframe.contentWindow.postMessage({ type: 'DATABASE_LOADED', data: window.formDataState }, '*');
-                }
-
-                // Salva o rascunho inicial direto no banco, sem consultar o iframe vazio
-                const postData = {
-                    process_id: PROCESS_ID,
-                    form_data: window.formDataState
-                };
-                await fetch(SUPABASE_URL + '/rest/v1/foco_drafts', {
-                    method: 'POST',
-                    headers: {
-                        'apikey': SUPABASE_ANON_KEY,
-                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
-                        'Content-Type': 'application/json',
-                        'Prefer': 'resolution=merge-duplicates'
-                    },
-                    body: JSON.stringify(postData)
-                }).catch(err => console.error('Erro ao salvar rascunho inicial:', err));
-
-            } else {
-                console.error('Processo não encontrado em lugar nenhum!');
-                return;
-            }
+            console.error('Processo não encontrado na tabela_requerimentos!');
+            return;
         }
 
-        // Dispara o evento para os iframes (caso tenha vindo da foco_drafts)
+        // Dispara o evento para os iframes preencherem os campos na tela
         const iframe = document.getElementById('frame');
-        if (iframe && iframe.contentWindow && data && data.length > 0) {
+        if (iframe && iframe.contentWindow) {
             iframe.contentWindow.postMessage({ type: 'DATABASE_LOADED', data: window.formDataState }, '*');
         }
 
     } catch (err) {
-        console.error('Erro inesperado ao carregar rascunho:', err);
+        console.error('Erro inesperado ao carregar processo:', err);
     }
 }
 
@@ -148,36 +132,59 @@ async function executeSaveDraft() {
             iframe.contentWindow.postMessage({ type: 'REQUEST_SAVE' }, '*');
         }
 
-        // Dé um tempinho para o iframe responder com os dados atualizados
+        // Dá um tempinho para o iframe responder com os dados atualizados
         await new Promise(r => setTimeout(r, 200));
 
-        // Mescla form_data_state com campos globais adicionais se necessário
         let payload = { ...window.formDataState };
         payload.updated_at = new Date().toISOString();
 
         const headers = {
             'apikey': SUPABASE_ANON_KEY,
             'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
-            'Content-Type': 'application/json',
-            'Prefer': 'resolution=merge-duplicates'
+            'Content-Type': 'application/json'
         };
 
+        // 1. Atualizar a tabela_requerimentos (Aba 1)
+        const reqPayload = {
+            data_req: payload.campo12,
+            processo_sei: payload.campo13,
+            cpf_cnpj: payload.campo14,
+            interessado: payload.campo15,
+            telefone: payload.campo19,
+            pessoa_estrangeira: payload.campo17,
+            prioridade_legal: payload.prioridade_legal,
+            cpf_cnpj_rep: payload.campo14_rep,
+            nome_rep: payload.campo15_rep,
+            telefone_rep: payload.campo19_rep,
+            uf: payload.uf,
+            municipio: payload.municipio,
+            regime_requerido: payload.procedimento
+        };
+
+        await fetch(SUPABASE_URL + '/rest/v1/tabela_requerimentos?numero_requerimento=eq.' + PROCESS_ID, {
+            method: 'PATCH',
+            headers,
+            body: JSON.stringify({ dados_json: reqPayload, updated_at: new Date().toISOString() })
+        });
+
+        // 2. Salvar na tabela_foco as análises técnicas (Abas 2+) usando UPSERT
         const postData = {
-            process_id: PROCESS_ID,
-            form_data: payload
+            numero_requerimento: PROCESS_ID,
+            dados_json: payload,
+            updated_at: new Date().toISOString()
         };
 
-        const url = SUPABASE_URL + '/rest/v1/foco_drafts?on_conflict=process_id';
+        const url = SUPABASE_URL + '/rest/v1/tabela_foco';
         const res = await fetch(url, {
             method: 'POST',
-            headers,
+            headers: { ...headers, 'Prefer': 'resolution=merge-duplicates' },
             body: JSON.stringify(postData)
         });
 
         if (!res.ok) {
-            console.error('Falha ao salvar rascunho', await res.text());
+            console.error('Falha ao salvar análises', await res.text());
         } else {
-            console.log('Rascunho salvo com sucesso no foco_drafts!');
+            console.log('Análises salvas com sucesso na nova estrutura!');
             const savedMsg = document.getElementById('savedMessage');
             if (savedMsg) {
                 savedMsg.style.display = 'block';
@@ -193,14 +200,45 @@ async function executeSaveDraft() {
 }
 
 function triggerSaveDraft() {
-    if (saveTimeout) clearTimeout(saveTimeout);
-    saveTimeout = setTimeout(executeSaveDraft, 1000);
+    // Autosave desativado por solicitação do usuário.
+    // O salvamento só ocorre ao chamar forceSaveDraft (Ex: botão Salvar e Avançar)
 }
 
 // Salva imediatamente, ignorando o debounce
 window.forceSaveDraft = async function() {
     if (saveTimeout) clearTimeout(saveTimeout);
     await executeSaveDraft();
+};
+
+window.updateStatusFluxo = async function(processId, novoCheckpoint, novoStatus) {
+    if (!processId || !window.supabaseClient) return;
+    try {
+        // Primeiro, busca o JSON atual
+        const urlGet = `${SUPABASE_URL}/rest/v1/tabela_status_fluxo?select=dados_json&numero_requerimento=eq.${processId}`;
+        const resGet = await fetch(urlGet, {
+            headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
+        });
+        if (resGet.ok) {
+            const data = await resGet.json();
+            let json = data.length > 0 ? data[0].dados_json : {};
+            json.checkpoint = novoCheckpoint;
+            json.status_geral = novoStatus || 'Em análise';
+            
+            // Atualiza
+            await fetch(`${SUPABASE_URL}/rest/v1/tabela_status_fluxo?numero_requerimento=eq.${processId}`, {
+                method: 'PATCH',
+                headers: {
+                    'apikey': SUPABASE_ANON_KEY,
+                    'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ dados_json: json, updated_at: new Date().toISOString() })
+            });
+            console.log(`Status atualizado para ${novoCheckpoint} - ${json.status_geral}`);
+        }
+    } catch (e) {
+        console.error("Erro ao atualizar status do fluxo:", e);
+    }
 };
 
 // Expée a funééo global para atualizar dados a partir de iframes
@@ -360,7 +398,6 @@ window.seedDatabase = async function() {
             r.logradouro = r.logradouro || "Endereço do Imóvel SPU, s/n";
             r.natureza = r.natureza || "Urbano";
             r.tipoImóvel = r.tipoImóvel || form_data.categoria || "Gleba/Terreno/Lote com edificaééo";
-            r.benfeitorias = r.benfeitorias || "Sim";
         }
     }
 
@@ -385,14 +422,13 @@ window.mockProcesses = [
             endereco: 'Endereço Simulado, s/n',
             area_total: '5000.00',
             area_uniao: '5000.00',
-            benfeitorias: 'Sim',
             area_construída_total: '2.400,00',
             area_terreno_disponivel: '2.400,00',
             area_construída_disponivel: '2.400,00',
             valor_avaliado: '500.000,00',
             data_avaliação: '13/05/2026',
             instrumento_avaliação: 'Laudo Técnico SPU',
-            situacao_incorporacao: 'Em processo de incorporaééo',
+
             lpm_homologada: 'Sim',
             processo_incorporacao: 'Sim',
             numero_processo: '1234.56790/2026-00',
@@ -407,14 +443,13 @@ window.mockProcesses = [
             endereco: 'Endereço Simulado, s/n',
             area_total: '5000.00',
             area_uniao: '5000.00',
-            benfeitorias: 'Sim',
             area_construída_total: '2.400,00',
             area_terreno_disponivel: '2.400,00',
             area_construída_disponivel: '2.400,00',
             valor_avaliado: '500.000,00',
             data_avaliação: '13/05/2026',
             instrumento_avaliação: 'Laudo Técnico SPU',
-            situacao_incorporacao: 'Em processo de incorporaééo',
+
             lpm_homologada: 'Sim',
             processo_incorporacao: 'Sim',
             numero_processo: '1234.56790/2026-00',
@@ -443,14 +478,13 @@ window.mockProcesses = [
             endereco: 'Endereço Simulado, s/n',
             area_total: '5000.00',
             area_uniao: '5000.00',
-            benfeitorias: 'Sim',
             area_construída_total: '2.400,00',
             area_terreno_disponivel: '2.400,00',
             area_construída_disponivel: '2.400,00',
             valor_avaliado: '500.000,00',
             data_avaliação: '13/05/2026',
             instrumento_avaliação: 'Laudo Técnico SPU',
-            situacao_incorporacao: 'Em processo de incorporaééo',
+
             lpm_homologada: 'Sim',
             processo_incorporacao: 'Sim',
             numero_processo: '1234.56790/2026-00',
@@ -478,14 +512,13 @@ window.mockProcesses = [
             endereco: 'Endereço Simulado, s/n',
             area_total: '5000.00',
             area_uniao: '5000.00',
-            benfeitorias: 'Sim',
             area_construída_total: '2.400,00',
             area_terreno_disponivel: '2.400,00',
             area_construída_disponivel: '2.400,00',
             valor_avaliado: '500.000,00',
             data_avaliação: '13/05/2026',
             instrumento_avaliação: 'Laudo Técnico SPU',
-            situacao_incorporacao: 'Em processo de incorporaééo',
+
             lpm_homologada: 'Sim',
             processo_incorporacao: 'Sim',
             numero_processo: '1234.56790/2026-00',
@@ -513,14 +546,13 @@ window.mockProcesses = [
             endereco: 'Endereço Simulado, s/n',
             area_total: '5000.00',
             area_uniao: '5000.00',
-            benfeitorias: 'Sim',
             area_construída_total: '2.400,00',
             area_terreno_disponivel: '2.400,00',
             area_construída_disponivel: '2.400,00',
             valor_avaliado: '500.000,00',
             data_avaliação: '13/05/2026',
             instrumento_avaliação: 'Laudo Técnico SPU',
-            situacao_incorporacao: 'Em processo de incorporaééo',
+
             lpm_homologada: 'Sim',
             processo_incorporacao: 'Sim',
             numero_processo: '1234.56790/2026-00',
@@ -548,14 +580,13 @@ window.mockProcesses = [
             endereco: 'Endereço Simulado, s/n',
             area_total: '5000.00',
             area_uniao: '5000.00',
-            benfeitorias: 'Sim',
             area_construída_total: '2.400,00',
             area_terreno_disponivel: '2.400,00',
             area_construída_disponivel: '2.400,00',
             valor_avaliado: '500.000,00',
             data_avaliação: '13/05/2026',
             instrumento_avaliação: 'Laudo Técnico SPU',
-            situacao_incorporacao: 'Em processo de incorporaééo',
+
             lpm_homologada: 'Sim',
             processo_incorporacao: 'Sim',
             numero_processo: '1234.56790/2026-00',
@@ -583,14 +614,13 @@ window.mockProcesses = [
             endereco: 'Endereço Simulado, s/n',
             area_total: '5000.00',
             area_uniao: '5000.00',
-            benfeitorias: 'Sim',
             area_construída_total: '2.400,00',
             area_terreno_disponivel: '2.400,00',
             area_construída_disponivel: '2.400,00',
             valor_avaliado: '500.000,00',
             data_avaliação: '13/05/2026',
             instrumento_avaliação: 'Laudo Técnico SPU',
-            situacao_incorporacao: 'Em processo de incorporaééo',
+
             lpm_homologada: 'Sim',
             processo_incorporacao: 'Sim',
             numero_processo: '1234.56790/2026-00',
@@ -618,14 +648,13 @@ window.mockProcesses = [
             endereco: 'Endereço Simulado, s/n',
             area_total: '5000.00',
             area_uniao: '5000.00',
-            benfeitorias: 'Sim',
             area_construída_total: '2.400,00',
             area_terreno_disponivel: '2.400,00',
             area_construída_disponivel: '2.400,00',
             valor_avaliado: '500.000,00',
             data_avaliação: '13/05/2026',
             instrumento_avaliação: 'Laudo Técnico SPU',
-            situacao_incorporacao: 'Em processo de incorporaééo',
+
             lpm_homologada: 'Sim',
             processo_incorporacao: 'Sim',
             numero_processo: '1234.56790/2026-00',
@@ -653,14 +682,13 @@ window.mockProcesses = [
             endereco: 'Endereço Simulado, s/n',
             area_total: '5000.00',
             area_uniao: '5000.00',
-            benfeitorias: 'Sim',
             area_construída_total: '2.400,00',
             area_terreno_disponivel: '2.400,00',
             area_construída_disponivel: '2.400,00',
             valor_avaliado: '500.000,00',
             data_avaliação: '13/05/2026',
             instrumento_avaliação: 'Laudo Técnico SPU',
-            situacao_incorporacao: 'Em processo de incorporaééo',
+
             lpm_homologada: 'Sim',
             processo_incorporacao: 'Sim',
             numero_processo: '1234.56790/2026-00',
@@ -675,14 +703,13 @@ window.mockProcesses = [
             endereco: 'Endereço Simulado, s/n',
             area_total: '5000.00',
             area_uniao: '5000.00',
-            benfeitorias: 'Sim',
             area_construída_total: '2.400,00',
             area_terreno_disponivel: '2.400,00',
             area_construída_disponivel: '2.400,00',
             valor_avaliado: '500.000,00',
             data_avaliação: '13/05/2026',
             instrumento_avaliação: 'Laudo Técnico SPU',
-            situacao_incorporacao: 'Em processo de incorporaééo',
+
             lpm_homologada: 'Sim',
             processo_incorporacao: 'Sim',
             numero_processo: '1234.56790/2026-00',
@@ -710,14 +737,13 @@ window.mockProcesses = [
             endereco: 'Endereço Simulado, s/n',
             area_total: '5000.00',
             area_uniao: '5000.00',
-            benfeitorias: 'Sim',
             area_construída_total: '2.400,00',
             area_terreno_disponivel: '2.400,00',
             area_construída_disponivel: '2.400,00',
             valor_avaliado: '500.000,00',
             data_avaliação: '13/05/2026',
             instrumento_avaliação: 'Laudo Técnico SPU',
-            situacao_incorporacao: 'Em processo de incorporaééo',
+
             lpm_homologada: 'Sim',
             processo_incorporacao: 'Sim',
             numero_processo: '1234.56790/2026-00',
@@ -745,14 +771,13 @@ window.mockProcesses = [
             endereco: 'Endereço Simulado, s/n',
             area_total: '5000.00',
             area_uniao: '5000.00',
-            benfeitorias: 'Sim',
             area_construída_total: '2.400,00',
             area_terreno_disponivel: '2.400,00',
             area_construída_disponivel: '2.400,00',
             valor_avaliado: '500.000,00',
             data_avaliação: '13/05/2026',
             instrumento_avaliação: 'Laudo Técnico SPU',
-            situacao_incorporacao: 'Em processo de incorporaééo',
+
             lpm_homologada: 'Sim',
             processo_incorporacao: 'Sim',
             numero_processo: '1234.56790/2026-00',
@@ -791,14 +816,13 @@ window.mockProcesses = [
             endereco: 'Endereço Simulado, s/n',
             area_total: '5000.00',
             area_uniao: '5000.00',
-            benfeitorias: 'Sim',
             area_construída_total: '2.400,00',
             area_terreno_disponivel: '2.400,00',
             area_construída_disponivel: '2.400,00',
             valor_avaliado: '500.000,00',
             data_avaliação: '13/05/2026',
             instrumento_avaliação: 'Laudo Técnico SPU',
-            situacao_incorporacao: 'Em processo de incorporaééo',
+
             lpm_homologada: 'Sim',
             processo_incorporacao: 'Sim',
             numero_processo: '1234.56790/2026-00',
@@ -826,14 +850,13 @@ window.mockProcesses = [
             endereco: 'Endereço Simulado, s/n',
             area_total: '5000.00',
             area_uniao: '5000.00',
-            benfeitorias: 'Sim',
             area_construída_total: '2.400,00',
             area_terreno_disponivel: '2.400,00',
             area_construída_disponivel: '2.400,00',
             valor_avaliado: '500.000,00',
             data_avaliação: '13/05/2026',
             instrumento_avaliação: 'Laudo Técnico SPU',
-            situacao_incorporacao: 'Em processo de incorporaééo',
+
             lpm_homologada: 'Sim',
             processo_incorporacao: 'Sim',
             numero_processo: '1234.56790/2026-00',
@@ -861,14 +884,13 @@ window.mockProcesses = [
             endereco: 'Endereço Simulado, s/n',
             area_total: '5000.00',
             area_uniao: '5000.00',
-            benfeitorias: 'Sim',
             area_construída_total: '2.400,00',
             area_terreno_disponivel: '2.400,00',
             area_construída_disponivel: '2.400,00',
             valor_avaliado: '500.000,00',
             data_avaliação: '13/05/2026',
             instrumento_avaliação: 'Laudo Técnico SPU',
-            situacao_incorporacao: 'Em processo de incorporaééo',
+
             lpm_homologada: 'Sim',
             processo_incorporacao: 'Sim',
             numero_processo: '1234.56790/2026-00',
@@ -896,14 +918,13 @@ window.mockProcesses = [
             endereco: 'Endereço Simulado, s/n',
             area_total: '5000.00',
             area_uniao: '5000.00',
-            benfeitorias: 'Sim',
             area_construída_total: '2.400,00',
             area_terreno_disponivel: '2.400,00',
             area_construída_disponivel: '2.400,00',
             valor_avaliado: '500.000,00',
             data_avaliação: '13/05/2026',
             instrumento_avaliação: 'Laudo Técnico SPU',
-            situacao_incorporacao: 'Em processo de incorporaééo',
+
             lpm_homologada: 'Sim',
             processo_incorporacao: 'Sim',
             numero_processo: '1234.56790/2026-00',
@@ -931,14 +952,13 @@ window.mockProcesses = [
             endereco: 'Endereço Simulado, s/n',
             area_total: '5000.00',
             area_uniao: '5000.00',
-            benfeitorias: 'Sim',
             area_construída_total: '2.400,00',
             area_terreno_disponivel: '2.400,00',
             area_construída_disponivel: '2.400,00',
             valor_avaliado: '500.000,00',
             data_avaliação: '13/05/2026',
             instrumento_avaliação: 'Laudo Técnico SPU',
-            situacao_incorporacao: 'Em processo de incorporaééo',
+
             lpm_homologada: 'Sim',
             processo_incorporacao: 'Sim',
             numero_processo: '1234.56790/2026-00',
@@ -977,14 +997,13 @@ window.mockProcesses = [
             endereco: 'Endereço Simulado, s/n',
             area_total: '5000.00',
             area_uniao: '5000.00',
-            benfeitorias: 'Sim',
             area_construída_total: '2.400,00',
             area_terreno_disponivel: '2.400,00',
             area_construída_disponivel: '2.400,00',
             valor_avaliado: '500.000,00',
             data_avaliação: '13/05/2026',
             instrumento_avaliação: 'Laudo Técnico SPU',
-            situacao_incorporacao: 'Em processo de incorporaééo',
+
             lpm_homologada: 'Sim',
             processo_incorporacao: 'Sim',
             numero_processo: '1234.56790/2026-00',
@@ -1012,14 +1031,13 @@ window.mockProcesses = [
             endereco: 'Endereço Simulado, s/n',
             area_total: '5000.00',
             area_uniao: '5000.00',
-            benfeitorias: 'Sim',
             area_construída_total: '2.400,00',
             area_terreno_disponivel: '2.400,00',
             area_construída_disponivel: '2.400,00',
             valor_avaliado: '500.000,00',
             data_avaliação: '13/05/2026',
             instrumento_avaliação: 'Laudo Técnico SPU',
-            situacao_incorporacao: 'Em processo de incorporaééo',
+
             lpm_homologada: 'Sim',
             processo_incorporacao: 'Sim',
             numero_processo: '1234.56790/2026-00',
@@ -1047,14 +1065,13 @@ window.mockProcesses = [
             endereco: 'Endereço Simulado, s/n',
             area_total: '5000.00',
             area_uniao: '5000.00',
-            benfeitorias: 'Sim',
             area_construída_total: '2.400,00',
             area_terreno_disponivel: '2.400,00',
             area_construída_disponivel: '2.400,00',
             valor_avaliado: '500.000,00',
             data_avaliação: '13/05/2026',
             instrumento_avaliação: 'Laudo Técnico SPU',
-            situacao_incorporacao: 'Em processo de incorporaééo',
+
             lpm_homologada: 'Sim',
             processo_incorporacao: 'Sim',
             numero_processo: '1234.56790/2026-00',
@@ -1169,6 +1186,71 @@ window.saveToFinal = async function() {
         console.error("L Erro na requisição (saveToFinal):", err);
         return false;
     }
+};
+
+window.salvarIndicacaoItem = async (processId, tipo, dados) => {
+    if (!processId) {
+        console.error("Sem PROCESS_ID, impossível salvar na tabela_indicacao.");
+        return;
+    }
+    
+    // Primeiro, tenta carregar o registro atual
+    let registro = await window.carregarIndicacoes(processId);
+    let dadosJson = registro ? registro.dados_json : { rips: [], cadastros_minimos: [] };
+    
+    if (tipo === 'RIP') {
+        if (!dadosJson.rips) dadosJson.rips = [];
+        if (!dadosJson.rips.includes(dados)) dadosJson.rips.push(dados);
+    } else if (tipo === 'CADASTRO_MINIMO') {
+        if (!dadosJson.cadastros_minimos) dadosJson.cadastros_minimos = [];
+        dadosJson.cadastros_minimos.push(dados);
+    }
+    
+    const body = {
+        numero_requerimento: processId,
+        dados_json: dadosJson
+    };
+    
+    try {
+        const url = `${window.SUPABASE_URL}/rest/v1/tabela_indicacao?on_conflict=numero_requerimento`;
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'apikey': window.SUPABASE_ANON_KEY,
+                'Authorization': `Bearer ${window.SUPABASE_ANON_KEY}`,
+                'Content-Type': 'application/json',
+                'Prefer': 'resolution=merge-duplicates'
+            },
+            body: JSON.stringify(body)
+        });
+        
+        if (!res.ok) console.error("Erro ao salvar indicação", await res.text());
+        else console.log("Indicação salva com sucesso!");
+    } catch (e) {
+        console.error("Erro na requisição salvarIndicacaoItem", e);
+    }
+};
+
+window.carregarIndicacoes = async (processId) => {
+    if (!processId) return null;
+    try {
+        const url = `${window.SUPABASE_URL}/rest/v1/tabela_indicacao?select=*&numero_requerimento=eq.${processId}`;
+        const res = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'apikey': window.SUPABASE_ANON_KEY,
+                'Authorization': `Bearer ${window.SUPABASE_ANON_KEY}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        if (res.ok) {
+            const data = await res.json();
+            if (data && data.length > 0) return data[0];
+        }
+    } catch (e) {
+        console.error("Erro ao carregar indicações", e);
+    }
+    return null;
 };
 
 // Executa no carregamento inicial da página
