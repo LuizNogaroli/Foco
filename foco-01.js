@@ -201,6 +201,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const fecharModalRip = () => { if (modalRip) modalRip.style.display = 'none'; };
     if (btnFecharModalRip) btnFecharModalRip.addEventListener('click', fecharModalRip);
     if (btnCancelarRip) btnCancelarRip.addEventListener('click', fecharModalRip);
+    if (inputNumeroRip) inputNumeroRip.addEventListener('input', limparErroRip);
     
     function adicionarRipNaLista(rip) {
         if (!listaRipsInseridos) return;
@@ -214,28 +215,68 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!window.ripsPendentes.includes(rip)) window.ripsPendentes.push(rip);
     }
 
+    // Função para validar RIP na tabela_spu
+    async function validarRipNoBanco(rip) {
+        try {
+            const SUPA_URL = window.SUPABASE_URL || (window.parent && window.parent.SUPABASE_URL);
+            const SUPA_KEY = window.SUPABASE_ANON_KEY || (window.parent && window.parent.SUPABASE_ANON_KEY);
+            if (!SUPA_URL || !SUPA_KEY) return true; // fallback: aceita se não conseguir conectar
+            const url = `${SUPA_URL}/rest/v1/tabela_spu?select=numero_rip&numero_rip=eq.${rip}&limit=1`;
+            const res = await fetch(url, { headers: { apikey: SUPA_KEY, Authorization: `Bearer ${SUPA_KEY}` } });
+            if (!res.ok) return true;
+            const data = await res.json();
+            return data.length > 0;
+        } catch (e) {
+            console.error('[foco-01] Erro ao validar RIP:', e);
+            return true;
+        }
+    }
+
+    function mostrarErroRip(msg) {
+        const el = document.getElementById('errRipNaoEncontrado');
+        if (el) { el.textContent = msg; el.style.display = 'block'; }
+    }
+    function limparErroRip() {
+        const el = document.getElementById('errRipNaoEncontrado');
+        if (el) el.style.display = 'none';
+    }
+
     if (btnSalvarRip) {
-        btnSalvarRip.addEventListener('click', () => {
-            if (inputNumeroRip.value.trim() !== '') {
-                adicionarRipNaLista(inputNumeroRip.value.trim());
-                fecharModalRip();
-                // Salva no estado central para que a Aba 2 possa recuperar
-                if (window.parent && typeof window.parent.updateField === 'function') {
-                    window.parent.updateField('rips', window.ripsPendentes);
-                }
+        btnSalvarRip.addEventListener('click', async () => {
+            limparErroRip();
+            const rip = inputNumeroRip.value.trim();
+            if (rip === '') return;
+            const existe = await validarRipNoBanco(rip);
+            if (!existe) {
+                mostrarErroRip('RIP não encontrado na tabela_spu!');
+                inputNumeroRip.style.borderColor = '#dc2626';
+                return;
+            }
+            inputNumeroRip.style.borderColor = '';
+            adicionarRipNaLista(rip);
+            fecharModalRip();
+            if (window.parent && typeof window.parent.updateField === 'function') {
+                window.parent.updateField('rips', window.ripsPendentes);
             }
         });
     }
     if (btnMaisRip) {
-        btnMaisRip.addEventListener('click', () => {
-            if (inputNumeroRip.value.trim() !== '') {
-                adicionarRipNaLista(inputNumeroRip.value.trim());
-                inputNumeroRip.value = '';
-                inputNumeroRip.focus();
-                // Salva no estado central
-                if (window.parent && typeof window.parent.updateField === 'function') {
-                    window.parent.updateField('rips', window.ripsPendentes);
-                }
+        btnMaisRip.addEventListener('click', async () => {
+            limparErroRip();
+            const rip = inputNumeroRip.value.trim();
+            if (rip === '') return;
+            const existe = await validarRipNoBanco(rip);
+            if (!existe) {
+                mostrarErroRip('RIP não encontrado na tabela_spu!');
+                inputNumeroRip.style.borderColor = '#dc2626';
+                return;
+            }
+            inputNumeroRip.style.borderColor = '';
+            adicionarRipNaLista(rip);
+            inputNumeroRip.value = '';
+            inputNumeroRip.focus();
+            if (window.parent && typeof window.parent.updateField === 'function') {
+                window.parent.updateField('rips', window.ripsPendentes);
             }
         });
     }

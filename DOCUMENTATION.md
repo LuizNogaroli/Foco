@@ -39,6 +39,7 @@ A máquina de estados do processo no FOCO reflete a situação do requerimento, 
 2. **Em análise de admissibilidade:** O perfil "Equipe Técnica SPU/UF" salvou a primeira etapa (Aba 1). *(Cor no layout: verde claro)*.
 3. **Devolvido para complementação:** Quando qualquer perfil devolve o processo para uma instância inferior. *(Cor no layout: vermelho vivo)*.
 4. **Admissibilidade confirmada:** O perfil "CDE" aprovou o requerimento com ou sem ressalvas. *(Cor no layout: verde vivo)*.
+5. **Aguardando deliberação SPU/XX:** Quando a Aba 3 é concluída, o status é atualizado para "Aguardando deliberação" + a UF (ex: SPU/PR).
 
 ### Ordenação no Painel:
 - **Prioridade 1:** Processos "Devolvido para complementação" aparecem no topo.
@@ -89,25 +90,82 @@ A estrutura reflete a segmentação de responsabilidades (focos) e as páginas d
 
 ---
 
-## 6. Próximos Passos (Evolução para v2.0 com Database)
+## 6. Tabelas Supabase
+
+O sistema utiliza as seguintes tabelas no Supabase:
+
+| Tabela | Uso no Sistema |
+|--------|----------------|
+| `tabela_foco` | Dados do formulário (rascunho) |
+| `foco_final` | Dados definitivos (Aba 3 → saveToFinal) |
+| `tabela_spu` | Dados do imóvel (RIPs, campos readonly) |
+| `tabela_requerimentos` | Dados do requerimento (Aba 1) |
+| `tabela_status_fluxo` | Checkpoint/instância e status geral |
+| `tabela_indicacao` | RIPs e cadastros mínimos indicados |
+| `tabela_acoes` | Ações judiciais/órgãos de controle |
+| `portal_servicos` | Lista de processos do painel |
+| `foco_drafts` | Rascunhos antigos |
+| `foco_origem` | Dados de origem |
+| `foco_reports` | Relatórios consolidados por perfil |
+| `datalake_spunet` | Dados do SPUnet (imóvel) |
+
+---
+
+## 7. Campos por Aba
+
+### Aba 1 - Indicação do Imóvel
+- Conceituação do imóvel (checkboxes com regras de RIP)
+- Cadastro do requerente/interessado
+- Natureza jurídica do destinatário (select com optgroups)
+- Endereço e localização
+- Upload de certidão de matrícula
+
+### Aba 2 - Caracterização
+- Dados do imóvel (campos carregados da `tabela_spu`)
+- Situação ocupacional
+- Benfeitorias
+- Avaliação do imóvel
+- Geolocalização (Leaflet)
+- Upload de certidão de matrícula
+- Documentos e links anexados
+- Observações da caracterização
+
+### Aba 3 - Destinação
+- Ações judiciais (carregadas da `tabela_acoes`)
+- Dados de comparação de área e valor
+- Custos de manutenção para a SPU
+- Outros interessados
+- Tipo de procedimento pretendido
+- Tipo de uso imobiliário e específico pretendidos
+- Modificação do terreno/edificação
+- Compatibilidade urbanística
+- Vinculação com programas estratégicos
+- Vinculação com políticas públicas
+- Impacto social esperado
+- Número estimado de beneficiários
+- Impacto ambiental esperado
+- Regime de destinação proposto
+- Observações da destinação
+
+---
+
+## 8. Atualizações Recentes
+
+### Jul/2026
+- **RIP Validation:** Inserção de RIPs agora valida contra a `tabela_spu`. RIPs não encontrados exibem erro "RIP não encontrado!".
+- **Upload de Certidão:** Componente de upload de certidão de matrícula adicionado às Abas 2 e 3.
+- **Ações Judiciais:** Campo carrega dados automaticamente da `tabela_acoes` via `fetch_acoes.js`.
+- **Status Fluxo:** Ao concluir Aba 3, status é atualizado para "Aguardando deliberação SPU/XX" na `tabela_status_fluxo`.
+- **Campos Condicionais:** Múltiplos campos com lógica de show/hide (radio → textarea, checkbox → textarea, select → textarea).
+- **Labels Atualizados:** Labels corrigidos em português (acentuação, simplificação).
+- **CSS Padronizado:** Seções de observações e documentos usam padrão `form-group editavel`.
+- **Documentos por RIP:** Todos os 20 RIPs de teste têm pelo menos 1 documento anexado na `tabela_spu`.
+
+---
+
+## 9. Próximos Passos (Evolução para v2.0 com Database)
 1. **Substituição de IDs temporários:** Trocar hashes randomizados por hashes SHA-256 baseados em conteúdo oficial.
 2. **Persistência Completa JSON:** Agrupar respostas (Etapas 1-6) e as Manifestações (Etapa 7) em um único payload associado ao número do processo no SEI.
 3. **Lock/Imutabilidade:** Ao concluir uma etapa, os dados e formulários devem entrar em modo `read-only`, bloqueando edições retroativas não autorizadas.
 4. **Autenticação SSO:** Ligar a visualização das telas ao login real do usuário para que ele só acesse as abas e permissões de sua lotação ou cargo.
 5. **Integração de Geração de PDFs:** Usar ferramentas como `jsPDF` ou `Puppeteer` para transformar os resumos em relatórios oficiais de sistema.
-
----
-
-## 7. Atualizações Recentes (Gestão de Identidade e Atribuição de Processos - Jun/2026)
-
-### 7.1. Mecânica de Configurações (Identity Management)
-Foi criada a interface dedicada `configuracoes.html` (e seus recursos `configuracoes.js`, `configuracoes.css`) para o mapeamento dinâmico de servidores e lotações.
-- **Funcionamento:** Permite alocar servidores (Ex: `SE-Servidor A`) em perfis específicos (Chefia, Coordenação, Equipe SPU) dentro de uma Unidade da Federação (UF).
-- **Controle de Acesso Baseado em Papel (RBAC):** Incluída a funcionalidade `Permitir Distribuição`. Esta chave (*toggle*) define, a nível de dado, se aquele servidor específico tem direitos de alterar o detentor/responsável por um processo dentro do Painel Principal.
-- **Armazenamento Supabase:** Os dados de configuração são persistidos diretamente no Supabase na tabela `foco_drafts` através da chave primária (pseudo-tabela) `process_id: 'GLOBAL_CONFIG_ROLES'`. Esta abordagem evitou a criação de novas tabelas SQL complexas para o escopo do protótipo no Vercel, gravando as configurações no formato JSON (`form_data`).
-- **Resolução de Problema Crítico (Supabase Upsert):** Durante a implementação, a operação `.upsert()` do SDK do Supabase falhava silenciosamente devido à ausência de restrições de unicidade explícitas no Schema para a coluna de conflito. A solução foi adotar uma abordagem segura no `db.js`: `.select()` primário seguido de `.insert()` ou `.update()`.
-
-### 7.2. Tabela Dinâmica do Painel (`index.html`)
-- **Redesign Fluido:** O `dashboard.css` teve seu container principal expandido para largura total (`max-width: 100%`) com ajuste sensível das larguras das colunas (`th`), conferindo espaço extra para visualização dos nomes dos servidores alocados.
-- **Simulador de Permissões no Header:** Adicionado um *dropdown* de testes no cabeçalho do Painel. Ao selecionar `Chefia`, a coluna **"Atribuído para"** renderiza menus `<select>` iteráveis permitindo alocação em tempo real do processo para um servidor da respectiva UF. Ao mudar para `Técnico`, o componente é transmutado para `read-only` (modo texto protegido por cor de fundo bloqueada).
-- **Salvamento Direto:** Ao escolher um servidor no dropdown do Painel, um gatilho envia via API o `UPDATE` individual no `form_data.atribuido_para` daquele `process_id` específico direto para o banco de dados.
