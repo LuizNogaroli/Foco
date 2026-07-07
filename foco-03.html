@@ -207,20 +207,6 @@
           </div>
       </div>
 
-      <!-- Certidão atualizada da matrícula -->
-      <div class="form-group editavel">
-          <label for="val_anexo_matricula">Certidão atualizada da matrícula (não superior a 12 meses):</label>
-          <input type="hidden" name="anexo_matricula" id="val_anexo_matricula">
-          <input type="hidden" name="filename_anexo_matricula" id="val_filename_anexo_matricula">
-          <input type="file" id="file_anexo_matricula" style="display:none;" onchange="handleFileUpload('anexo_matricula')" accept=".pdf,.doc,.docx,.jpg,.png">
-          <div id="actions_anexo_matricula" style="margin-top: 8px; display: flex; align-items: center; gap: 8px;">
-              <span id="filename_anexo_matricula" style="display:none; font-size: 0.85em; color: #475569; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></span>
-              <button type="button" class="btn-link-doc btn-upload" onclick="triggerUpload('anexo_matricula')" style="background-color: #2e7d32; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">📂 Carregar arquivo</button>
-              <button type="button" class="btn-link-doc btn-view" style="display:none; background-color: #0284c7; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;" onclick="visualizarDoc('anexo_matricula')" title="Visualizar">👁️ Visualizar</button>
-              <button type="button" class="btn-link-doc btn-remove" style="display:none; background-color: #dc2626; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;" onclick="removerDoc('anexo_matricula')" title="Remover">🗑️ Excluir</button>
-          </div>
-      </div>
-
       <!-- Capacidade Financeira -->
       <h4 class="section-title">Capacidade Financeira</h4>
       <div class="form-group editavel">
@@ -250,6 +236,35 @@
       <div class="form-group editavel">
           <label>Descrição:</label>
           <textarea id="descricao_acao" name="descricao_acao" rows="4" readonly style="background:#f1f5f9; color:#475569; resize:none;"></textarea>
+      </div>
+
+      <!-- Dados de Comparação de Área e Valor -->
+      <h4 class="section-title">Dados de Comparação de Área e Valor:</h4>
+      <div class="form-group editavel" style="padding: 15px; border: 1px solid #cbd5e1; border-radius: 8px; background-color: #f8fafc;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+              <div class="form-group">
+                  <label for="area_total_imovel">Área total do imóvel (m²):</label>
+                  <input type="text" id="area_total_imovel" name="area_total_imovel" placeholder="Ex: 5.000,00" autocomplete="off" readonly />
+              </div>
+              <div class="form-group">
+                  <label for="valor_total_imovel">Valor total do imóvel (R$):</label>
+                  <input type="text" id="valor_total_imovel" name="valor_total_imovel" placeholder="Ex: 1.500.000,00" autocomplete="off" readonly />
+              </div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px; border-top: 1px dashed #cbd5e1; padding-top: 10px;">
+              <div class="form-group">
+                  <label for="area_terreno_destinada">Área do terreno a ser destinada (m²):</label>
+                  <input type="text" id="area_terreno_destinada" name="area_terreno_destinada" placeholder="Ex: 1.200,00" autocomplete="off" readonly />
+              </div>
+              <div class="form-group">
+                  <label for="area_construida_destinada">Área construída a ser destinada (m²):</label>
+                  <input type="text" id="area_construida_destinada" name="area_construida_destinada" placeholder="Ex: 800,00" autocomplete="off" readonly />
+              </div>
+          </div>
+          <div class="form-group" style="margin-top: 10px;">
+              <label for="valor_area_destinada">Valor de referência da área a ser destinada (R$):</label>
+              <input type="text" id="valor_area_destinada" name="valor_area_destinada" placeholder="Ex: 360.000,00" autocomplete="off" readonly />
+          </div>
       </div>
 
       <!-- Custos de Manutenção para a SPU -->
@@ -565,11 +580,11 @@
 
   <div id="bloco511_obs" style="display:none; margin-top:8px;">
     <label for="campo511_obs">Observações complementares:</label>
-    <textaárea
+    <textarea
       id="campo511_obs"
       name="campo511_obs"
       placeholder="Observações sobre o regime de destinação proposto..."
-    ></textaárea>
+    ></textarea>
   </div>
 </div>
 
@@ -577,27 +592,13 @@
 
 
     <div class="form-group editavel">
-    <label for="obs224_0">Observações:</label>
-    <textaárea id="obs224_0" name="imoveis[0][obs_geral_ident]" placeholder=""></textaárea>
+    <label for="obs224_0">Observações da Destinação:</label>
+    <textarea id="obs224_0" name="imoveis[0][obs_geral_ident]" placeholder="Insira aqui as observações gerais da análise desta aba..."></textarea>
     <div class="dynamic-list-wrapper" style="flex:1;display:flex;flex-direction:column;gap:8px;">
       <button type="button" class="btn-add" id="btnAdicionarImagemIdent_0" style="align-self:flex-start;">+ Adicionar link/documento</button>
       <div id="imagens-list-ident_0"></div>
     </div>
   </div>
-
-      <!-- Contrapartida -->
-      <h4 class="section-title">Contrapartida e Impactos</h4>
-      <div class="form-group editavel" id="secao-contrapartida">
-          <label>Haverá contrapartida vinculada à destinação?</label>
-          <div class="radio-group">
-              <label class="radio-option"><input type="radio" name="tem_contrapartida" value="Sim" onclick="document.getElementById('bloco-contrapartida').style.display='flex'"> Sim</label>
-              <label class="radio-option"><input type="radio" name="tem_contrapartida" value="Não" checked onclick="document.getElementById('bloco-contrapartida').style.display='none'"> Não</label>
-          </div>
-          <div id="bloco-contrapartida" style="display:none; margin-top: 10px; flex-direction: column; gap: 8px;">
-              <label for="desc_contrapartida">Descrição da Contrapartida / Encargos:</label>
-              <textarea id="desc_contrapartida" name="desc_contrapartida" placeholder="Descreva os encargos, obras ou melhorias assumidas pelo destinatário..."></textarea>
-          </div>
-      </div>
 
       <!-- Botões -->
       <div class="button-group" style="margin-top: 40px; display: flex; justify-content: flex-end; gap: 15px; border-top: 1px solid #ccc; padding-top: 20px;">
@@ -867,7 +868,7 @@ document.addEventListener('DOMContentLoaded',function(){
 
         if(!exibir){
           document.querySelectorAll(`#${cfg.grupo} input[type="checkbox"], #${cfg.grupo} input[type="radio"]`).forEach(cb=>cb.checked=false);
-          document.querySelectorAll(`#${cfg.grupo} textaárea`).forEach(t=>t.value='');
+          document.querySelectorAll(`#${cfg.grupo} textarea`).forEach(t=>t.value='');
           document.querySelectorAll(`#${cfg.grupo} select`).forEach(s=>s.value='');
         }
 

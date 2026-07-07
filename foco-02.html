@@ -219,6 +219,20 @@ input:checked + .slider:before { transform: translateX(14px); }
       
 
 
+      <!-- Certidão atualizada da matrícula -->
+      <div class="form-group editavel" style="margin-top: 20px;">
+          <label for="val_anexo_matricula_aba2" style="font-weight: bold;">Certidão atualizada da matrícula (não superior a 12 meses):</label>
+          <input type="hidden" name="anexo_matricula_aba2" id="val_anexo_matricula_aba2">
+          <input type="hidden" name="filename_anexo_matricula_aba2" id="val_filename_anexo_matricula_aba2">
+          <input type="file" id="file_anexo_matricula_aba2" style="display:none;" onchange="handleFileUpload('anexo_matricula_aba2')" accept=".pdf,.doc,.docx,.jpg,.png">
+          <div id="actions_anexo_matricula_aba2" style="margin-top: 8px; display: flex; align-items: center; gap: 8px;">
+              <span id="filename_anexo_matricula_aba2" style="display:none; font-size: 0.85em; color: #475569; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></span>
+              <button type="button" class="btn-link-doc btn-upload" onclick="triggerUpload('anexo_matricula_aba2')" style="background-color: #2e7d32; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">📂 Carregar arquivo</button>
+              <button type="button" class="btn-link-doc btn-view" style="display:none; background-color: #0284c7; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;" onclick="visualizarDoc('anexo_matricula_aba2')" title="Visualizar">👁️ Visualizar</button>
+              <button type="button" class="btn-link-doc btn-remove" style="display:none; background-color: #dc2626; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;" onclick="removerDoc('anexo_matricula_aba2')" title="Remover">🗑️ Excluir</button>
+          </div>
+      </div>
+
       <!-- Observações e Documentos da Aba 2 (Geral) -->
       <div style="margin-top: 30px; margin-bottom: 20px;">
           <!-- Observações (Geral) -->
