@@ -53,7 +53,15 @@ async function updateRIP() {
         latitude: "-15.793889",
         longitude: "-47.882778",
         custos_manutencao: "Sim",
-        estimativa_custos: "15.000,00"
+        estimativa_custos: "15.000,00",
+        docs_custom_files_aba2_1: "",
+        docs_custom_links_aba2_1: "https://extranet.spunet.gov.br/documentos/2026001_certidao_matricula.pdf",
+        documentos_anexados: [
+            {
+                nome: "Certidão de Matrícula",
+                url: "https://extranet.spunet.gov.br/documentos/2026001_certidao_matricula.pdf"
+            }
+        ]
     };
     
     dados = { ...dados, ...mockData };

@@ -5,7 +5,7 @@
 window.ripsPesquisados = window.ripsPesquisados || {};
 window.imovelCount = window.imovelCount || 0;
 
-document.addEventListener('DOMContentLoaded', function () {
+function inicializarFoco01() {
     const form01 = document.getElementById('form01');
     if (!form01) return;
 
@@ -22,7 +22,10 @@ document.addEventListener('DOMContentLoaded', function () {
         btn.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
-            if (modalSim) {
+            const url = this.getAttribute('data-url');
+            if (url && url !== '#') {
+                window.open(url, '_blank');
+            } else if (modalSim) {
                 modalSim.style.display = 'flex';
             }
         });
@@ -89,11 +92,46 @@ document.addEventListener('DOMContentLoaded', function () {
     // =========================================================================
     // 5. RENDERIZAÇÃO DINÂMICA DE DOCUMENTOS
     // =========================================================================
+    // Fallback/Polling para evitar race conditions e atualizar título
+    let docsRendered = false;
+    const checkStateInterval = setInterval(() => {
+        if (window.parent && window.parent.formDataState) {
+            const data = window.parent.formDataState;
+            const labelTitulo = document.getElementById('label-titulo-requerimento');
+            if (labelTitulo) {
+                labelTitulo.textContent = 'Requerimento';
+            }
+            const tituloPagina = document.getElementById('titulo-pagina-requerimento');
+            if (tituloPagina && data.procedimento) {
+                tituloPagina.textContent = data.procedimento;
+            }
+            if (data.documentos_anexados) {
+                clearInterval(checkStateInterval);
+                if (!docsRendered) {
+                    renderDocumentos(data.documentos_anexados);
+                    docsRendered = true;
+                }
+            }
+        }
+    }, 200);
+
     window.addEventListener('message', function(event) {
         if (event.data && event.data.type === 'DATABASE_LOADED') {
             const data = event.data.data;
+            const labelTitulo = document.getElementById('label-titulo-requerimento');
+            if (labelTitulo) {
+                labelTitulo.textContent = 'Requerimento';
+            }
+            const tituloPagina = document.getElementById('titulo-pagina-requerimento');
+            if (tituloPagina && data.procedimento) {
+                tituloPagina.textContent = data.procedimento;
+            }
             if (data && data.documentos_anexados && Array.isArray(data.documentos_anexados)) {
-                renderDocumentos(data.documentos_anexados);
+                clearInterval(checkStateInterval);
+                if (!docsRendered) {
+                    renderDocumentos(data.documentos_anexados);
+                    docsRendered = true;
+                }
             }
         }
     });
@@ -124,7 +162,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         </div>
                     </td>
                     <td class="coluna-acao" style="text-align: right; padding: 10px 8px;">
-                        <button type="button" class="btn-link-doc btn-simular-doc" style="background-color: #0284c7; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; display: inline-block;" title="Visualizar">👁️ Visualizar</button>
+                        <button type="button" class="btn-link-doc btn-simular-doc" data-url="${doc.url || '#'}" style="background-color: #0284c7; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; display: inline-block;" title="Visualizar">👁️ Visualizar</button>
                     </td>
                 </tr>
             `;
@@ -139,7 +177,10 @@ document.addEventListener('DOMContentLoaded', function () {
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                if (modalSim) {
+                const url = this.getAttribute('data-url');
+                if (url && url !== '#') {
+                    window.open(url, '_blank');
+                } else if (modalSim) {
                     modalSim.style.display = 'flex';
                 }
             });
@@ -150,29 +191,166 @@ document.addEventListener('DOMContentLoaded', function () {
     // 4. TOGGLE DOS BOTÕES DA CONCEITUAÇÃO DO IMÓVEL
     // =========================================================================
 
-    // Toggle para "Inserir RIP"
-    const cbRips = document.querySelectorAll('.cb-rip');
+    // Toggle para botões Inserir RIP / Inserir Cadastro Mínimo com base no Select
+    const containerDropdown = document.getElementById('container_conceituacao_dropdown');
+    const selectConceituacao = document.getElementById('conceituacao_imovel');
+    const btnEnviar = document.getElementById('btnEnviar');
     const btnInserirRip = document.getElementById('btnInserirRip');
-    if (cbRips.length > 0 && btnInserirRip) {
-        cbRips.forEach(cb => {
-            cb.addEventListener('change', function() {
-                const anyChecked = Array.from(cbRips).some(c => c.checked);
-                btnInserirRip.style.display = anyChecked ? 'block' : 'none';
-            });
+    const btnInserirCadastroMinimo = document.getElementById('btnInserirCadastroMinimo');
+
+    // Estado da solicitação de criação de RIP
+    window.solicitacaoCriacaoRip = "";
+
+    function atualizarLayoutConceituacao() {
+        if (!selectConceituacao) return;
+        const val = selectConceituacao.value;
+        const exigeRip = ["Terreno/acrescido de marinha", "Terreno/acrescido marginal", "Nacional interior"];
+        const exigeCadastro = ["Espelho d'água", "Cavidades naturais subterrâneas", "Manguezal", "Praias"];
+
+        const blocoInfo = document.getElementById('bloco-info-exige-rip');
+        const spanConceituacao = document.getElementById('info-conceituacao-selecionada');
+        const btnCadastro = document.getElementById('btnInserirCadastroMinimo');
+
+        let selecionado = "";
+        if (val && exigeRip.includes(val)) {
+            selecionado = "Sim";
+            if (blocoInfo) blocoInfo.style.display = "block";
+            if (spanConceituacao) spanConceituacao.textContent = val;
+            if (btnCadastro) btnCadastro.style.display = "none";
+        } else if (val && exigeCadastro.includes(val)) {
+            selecionado = "Não";
+            if (blocoInfo) blocoInfo.style.display = "none";
+            if (btnCadastro) btnCadastro.style.display = "block";
+        } else {
+            if (blocoInfo) blocoInfo.style.display = "none";
+            if (btnCadastro) btnCadastro.style.display = "none";
+        }
+
+        // Gerenciar estado ativo/inativo do botão Enviar com base em RIP (ou solicitação de criação) ou Cadastro Mínimo realizado
+        if (btnEnviar) {
+            let habilitado = false;
+            if (selecionado === "Sim" && ((window.ripsPendentes && window.ripsPendentes.length > 0) || window.solicitacaoCriacaoRip)) {
+                habilitado = true;
+            } else if (selecionado === "Não" && window.cadastrosPendentes && window.cadastrosPendentes.length > 0) {
+                habilitado = true;
+            }
+
+            if (habilitado) {
+                btnEnviar.disabled = false;
+                btnEnviar.style.opacity = "1";
+                btnEnviar.style.pointerEvents = "auto";
+                btnEnviar.style.cursor = "pointer";
+            } else {
+                btnEnviar.disabled = true;
+                btnEnviar.style.opacity = "0.4";
+                btnEnviar.style.pointerEvents = "none";
+                btnEnviar.style.cursor = "not-allowed";
+            }
+        }
+    }
+
+    // LÓGICA DO MODAL SOLICITAR CRIAÇÃO DE RIP
+    console.log("🔍 [foco-01] Iniciando binding do modal de solicitação...");
+    const modalSolicitacao = document.getElementById('modalSolicitarCriacaoRip');
+    const btnSolicitar = document.getElementById('btnSolicitarCriacaoRip');
+    const btnFecharSolicitacao = document.getElementById('btnFecharModalSolicitacaoRip');
+    const btnCancelarSolicitacao = document.getElementById('btnCancelarSolicitacaoRip');
+    const btnSalvarSolicitacao = document.getElementById('btnSalvarSolicitacaoRip');
+    const inputSolicitacao = document.getElementById('inputSolicitacaoCriacao');
+
+    console.log("🔍 [foco-01] Elementos consultados:", {
+        modalSolicitacao: !!modalSolicitacao,
+        btnSolicitar: !!btnSolicitar,
+        btnFecharSolicitacao: !!btnFecharSolicitacao,
+        btnCancelarSolicitacao: !!btnCancelarSolicitacao,
+        btnSalvarSolicitacao: !!btnSalvarSolicitacao,
+        inputSolicitacao: !!inputSolicitacao
+    });
+
+    function renderSolicitacaoCriacaoRip() {
+        const existing = document.getElementById('card-solicitacao-rip');
+        if (existing) existing.remove();
+        
+        if (!window.solicitacaoCriacaoRip) return;
+
+        const div = document.createElement('div');
+        div.id = 'card-solicitacao-rip';
+        div.style.cssText = "background-color: #fdf2f8; border: 1px solid #fbcfe8; padding: 10px 14px; border-radius: 6px; display: flex; justify-content: space-between; align-items: flex-start; font-size: 14px; font-weight: 500; color: #9d174d; margin-top: 8px; flex-direction: column; gap: 6px; text-align: left;";
+        div.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                <span>🔔 Solicitação de Criação de RIP</span>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <span style="cursor: pointer; color: #0284c7; font-weight: bold; font-size: 12px;" id="btnEditarSolicitacaoRip" title="Editar">Editar</span>
+                    <span style="cursor: pointer; color: #ef4444; font-weight: bold; font-size: 18px;" id="btnExcluirSolicitacaoRip" title="Remover">&times;</span>
+                </div>
+            </div>
+            <div style="font-size: 13px; color: #475569; background: #fff; padding: 6px 10px; border-radius: 4px; border: 1px solid #f3f4f6; width: 100%; box-sizing: border-box; word-break: break-all;">
+                ${window.solicitacaoCriacaoRip}
+            </div>
+        `;
+        const listRips = document.getElementById('listaRipsInseridos');
+        if (listRips) listRips.appendChild(div);
+
+        div.querySelector('#btnEditarSolicitacaoRip').addEventListener('click', () => {
+            if (inputSolicitacao) inputSolicitacao.value = window.solicitacaoCriacaoRip;
+            if (modalSolicitacao) modalSolicitacao.style.display = 'flex';
+        });
+
+        div.querySelector('#btnExcluirSolicitacaoRip').addEventListener('click', () => {
+            window.solicitacaoCriacaoRip = "";
+            div.remove();
+            atualizarLayoutConceituacao();
         });
     }
 
-    // Toggle para "Inserir Cadastro Mínimo"
-    const cbDispensados = document.querySelectorAll('.cb-dispensado');
-    const btnInserirCadastroMinimo = document.getElementById('btnInserirCadastroMinimo');
-    if (cbDispensados.length > 0 && btnInserirCadastroMinimo) {
-        cbDispensados.forEach(cb => {
-            cb.addEventListener('change', function() {
-                const anyChecked = Array.from(cbDispensados).some(c => c.checked);
-                btnInserirCadastroMinimo.style.display = anyChecked ? 'block' : 'none';
-            });
+    if (btnSolicitar && modalSolicitacao) {
+        btnSolicitar.addEventListener('click', () => {
+            console.log("🔍 [foco-01] Clique detectado em btnSolicitar! Abrindo modal...");
+            modalSolicitacao.style.display = 'flex';
+            if (inputSolicitacao) inputSolicitacao.value = window.solicitacaoCriacaoRip || '';
         });
     }
+
+    const fecharModalSolicitacao = () => { if (modalSolicitacao) modalSolicitacao.style.display = 'none'; };
+    if (btnFecharSolicitacao) btnFecharSolicitacao.addEventListener('click', fecharModalSolicitacao);
+    if (btnCancelarSolicitacao) btnCancelarSolicitacao.addEventListener('click', fecharModalSolicitacao);
+
+    if (btnSalvarSolicitacao) {
+        btnSalvarSolicitacao.addEventListener('click', () => {
+            if (!inputSolicitacao) return;
+            const txt = inputSolicitacao.value.trim();
+            if (!txt) {
+                alert("Por favor, descreva sua solicitação ao setor de cadastro.");
+                return;
+            }
+            window.solicitacaoCriacaoRip = txt;
+            renderSolicitacaoCriacaoRip();
+            fecharModalSolicitacao();
+            atualizarLayoutConceituacao();
+        });
+    }
+
+    window.removerRipItem = function(rip) {
+        window.ripsPendentes = window.ripsPendentes.filter(r => r !== rip);
+        atualizarLayoutConceituacao();
+        if (window.parent && typeof window.parent.updateField === 'function') {
+            window.parent.updateField('rips', window.ripsPendentes);
+        }
+    };
+
+    window.removerCadastroItem = function(cep, area) {
+        window.cadastrosPendentes = window.cadastrosPendentes.filter(c => c.cep !== cep || c.area !== area);
+        atualizarLayoutConceituacao();
+    };
+
+    if (selectConceituacao) {
+        selectConceituacao.addEventListener('change', () => {
+            atualizarLayoutConceituacao();
+        });
+    }
+
+    // Inicializa o layout para deixar o botão desabilitado caso nada esteja marcado inicialmente
+    atualizarLayoutConceituacao();
 
     // =========================================================================
     // 5. LÓGICA DOS MODAIS (RIP E CADASTRO MÍNIMO)
@@ -209,10 +387,11 @@ document.addEventListener('DOMContentLoaded', function () {
         div.style.cssText = "background-color: #f0fdf4; border: 1px solid #bbf7d0; padding: 8px 12px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; font-weight: 500; color: #166534;";
         div.innerHTML = `
             <span>✅ RIP Cadastrado: <strong>${rip}</strong></span>
-            <span style="cursor: pointer; color: #ef4444;" onclick="this.parentElement.remove(); window.ripsPendentes = window.ripsPendentes.filter(r => r !== '${rip}');" title="Remover">&times;</span>
+            <span style="cursor: pointer; color: #ef4444;" onclick="this.parentElement.remove(); window.removerRipItem('${rip}');" title="Remover">&times;</span>
         `;
         listaRipsInseridos.appendChild(div);
         if (!window.ripsPendentes.includes(rip)) window.ripsPendentes.push(rip);
+        atualizarLayoutConceituacao();
     }
 
     // Função para validar RIP na tabela_spu
@@ -311,17 +490,15 @@ document.addEventListener('DOMContentLoaded', function () {
         const div = document.createElement('div');
         div.style.cssText = "background-color: #f0fdf4; border: 1px solid #bbf7d0; padding: 8px 12px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; font-weight: 500; color: #166534;";
         
-        // Converte o objeto de volta para string escapada para remover depois
-        const jsonStr = JSON.stringify(dados).replace(/'/g, "&apos;").replace(/"/g, "&quot;");
-        
         div.innerHTML = `
             <span>✅ Cadastro realizado <span style="font-size: 12px; color: #15803d; font-weight: normal; margin-left: 5px;">(CEP: ${dados.cep})</span></span>
-            <span style="cursor: pointer; color: #ef4444;" onclick="this.parentElement.remove(); window.cadastrosPendentes = window.cadastrosPendentes.filter(c => c.cep !== '${dados.cep}' || c.area !== '${dados.area}');" title="Remover">&times;</span>
+            <span style="cursor: pointer; color: #ef4444;" onclick="this.parentElement.remove(); window.removerCadastroItem('${dados.cep}', '${dados.area}');" title="Remover">&times;</span>
         `;
         listaCadastrosInseridos.appendChild(div);
         
         const exists = window.cadastrosPendentes.some(c => c.cep === dados.cep && c.area === dados.area);
         if (!exists) window.cadastrosPendentes.push(dados);
+        atualizarLayoutConceituacao();
     }
 
     if (btnSalvarCadastro) {
@@ -362,9 +539,42 @@ document.addEventListener('DOMContentLoaded', function () {
             if (registro && registro.dados_json) {
                 const rips = registro.dados_json.rips || [];
                 const cadastros = registro.dados_json.cadastros_minimos || [];
+                window.solicitacaoCriacaoRip = registro.dados_json.solicitacao_criacao_rip || "";
                 rips.forEach(rip => adicionarRipNaLista(rip));
                 cadastros.forEach(cad => adicionarCadastroNaLista(cad));
+                if (window.solicitacaoCriacaoRip) {
+                    renderSolicitacaoCriacaoRip();
+                }
+
+                // Restaura a conceituação do imóvel
+                const selectCon = document.getElementById('conceituacao_imovel');
+                if (selectCon) {
+                    let val = registro.dados_json.conceituacao_imovel || '';
+                    if (!val) {
+                        // Fallback/Backward compatibility com dados legados
+                        const legacyRips = registro.dados_json.conceituacao_rip || [];
+                        const legacyDisp = registro.dados_json.conceituacao_dispensado || [];
+                        if (legacyRips.length > 0) {
+                            val = legacyRips[0].replace(" (Exige RIP)", "").replace(" / ", "/");
+                        } else if (legacyDisp.length > 0) {
+                            val = legacyDisp[0].replace("Praia marítima", "Praias").replace("Praia fluvial ou lacustre", "Praias");
+                        }
+                    }
+
+                    if (val) {
+                        selectCon.value = val;
+                        atualizarLayoutConceituacao();
+                    } else {
+                        atualizarLayoutConceituacao();
+                    }
+                } else {
+                    atualizarLayoutConceituacao();
+                }
+            } else {
+                atualizarLayoutConceituacao();
             }
+        } else {
+            atualizarLayoutConceituacao();
         }
     }, 1000); // Aguarda o db.js estar pronto e a tela carregar
 
@@ -384,16 +594,26 @@ document.addEventListener('DOMContentLoaded', function () {
             const processId = localStorage.getItem('CURRENT_PROCESS_ID');
             
             if (window.parent) {
-                const cbRipsAtivos = Array.from(document.querySelectorAll('.cb-rip:checked')).map(cb => cb.value);
-                const cbDispensadosAtivos = Array.from(document.querySelectorAll('.cb-dispensado:checked')).map(cb => cb.value);
+                const selectCon = document.getElementById('conceituacao_imovel');
+                const val = selectCon ? selectCon.value : '';
+                
+                const exigeRip = ["Terreno/acrescido de marinha", "Terreno/acrescido marginal", "Nacional interior"];
+                const exigeCadastro = ["Espelho d'água", "Cavidades naturais subterrâneas", "Manguezal", "Praias"];
+                const possuiRipVal = exigeRip.includes(val) ? 'Sim' : (exigeCadastro.includes(val) ? 'Não' : '');
+                
+                const cbRipsAtivos = exigeRip.includes(val) ? [val] : [];
+                const cbDispensadosAtivos = exigeCadastro.includes(val) ? [val] : [];
                 
                 try {
                     // 1. Salva na Tabela Indicação
                     const dadosIndicacao = {
                         rips: window.ripsPendentes,
                         cadastros_minimos: window.cadastrosPendentes,
+                        possui_rip: possuiRipVal,
+                        conceituacao_imovel: val,
                         conceituacao_rip: cbRipsAtivos,
-                        conceituacao_dispensado: cbDispensadosAtivos
+                        conceituacao_dispensado: cbDispensadosAtivos,
+                        solicitacao_criacao_rip: window.solicitacaoCriacaoRip || ""
                     };
                     
                     const url = `${window.parent.SUPABASE_URL}/rest/v1/tabela_indicacao?on_conflict=numero_requerimento`;
@@ -409,10 +629,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     });
                     console.log('📝 [foco-01] tabela_indicacao status:', respIndicacao.status);
                     
-                    // 2. Sincroniza RIPs com o formDataState do parent
+                    // 2. Sincroniza dados com o formDataState do parent
                     if (typeof window.parent.updateField === 'function') {
                         window.parent.updateField('rips', window.ripsPendentes);
-                        console.log('📝 [foco-01] formDataState.rips atualizado:', window.parent.formDataState?.rips);
+                        window.parent.updateField('solicitacao_criacao_rip', window.solicitacaoCriacaoRip || "");
+                        window.parent.updateField('cadastros_minimos', window.cadastrosPendentes || []);
+                        console.log('📝 [foco-01] formDataState sincronizado.');
                     }
                     
                     // 3. Persiste formDataState na tabela_foco
@@ -481,4 +703,10 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-});
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', inicializarFoco01);
+} else {
+    inicializarFoco01();
+}

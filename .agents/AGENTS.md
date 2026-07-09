@@ -1,5 +1,13 @@
 ## Regra de Base de Conhecimento (Knowledge Base)
-Sempre que o agente enfrentar um desafio complexo e encontrar uma soluÁ„o (arquitetural, lÛgica ou tÈcnica), ele deve documentar esse aprendizado gerando um artefato (arquivo .md). Para evitar sobrescrita e acumular o histÛrico, o arquivo deve ser nomeado no formato `kb_<assunto>_YYYYMMDD_HHMM.md` (ex: `kb_datalake_fields_20260626_1755.md`). O objetivo È construir uma base de conhecimento duradoura para o projeto que depois ser· depurada em um documento ˙nico.
+Sempre que o agente enfrentar um desafio complexo e encontrar uma solu√ß√£o (arquitetural, l√≥gica ou t√©cnica), ele deve documentar esse aprendizado gerando um artefato (arquivo .md). Para evitar sobrescrita e acumular o hist√≥rico, o arquivo deve ser nomeado no formato `kb_<assunto>_YYYYMMDD_HHMM.md` (ex: `kb_datalake_fields_20260626_1755.md`). O objetivo √© construir uma base de conhecimento duradoura para o projeto que depois ser√° depurada em um documento √∫nico.
 
-O agente deve criar os artefatos de Knowledge Base de forma autÙnoma e silenciosa, sem precisar relatar ao usu·rio a criaÁ„o de cada um deles, pois o usu·rio far· a revis„o posterior.
-Certifique-se de salvar todos esses arquivos .md diretamente no diretÛrio 'kb/' na raiz do projeto (crie-o se n„o existir), para manter o repositÛrio organizado e n„o poluir a raiz do cÛdigo.
+O agente deve criar os artefatos de Knowledge Base de forma aut√¥noma e silenciosa, sem precisar relatar ao usu√°rio a cria√ß√£o de cada um deles, pois o usu√°rio far√° a revis√£o posterior.
+
+Certifique-se de salvar todos esses arquivos .md diretamente no diret√≥rio 'kb/' na raiz do projeto (crie-o se n√£o existir), para manter o reposit√≥rio organizado e n√£o poluir a raiz do c√≥digo.
+
+## Regra de Reversibilidade e Hist√≥rico de Altera√ß√µes (Rollback/Desfazer)
+Sempre que salvar o log de uma corre√ß√£o importante em `docs/historico/` (utilizando o padr√£o `<nome>_<timestamp>.md`), voc√™ deve incluir obrigatoriamente:
+1. **Estado Anterior (Antes):** O bloco de c√≥digo original exato que foi alterado/removido.
+2. **Estado Novo (Depois):** O bloco de c√≥digo novo ap√≥s a altera√ß√£o.
+3. **Plano de Rollback / Desfazer:** Instru√ß√µes detalhadas passo a passo de como reverter a mudan√ßa e restaurar o estado original se necess√°rio.
+Isso garante a reversibilidade total do c√≥digo e permite reverter erros de forma √°gil e segura em turnos futuros.

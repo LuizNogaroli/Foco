@@ -163,9 +163,21 @@ body {
 .filters-body {
     padding: 20px;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: 15px;
     background-color: #ffffff;
+}
+
+@media (max-width: 1024px) {
+    .filters-body {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .filters-body {
+        grid-template-columns: 1fr;
+    }
 }
 
 .filter-group {
@@ -182,10 +194,14 @@ body {
 }
 
 .filter-group select, .filter-group input {
+    width: 100%;
+    height: 42px;
+    box-sizing: border-box;
     padding: 10px;
     border: 1.5px solid var(--spu-border);
     border-radius: 6px;
     font-size: 13.5px;
+    font-family: inherit;
     outline: none;
     color: #334155;
     background-color: #fff;
@@ -215,6 +231,7 @@ body {
     border: 1.5px solid var(--spu-border);
     border-radius: 6px;
     font-size: 13.5px;
+    font-family: inherit;
     outline: none;
     box-sizing: border-box;
 }

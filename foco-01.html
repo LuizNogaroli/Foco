@@ -8,14 +8,15 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FOCO-01 — Indicação do Imóvel</title>
+    <title>FOCO-01 — Requerimento</title>
     <link rel="stylesheet" href="styles-forms.css?v=1782355313469">
     <link rel="stylesheet" href="hints.css?v=1782355313469">
     <link rel="stylesheet" href="custom-select.css?v=1782355313469">
 </head>
 <body>
     <div class="form-container">
-        <h2>Indicação do Imóvel</h2>
+        <div id="label-titulo-requerimento" style="text-align: center; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: #6b7280; font-weight: 700; margin-bottom: 4px;">Requerimento</div>
+        <h2 id="titulo-pagina-requerimento" style="text-align: center; margin-top: 0; margin-bottom: 24px;"></h2>
         <form id="form01" novalidate>
             
             <h4 style="margin: 0 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 8px;">Dados do Requerimento</h4>
@@ -116,56 +117,51 @@
                 </details>
             </section>
 
+            <!-- Título centralizado para a seção de indicação -->
+            <h2 style="text-align: center; color: #1e3a5f; margin: 40px 0 20px 0; font-size: 1.5rem; border-bottom: none;">Indicação do Imóvel</h2>
+
+            <!-- Subtítulo fora do box -->
+            <h4 style="margin: 20px 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 8px;">Conceituação do Imóvel</h4>
+
             <!-- Conceituação do Imóvel -->
-            <section class="conceituacao-imovel-section editavel" style="margin-bottom: 25px; background: #eff6ff; border-left: 4px solid #007bff; border-radius: 4px; padding: 15px;">
-                <h3 style="font-size: 16px; color: #1e3a5f; margin-bottom: 15px; margin-top: 0;">Conceituação do imóvel a ser destinado (selecione uma ou mais opções):</h3>
+            <section class="conceituacao-imovel-section editavel" style="margin-bottom: 25px; background: #eff6ff; border-left: 4px solid #007bff; border-radius: 4px; padding: 10px 15px;">
                 
-                <div style="display: flex; flex-wrap: wrap; gap: 30px;">
-                    <!-- Coluna 1: Exige RIP -->
-                    <div style="flex: 1; min-width: 300px; display: flex; flex-direction: column; gap: 10px; align-items: flex-start;">
-                        <div style="font-weight: 600; color: #1e3a5f; margin-bottom: 5px; font-size: 15px; text-align: left; width: 100%;">Selecione o tipo de terreno (Exige RIP):</div>
-                        <label style="display: flex; align-items: center; justify-content: flex-start; text-align: left; gap: 8px; font-size: 15px; cursor: pointer; color: #334155; width: 100%;">
-                            <input type="checkbox" name="conceituacao_rip[]" value="Terreno / acrescido de marinha (Exige RIP)" class="custom-checkbox cb-rip" style="width: auto; margin: 0;">
-                            Terreno / acrescido de marinha (Exige RIP)
-                        </label>
-                        <label style="display: flex; align-items: center; justify-content: flex-start; text-align: left; gap: 8px; font-size: 15px; cursor: pointer; color: #334155; width: 100%;">
-                            <input type="checkbox" name="conceituacao_rip[]" value="Terreno / acrescido marginal (Exige RIP)" class="custom-checkbox cb-rip" style="width: auto; margin: 0;">
-                            Terreno / acrescido marginal (Exige RIP)
-                        </label>
-                        <label style="display: flex; align-items: center; justify-content: flex-start; text-align: left; gap: 8px; font-size: 15px; cursor: pointer; color: #334155; width: 100%;">
-                            <input type="checkbox" name="conceituacao_rip[]" value="Nacional interior (Exige RIP)" class="custom-checkbox cb-rip" style="width: auto; margin: 0;">
-                            Nacional interior (Exige RIP)
-                        </label>
-                        <button type="button" id="btnInserirRip" class="btn-action" style="display: none; margin-top: 10px; padding: 8px 16px; background-color: #0284c7; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: bold; width: fit-content;">+ Inserir RIP</button>
-                        <div id="listaRipsInseridos" style="display: flex; flex-direction: column; gap: 8px; width: 100%; margin-top: 5px;"></div>
+                <div style="display: flex; flex-direction: column; gap: 10px; align-items: flex-start; width: 100%;">
+                    
+                    <!-- Dropdown de Conceituação -->
+                    <div id="container_conceituacao_dropdown" style="width: 100%; max-width: 450px; text-align: left; margin-top: 5px;">
+                        <label for="conceituacao_imovel" style="font-weight: 600; color: #1e3a5f; margin-bottom: 6px; font-size: 15px; display: block;">Selecione a conceituação do imóvel:</label>
+                        <select id="conceituacao_imovel" name="conceituacao_imovel" class="form-control" style="width: 100%; padding: 8px 12px; border-radius: 4px; border: 1px solid #cbd5e1; font-size: 15px; color: #334155; background-color: #ffffff;">
+                            <option value="">Selecione uma opção...</option>
+                            <option value="Terreno/acrescido de marinha">Terreno/acrescido de marinha</option>
+                            <option value="Terreno/acrescido marginal">Terreno/acrescido marginal</option>
+                            <option value="Nacional interior">Nacional interior</option>
+                            <option value="Espelho d'água">Espelho d'água</option>
+                            <option value="Cavidades naturais subterrâneas">Cavidades naturais subterrâneas</option>
+                            <option value="Manguezal">Manguezal</option>
+                            <option value="Praias">Praias</option>
+                        </select>
                     </div>
 
-                    <!-- Coluna 2: Dispensado -->
-                    <div style="flex: 1; min-width: 300px; display: flex; flex-direction: column; gap: 10px; align-items: flex-start;">
-                        <div style="font-weight: 600; color: #1e3a5f; margin-bottom: 5px; font-size: 15px; text-align: left; width: 100%;">Selecione o tipo de terreno dispensado:</div>
-                        <label style="display: flex; align-items: center; justify-content: flex-start; text-align: left; gap: 8px; font-size: 15px; cursor: pointer; color: #334155; width: 100%;">
-                            <input type="checkbox" name="conceituacao_dispensado[]" value="Espelho d'água" class="custom-checkbox cb-dispensado" style="width: auto; margin: 0;">
-                            Espelho d'água
-                        </label>
-                        <label style="display: flex; align-items: center; justify-content: flex-start; text-align: left; gap: 8px; font-size: 15px; cursor: pointer; color: #334155; width: 100%;">
-                            <input type="checkbox" name="conceituacao_dispensado[]" value="Cavidades naturais subterrâneas" class="custom-checkbox cb-dispensado" style="width: auto; margin: 0;">
-                            Cavidades naturais subterrâneas
-                        </label>
-                        <label style="display: flex; align-items: center; justify-content: flex-start; text-align: left; gap: 8px; font-size: 15px; cursor: pointer; color: #334155; width: 100%;">
-                            <input type="checkbox" name="conceituacao_dispensado[]" value="Manguezal" class="custom-checkbox cb-dispensado" style="width: auto; margin: 0;">
-                            Manguezal
-                        </label>
-                        <label style="display: flex; align-items: center; justify-content: flex-start; text-align: left; gap: 8px; font-size: 15px; cursor: pointer; color: #334155; width: 100%;">
-                            <input type="checkbox" name="conceituacao_dispensado[]" value="Praia marítima" class="custom-checkbox cb-dispensado" style="width: auto; margin: 0;">
-                            Praia marítima
-                        </label>
-                        <label style="display: flex; align-items: center; justify-content: flex-start; text-align: left; gap: 8px; font-size: 15px; cursor: pointer; color: #334155; width: 100%;">
-                            <input type="checkbox" name="conceituacao_dispensado[]" value="Praia fluvial ou lacustre" class="custom-checkbox cb-dispensado" style="width: auto; margin: 0;">
-                            Praia fluvial ou lacustre
-                        </label>
-                        <button type="button" id="btnInserirCadastroMinimo" class="btn-action" style="display: none; margin-top: 10px; padding: 8px 16px; background-color: #0284c7; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: bold; width: fit-content;">+ Inserir Cadastro Mínimo</button>
-                        <div id="listaCadastrosInseridos" style="display: flex; flex-direction: column; gap: 8px; width: 100%; margin-top: 5px;"></div>
+                    <!-- Bloco Info Exige RIP -->
+                    <div id="bloco-info-exige-rip" style="display: none; margin-top: 12px; padding: 12px; background-color: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; width: 100%;">
+                        <div style="font-weight: 600; color: #1e3a5f; margin-bottom: 8px;">
+                            Conceituação selecionada: <span id="info-conceituacao-selecionada" style="font-weight: 700; color: #0056b3;"></span>
+                        </div>
+                        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+                            <span style="font-size: 0.95em; color: #374151; font-weight: 500;">⚠️ A conceituação do imóvel exige um RIP.</span>
+                            <div style="display: flex; gap: 10px;">
+                                <button type="button" id="btnInserirRip" class="btn-action" style="padding: 8px 16px; background-color: #0284c7; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: bold; width: fit-content;">+ Inserir RIP</button>
+                                <button type="button" id="btnSolicitarCriacaoRip" class="btn-action" style="padding: 8px 16px; background-color: #7c3aed; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: bold; width: fit-content;">Solicitar a criação de RIP</button>
+                            </div>
+                        </div>
                     </div>
+
+                    <!-- Botão Inserir Cadastro Mínimo -->
+                    <button type="button" id="btnInserirCadastroMinimo" class="btn-action" style="display: none; padding: 8px 16px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: bold; width: fit-content; margin-top: 5px;">+ Inserir Cadastro Mínimo</button>
+
+                    <div id="listaRipsInseridos" style="display: flex; flex-direction: column; gap: 8px; width: 100%; margin-top: 5px;"></div>
+                    <div id="listaCadastrosInseridos" style="display: flex; flex-direction: column; gap: 8px; width: 100%; margin-top: 5px;"></div>
                 </div>
             </section>
 
@@ -193,7 +189,7 @@
 
     <script src="formulario.js?v=1782355313469"></script>
     <script src="hints.js?v=1782355313469"></script>
-    <script src="foco-01.js?v=99999_7"></script>
+    <script src="foco-01.js?v=99999_20"></script>
 
     <script>
         // ================================================================
@@ -324,6 +320,24 @@
             <div style="display: flex; justify-content: flex-end; gap: 15px; padding-top: 15px; border-top: 1px solid #e2e8f0;">
                 <button type="button" id="btnCancelarCadastro" style="padding: 10px 20px; background-color: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; border-radius: 4px; cursor: pointer; font-weight: bold;">Cancelar</button>
                 <button type="button" id="btnSalvarCadastro" style="padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">Salvar Cadastro</button>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Solicitar Criação de RIP -->
+    <div id="modalSolicitarCriacaoRip" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:3000; align-items:center; justify-content:center;">
+        <div style="background:white; padding:30px; border-radius:12px; max-width:500px; width:90%; box-shadow:0 10px 25px rgba(0,0,0,0.3); text-align:left; position:relative; border-top: 8px solid #7c3aed;">
+            <button id="btnFecharModalSolicitacaoRip" style="position:absolute; top:15px; right:15px; background:none; border:none; font-size:24px; cursor:pointer; color:#64748b;">&times;</button>
+            <h3 style="color:#1e3a5f; margin-top:0; margin-bottom:15px; font-size:20px; font-weight:700;">Solicitar Criação de RIP</h3>
+            <p style="font-size:0.9em; color:#64748b; margin-bottom:20px;">Descreva a solicitação que será enviada ao setor de cadastro para a criação do RIP deste imóvel.</p>
+            
+            <div style="margin-bottom: 20px;">
+                <label for="inputSolicitacaoCriacao" style="font-weight: bold; display: block; margin-bottom: 8px; color:#1e3a5f;">Justificativa / Descrição da Solicitação:</label>
+                <textarea id="inputSolicitacaoCriacao" rows="5" placeholder="Descreva aqui os detalhes do imóvel, localização e motivo da solicitação de abertura de RIP..." style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:6px; resize:vertical; outline:none; font-family:inherit;"></textarea>
+            </div>
+            
+            <div style="display:flex; justify-content:flex-end; gap:12px;">
+                <button type="button" class="btn-secondary" id="btnCancelarSolicitacaoRip" style="padding:10px 20px; background-color:#f1f5f9; color:#334155; border:1px solid #cbd5e1; border-radius:6px; font-weight:bold; cursor:pointer;">Cancelar</button>
+                <button type="button" id="btnSalvarSolicitacaoRip" style="padding:10px 20px; background-color:#7c3aed; color:white; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">Enviar Solicitação</button>
             </div>
         </div>
     </div>

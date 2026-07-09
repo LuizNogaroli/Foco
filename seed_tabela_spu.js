@@ -53,7 +53,15 @@ async function insertRips() {
                 data_avaliacao: "15/05/2026",
                 instrumento_avaliacao: "Laudo de Avaliação NBR 14653",
                 lpm_homologada: "Sim",
-                processo_incorporacao: "10480.123456/2020-11"
+                processo_incorporacao: "10480.123456/2020-11",
+                docs_custom_files_aba2_1: "",
+                docs_custom_links_aba2_1: `https://extranet.spunet.gov.br/documentos/${req.num}_certidao_matricula.pdf`,
+                documentos_anexados: [
+                    {
+                        nome: "Certidão de Matrícula",
+                        url: `https://extranet.spunet.gov.br/documentos/${req.num}_certidao_matricula.pdf`
+                    }
+                ]
             }
         };
 

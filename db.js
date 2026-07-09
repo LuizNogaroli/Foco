@@ -158,7 +158,8 @@ async function executeSaveDraft() {
             telefone_rep: payload.campo19_rep,
             uf: payload.uf,
             municipio: payload.municipio,
-            regime_requerido: payload.procedimento
+            regime_requerido: payload.procedimento,
+            documentos_anexados: payload.documentos_anexados || []
         };
 
         await fetch(SUPABASE_URL + '/rest/v1/tabela_requerimentos?numero_requerimento=eq.' + PROCESS_ID, {

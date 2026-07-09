@@ -94,8 +94,8 @@ async function seed() {
                     telefone: '(99) 99999-9999'
                 },
                 documentos_anexados: [
-                    { nome: "Requerimento inicial", url: "#" },
-                    { nome: "Contrato social", url: "#" }
+                    { nome: "Requerimento inicial", url: "PDF_1_Nononononononono.pdf" },
+                    { nome: "Contrato social", url: "PDF_2_Nononononononono.pdf" }
                 ]
             }
         });

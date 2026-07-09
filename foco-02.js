@@ -220,9 +220,21 @@ window.adicionarTagRIP = function(rip, dados) {
     
     div.innerHTML = `
         <span><strong style="color: #2e7d32; font-size: 1.1em;">RIP: ${rip}</strong> - ${dados ? (dados.natureza || dados.natureza_terreno || 'Terreno Importado') : 'Terreno Importado'}</span>
-        <button type="button" onclick="window.removerRIP('${rip}')" style="background: none; border: none; color: #d32f2f; font-weight: bold; cursor: pointer; font-size: 1.1em;" title="Remover RIP">&times;</button>
     `;
     if (lista) lista.appendChild(div);
+};
+
+window.toggleInconsistenciasRip = function(element, rip) {
+    const parent = element.closest(`#group-pergunta-inconsistencias-${rip}`);
+    if (parent) {
+        parent.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+            if (cb !== element) cb.checked = false;
+        });
+    }
+    const obsBlock = document.getElementById(`bloco-inconsistencias-obs-${rip}`);
+    if (obsBlock) {
+        obsBlock.style.display = (element.checked && element.value === 'Sim') ? 'flex' : 'none';
+    }
 };
 
 window.criarBlocoImovel = function(rip, dados) {
@@ -313,485 +325,102 @@ window.criarBlocoImovel = function(rip, dados) {
     }
 
     div.innerHTML = `
-        <div class="accordion-header" style="background-color: #f1f5f9; padding: 12px 16px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; border-radius: 8px 8px 0 0; border-bottom: 1px solid #cbd5e1;" onclick="toggleAccordion(this)">
-            <h4 style="margin: 0; color: #0f172a;">Imóvel Selecionado: RIP ${rip}</h4>
-            <span class="accordion-icon" style="font-size: 1.2em; font-weight: bold; color: #64748b;">▲</span>
+        <div class="accordion-header type-rip" style="padding: 12px 16px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; border-radius: 8px 8px 0 0; border-bottom: 1px solid #cbd5e1;" onclick="toggleAccordion(this)">
+            <h4 style="margin: 0; font-weight: bold;">Imóvel Selecionado: RIP ${rip}</h4>
+            <span class="accordion-icon" style="font-size: 1.2em; font-weight: bold;">▲</span>
         </div>
         <div class="accordion-content" style="display: block; padding: 16px;">
             <input type="hidden" name="imoveis[${index}][rip]" value="${rip}">
             
-            <div id="secao-identificacao-${rip}">
-            <h4 style="margin: 0 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
-              Identificação do Imóvel
-              
-            </h4>
-            
-            ${buildField('Conceituação do Imóvel', 'conceituacao', dados.conceituacao || dados.descricao)}
-            ${buildField('Condição de Urbanização', 'condicao_urbanizacao', dados.condicao_urbanizacao)}
-            ${buildField('Natureza do Imóvel', 'natureza', dados.natureza || dados.natureza_terreno)}
-            ${buildField('Tipo de Imóvel', 'tipo_imovel', dados.tipoImovel || dados.tipo_imovel)}
+            <!-- Localização -->
+            <h5 style="margin: 0 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 6px; font-weight: bold; font-size: 1.05em; text-align: left;">Localização</h5>
             ${buildField('CEP', 'cep', dados.cep)}
             ${buildField('UF', 'uf', dados.uf)}
             ${buildField('Município', 'municipio', dados.municipio)}
             ${buildField('Endereço', 'endereco', dados.endereco || dados.logradouro)}
+            
+            <!-- Tipologia -->
+            <h5 style="margin: 24px 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 6px; font-weight: bold; font-size: 1.05em; text-align: left;">Tipologia</h5>
+            ${buildField('Conceituação do Imóvel', 'conceituacao', dados.conceituacao || dados.descricao)}
+            ${buildField('Condição de Urbanização', 'condicao_urbanizacao', dados.condicao_urbanizacao)}
+            ${buildField('Natureza do Imóvel', 'natureza', dados.natureza || dados.natureza_terreno)}
+            ${buildField('Tipo de Imóvel', 'tipo_imovel', dados.tipoImovel || dados.tipo_imovel)}
+            
+            <!-- Características -->
+            <h5 style="margin: 24px 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 6px; font-weight: bold; font-size: 1.05em; text-align: left;">Características</h5>
             ${buildField('Área total (m²)', 'area_total', dados.area_total)}
             ${buildField('Área da União (m²)', 'area_uniao', dados.area_uniao)}
-            ${buildField('Há benfeitorias?', 'benfeitorias', dados.benfeitorias)}
             ${buildField('Área construída total (m²)', 'area_construida_total', dados.area_construida_total)}
             ${buildField('Área construída disponível (m²)', 'area_construida_disponivel', dados.area_construida_disponivel)}
             ${buildField('Área de terreno disponível (m²)', 'area_terreno_disponivel', dados.area_terreno_disponivel)}
+            ${buildField('Há benfeitorias?', 'benfeitorias', dados.benfeitorias)}
+            
+            <!-- Condições da incorporação -->
+            <h5 style="margin: 24px 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 6px; font-weight: bold; font-size: 1.05em; text-align: left;">Dados da incorporação</h5>
             ${buildField('Situação da Incorporação', 'situacao_incorporacao', dados.situacao_incorporacao || dados.situacao)}
             ${buildField('LPM/1831 ou LMEO homologadas?', 'lpm_homologada', dados.lpm_homologada)}
-            ${buildField('Processo de incorp.?', 'processo_incorporacao', dados.processo_incorporacao)}
+            ${buildField('Processo de incorporação:', 'processo_incorporacao', dados.processo_incorporacao)}
             <div class="bloco-condicional" data-controlled-by="processo_incorporacao" data-show-when="Sim" style="display:none; padding-left:16px; border-left:3px solid #94a3b8; margin-top:4px;">
                 ${buildField('Número do Processo', 'numero_processo', dados.numero_processo)}
                 ${buildField('Cartório', 'cartorio', dados.cartorio)}
                 ${buildField('Matrícula', 'matricula', dados.matricula)}
             </div>
-            
-            <!-- Bloco Justificativa da Identificação -->
-            <!-- /secao-identificacao -->
-        </div>
 
-            <!-- ========== AVALIAÇÃO DO IMÓVEL ========== -->
+            <!-- Condições da Avaliação -->
             <div id="secao-avaliacao-${rip}">
-                <h4 style="margin: 24px 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 8px;">
-                  Avaliação do Imóvel
-                </h4>
+                <h5 style="margin: 24px 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 6px; font-weight: bold; font-size: 1.05em; text-align: left;">Dados da Avaliação</h5>
                 ${buildField('Valor da Avaliação (R$)', 'valor_avaliacao', dados.valor_avaliacao)}
                 ${buildField('Data da Avaliação', 'data_avaliacao', dados.data_avaliacao)}
                 ${buildField('Instrumento de Avaliação', 'instrumento_avaliacao', dados.instrumento_avaliacao)}
                 
                 <div class="form-group editavel">
                     <div class="dynamic-list-wrapper" style="margin-top: 10px; flex: 1; display: flex; flex-direction: column; gap: 8px;">
-                        <button type="button" class="btn-add" id="btnAdicionarDocumentoAvaliacao_${rip}" style="align-self: flex-start;" onclick="if(typeof window.adicionarDocumentoDinamico === 'function') window.adicionarDocumentoDinamico('documentos-list-avaliacao_${rip}')">＋ Anexar Instrumento de Avaliação (Digitalizado)</button>
+                        <button type="button" class="btn-add" id="btnAdicionarDocumentoAvaliacao_${rip}" style="align-self: flex-start;" onclick="if(typeof window.adicionarDocumentoDinamico === 'function') window.adicionarDocumentoDinamico('documentos-list-avaliacao_${rip}')">＋ Anexar link/documento</button>
                         <div id="documentos-list-avaliacao_${rip}"></div>
                     </div>
                 </div>
             </div>
-<!-- ==================== OCUPAÇÃO ==================== -->
-          <h4 style="margin: 24px 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 8px;">
-            Ocupação
-          </h4>
 
-          <!-- 3.1 Situação ocupacional -->
-          <div class="form-group editavel">
-            <label>Situação ocupacional:</label>
-
-            <div class="radio-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-items: center;">
-              <label class="radio-option">
-                <input type="radio" name="imoveis[${index}][situacao_ocupacional]" value="Desocupado" required />
-                Desocupado
-              </label>
-
-              <label class="radio-option">
-                <input type="radio" name="imoveis[${index}][situacao_ocupacional]" value="Ocupado regularmente" />
-                Ocupado regularmente
-              </label>
-
-              <label class="radio-option">
-                <input type="radio" name="imoveis[${index}][situacao_ocupacional]" value="Ocupado irregularmente" />
-                Ocupado irregularmente
-              </label>
-
-              <label class="radio-option">
-                <input type="radio" name="imoveis[${index}][situacao_ocupacional]" value="Não há informação" />
-                Não há informação
-              </label>
-            </div>
-
-            <!-- Campos exibidos quando Desocupado -->
-            <div id="bloco-desocupado_${rip}" style="display: none; flex-direction: column; gap: 6px; margin-top: 8px;">
-              <label for="campo-tempo-desocupacao_${rip}">Tempo de desocupação:</label>
-              <input
-                type="text"
-                id="campo-tempo-desocupacao_${rip}"
-                name="imoveis[${index}][tempo_desocupacao]"
-                placeholder="Ex: 05 anos, desde 03/2010 ou desde 2010"
-              />
-
-              <label for="obs-desocupado_${rip}">Observações:</label>
-              <textarea
-                id="obs-desocupado_${rip}"
-                name="imoveis[${index}][obs_desocupado]"
-                placeholder="Observações sobre a desocupação..."
-              ></textarea>
-            </div>
-
-            <!-- Campos exibidos quando Ocupado regularmente ou Ocupado irregularmente -->
-            <div id="bloco-ocupado_${rip}" style="display: none; flex-direction: column; gap: 6px; margin-top: 8px;">
-              <label for="campo-data-conhecimento-ocupacao_${rip}">Data de conhecimento da ocupação:</label>
-              <input
-                type="text"
-                id="campo-data-conhecimento-ocupacao_${rip}"
-                name="imoveis[${index}][data_conhecimento_ocupacao]"
-                placeholder="Ex: 03/2010 ou 2010"
-              />
-
-              <label for="obs-ocupado_${rip}">Observações:</label>
-              <textarea
-                id="obs-ocupado_${rip}"
-                name="imoveis[${index}][obs_ocupado]"
-                placeholder="Informar dados do ocupante e indicar se a ocupação é parcial ou integral."
-              ></textarea>
-            </div>
-          </div>
-
-          <!-- Campos exibidos apenas quando Ocupado regularmente ou Ocupado irregularmente -->
-          <div id="bloco-uso-atual_${rip}" style="display: none; flex-direction: column; gap: 0;">
-
-            <!-- 3.2 Uso imobiliário atual -->
-            <div class="form-group editavel">
-              <label for="campo32_${rip}">Uso imobiliário atual:</label>
-              <select id="campo32_${rip}" name="imoveis[${index}][tipo_uso_atual]">
-                <option value="">Selecione...</option>
-                <option value="0101">01.01 Uso administrativo e representativo</option>
-                <option value="0102">01.02 Uso para agropecuária, aquicultura, produção florestal e pesca</option>
-                <option value="0103">01.03 Uso ambiental e dos recursos naturais</option>
-                <option value="0104">01.04 Uso cultural, esportivo e de lazer</option>
-                <option value="0106">01.06 Uso habitacional</option>
-                <option value="0111">01.11 Uso por povos originários e comunidades tradicionais</option>
-              </select>
-            </div>
-
-            <!-- 3.3 Uso específico atual -->
-            <div class="form-group editavel">
-              <label for="campo33_${rip}">Uso específico atual:</label>
-              <select id="campo33_${rip}" name="imoveis[${index}][tipo_uso_especifico_atual]" disabled>
-                <option value="">Selecione primeiro o uso imobiliário atual...</option>
-              </select>
-            </div>
-
-          </div>
-
-          <!-- ==================== INCIDÊNCIA AMBIENTAL ==================== -->
-          <div class="form-group editavel">
-            <label>Incidência ambiental:</label>
-
-            <div class="checkbox-group" id="group-incidencia_${rip}" class="checkbox-group">
-
-              <label class="checkbox-option">
-                <input
-                  type="checkbox"
-                  name="imoveis[${index}][incidencia_ambiental][]"
-                  value="Nenhuma incidência identificada"
-                />
-                Nenhuma incidência identificada
-                <span class="hint-semaforo">
-                  <span
-                    class="hint-icon"
-                    data-hint="Não foi identificada incidência ambiental relevante sobre o imóvel."
-                    data-hint-tipo="verde"
-                  >?</span>
-                </span>
-              </label>
-
-              <label class="checkbox-option">
-                <input
-                  type="checkbox"
-                  name="imoveis[${index}][incidencia_ambiental][]"
-                  value="APP"
-                />
-                APP — Área de Preservação Permanente
-                <span class="hint-semaforo">
-                  <span
-                    class="hint-icon"
-                    data-hint="Área protegida por legislação específica com restrições severas."
-                    data-hint-tipo="vermelho"
-                  >?</span>
-                </span>
-              </label>
-
-              <label class="checkbox-option">
-                <input
-                  type="checkbox"
-                  name="imoveis[${index}][incidencia_ambiental][]"
-                  value="Unidade de Conservação"
-                />
-                Unidade de Conservação Federal, Estadual ou Municipal
-                <span class="hint-semaforo">
-                  <span
-                    class="hint-icon"
-                    data-hint="Sujeito a regime próprio de proteção."
-                    data-hint-tipo="amarelo"
-                  >?</span>
-                </span>
-              </label>
-
-              <label class="checkbox-option">
-                <input
-                  type="checkbox"
-                  name="imoveis[${index}][incidencia_ambiental][]"
-                  value="Área de risco"
-                />
-                Área de risco — geotécnica, inundação, etc.
-              </label>
-
-              <label class="checkbox-option">
-                <input
-                  type="checkbox"
-                  name="imoveis[${index}][incidencia_ambiental][]"
-                  value="Área contaminada"
-                />
-                Área contaminada — passivo ambiental
-              </label>
-
-              <label class="checkbox-option">
-                <input
-                  type="checkbox"
-                  name="imoveis[${index}][incidencia_ambiental][]"
-                  value="Outra situação ambiental"
-                />
-                Outra situação ambiental
-              </label>
-
-            </div>
-
-            <div id="bloco-obs35_${rip}" style="display: none; flex-direction: column; gap: 6px; margin-top: 8px;">
-              <label for="obs35_${rip}">Observações sobre incidência ambiental:</label>
-              <textarea
-                id="obs35_${rip}"
-                name="imoveis[${index}][obs_incidencia_ambiental]"
-                placeholder="Descreva informações complementares sobre incidência ambiental..."
-              ></textarea>
-            </div>
-          </div>
-
-          <!-- ==================== RISCOS ==================== -->
-          <h4 style="margin: 24px 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 8px;">
-            Riscos
-          </h4>
-
-          <div class="form-group editavel">
-            <label>Há riscos identificado?</label>
-
-            <div id="group-pergunta-riscos_${rip}" class="checkbox-group" style="display:flex; flex-direction:row; gap:32px; flex-wrap:wrap; margin-bottom:10px; align-items:center;">
-              <label class="checkbox-option" style="display:inline-flex; align-items:center; gap:6px; margin:0;"><input type="checkbox" name="imoveis[${index}][ha_riscos][]" value="Sim" /> Sim</label>
-              <label class="checkbox-option" style="display:inline-flex; align-items:center; gap:6px; margin:0;"><input type="checkbox" name="imoveis[${index}][ha_riscos][]" value="Não" /> Não</label>
-              <label class="checkbox-option" style="display:inline-flex; align-items:center; gap:6px; margin:0;"><input type="checkbox" name="imoveis[${index}][ha_riscos][]" value="Não há informação suficiente" /> Não há informação suficiente</label>
-            </div>
-
-            <div id="bloco-riscos-itens_${rip}" style="display:none;">
-              <label style="margin-top:4px;">Riscos verificados:</label>
-
-              <div class="checkbox-group" id="group-riscos_${rip}" class="checkbox-group">
-
-              <label class="checkbox-option">
-                <input
-                  type="checkbox"
-                  name="imoveis[${index}][riscos][]"
-                  value="Risco de invasão/esbulho"
-                />
-                Risco de invasão/esbulho
-              </label>
-
-              <label class="checkbox-option">
-                <input
-                  type="checkbox"
-                  name="imoveis[${index}][riscos][]"
-                  value="Risco à segurança/saúde pública"
-                />
-                Risco à segurança/saúde pública
-              </label>
-
-              <label class="checkbox-option">
-                <input
-                  type="checkbox"
-                  name="imoveis[${index}][riscos][]"
-                  value="Risco estrutural ou de desabamento"
-                />
-                Risco estrutural ou de desabamento
-              </label>
-
-              <label class="checkbox-option">
-                <input
-                  type="checkbox"
-                  name="imoveis[${index}][riscos][]"
-                  value="Risco de depredação, vandalismo ou deterioração"
-                />
-                Risco de depredação, vandalismo ou deterioração
-              </label>
-
-              <label class="checkbox-option">
-                <input
-                  type="checkbox"
-                  name="imoveis[${index}][riscos][]"
-                  value="Outro risco identificado"
-                />
-                Outro risco identificado
-              </label>
-
-            </div>
-
-            <div id="bloco-obs-riscos_${rip}" style="display: none; flex-direction: column; gap: 6px; margin-top: 8px;">
-              <label for="obs-riscos_${rip}">Observações sobre riscos:</label>
-              <textarea
-                id="obs-riscos_${rip}"
-                name="imoveis[${index}][obs_riscos]"
-                placeholder="Descreva informações complementares sobre os riscos verificados..."
-              ></textarea>
-            </div>
-          </div>
-          </div>
-
-          <!-- ==================== RESTRIÇÕES ==================== -->
-          <h4 style="margin: 24px 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 8px;">
-            Restrições
-          </h4>
-
-          <div class="form-group editavel">
-            <label>Há restrições e condições limitadoras?</label>
-
-            <div id="group-pergunta-restricoes_${rip}" class="checkbox-group" style="display:flex; flex-direction:row; gap:32px; flex-wrap:wrap; margin-bottom:10px; align-items:center;">
-              <label class="checkbox-option" style="display:inline-flex; align-items:center; gap:6px; margin:0;"><input type="checkbox" name="imoveis[${index}][ha_restricoes][]" value="Sim" /> Sim</label>
-              <label class="checkbox-option" style="display:inline-flex; align-items:center; gap:6px; margin:0;"><input type="checkbox" name="imoveis[${index}][ha_restricoes][]" value="Não" /> Não</label>
-              <label class="checkbox-option" style="display:inline-flex; align-items:center; gap:6px; margin:0;"><input type="checkbox" name="imoveis[${index}][ha_restricoes][]" value="Não há informação suficiente" /> Não há informação suficiente</label>
-              </div>
-
-            <div id="bloco-restricoes-itens_${rip}" style="display:none;">
-              <label style="margin-top:4px;">Restrições verificadas:</label>
-
-              <div class="checkbox-group" id="group-restricoes_${rip}" class="checkbox-group">
-
-              <label class="checkbox-option">
-                <input type="checkbox" name="imoveis[${index}][restricoes][]" value="Faixa de fronteira" />
-                Faixa de fronteira
-              </label>
-
-              <label class="checkbox-option">
-                <input type="checkbox" name="imoveis[${index}][restricoes][]" value="Faixa de segurança" />
-                Faixa de segurança
-              </label>
-
-              <label class="checkbox-option">
-                <input type="checkbox" name="imoveis[${index}][restricoes][]" value="Faixa de domínio Ferrovia/Rodovia" />
-                Faixa de domínio Ferrovia/Rodovia
-              </label>
-
-              <label class="checkbox-option">
-                <input type="checkbox" name="imoveis[${index}][restricoes][]" value="Faixa de 100 metros ao longo da costa marítima" />
-                Faixa de 100 metros ao longo da costa marítima
-              </label>
-
-              <label class="checkbox-option">
-                <input type="checkbox" name="imoveis[${index}][restricoes][]" value="Circunferência de 1.320 metros em torno de instalações militares" />
-                Circunferência de 1.320 metros em torno de instalações militares
-              </label>
-
-              <label class="checkbox-option">
-                <input type="checkbox" name="imoveis[${index}][restricoes][]" value="Terra indígena" />
-                Terra indígena
-              </label>
-
-              <label class="checkbox-option">
-                <input type="checkbox" name="imoveis[${index}][restricoes][]" value="Território quilombola ou área de comunidade tradicional" />
-                Território quilombola ou área de comunidade tradicional
-              </label>
-
-              <label class="checkbox-option">
-                <input type="checkbox" name="imoveis[${index}][restricoes][]" value="Zona/Área de Interesse Social (ZEIS)" />
-                Zona/Área de Interesse Social — ZEIS
-              </label>
-
-              <label class="checkbox-option">
-                <input type="checkbox" name="imoveis[${index}][restricoes][]" value="Área de segurança" />
-                Área de segurança
-              </label>
-
-              <label class="checkbox-option">
-                <input type="checkbox" name="imoveis[${index}][restricoes][]" value="Área Non Aedificandi" />
-                Área Non Aedificandi
-              </label>
-
-              <label class="checkbox-option">
-                <input type="checkbox" name="imoveis[${index}][restricoes][]" value="Restrição de uso/ocupação incidente sobre o imóvel" />
-                Restrição de uso/ocupação incidente sobre o imóvel
-              </label>
-
-              <label class="checkbox-option">
-                <input type="checkbox" name="imoveis[${index}][restricoes][]" value="Tombado como patrimônio histórico, artístico e/ou cultural" />
-                Tombado como patrimônio histórico, artístico e/ou cultural
-              </label>
-
-              <label class="checkbox-option">
-                <input type="checkbox" name="imoveis[${index}][restricoes][]" value="Poligonal de Porto Organizado" />
-                Poligonal de Porto Organizado
-              </label>
-
-              <label class="checkbox-option">
-                <input type="checkbox" name="imoveis[${index}][restricoes][]" value="Área operacional da RFFSA" />
-                Área operacional da RFFSA
-              </label>
-
-              <label class="checkbox-option">
-                <input type="checkbox" name="imoveis[${index}][restricoes][]" value="Ilha oceânica ou costeira sem sede de município" />
-                Ilha oceânica ou costeira sem sede de município
-              </label>
-
-              <label class="checkbox-option">
-                <input type="checkbox" name="imoveis[${index}][restricoes][]" value="Ilha fluvial ou lacustre" />
-                Ilha fluvial ou lacustre
-              </label>
-
-              <label class="checkbox-option">
-                <input type="checkbox" name="imoveis[${index}][restricoes][]" value="Localizada em loteamento" />
-                Localizada em loteamento
-              </label>
-
-              <label class="checkbox-option">
-                <input
-                  type="checkbox"
-                  name="imoveis[${index}][restricoes][]"
-                  value="Outra restrição identificada"
-                />
-                Outra restrição identificada
-              </label>
-
-              </div>
-            </div>
-
-            <div id="bloco-obs-restricoes_${rip}" style="display: none; flex-direction: column; gap: 6px; margin-top: 16px;">
-              <label for="obs-restricoes_${rip}">Observações sobre as restrições:</label>
-              <textarea
-                id="obs-restricoes_${rip}"
-                name="imoveis[${index}][obs_restricoes]"
-                placeholder="Descreva informações complementares sobre as restrições verificadas..."
-              ></textarea>
-            </div>
-          </div>
-        </section>
-      </div>
-
-      
-            <!-- ========== GEOLOCALIZAÇÃO ========== -->
-            <div id="secao-geolocalizacao-${rip}">
-                <h4 style="margin: 24px 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 8px;">
-                  Geolocalização
-                </h4>
-                <div class="form-group editavel">
-                    <label for="cep_${rip}">Localizar por CEP:</label>
-                    <div class="cep-row">
-                        <input type="text" id="cep_${rip}" name="imoveis[${index}][geo_cep]" class="mask-cep" placeholder="00000-000" maxlength="9" value="${dados.geo_cep || dados.cep || ''}">
-                        <button type="button" class="btn-search">🔍 Buscar</button>
-                    </div>
-                </div>
-                <div class="form-group editavel">
-                    <div class="cep-row">
-                        <div style="flex: 1;">
-                            <label for="latitude_${rip}" style="font-weight: bold; font-size: 0.9em; display: block; margin-bottom: 5px;">Latitude:</label>
-                            <input type="text" id="latitude_${rip}" name="imoveis[${index}][latitude]" placeholder="-15.793889" style="width: 100%;" value="${dados.latitude || ''}">
-                        </div>
-                        <div style="flex: 1;">
-                            <label for="longitude_${rip}" style="font-weight: bold; font-size: 0.9em; display: block; margin-bottom: 5px;">Longitude:</label>
-                            <input type="text" id="longitude_${rip}" name="imoveis[${index}][longitude]" placeholder="-47.882778" style="width: 100%;" value="${dados.longitude || ''}">
-                        </div>
-                    </div>
+            <!-- ========== CERTIDÃO DE MATRÍCULA ========== -->
+            <div id="secao-certidao-${rip}" class="form-group editavel" style="margin-top: 24px;">
+                <label for="val_anexo_matricula_${rip}" style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 0.95em; color: #1e1b4b;">Certidão atualizada da matrícula (não superior a 12 meses):</label>
+                <input type="hidden" name="imoveis[${index}][anexo_matricula]" id="val_anexo_matricula_${rip}" value="${dados.anexo_matricula || ''}">
+                <input type="hidden" name="imoveis[${index}][filename_anexo_matricula]" id="val_filename_anexo_matricula_${rip}" value="${dados.filename_anexo_matricula || ''}">
+                <input type="file" id="file_anexo_matricula_${rip}" style="display:none;" onchange="window.handleFileUpload('anexo_matricula_${rip}')" accept=".pdf,.doc,.docx,.jpg,.png">
+                <div id="actions_anexo_matricula_${rip}" style="margin-top: 8px; display: flex; align-items: center; gap: 8px;">
+                    <span id="filename_anexo_matricula_${rip}" style="display:none; font-size: 0.85em; color: #475569; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></span>
+                    <button type="button" class="btn-upload" onclick="window.triggerUpload('anexo_matricula_${rip}')" style="background-color: #2e7d32; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold;">📂 Carregar arquivo</button>
+                    <button type="button" class="btn-view" style="display:none; background-color: #0284c7; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;" onclick="window.visualizarDoc('anexo_matricula_${rip}')" title="Visualizar">👁️ Visualizar</button>
                 </div>
             </div>
 
+            <!-- ========== INCONSISTÊNCIAS CADASTRAIS (RIP: ${rip}) ========== -->
+            <div id="secao-inconsistencias-${rip}" class="form-group editavel" style="margin-top: 24px; padding: 16px; background-color: #fef2f2; border: 1px solid #fca5a5; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); text-align: left;">
+                <label style="font-weight: 700; color: #991b1b; font-size: 1.05em; display: block; margin-bottom: 12px;">Há inconsistências cadastrais a serem informadas?</label>
+                <div id="group-pergunta-inconsistencias-${rip}" class="checkbox-group" style="display:flex; flex-direction:row; gap:32px; flex-wrap:wrap; margin-bottom:10px; align-items:center;">
+                    <label class="checkbox-option" style="display:inline-flex; align-items:center; gap:6px; margin:0; font-weight: 600;">
+                        <input type="checkbox" name="imoveis[${index}][ha_inconsistencias]" class="cb-ha-inconsistencias" value="Sim" onclick="window.toggleInconsistenciasRip(this, '${rip}')" ${dados.ha_inconsistencias === 'Sim' ? 'checked' : ''} /> Sim
+                    </label>
+                    <label class="checkbox-option" style="display:inline-flex; align-items:center; gap:6px; margin:0; font-weight: 600;">
+                        <input type="checkbox" name="imoveis[${index}][ha_inconsistencias]" class="cb-ha-inconsistencias" value="Não" onclick="window.toggleInconsistenciasRip(this, '${rip}')" ${dados.ha_inconsistencias === 'Não' ? 'checked' : ''} /> Não
+                    </label>
+                </div>
+
+                <div id="bloco-inconsistencias-obs-${rip}" style="display:${dados.ha_inconsistencias === 'Sim' ? 'flex' : 'none'}; flex-direction: column; gap: 6px; margin-top: 12px;">
+                    <label for="obs-inconsistencias-${rip}" style="font-weight: 600; color: #1e293b;">Descreva as inconsistências identificadas:</label>
+                    <textarea id="obs-inconsistencias-${rip}" name="imoveis[${index}][obs_inconsistencias]" placeholder="Descreva aqui as divergências encontradas entre o cadastro do SPU e a situação real..." style="width: 100%; border: 1px solid #cbd5e1; padding: 8px; border-radius: 4px; background-color: #fff; color: #334155; resize: vertical; min-height: 80px; font-family: inherit; font-size: 14px;">${dados.obs_inconsistencias || ''}</textarea>
+                </div>
+            </div>
+
+        </div>
     `;
 
     container.appendChild(div);
+
+    // Inicializa a UI do anexo de matrícula se já houver dados
+    if (typeof window.updateDocUI === 'function') {
+        setTimeout(() => window.updateDocUI(`anexo_matricula_${rip}`), 100);
+    }
 
     // Inicializa a lista dinâmica de anexos da seção de avaliação para este RIP
     if (typeof window.inicializarListaDocumentosDinamica === 'function') {
@@ -804,174 +433,7 @@ window.criarBlocoImovel = function(rip, dados) {
         }
     }
 
-    // Busca geográfica por CEP: usa o CEP já carregado para abrir o modal e executar a busca
-    (function() {
-        var inputCepGeo = div.querySelector('#cep_' + rip);
-        var btnBuscarGeo = div.querySelector('.btn-search');
-        if (!inputCepGeo || !btnBuscarGeo) return;
-
-        btnBuscarGeo.addEventListener('click', function() {
-            var geoModal = document.getElementById('geoModal');
-            if (geoModal) {
-                geoModal.style.display = 'flex';
-            }
-            if (typeof window.inicializarMapa === 'function') {
-                window.inicializarMapa();
-            }
-
-            var modalSearchInput = document.getElementById('modal-search-input');
-            if (modalSearchInput) {
-                modalSearchInput.value = inputCepGeo.value || '';
-                if (modalSearchInput.value && typeof window.buscarNoModal === 'function') {
-                    window.buscarNoModal();
-                }
-            }
-        });
-    })();
-
-    // ---- Situação Ocupacional: show/hide condicional ----
-    (function() {
-        var radioName = 'imoveis[' + index + '][situacao_ocupacional]';
-        function atualizarOcupacao() {
-            var blocoDesocupado = document.getElementById('bloco-desocupado_' + rip);
-            var blocoOcupado = document.getElementById('bloco-ocupado_' + rip);
-            var blocoUsoAtual = document.getElementById('bloco-uso-atual_' + rip);
-            if (!blocoDesocupado) return;
-            var checked = div.querySelector('[name="' + radioName + '"]:checked');
-            var val = checked ? checked.value : '';
-            blocoDesocupado.style.display = (val === 'Desocupado') ? 'flex' : 'none';
-            blocoOcupado.style.display = (val === 'Ocupado regularmente' || val === 'Ocupado irregularmente') ? 'flex' : 'none';
-            if (blocoUsoAtual) blocoUsoAtual.style.display = (val === 'Ocupado regularmente' || val === 'Ocupado irregularmente') ? 'flex' : 'none';
-        }
-        div.querySelectorAll('[name="' + radioName + '"]').forEach(function(radio) {
-            radio.addEventListener('change', atualizarOcupacao);
-        });
-        setTimeout(atualizarOcupacao, 0);
-    })();
-
-    // ---- Incidência Ambiental: cada opção (exceto "Nenhuma...") abre seu campo de observação ----
-    (function() {
-        var group = div.querySelector('#group-incidencia_' + rip);
-        if (!group) return;
-
-        var blocoObs = div.querySelector('#bloco-obs35_' + rip);
-        var checkboxes = group.querySelectorAll('input[type="checkbox"]');
-        var cbNenhuma = group.querySelector('input[value="Nenhuma incidência identificada"]');
-
-        function atualizarIncidenciaAmbiental(changed) {
-            var mudouNenhuma = changed && changed.value === 'Nenhuma incidência identificada';
-
-            if (mudouNenhuma && changed.checked) {
-                checkboxes.forEach(function(cb) {
-                    if (cb !== changed) cb.checked = false;
-                });
-            }
-
-            if (!mudouNenhuma) {
-                var algumaNaoNenhumaMarcada = false;
-                checkboxes.forEach(function(cb) {
-                    if (cb.value !== 'Nenhuma incidência identificada' && cb.checked) {
-                        algumaNaoNenhumaMarcada = true;
-                    }
-                });
-                if (algumaNaoNenhumaMarcada && cbNenhuma) cbNenhuma.checked = false;
-            }
-
-            var mostrarContainerObs = false;
-            checkboxes.forEach(function(cb) {
-                if (cb.checked) mostrarContainerObs = true;
-            });
-
-            if (blocoObs) {
-                blocoObs.style.display = mostrarContainerObs ? 'flex' : 'none';
-            }
-        }
-
-        checkboxes.forEach(function(cb) {
-            cb.addEventListener('change', function() {
-                atualizarIncidenciaAmbiental(cb);
-            });
-        });
-
-        setTimeout(function() { atualizarIncidenciaAmbiental(null); }, 0);
-    })();
-
-    // ---- Riscos/Restrições: pergunta de triagem (Sim/Não/Não há informação) ----
-    (function() {
-        function initPerguntaComMulticheck(config) {
-            var grupoPergunta = div.querySelector(config.perguntaSelector);
-            var grupoItens = div.querySelector(config.itensSelector);
-            var blocoObs = div.querySelector(config.obsSelector);
-            if (!grupoPergunta || !grupoItens) return;
-
-            var checksPergunta = grupoPergunta.querySelectorAll('input[type="checkbox"]');
-            var checksItens = grupoItens.querySelectorAll('input[type="checkbox"]');
-
-            function valorPerguntaSelecionado() {
-                for (var i = 0; i < checksPergunta.length; i++) {
-                    if (checksPergunta[i].checked) return checksPergunta[i].value;
-                }
-                return '';
-            }
-
-            function atualizar(changedPergunta) {
-                if (changedPergunta) {
-                    checksPergunta.forEach(function(cb) {
-                        if (cb !== changedPergunta) cb.checked = false;
-                    });
-                }
-
-                var valorPergunta = valorPerguntaSelecionado();
-                var mostrarItens = valorPergunta === 'Sim';
-
-                if (!valorPergunta) {
-                    var algumItemMarcado = false;
-                    checksItens.forEach(function(cb) {
-                        if (cb.checked) algumItemMarcado = true;
-                    });
-                    if (algumItemMarcado) {
-                        checksPergunta.forEach(function(cb) {
-                            cb.checked = (cb.value === 'Sim');
-                        });
-                        mostrarItens = true;
-                    }
-                }
-
-                grupoItens.style.display = mostrarItens ? 'block' : 'none';
-
-                var algumMarcado = false;
-                checksItens.forEach(function(cb) {
-                    if (cb.checked) algumMarcado = true;
-                });
-                if (blocoObs) {
-                    blocoObs.style.display = (mostrarItens && algumMarcado) ? 'flex' : 'none';
-                }
-            }
-
-            checksPergunta.forEach(function(cb) {
-                cb.addEventListener('change', function() { atualizar(cb); });
-            });
-            checksItens.forEach(function(cb) {
-                cb.addEventListener('change', function() { atualizar(null); });
-            });
-
-            setTimeout(function() { atualizar(null); }, 0);
-        }
-
-        initPerguntaComMulticheck({
-            perguntaSelector: '#group-pergunta-riscos_' + rip,
-            itensSelector: '#bloco-riscos-itens_' + rip,
-            obsSelector: '#bloco-obs-riscos_' + rip
-        });
-
-        initPerguntaComMulticheck({
-            perguntaSelector: '#group-pergunta-restricoes_' + rip,
-            itensSelector: '#bloco-restricoes-itens_' + rip,
-            obsSelector: '#bloco-obs-restricoes_' + rip
-        });
-    })();
-
-    // ---- Tira o snapshot dos valores originais assim que o bloco é criado ----
+        // ---- Tira o snapshot dos valores originais assim que o bloco é criado ----
     setTimeout(() => {
         const inputs = div.querySelectorAll('input, select, textarea');
         inputs.forEach(input => {
@@ -1093,37 +555,57 @@ window.preencherCamposGlobais = function(dados) {
         if (el) el.value = val || '';
     }
 
+    function checkBoxes(name, values) {
+        if (!values) return;
+        let arr = Array.isArray(values) ? values : String(values).split(',').map(s => s.trim());
+        document.querySelectorAll(`input[name="${name}"]`).forEach(cb => {
+            cb.checked = arr.includes(cb.value);
+        });
+    }
+
+    // 1. Situação Ocupacional (Radios e condicionais)
+    if (dados.situacao_ocupacional) {
+        const rad = document.querySelector(`input[name="situacao_ocupacional"][value="${dados.situacao_ocupacional}"]`);
+        if (rad) {
+            rad.checked = true;
+            rad.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+    }
+    fill('campo-tempo-desocupacao', dados.tempo_desocupacao);
+    fill('obs-desocupado', dados.obs_desocupado);
+    fill('campo-data-conhecimento-ocupacao', dados.data_conhecimento_ocupacao || dados.data_ocupacao || dados.data_ocupacao_irregular);
+    fill('obs-ocupado', dados.obs_ocupado);
+    
+    if (dados.tipo_uso_atual || dados.uso_imobiliario_atual) {
+        fill('campo32', dados.tipo_uso_atual || dados.uso_imobiliario_atual);
+        document.getElementById('campo32')?.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+
+    // 2. Incidência ambiental checkboxes
+    checkBoxes('ha_incidencia[]', dados.ha_incidencia);
+    checkBoxes('incidencia_ambiental[]', dados.incidencia_ambiental);
+    fill('obs_incidencia_ambiental', dados.obs_incidencia_ambiental || dados.observacoes_incidencia);
+
+    // 3. Riscos checkboxes
+    checkBoxes('ha_riscos[]', dados.ha_riscos);
+    checkBoxes('riscos[]', dados.riscos_verificados || dados.riscos);
+    fill('obs_riscos', dados.obs_riscos);
+    
+    // 4. Restrições checkboxes
+    checkBoxes('ha_restricoes[]', dados.ha_restricoes);
+    checkBoxes('restricoes[]', dados.restricoes_verificadas || dados.restricoes);
+    fill('obs_restricoes', dados.obs_restricoes);
+
+    // 5. Geolocalização
+    fill('cep', dados.geo_cep || dados.cep);
+    fill('latitude', dados.latitude);
+    fill('longitude', dados.longitude);
+
+
+
     fill('valor_avaliacao', dados.valor_avaliado || dados.valor_avaliacao);
     fill('data_avaliacao', dados.data_avaliacao);
     fill('instrumento_avaliacao', dados.instrumento_avaliacao);
-    
-    // Situação ocupacional é tratada dinamicamente por RIP em criarBlocoImovel
-
-    // Riscos e restricoes (array or string)
-    let riscos = dados.riscos_verificados || dados.riscos;
-    if (Array.isArray(riscos)) riscos = riscos.join(', ');
-    fill('riscos_verificados', riscos);
-    fill('obs_riscos', dados.obs_riscos);
-    
-    let restricoes = dados.restricoes_verificadas || dados.restricoes;
-    if (Array.isArray(restricoes)) restricoes = restricoes.join(', ');
-    fill('restricoes_verificadas', restricoes);
-    fill('obs_restricoes', dados.obs_restricoes);
-
-    // Incidência ambiental checkboxes
-    let incidencias = dados.incidencia_ambiental;
-    if (incidencias) {
-        if (!Array.isArray(incidencias)) {
-            incidencias = String(incidencias).split(',').map(s => s.trim());
-        }
-        document.querySelectorAll('input[name="incidencia_ambiental[]"]').forEach(cb => {
-            cb.checked = incidencias.includes(cb.value);
-        });
-    }
-    if (typeof window.verificarVisibilidadeIncidencia === 'function') {
-        window.verificarVisibilidadeIncidencia();
-    }
-    fill('obs_incidencia_ambiental', dados.obs_incidencia_ambiental || dados.observacoes_incidencia);
 
     // Custos de manutenção
     const custos = dados.custos_manutencao || 'Não';
@@ -1610,7 +1092,7 @@ window.carregarCamposRIP = async function(rip) {
         'area_construida_disponivel': 'area_construida_disponivel',
         'area_terreno_disponivel':    'area_terreno_disponivel',
         'situacao_incorporacao':      'situacao_incorporacao',
-        'valor_avaliado':             'valor_avaliado',
+        'valor_avaliado':             'valor_avaliacao',
         'data_avaliacao':             'data_avaliacao',
         'instrumento_avaliacao':      'instrumento_avaliacao',
         'lpm_homologada':             'lpm_homologada',
@@ -1674,51 +1156,47 @@ window.carregarCamposRIP = async function(rip) {
             campo.style.color = '#334155';
             campo.style.cursor = 'not-allowed';
             campo.classList.add('auto-loaded-field');
+            campo.classList.remove('empty-spu-field');
             campo.classList.remove('custom-empty-select');
-
-            // Adiciona ícone de cadeado no label
-            const formGroup = campo.closest('.form-group');
-            if (formGroup) {
-                const label = formGroup.querySelector('label');
-                if (label && !label.querySelector('.lock-icon')) {
-                    const lockSpan = document.createElement('span');
-                    lockSpan.className = 'lock-icon';
-                    lockSpan.title = 'Dado importado do Datalake SPUnet (somente leitura)';
-                    lockSpan.style.marginLeft = '6px';
-                    lockSpan.style.fontSize = '0.85em';
-                    lockSpan.style.color = '#64748b';
-                    lockSpan.innerHTML = '🔒';
-                    label.appendChild(lockSpan);
-                }
-            }
 
             // Dispara change para acionar lógicas condicionais
             campo.dispatchEvent(new Event('change', { bubbles: true }));
 
         } else {
-            // ===== CAMPO SEM DADOS: deixar ABERTO para edição =====
-            camposAbertos++;
+            // ===== CAMPO SEM DADOS: trancar e exibir placeholder condicional =====
+            camposPreenchidos++;
 
             if (campo.tagName === 'SELECT') {
-                campo.disabled = false;
-                campo.classList.add('custom-empty-select');
+                let opt = campo.querySelector('option[value=""]');
+                if (!opt) {
+                    opt = document.createElement('option');
+                    opt.value = "";
+                    campo.insertBefore(opt, campo.firstChild);
+                }
+                opt.textContent = "Não há este dado no cadastro do imóvel";
+                opt.disabled = true;
+                opt.selected = true;
+                campo.value = "";
+                campo.disabled = true;
+                campo.classList.remove('custom-empty-select');
             } else {
-                campo.readOnly = false;
+                campo.placeholder = "Não há este dado no cadastro do imóvel";
+                campo.value = "";
+                campo.readOnly = true;
                 campo.disabled = false;
             }
-            campo.style.backgroundColor = '';
-            campo.style.border = '';
-            campo.style.color = '';
-            campo.style.cursor = '';
-            campo.classList.remove('auto-loaded-field');
 
-            // Remove ícone de cadeado quando o campo vier vazio do banco
-            const formGroup = campo.closest('.form-group');
-            if (formGroup) {
-                const label = formGroup.querySelector('label');
-                const lock = label ? label.querySelector('.lock-icon') : null;
-                if (lock) lock.remove();
-            }
+            // Estilo visual de campo trancado (fundo cinza)
+            campo.style.backgroundColor = '#f1f5f9';
+            campo.style.border = '1px solid #cbd5e1';
+            campo.style.color = '#334155';
+            campo.style.cursor = 'not-allowed';
+            campo.classList.add('auto-loaded-field');
+            campo.classList.add('empty-spu-field');
+            campo.classList.remove('custom-empty-select');
+
+            // Dispara change para acionar lógicas condicionais
+            campo.dispatchEvent(new Event('change', { bubbles: true }));
         }
     }
 
@@ -1801,4 +1279,281 @@ window.carregarCamposRIP = async function(rip) {
     }
 
     console.log(`✅ [carregarCamposRIP] RIP ${rip} concluído: ${camposPreenchidos} campos trancados, ${camposAbertos} campos abertos para edição.`);
+};
+
+// Accordion Toggle function
+window.toggleAccordion = function(header) {
+    const content = header.nextElementSibling;
+    const icon = header.querySelector('.accordion-icon');
+    if (content) {
+        const isCollapsed = content.style.display === 'none';
+        content.style.display = isCollapsed ? 'block' : 'none';
+        if (icon) {
+            icon.textContent = isCollapsed ? '▲' : '▼';
+        }
+        header.classList.toggle('active', isCollapsed);
+    }
+};
+
+// Renderizar bloco de solicitação de criação de RIP (no topo)
+window.criarBlocoSolicitacaoCriacao = function(texto) {
+    if (!texto) return;
+    const container = document.getElementById('container-solicitacao-criacao-rip');
+    if (!container) return;
+
+    container.style.display = "block";
+    container.innerHTML = `
+        <div class="card mb-4" style="border: 1px solid #fbcfe8; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); background-color: #fdf2f8;">
+            <div class="accordion-header type-solicitacao" style="padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; border-radius: 8px 8px 0 0; border-bottom: 1px solid #fbcfe8; background-color: #fce7f3; color: #9d174d;">
+                <h4 style="margin: 0; font-weight: bold; font-size: 1.1em;">🔔 Solicitação de Criação de RIP</h4>
+            </div>
+            <div style="padding: 16px;">
+                <div class="form-group" style="text-align: left; margin: 0;">
+                    <label style="display:block; margin-bottom: 5px; font-weight: 600; color: #9d174d;">Justificativa enviada ao setor de cadastro:</label>
+                    <textarea readonly style="width: 100%; border: 1px solid #fbcfe8; padding: 8px; border-radius: 4px; background-color: #fff; color: #334155; resize: vertical; font-family: inherit; font-size: 14px;" rows="4">${texto}</textarea>
+                </div>
+            </div>
+        </div>
+    `;
+};
+
+// Renderizar bloco de Cadastro Mínimo
+window.criarBlocoCadastroMinimo = function(dados, idx) {
+    dados = dados || {};
+    const container = document.getElementById('accordion-indicacoes');
+    if (!container) return;
+
+    // Remove text fallback list if still present
+    const loadingText = container.querySelector('div') || container.querySelector('i');
+    if (loadingText && loadingText.textContent.includes('Carregando')) {
+        container.innerHTML = '';
+    }
+
+    // Evita duplicados
+    const key = `cadastro-${dados.cep}-${dados.area}`;
+    if (document.querySelector(`.cadastro-block[data-key="${key}"]`)) return;
+
+    const div = document.createElement('div');
+    div.className = 'cadastro-block card mb-4';
+    div.setAttribute('data-key', key);
+    div.style.border = '1px solid #cbd5e1';
+    div.style.borderRadius = '8px';
+    div.style.boxShadow = '0 2px 4px rgba(0,0,0,0.05)';
+
+    function buildReadOnlyField(label, value) {
+        return `
+            <div class="form-group" style="margin-bottom: 15px; text-align: left;">
+                <label style="display:block; margin-bottom: 5px; font-weight: 600; color: #475569;">${label}</label>
+                <input type="text" value="${value || ''}" readonly style="width: 100%; border: 1px solid #cbd5e1; padding: 8px; border-radius: 4px; background-color: #f8fafc; color: #334155;">
+            </div>
+        `;
+    }
+
+    div.innerHTML = `
+        <div class="accordion-header type-cadastro" style="padding: 12px 16px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; border-radius: 8px 8px 0 0; border-bottom: 1px solid #cbd5e1;" onclick="toggleAccordion(this)">
+            <h4 style="margin: 0; font-weight: bold;">Cadastro Mínimo Selecionado: CEP ${dados.cep || 'N/D'}</h4>
+            <span class="accordion-icon" style="font-size: 1.2em; font-weight: bold;">▲</span>
+        </div>
+        <div class="accordion-content" style="display: block; padding: 16px;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                ${buildReadOnlyField('CEP', dados.cep)}
+                ${buildReadOnlyField('UF', dados.uf)}
+                ${buildReadOnlyField('Município', dados.municipio)}
+                ${buildReadOnlyField('Logradouro', dados.logradouro || dados.endereco)}
+                ${buildReadOnlyField('Número', dados.numero)}
+                ${buildReadOnlyField('Área a ser destinada (m²)', dados.area)}
+            </div>
+            ${dados.observacoes ? `
+            <div class="form-group" style="margin-top: 15px; text-align: left;">
+                <label style="display:block; margin-bottom: 5px; font-weight: 600; color: #475569;">Observações</label>
+                <textarea readonly style="width: 100%; border: 1px solid #cbd5e1; padding: 8px; border-radius: 4px; background-color: #f8fafc; color: #334155; resize: vertical;" rows="3">${dados.observacoes}</textarea>
+            </div>
+            ` : ''}
+        </div>
+    `;
+
+    container.appendChild(div);
+};
+
+// Carregar dados iniciais de indicação (Cadastro Mínimo e Solicitação de Criação), se existirem
+setTimeout(async () => {
+    const processId = localStorage.getItem('CURRENT_PROCESS_ID');
+    if (processId && window.parent && typeof window.parent.carregarIndicacoes === 'function') {
+        const registro = await window.parent.carregarIndicacoes(processId);
+        if (registro && registro.dados_json) {
+            // 1. Solicitação de Criação de RIP (Carrega por cima)
+            const solicitacao = registro.dados_json.solicitacao_criacao_rip || "";
+            if (solicitacao && typeof window.criarBlocoSolicitacaoCriacao === 'function') {
+                window.criarBlocoSolicitacaoCriacao(solicitacao);
+            }
+
+            // 2. Cadastro Mínimo (Carrega por último)
+            const cadastros = registro.dados_json.cadastros_minimos || [];
+            cadastros.forEach((cad, idx) => {
+                if (typeof window.criarBlocoCadastroMinimo === 'function') {
+                    window.criarBlocoCadastroMinimo(cad, idx);
+                }
+            });
+        }
+    }
+}, 1000);
+
+// ==================== Lógica de Triagem de Pergunta com Multicheckbox (Global) ====================
+window.initPerguntaComMulticheck = function(config) {
+    var grupoPergunta = document.querySelector(config.perguntaSelector);
+    var grupoItens = document.querySelector(config.itensSelector);
+    var blocoObs = document.querySelector(config.obsSelector);
+    if (!grupoPergunta || !grupoItens) return;
+
+    var checksPergunta = grupoPergunta.querySelectorAll('input[type="checkbox"]');
+    var checksItens = grupoItens.querySelectorAll('input[type="checkbox"]');
+
+    function valorPerguntaSelecionado() {
+        for (var i = 0; i < checksPergunta.length; i++) {
+            if (checksPergunta[i].checked) return checksPergunta[i].value;
+        }
+        return '';
+    }
+
+    function atualizar(changedPergunta) {
+        if (changedPergunta) {
+            checksPergunta.forEach(function(cb) {
+                if (cb !== changedPergunta) cb.checked = false;
+            });
+        }
+
+        var valorPergunta = valorPerguntaSelecionado();
+        var mostrarItens = valorPergunta === 'Sim';
+
+        if (!valorPergunta) {
+            var algumItemMarcado = false;
+            checksItens.forEach(function(cb) {
+                if (cb.checked) algumItemMarcado = true;
+            });
+            if (algumItemMarcado) {
+                checksPergunta.forEach(function(cb) {
+                    cb.checked = (cb.value === 'Sim');
+                });
+                mostrarItens = true;
+            }
+        }
+
+        grupoItens.style.display = mostrarItens ? 'block' : 'none';
+
+        var algumMarcado = false;
+        checksItens.forEach(function(cb) {
+            if (cb.checked) algumMarcado = true;
+        });
+        if (blocoObs) {
+            blocoObs.style.display = (mostrarItens && algumMarcado) ? 'flex' : 'none';
+        }
+    }
+
+    checksPergunta.forEach(function(cb) {
+        cb.addEventListener('change', function() { atualizar(cb); });
+    });
+    checksItens.forEach(function(cb) {
+        cb.addEventListener('change', function() { atualizar(null); });
+    });
+
+    setTimeout(function() { atualizar(null); }, 0);
+};
+
+// ==================== Lógica de Inicialização das Seções Globais (Aba 2) ====================
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Situação Ocupacional: show/hide condicional
+    const situacaoRadios = document.querySelectorAll('input[name="situacao_ocupacional"]');
+    function atualizarOcupacaoGlobal() {
+        const blocoDesocupado = document.getElementById('bloco-desocupado');
+        const blocoOcupado = document.getElementById('bloco-ocupado');
+        const blocoUsoAtual = document.getElementById('bloco-uso-atual');
+        const checked = document.querySelector('input[name="situacao_ocupacional"]:checked');
+        const val = checked ? checked.value : '';
+        if (blocoDesocupado) blocoDesocupado.style.display = (val === 'Desocupado') ? 'flex' : 'none';
+        if (blocoOcupado) blocoOcupado.style.display = (val === 'Ocupado regularmente' || val === 'Ocupado irregularmente') ? 'flex' : 'none';
+        if (blocoUsoAtual) blocoUsoAtual.style.display = (val === 'Ocupado regularmente' || val === 'Ocupado irregularmente') ? 'flex' : 'none';
+    }
+    situacaoRadios.forEach(radio => radio.addEventListener('change', atualizarOcupacaoGlobal));
+    setTimeout(atualizarOcupacaoGlobal, 100);
+
+    // 2. Incidência/Riscos/Restrições: triagem questions (Sim/Não/Não há informação)
+    setTimeout(() => {
+        if (typeof window.initPerguntaComMulticheck === 'function') {
+            window.initPerguntaComMulticheck({
+                perguntaSelector: '#group-pergunta-incidencia',
+                itensSelector: '#bloco-incidencia-itens',
+                obsSelector: '#bloco-obs-incidencia'
+            });
+            window.initPerguntaComMulticheck({
+                perguntaSelector: '#group-pergunta-riscos',
+                itensSelector: '#bloco-riscos-itens',
+                obsSelector: '#bloco-obs-riscos'
+            });
+            window.initPerguntaComMulticheck({
+                perguntaSelector: '#group-pergunta-restricoes',
+                itensSelector: '#bloco-restricoes-itens',
+                obsSelector: '#bloco-obs-restricoes'
+            });
+        }
+    }, 200);
+
+    // 4. Busca geográfica por CEP global e abertura do modal
+    const btnOpenGeo = document.getElementById('btn-open-geo-modal');
+    if (btnOpenGeo) {
+        btnOpenGeo.addEventListener('click', () => {
+            if (typeof window.abrirGeoModal === 'function') window.abrirGeoModal();
+        });
+    }
+    const btnBuscarCepGlobal = document.getElementById('btnBuscarCepGlobal');
+    if (btnBuscarCepGlobal) {
+        btnBuscarCepGlobal.addEventListener('click', () => {
+            if (typeof window.abrirGeoModal === 'function') window.abrirGeoModal();
+            else {
+                // Fallback direct modal opening
+                const geoModal = document.getElementById('geoModal');
+                if (geoModal) geoModal.style.display = 'flex';
+                if (typeof window.inicializarMapa === 'function') window.inicializarMapa();
+            }
+        });
+    }
+
+
+});
+
+// Abertura do Modal de Geolocalização (Global)
+window.abrirGeoModal = function() {
+    const geoModal = document.getElementById('geoModal');
+    if (geoModal) {
+        geoModal.style.display = 'flex';
+    }
+    if (typeof window.inicializarMapa === 'function') {
+        window.inicializarMapa();
+    }
+    
+    const latInput = document.getElementById('latitude')?.value || '';
+    const lonInput = document.getElementById('longitude')?.value || '';
+    const lat = parseFloat(latInput);
+    const lon = parseFloat(lonInput);
+    
+    if (!isNaN(lat) && !isNaN(lon)) {
+        if (window.drawnItems) {
+            window.drawnItems.clearLayers();
+            const marker = L.marker([lat, lon]);
+            window.drawnItems.addLayer(marker);
+            setTimeout(() => { 
+                if (window.map) window.map.setView([lat, lon], 16); 
+            }, 400);
+        }
+    } else {
+        const cepStr = document.getElementById('cep')?.value || '';
+        if (cepStr && (!window.drawnItems || window.drawnItems.getLayers().length === 0)) {
+            const modalSearchInput = document.getElementById('modal-search-input');
+            if (modalSearchInput) {
+                modalSearchInput.value = cepStr;
+                if (typeof window.buscarNoModal === 'function') {
+                    window.buscarNoModal();
+                }
+            }
+        }
+    }
 };

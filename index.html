@@ -147,37 +147,48 @@
                         <option value="Viabilidade confirmada">Confirmada</option>
                     </select>
                 </div>
-                <div class="filter-group" style="grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 10px;">
-                    <div style="display: flex; flex-direction: column; gap: 8px;">
-                        <label for="filterInteressado" style="font-size: 13px; font-weight: 600; color: #475569;">Interessado</label>
-                        <input type="text" id="filterInteressado" placeholder="Nome do interessado..." oninput="applyFilters()" style="padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; outline: none; transition: border-color 0.2s;">
-                    </div>
-                    <div style="display: flex; flex-direction: column; gap: 8px;">
-                        <label for="filterProcessoSei" style="font-size: 13px; font-weight: 600; color: #475569;">Processo SEI</label>
-                        <input type="text" id="filterProcessoSei" placeholder="Nº Processo SEI..." oninput="applyFilters()" style="padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; outline: none; transition: border-color 0.2s;">
-                    </div>
-                    <div style="display: flex; flex-direction: column; gap: 8px;">
-                        <label for="filterRip" style="font-size: 13px; font-weight: 600; color: #475569;">RIP</label>
-                        <input type="text" id="filterRip" placeholder="Nº do RIP..." oninput="applyFilters()" style="padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; outline: none; transition: border-color 0.2s;">
-                    </div>
-                    <div style="display: flex; flex-direction: column; gap: 8px;">
-                        <label for="filterUso" style="font-size: 13px; font-weight: 600; color: #475569;">Uso Imobiliário</label>
-                        <select id="filterUso" onchange="applyFilters()" style="padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; outline: none; transition: border-color 0.2s; background-color: #fff; color: #1e293b;">
-                            <option value="">Todos</option>
-                            <option value="Habitacional">Habitacional</option>
-                            <option value="Regularização fundiária">Regularização fundiária</option>
-                            <option value="Institucional">Institucional</option>
-                            <option value="Infraestrutura">Infraestrutura</option>
-                            <option value="Desenvolvimento econômico">Desenvolvimento econômico</option>
-                            <option value="Preservação ambiental">Preservação ambiental</option>
-                            <option value="Uso comunitário">Uso comunitário</option>
-                            <option value="Uso cultural">Uso cultural</option>
-                            <option value="Uso educacional">Uso educacional</option>
-                            <option value="Uso de saúde">Uso de saúde</option>
-                            <option value="Assistência social">Assistência social</option>
-                            <option value="Esporte e lazer">Esporte e lazer</option>
-                        </select>
-                    </div>
+                <div class="filter-group">
+                    <label for="filterTipoRequerimento">Tipo de Requerimento</label>
+                    <select id="filterTipoRequerimento" onchange="applyFilters()">
+                        <option value="">Todos</option>
+                        <option value="Adquirir Imóvel Aforado da União por Remição">Adquirir Imóvel Aforado da União por Remição</option>
+                        <option value="Alterar Regime ou Contrato de Utilização de Imóvel da União">Alterar Regime ou Contrato de Utilização de Imóvel da União</option>
+                        <option value="Autorização de passagem em imóveis da União">Autorização de passagem em imóveis da União</option>
+                        <option value="Entrega para Aquicultura">Entrega para Aquicultura</option>
+                        <option value="Enviar Proposta de Aquisição de Imóvel da União">Enviar Proposta de Aquisição de Imóvel da União</option>
+                        <option value="Obter a Gestão Municipal de Praias Marítimas">Obter a Gestão Municipal de Praias Marítimas</option>
+                        <option value="Obter Autorização de Obras em Imóvel da União">Obter Autorização de Obras em Imóvel da União</option>
+                        <option value="Obter Cessão de Uso de Espaço Físico em Águas Públicas">Obter Cessão de Uso de Espaço Físico em Águas Públicas</option>
+                        <option value="Obter Permissão de Uso para Eventos em Imóvel da União">Obter Permissão de Uso para Eventos em Imóvel da União</option>
+                        <option value="Regularizar Utilização de Imóvel da União">Regularizar Utilização de Imóvel da União</option>
+                        <option value="Solicitar Adesão ao Projeto Orla">Solicitar Adesão ao Projeto Orla</option>
+                        <option value="Solicitar imóvel para uso da Administração Pública e Entidades sem Fins Lucrativos">Solicitar imóvel para uso da Administração Pública e Entidades sem Fins Lucrativos</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filterInteressado">Interessado</label>
+                    <input type="text" id="filterInteressado" placeholder="Nome do interessado..." oninput="applyFilters()">
+                </div>
+                <div class="filter-group">
+                    <label for="filterProcessoSei">Processo SEI</label>
+                    <input type="text" id="filterProcessoSei" placeholder="Nº Processo SEI..." oninput="applyFilters()">
+                </div>
+                <div class="filter-group">
+                    <label for="filterRip">RIP</label>
+                    <input type="text" id="filterRip" placeholder="Nº do RIP..." oninput="applyFilters()">
+                </div>
+                <div class="filter-group">
+                    <label for="filterUso">Uso Imobiliário</label>
+                    <select id="filterUso" onchange="applyFilters()">
+                        <option value="">Todos</option>
+                        <option value="Terreno/acrescido de marinha">Terreno/acrescido de marinha</option>
+                        <option value="Terreno/acrescido marginal">Terreno/acrescido marginal</option>
+                        <option value="Nacional interior">Nacional interior</option>
+                        <option value="Espelho d'água">Espelho d'água</option>
+                        <option value="Cavidades naturais subterrâneas">Cavidades naturais subterrâneas</option>
+                        <option value="Manguezal">Manguezal</option>
+                        <option value="Praias">Praias</option>
+                    </select>
                 </div>
             </div>
         </section>
@@ -205,8 +216,7 @@
                         <th style="width: 150px;">Município</th>
                         <th>Interessado</th>
                         <th style="width: 160px;">Processo SEI</th>
-                        <th style="width: 120px;">RIP(s)</th>
-                        <th style="width: 170px;">Regime de Destinação</th>
+                        <th style="width: 250px;">Tipo de Requerimento</th>
                         <th style="width: 160px;">Instância</th>
                         <th style="width: 200px;">Atribuído para</th>
                         <th style="width: 120px;">Status</th>
@@ -215,7 +225,7 @@
                 </thead>
                 <tbody id="tableBody">
                     <tr>
-                        <td colspan="12" class="empty-state">Carregando processos do banco de dados...</td>
+                        <td colspan="11" class="empty-state">Carregando processos do banco de dados...</td>
                     </tr>
                 </tbody>
             </table>
@@ -369,7 +379,7 @@
             tableBody.innerHTML = '';
 
             if (list.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="12" class="empty-state">Nenhum processo encontrado.</td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="11" class="empty-state">Nenhum processo encontrado.</td></tr>`;
                 return;
             }
 
@@ -389,12 +399,6 @@
 
                 let statusFlowHtml = `<span>${proc.checkpoint}</span>`;
 
-                // Badge estilizado para os RIPs
-                let ripsHtml = '-';
-                if (proc.rips && proc.rips !== '-') {
-                    ripsHtml = proc.rips.split(',').map(r => `<span style="background-color: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 12px; display: inline-block; margin: 2px 0;">${r.trim()}</span>`).join(' ');
-                }
-
                 tr.innerHTML = `
                     <td>${proc.requerimento}</td>
                     <td>${proc.data_req}</td>
@@ -404,7 +408,6 @@
                         <div>${proc.interessado}</div>
                     </td>
                     <td><span>${proc.sei}</span></td>
-                    <td><div style="display: flex; flex-direction: column; gap: 4px;">${ripsHtml}</div></td>
                     <td>${proc.procedimento}</td>
                     <td>${statusFlowHtml}</td>
                     <td>
@@ -508,6 +511,7 @@
             const sei = document.getElementById('filterProcessoSei').value.toLowerCase().trim();
             const ripQuery = document.getElementById('filterRip').value.toLowerCase().trim();
             const uso = document.getElementById('filterUso').value.toLowerCase().trim();
+            const tipoReq = document.getElementById('filterTipoRequerimento').value;
 
             const filtered = allProcesses.filter(proc => {
                 const matchUf = !uf || proc.uf === uf;
@@ -517,33 +521,31 @@
                 const matchSei = !sei || proc.sei.toLowerCase().includes(sei);
                 
                 // Filtro por RIP
-                const matchRip = !ripQuery || (proc.rips && proc.rips.toLowerCase().includes(ripQuery));
+                const matchRip = !ripQuery || (proc.rips && (Array.isArray(proc.rips) ? proc.rips.some(r => String(r).toLowerCase().includes(ripQuery)) : String(proc.rips).toLowerCase().includes(ripQuery)));
                 
                 // Filtro por Uso Imobiliário
                 const procUso = (proc.uso || '').toLowerCase();
-                const matchUso = !uso || procUso.includes(uso) || (
-                    uso === 'habitacional' && (procUso.includes('habitacion') || procUso.includes('habita'))
-                ) || (
-                    uso === 'regularização fundiária' && procUso.includes('regulariza')
-                ) || (
-                    uso === 'institucional' && (procUso.includes('sede') || procUso.includes('instituc'))
-                ) || (
-                    uso === 'uso comunitário' && procUso.includes('comunit')
-                ) || (
-                    uso === 'uso cultural' && procUso.includes('cultur')
-                ) || (
-                    uso === 'infraestrutura' && (procUso.includes('infra') || procUso.includes('logíst'))
-                );
+                const matchUso = !uso || procUso.includes(uso) || 
+                                 (uso === 'terreno/acrescido de marinha' && (procUso.includes('marinha') || procUso.includes('acrescido'))) ||
+                                 (uso === 'terreno/acrescido marginal' && procUso.includes('marginal')) ||
+                                 (uso === 'nacional interior' && procUso.includes('interior')) ||
+                                 (uso === 'espelho d\'água' && procUso.includes('espelho')) ||
+                                 (uso === 'cavidades naturais subterrâneas' && procUso.includes('cavidade')) ||
+                                 (uso === 'manguezal' && procUso.includes('mangue')) ||
+                                 (uso === 'praias' && procUso.includes('praia'));
+
+                // Filtro por Tipo de Requerimento
+                const matchTipo = !tipoReq || proc.procedimento === tipoReq;
 
                 // Filtro por busca geral (Query)
                 const matchQuery = !query || 
-                                   proc.id.toLowerCase().includes(query) || 
-                                   proc.interessado.toLowerCase().includes(query) || 
-                                   proc.sei.toLowerCase().includes(query) || 
-                                   (proc.rips && proc.rips.toLowerCase().includes(query)) ||
-                                   proc.requerimento.toLowerCase().includes(query);
+                                   String(proc.id).toLowerCase().includes(query) || 
+                                   String(proc.interessado).toLowerCase().includes(query) || 
+                                   String(proc.sei).toLowerCase().includes(query) || 
+                                   (proc.rips && (Array.isArray(proc.rips) ? proc.rips.some(r => String(r).toLowerCase().includes(query)) : String(proc.rips).toLowerCase().includes(query))) ||
+                                   String(proc.requerimento).toLowerCase().includes(query);
 
-                return matchUf && matchMuni && matchStatus && matchInteressado && matchSei && matchRip && matchUso && matchQuery;
+                return matchUf && matchMuni && matchStatus && matchInteressado && matchSei && matchRip && matchUso && matchTipo && matchQuery;
             });
 
             sortProcesses(filtered);
