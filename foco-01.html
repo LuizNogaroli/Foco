@@ -15,7 +15,7 @@
 </head>
 <body>
     <div class="form-container">
-        <div id="label-titulo-requerimento" style="text-align: center; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: #6b7280; font-weight: 700; margin-bottom: 4px;">Requerimento</div>
+        <div id="label-titulo-requerimento" style="text-align: center; font-size: 0.85rem; letter-spacing: 0.05em; color: #6b7280; font-weight: 700; margin-bottom: 4px;">Requerimento</div>
         <h2 id="titulo-pagina-requerimento" style="text-align: center; margin-top: 0; margin-bottom: 24px;"></h2>
         <form id="form01" novalidate>
             
@@ -118,7 +118,7 @@
             </section>
 
             <!-- Título centralizado para a seção de indicação -->
-            <h2 style="text-align: center; color: #1e3a5f; margin: 40px 0 20px 0; font-size: 1.5rem; border-bottom: none;">Indicação do Imóvel</h2>
+            <h2 style="text-align: center; color: #1e3a5f; margin: 40px 0 20px 0; font-size: 1.5rem; border-bottom: none;">Indicação de Imóvel</h2>
 
             <!-- Subtítulo fora do box -->
             <h4 style="margin: 20px 0 16px 0; color: #0056b3; border-bottom: 2px solid #ddd; padding-bottom: 8px;">Conceituação do Imóvel</h4>
@@ -157,8 +157,16 @@
                         </div>
                     </div>
 
-                    <!-- Botão Inserir Cadastro Mínimo -->
-                    <button type="button" id="btnInserirCadastroMinimo" class="btn-action" style="display: none; padding: 8px 16px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: bold; width: fit-content; margin-top: 5px;">+ Inserir Cadastro Mínimo</button>
+                    <!-- Bloco Info Exige Cadastro Mínimo -->
+                    <div id="bloco-info-exige-cadastro-minimo" style="display: none; margin-top: 12px; padding: 12px; background-color: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; width: 100%;">
+                        <div style="font-weight: 600; color: #1e3a5f; margin-bottom: 8px;">
+                            Conceituação selecionada: <span id="info-conceituacao-selecionada-cadastro" style="font-weight: 700; color: #0056b3;"></span>
+                        </div>
+                        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+                            <span style="font-size: 0.95em; color: #374151; font-weight: 500;">⚠️ A conceituação do imóvel exige um CADASTRO MÍNIMO.</span>
+                            <button type="button" id="btnInserirCadastroMinimo" class="btn-action" style="padding: 8px 16px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: bold; width: fit-content;">+ Inserir Cadastro Mínimo</button>
+                        </div>
+                    </div>
 
                     <div id="listaRipsInseridos" style="display: flex; flex-direction: column; gap: 8px; width: 100%; margin-top: 5px;"></div>
                     <div id="listaCadastrosInseridos" style="display: flex; flex-direction: column; gap: 8px; width: 100%; margin-top: 5px;"></div>

@@ -209,21 +209,23 @@ function inicializarFoco01() {
 
         const blocoInfo = document.getElementById('bloco-info-exige-rip');
         const spanConceituacao = document.getElementById('info-conceituacao-selecionada');
-        const btnCadastro = document.getElementById('btnInserirCadastroMinimo');
+        const blocoCadastro = document.getElementById('bloco-info-exige-cadastro-minimo');
+        const spanConceituacaoCadastro = document.getElementById('info-conceituacao-selecionada-cadastro');
 
         let selecionado = "";
         if (val && exigeRip.includes(val)) {
             selecionado = "Sim";
             if (blocoInfo) blocoInfo.style.display = "block";
             if (spanConceituacao) spanConceituacao.textContent = val;
-            if (btnCadastro) btnCadastro.style.display = "none";
+            if (blocoCadastro) blocoCadastro.style.display = "none";
         } else if (val && exigeCadastro.includes(val)) {
             selecionado = "Não";
             if (blocoInfo) blocoInfo.style.display = "none";
-            if (btnCadastro) btnCadastro.style.display = "block";
+            if (blocoCadastro) blocoCadastro.style.display = "block";
+            if (spanConceituacaoCadastro) spanConceituacaoCadastro.textContent = val;
         } else {
             if (blocoInfo) blocoInfo.style.display = "none";
-            if (btnCadastro) btnCadastro.style.display = "none";
+            if (blocoCadastro) blocoCadastro.style.display = "none";
         }
 
         // Gerenciar estado ativo/inativo do botão Enviar com base em RIP (ou solicitação de criação) ou Cadastro Mínimo realizado

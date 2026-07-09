@@ -327,9 +327,9 @@ window.criarBlocoImovel = function(rip, dados) {
     div.innerHTML = `
         <div class="accordion-header type-rip" style="padding: 12px 16px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; border-radius: 8px 8px 0 0; border-bottom: 1px solid #cbd5e1;" onclick="toggleAccordion(this)">
             <h4 style="margin: 0; font-weight: bold;">Imóvel Selecionado: RIP ${rip}</h4>
-            <span class="accordion-icon" style="font-size: 1.2em; font-weight: bold;">▲</span>
+            <span class="accordion-icon" style="font-size: 1.2em; font-weight: bold;">▼</span>
         </div>
-        <div class="accordion-content" style="display: block; padding: 16px;">
+        <div class="accordion-content" style="display: none; padding: 16px;">
             <input type="hidden" name="imoveis[${index}][rip]" value="${rip}">
             
             <!-- Localização -->
@@ -1352,9 +1352,9 @@ window.criarBlocoCadastroMinimo = function(dados, idx) {
     div.innerHTML = `
         <div class="accordion-header type-cadastro" style="padding: 12px 16px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; border-radius: 8px 8px 0 0; border-bottom: 1px solid #cbd5e1;" onclick="toggleAccordion(this)">
             <h4 style="margin: 0; font-weight: bold;">Cadastro Mínimo Selecionado: CEP ${dados.cep || 'N/D'}</h4>
-            <span class="accordion-icon" style="font-size: 1.2em; font-weight: bold;">▲</span>
+            <span class="accordion-icon" style="font-size: 1.2em; font-weight: bold;">▼</span>
         </div>
-        <div class="accordion-content" style="display: block; padding: 16px;">
+        <div class="accordion-content" style="display: none; padding: 16px;">
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
                 ${buildReadOnlyField('CEP', dados.cep)}
                 ${buildReadOnlyField('UF', dados.uf)}
