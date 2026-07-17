@@ -56,6 +56,18 @@ async function insertRips() {
                 processo_incorporacao: "10480.123456/2020-11",
                 docs_custom_files_aba2_1: "",
                 docs_custom_links_aba2_1: `https://extranet.spunet.gov.br/documentos/${req.num}_certidao_matricula.pdf`,
+                contratos_anteriores: [
+                    {
+                        numero: `Contrato nº ${100 + (parseInt(req.num) % 100)}/2020`,
+                        data_inicio: "01/01/2020",
+                        data_fim: "31/12/2022"
+                    },
+                    {
+                        numero: `Contrato nº ${200 + (parseInt(req.num) % 100)}/2023`,
+                        data_inicio: "01/01/2023",
+                        data_fim: "31/12/2025"
+                    }
+                ],
                 documentos_anexados: [
                     {
                         nome: "Certidão de Matrícula",

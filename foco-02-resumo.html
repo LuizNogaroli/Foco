@@ -1,53 +1,91 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-
     <meta charset="UTF-8">
-    <title>Resumo - Dados do Imóvel</title>
+    <title>Resumo - Caracterização (Aba 2)</title>
     <link rel="stylesheet" href="report.css?v=1782355313469">
 </head>
 <body>
-    <div class="report-container">
+    <div id="loading" style="padding: 30px; text-align: center; font-size: 1.2em; color: #64748b; font-family: sans-serif;">
+        🔄 Carregando relatório da base de dados...
+    </div>
+
+    <div id="content" class="report-container" style="display: none;">
         <div class="report-header">
-            <p style="font-weight:bold; margin-top:10px;">Relatório - Dados do Imóvel</p>
+            <p style="font-weight:bold; margin-top:10px;">Relatório Consolidado - Aba 2 (Caracterização)</p>
         </div>
 
         <div class="report-section">
-            <div class="report-section-title">Localização e Identificação</div>
+            <div class="report-section-title">Situação Patrimonial e Matrícula</div>
             <div class="report-grid">
                 <div class="report-item">
-                    <span class="report-label">RIP</span>
-                    <span class="report-value">1234.00001.00-5</span>
+                    <span class="report-label">Imóvel possui matrícula?</span>
+                    <span class="report-value" id="val_tem_matricula">-</span>
                 </div>
                 <div class="report-item">
-                    <span class="report-label">Endereço</span>
-                    <span class="report-value">Avenida Central, 1000 - Centro</span>
+                    <span class="report-label">Nº da Matrícula / Transcrição</span>
+                    <span class="report-value" id="val_num_matricula">-</span>
                 </div>
                 <div class="report-item">
-                    <span class="report-label">Cidade / UF</span>
-                    <span class="report-value">Brasília / DF</span>
-                </div>
-                <div class="report-item">
-                    <span class="report-label">Área Total (m²)</span>
-                    <span class="report-value">5.000,00</span>
+                    <span class="report-label">Cartório / Ofício de Imóveis</span>
+                    <span class="report-value" id="val_cartorio">-</span>
                 </div>
             </div>
         </div>
 
         <div class="report-section">
-            <div class="report-section-title">Situação Patrimonial</div>
+            <div class="report-section-title">Ocupação e Uso</div>
             <div class="report-grid">
                 <div class="report-item">
-                    <span class="report-label">Regime de Propriedade</span>
-                    <span class="report-value">Domínio Pleno da União</span>
+                    <span class="report-label">Situação Ocupacional</span>
+                    <span class="report-value" id="val_situacao_ocupacional">-</span>
                 </div>
                 <div class="report-item">
-                    <span class="report-label">Matrícula Registro de Imóveis</span>
-                    <span class="report-value">123.456 - 1º RI de Brasília</span>
+                    <span class="report-label">Uso Principal Atual</span>
+                    <span class="report-value" id="val_uso_principal">-</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="report-section">
+            <div class="report-section-title">Aspectos Físicos e Ambientais</div>
+            <div class="report-grid">
+                <div class="report-item" style="grid-column: span 2;">
+                    <span class="report-label">Condição de Urbanização / Obras</span>
+                    <span class="report-value" id="val_urbanizacao">-</span>
+                </div>
+                <div class="report-item" style="grid-column: span 2;">
+                    <span class="report-label">Incidências Ambientais Verificadas</span>
+                    <span class="report-value" id="val_incidencia_ambiental">-</span>
+                </div>
+                <div class="report-item" style="grid-column: span 2;">
+                    <span class="report-label">Observações Ambientais</span>
+                    <span class="report-value" id="val_obs_ambiental">-</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="report-section">
+            <div class="report-section-title">Riscos e Restrições</div>
+            <div class="report-grid">
+                <div class="report-item" style="grid-column: span 2;">
+                    <span class="report-label">Riscos Verificados</span>
+                    <span class="report-value" id="val_riscos">-</span>
+                </div>
+                <div class="report-item" style="grid-column: span 2;">
+                    <span class="report-label">Observações sobre Riscos</span>
+                    <span class="report-value" id="val_obs_riscos">-</span>
+                </div>
+                <div class="report-item" style="grid-column: span 2;">
+                    <span class="report-label">Restrições / Condições Específicas</span>
+                    <span class="report-value" id="val_restricoes">-</span>
+                </div>
+                <div class="report-item" style="grid-column: span 2;">
+                    <span class="report-label">Observações sobre Restrições</span>
+                    <span class="report-value" id="val_obs_restricoes">-</span>
                 </div>
             </div>
         </div>
@@ -56,19 +94,116 @@
         <div style="margin-top: 40px; padding: 15px; border: 1px solid #ddd; border-left: 6px solid #1a7a4a; background: #fdfdfd; width: 100%; box-sizing: border-box; font-size: 0.85rem; color: #444; font-family: sans-serif;">
             <div style="display: flex; justify-content: space-between; align-items: flex-end;">
                 <div style="line-height: 1.5;">
-                    Responsável: <span style="color:#1a4e8a; font-weight:bold;">João Silva (Analista Técnico SPU/UF)</span><br>
+                    Responsável: <span style="color:#1a4e8a; font-weight:bold;">Sistema (Geração Automática)</span><br>
                     Status do Documento: <span style="color:#1a7a4a; font-weight:bold;">CONSOLIDADO E CONFERIDO</span>
                 </div>
                 <div style="text-align: right; line-height: 1.5;">
-                    <strong>Data/Hora:</strong> 25/05/2026 14:45:22<br>
-                    <strong>ID de Autenticidade:</strong> <span style="font-family: monospace; color: #666;">F9G8-H7J6-K5L4</span>
+                    <strong>Data/Hora Relatório:</strong> <span id="val_data_relatorio">-</span><br>
+                    <strong>Processo Base:</strong> <span style="font-family: monospace; color: #666;" id="val_base_id">-</span>
                 </div>
             </div>
         </div>
 
         <div class="report-footer">
-            <p>Documento para simples conferência técnica e hierárquica.</p>
+            <p>Documento gerado automaticamente com base nos dados salvos no sistema. Simples conferência técnica e hierárquica.</p>
         </div>
     </div>
+
+    <script>
+        async function loadReport() {
+            const processId = localStorage.getItem('CURRENT_PROCESS_ID');
+            if (!processId) {
+                document.getElementById('loading').innerText = "Erro: Processo não identificado.";
+                return;
+            }
+
+            try {
+                const SUPA_URL = window.parent?.SUPABASE_URL || window.parent?.parent?.SUPABASE_URL;
+                const SUPA_KEY = window.parent?.SUPABASE_ANON_KEY || window.parent?.parent?.SUPABASE_ANON_KEY;
+
+                if (!SUPA_URL || !SUPA_KEY) {
+                    throw new Error("Credenciais do Supabase não encontradas.");
+                }
+
+                const url = `${SUPA_URL}/rest/v1/tabela_relatorios?select=*&process_id=eq.${encodeURIComponent(processId)}&aba=eq.aba2&limit=1`;
+                const res = await fetch(url, {
+                    headers: { 'apikey': SUPA_KEY, 'Authorization': `Bearer ${SUPA_KEY}` }
+                });
+
+                if (!res.ok) {
+                    const errTxt = await res.text();
+                    throw new Error(`Status ${res.status}: ${res.statusText} - ${errTxt}`);
+                }
+                
+                const data = await res.json();
+                if (data && data.length > 0) {
+                    const rel = data[0].dados_relatorio;
+                    
+                    document.getElementById('val_tem_matricula').textContent = rel.tem_matricula || '-';
+                    document.getElementById('val_num_matricula').textContent = rel.num_matricula || '-';
+                    document.getElementById('val_cartorio').textContent = rel.cartorio_matricula || '-';
+                    
+                    document.getElementById('val_situacao_ocupacional').textContent = rel.situacao_ocupacional || '-';
+                    document.getElementById('val_uso_principal').textContent = rel.uso_principal || '-';
+                    
+                    document.getElementById('val_urbanizacao').textContent = rel.condicao_urbanizacao || '-';
+                    
+                    document.getElementById('val_incidencia_ambiental').textContent = (rel.incidencia_ambiental && rel.incidencia_ambiental.length > 0) ? (Array.isArray(rel.incidencia_ambiental) ? rel.incidencia_ambiental.join(', ') : rel.incidencia_ambiental) : '-';
+                    document.getElementById('val_obs_ambiental').textContent = rel.obs_incidencia_ambiental || '-';
+                    
+                    document.getElementById('val_riscos').textContent = (rel.ha_riscos === 'Sim' && rel.riscos && rel.riscos.length > 0) ? (Array.isArray(rel.riscos) ? rel.riscos.join(', ') : rel.riscos) : rel.ha_riscos || '-';
+                    document.getElementById('val_obs_riscos').textContent = rel.obs_riscos || '-';
+                    
+                    document.getElementById('val_restricoes').textContent = (rel.ha_restricoes === 'Sim' && rel.restricoes && rel.restricoes.length > 0) ? (Array.isArray(rel.restricoes) ? rel.restricoes.join(', ') : rel.restricoes) : rel.ha_restricoes || '-';
+                    document.getElementById('val_obs_restricoes').textContent = rel.obs_restricoes || '-';
+
+                    // Metadados
+                    const dateObj = new Date(data[0].updated_at);
+                    document.getElementById('val_data_relatorio').textContent = dateObj.toLocaleString('pt-BR');
+                    document.getElementById('val_base_id').textContent = processId;
+                    
+                    // Renderiza selo de aprovação
+                    if (rel.aprovacao && rel.aprovacao.status) {
+                        const aprovDate = new Date(rel.aprovacao.data).toLocaleString('pt-BR');
+                        const perfilAss = rel.aprovacao.perfil || 'Perfil Atual';
+                        const obsAss = rel.aprovacao.observacoes ? rel.aprovacao.observacoes : 'Sem observações adicionais.';
+                        const statusDiv = document.querySelector('div[style*="border-left: 6px solid #1a7a4a"]');
+                        if (statusDiv) {
+                            statusDiv.innerHTML += `
+                                <div style="margin-top: 25px; padding-top: 15px; border-top: 1px dashed #ccc; color: #333;">
+                                    <h4 style="margin:0 0 10px 0; color: #1e3a5f;">Conclusão e Manifestação</h4>
+                                    <div style="background: #e8f5e9; padding: 15px; border-radius: 4px; border-left: 4px solid #166534; margin-bottom: 15px;">
+                                        <p style="margin: 0 0 10px 0; font-size: 13px; color: #166534;">
+                                            <strong>Declaração:</strong> Declaro que as informações consignadas neste formulário foram inseridas com base nos dados disponíveis nos sistemas oficiais, nos documentos constantes do processo e nas verificações realizadas no âmbito desta unidade, estando compatíveis com os elementos analisados.
+                                        </p>
+                                        <div style="font-size: 14px; color: #166534;">
+                                            <strong>✅ Aprovado e Assinado Digitalmente</strong>
+                                            <br>Data: ${aprovDate}
+                                            <br>Perfil Responsável: <strong>${perfilAss}</strong>
+                                        </div>
+                                    </div>
+                                    
+                                    <div style="background: #f8fafc; padding: 15px; border-radius: 4px; border: 1px solid #cbd5e1;">
+                                        <h5 style="margin:0 0 8px 0; color: #334155; font-size: 14px;">Observações da Manifestação:</h5>
+                                        <p style="margin: 0; font-size: 13px; color: #475569; white-space: pre-wrap;">${obsAss}</p>
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    }
+                    
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('content').style.display = 'block';
+                } else {
+                    document.getElementById('loading').innerText = "Nenhum relatório salvo encontrado para a Aba 2. Salve a Aba 2 para gerar.";
+                }
+            } catch (err) {
+                console.error(err);
+                document.getElementById('loading').innerText = "Erro ao carregar o relatório: " + err.message;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadReport);
+    </script>
 </body>
 </html>

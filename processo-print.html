@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Processo - Documento Completo</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+    :root { --spu-blue: #1e3a5f; --spu-light: #f0f4f8; }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f5f5f5;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    /* Barra de ferramentas (não entra no PDF) */
+    .toolbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: var(--spu-blue); color: #fff;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    .toolbar h2 { font-size: 1rem; font-weight: 600; }
+    .toolbar button {
+      background: #fff; color: var(--spu-blue); border: none;
+      padding: 8px 18px; border-radius: 6px; font-weight: 700;
+      cursor: pointer; font-size: 0.9rem;
+    }
+    .toolbar button:hover { background: #e2e8f0; }
+
+    /* Container do documento */
+    #print-area {
+      max-width: 800px; margin: 70px auto 40px; background: #fff;
+      padding: 40px 50px; box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      border-radius: 4px;
+    }
+
+    /* Cabeçalho do documento */
+    .doc-header {
+      text-align: center; border-bottom: 3px solid var(--spu-blue);
+      padding-bottom: 20px; margin-bottom: 30px;
+    }
+    .doc-header h1 {
+      font-size: 1.3rem; color: var(--spu-blue);
+      text-transform: uppercase; margin: 8px 0 4px;
+    }
+    .doc-header .subtitle { font-size: 0.95rem; color: #666; }
+    .doc-header .process-id {
+      font-family: monospace; font-size: 0.85rem; color: #888; margin-top: 6px;
+    }
+
+    /* Seções */
+    .section {
+      margin-bottom: 28px; page-break-inside: avoid;
+    }
+    .section-title {
+      background: var(--spu-light); padding: 8px 14px;
+      border-left: 5px solid var(--spu-blue); font-weight: 700;
+      color: var(--spu-blue); font-size: 1.05rem; margin-bottom: 14px;
+    }
+
+    /* Grid de campos */
+    .field-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 12px 20px;
+    }
+    .field { margin-bottom: 4px; }
+    .field.full { grid-column: 1 / -1; }
+    .field-label {
+      font-size: 0.8rem; font-weight: 600; color: #555;
+      text-transform: uppercase; letter-spacing: 0.3px;
+    }
+    .field-value {
+      font-size: 0.95rem; color: #111; word-break: break-word;
+      min-height: 1.4em;
+    }
+    .field-value.empty { color: #aaa; font-style: italic; }
+
+    /* Deliberações */
+    .delib-list { display: flex; flex-direction: column; gap: 14px; }
+    .delib-card {
+      border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px;
+      position: relative; background: #fafbfc;
+    }
+    .delib-card::before {
+      content: ''; position: absolute; left: -22px; top: 18px;
+      width: 10px; height: 10px; border-radius: 50%;
+      background: #10b981; border: 2px solid #fff;
+      box-shadow: 0 0 0 2px #a7f3d0;
+    }
+    .delib-card.devolvido::before { background: #ef4444; box-shadow: 0 0 0 2px #fca5a5; }
+    .delib-head {
+      display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid #f1f5f9; padding-bottom: 6px; margin-bottom: 8px;
+    }
+    .delib-perfil { font-weight: 700; color: var(--spu-blue); font-size: 0.95rem; }
+    .delib-data { font-size: 0.8rem; color: #64748b; }
+    .delib-decisao { font-size: 0.9rem; }
+    .delib-detalhe {
+      font-size: 0.85rem; color: #475569; margin-top: 6px;
+      padding-top: 6px; border-top: 1px dashed #e2e8f0;
+    }
+
+    /* Estilos da Timeline */
+    .timeline {
+      position: relative;
+      padding-left: 24px;
+      border-left: 3px solid #e2e8f0;
+      margin-left: 12px;
+      margin-top: 20px;
+    }
+    .timeline-item {
+      position: relative;
+      margin-bottom: 35px;
+      page-break-inside: avoid;
+    }
+    .timeline-marker {
+      position: absolute;
+      left: -31px;
+      top: 5px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #cbd5e1;
+      border: 2px solid #fff;
+      box-shadow: 0 0 0 2px #e2e8f0;
+    }
+    .timeline-item.deliberacao-aprovado .timeline-marker {
+      background: #10b981;
+      box-shadow: 0 0 0 2px #a7f3d0;
+    }
+    .timeline-item.deliberacao-devolvido .timeline-marker {
+      background: #ef4444;
+      box-shadow: 0 0 0 2px #fca5a5;
+    }
+    .timeline-item.versao-salva .timeline-marker {
+      background: #3b82f6;
+      box-shadow: 0 0 0 2px #bfdbfe;
+    }
+    
+    .timeline-header {
+      font-size: 0.95rem;
+      font-weight: bold;
+      color: var(--spu-blue);
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+    .timeline-date {
+      font-size: 0.8rem;
+      color: #64748b;
+      font-weight: normal;
+    }
+    
+    .timeline-content-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 18px;
+      background: #fafbfc;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+    
+    .resposta-devolutiva-destaque {
+      background-color: #fffbeb;
+      border: 1px solid #fcd34d;
+      border-radius: 6px;
+      padding: 12px;
+      margin-top: 15px;
+      color: #92400e;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Barra de ferramentas (não entra no PDF) -->
+  <div class="toolbar" id="toolbar">
+    <h2>Documento do Processo</h2>
+    <button onclick="gerarPDF()">Gerar PDF</button>
+  </div>
+
+  <!-- Área do documento -->
+  <div id="print-area">
+    <div class="loading" id="loading">Carregando dados do processo...</div>
+
+    <div id="content" style="display:none;">
+
+      <!-- Cabeçalho -->
+      <div class="doc-header">
+        <h1>Relatório Consolidado do Processo</h1>
+        <div class="subtitle">Sistema de Gestão de Destinação de Imóveis da União — SPU/DF</div>
+        <div class="process-id" id="doc-process-id"></div>
+      </div>
+
+      <!-- TIMELINE HISTÓRICA DO PROCESSO -->
+      <div class="section">
+        <div class="section-title">Histórico de Atividades e Tramitações do Processo</div>
+        <div id="timeline-container"></div>
+      </div>
+
+      <!-- RODAPÉ -->
+      <div class="doc-footer">
+        Documento gerado automaticamente pelo Sistema FOCO/SPU.<br>
+        <span id="doc-footer-data"></span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ============================================================
+    //  CREDENCIAIS SUPABASE (fallback local)
+    // ============================================================
+    const SUPA_URL = "https://rzdmnzuweyzhilfcungl.supabase.co";
+    const SUPA_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ6ZG1uenV3ZXl6aGlsZmN1bmdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE4NTk5NTcsImV4cCI6MjA5NzQzNTk1N30.IqRxw3n2c-zNCccbgOUfh7wLy8eNnOVKJzwa8AsoSnU";
+
+    const HEADERS = { apikey: SUPA_KEY, Authorization: `Bearer ${SUPA_KEY}` };
+
+    // ============================================================
+    //  MAPEAMENTO DE CAMPOS POR ABA
+    // ============================================================
+    const FIELD_MAP = {
+      aba1: [
+        { key: 'nome_requerente', label: 'Nome do Requerente' },
+        { key: 'cpf_cnpj', label: 'CPF/CNPJ' },
+        { key: 'telefone', label: 'Telefone' },
+        { key: 'pessoa_estrangeira', label: 'Pessoa Estrangeira' },
+        { key: 'numero_requerimento', label: 'Nº do Requerimento' },
+        { key: 'data_requerimento', label: 'Data do Requerimento' },
+        { key: 'processo_sei', label: 'Processo SEI' },
+        { key: 'prioridade_legal', label: 'Prioridade Legal' },
+        { key: 'nome_rep', label: 'Representante Legal' },
+        { key: 'cpf_cnpj_rep', label: 'CPF/CNPJ Representante' },
+        { key: 'telefone_rep', label: 'Telefone Representante' },
+        { key: 'conceituacao_imovel', label: 'Conceituação do Imóvel', full: true },
+        { key: 'rips', label: 'RIPs', full: true },
+        { key: 'solicitacao_criacao_rip', label: 'Solicitação de Criação de RIP / Obs', full: true },
+      ],
+      aba2: [
+        { key: 'tem_matricula', label: 'Imóvel possui matrícula?' },
+        { key: 'num_matricula', label: 'Nº Matrícula / Transcrição' },
+        { key: 'cartorio_matricula', label: 'Cartório / Ofício' },
+        { key: 'situacao_ocupacional', label: 'Situação Ocupacional' },
+        { key: 'uso_principal', label: 'Uso Principal Atual' },
+        { key: 'condicao_urbanizacao', label: 'Condição de Urbanização / Obras', full: true },
+        { key: 'incidencia_ambiental', label: 'Incidências Ambientais', full: true },
+        { key: 'riscos', label: 'Riscos Verificados', full: true },
+        { key: 'restricoes', label: 'Restrições / Condições Específicas', full: true },
+      ],
+      aba3: [
+        { key: 'cpf_cnpj_regular', label: 'CPF/CNPJ regular?' },
+        { key: 'natureza', label: 'Natureza da Destinação' },
+        { key: 'pendencias', label: 'Pendências Contratuais/Documentais?' },
+        { key: 'capacidade_fin', label: 'Capacidade Financeira', full: true },
+        { key: 'nup_sei', label: 'NUP SEI (Ações Judiciais)' },
+        { key: 'tipo_processo', label: 'Tipo de Processo' },
+        { key: 'resumo_acao', label: 'Resumo da Ação', full: true },
+        { key: 'area_total_imovel', label: 'Área Total do Imóvel (m²)' },
+        { key: 'valor_total_imovel', label: 'Valor Total do Imóvel (R$)' },
+        { key: 'area_terreno_destinada', label: 'Área Terreno Destinada (m²)' },
+        { key: 'area_construida_destinada', label: 'Área Construída Destinada (m²)' },
+        { key: 'modalidade', label: 'Tipo de Procedimento Pretendido' },
+        { key: 'tipo_uso_imobiliario', label: 'Tipo de Uso Imobiliário' },
+        { key: 'tipo_uso_especifico', label: 'Tipo de Uso Específico' },
+        { key: 'custos_manutencao', label: 'Gera Custos de Manutenção?' },
+        { key: 'custos_valor', label: 'Valor Anual Custos (R$)' },
+        { key: 'outros_interessados', label: 'Outros Interessados no Imóvel?' },
+      ]
+    };
+
+    const PERFIL_NOMES = {
+      'CHEFIA_SPU': 'Chefia SPU/UF',
+      'COORDENACAO_SPU': 'Coordenação SPU/UF',
+      'SUPERINTENDENCIA': 'Superintendência',
+      'EQUIPE_CG': 'Equipe C.G.',
+      'COORDENACAO_GERAL': 'Coordenação-Geral',
+      'DIRETORIA': 'Direção'
+    };
+
+    // ============================================================
+    //  UTILITÁRIOS
+    // ============================================================
+    function val(v) {
+      if (v === null || v === undefined || v === '') return null;
+      if (Array.isArray(v)) return v.length ? v.join(', ') : null;
+      return String(v);
+    }
+
+    // ============================================================
+    //  FETCH DE DADOS
+    // ============================================================
+    async function fetchJSON(url) {
+      const r = await fetch(url, { headers: HEADERS });
+      if (!r.ok) return null;
+      return r.json();
+    }
+
+    async function loadAll() {
+      const params = new URLSearchParams(window.location.search);
+      const processId = params.get('processo') || localStorage.getItem('CURRENT_PROCESS_ID');
+
+      if (!processId) {
+        document.getElementById('loading').innerText = 'Erro: Processo não identificado na URL.';
+        return;
+      }
+
+      document.getElementById('doc-process-id').textContent = `Processo: ${processId}`;
+      document.getElementById('doc-footer-data').textContent = `Gerado em: ${new Date().toLocaleString('pt-BR')}`;
+
+      try {
+        // Busca todas as versões e todas as deliberações
+        const [todasVersoes, delib, status] = await Promise.all([
+          fetchJSON(`${SUPA_URL}/rest/v1/tabela_versoes_formulario?select=*&processo_id=eq.${encodeURIComponent(processId)}&order=criado_em.asc`),
+          fetchJSON(`${SUPA_URL}/rest/v1/tabela_deliberacoes?process_id=eq.${encodeURIComponent(processId)}&order=created_at.asc`),
+          fetchJSON(`${SUPA_URL}/rest/v1/tabela_status_fluxo?select=dados_json&numero_requerimento=eq.${encodeURIComponent(processId)}&order=id.desc&limit=1`)
+        ]);
+
+        // Se nenhuma versão existir (compatibilidade legado), busca o rascunho de tabela_relatorios
+        let fallbackReports = [];
+        if (!todasVersoes || todasVersoes.length === 0) {
+          console.log("🚩 Nenhuma versão encontrada na tabela de versionamento. Buscando fallback em tabela_relatorios...");
+          const rels = await fetchJSON(`${SUPA_URL}/rest/v1/tabela_relatorios?select=*&process_id=eq.${encodeURIComponent(processId)}`);
+          if (rels && rels.length > 0) {
+            fallbackReports = rels.map(r => ({
+              processo_id: r.process_id,
+              aba: r.aba,
+              versao: 1,
+              dados_json: r.dados_relatorio,
+              criado_por: 'SISTEMA (Legado)',
+              criado_em: r.updated_at || new Date().toISOString()
+            }));
+          }
+        }
+
+        let eventos = [];
+
+        // Adiciona as versões carregadas
+        const listaVersoes = (todasVersoes && todasVersoes.length > 0) ? todasVersoes : fallbackReports;
+        listaVersoes.forEach(v => {
+          eventos.push({
+            tipo: 'versao',
+            dataObj: new Date(v.criado_em || v.created_at || new Date()),
+            dados: v
+          });
+        });
+
+        // Adiciona as deliberações
+        if (delib && delib.length > 0) {
+          delib.forEach(d => {
+            eventos.push({
+              tipo: 'deliberacao',
+              dataObj: new Date(d.created_at),
+              dados: d
+            });
+          });
+        }
+
+        // Ordena cronologicamente todos os eventos (Abas salvas e Deliberações intercaladas)
+        eventos.sort((a, b) => a.dataObj - b.dataObj);
+
+        // Renderiza a timeline
+        const timelineEl = document.getElementById('timeline-container');
+        if (eventos.length === 0) {
+          timelineEl.innerHTML = '<div class="field-value empty">Nenhuma atividade registrada no histórico deste processo.</div>';
+        } else {
+          let html = '<div class="timeline">';
+          eventos.forEach(evt => {
+            if (evt.tipo === 'versao') {
+              const v = evt.dados;
+              const abaNum = v.aba.replace('aba', '');
+              const labelAba = `Aba ${abaNum} — ${abaNum === '1' ? 'Indicação do Imóvel' : abaNum === '2' ? 'Caracterização' : 'Destinação'}`;
+              const criadoPor = v.criado_por || 'Sistema';
+              const dataStr = evt.dataObj.toLocaleString('pt-BR');
+              
+              // Renderiza os campos desta versão usando o FIELD_MAP correspondente
+              const camposMapeados = FIELD_MAP[v.aba] || [];
+              let fieldsHtml = '<div class="field-grid">';
+              camposMapeados.forEach(f => {
+                const valueRaw = v.dados_json ? v.dados_json[f.key] : null;
+                const valueFormatted = val(valueRaw);
+                fieldsHtml += `<div class="field${f.full ? ' full' : ''}">
+                  <div class="field-label">${f.label}</div>
+                  <div class="field-value${valueFormatted ? '' : ' empty'}">${valueFormatted || '—'}</div>
+                </div>`;
+              });
+              fieldsHtml += '</div>';
+
+              // Destaca "Resposta à Devolutiva" se existir no snapshot
+              let respostaHtml = '';
+              if (v.dados_json && v.dados_json.resposta_devolucao) {
+                respostaHtml = `
+                  <div class="resposta-devolutiva-destaque">
+                    <strong>↩️ Resposta à Devolutiva:</strong> ${v.dados_json.resposta_devolucao}
+                  </div>
+                `;
+              }
+
+              html += `
+                <div class="timeline-item versao-salva">
+                  <div class="timeline-marker"></div>
+                  <div class="timeline-header">
+                    <span>📝 Versão ${v.versao} da ${labelAba} <small style="font-weight: normal; color: #475569;">(Salvo por ${criadoPor})</small></span>
+                    <span class="timeline-date">${dataStr}</span>
+                  </div>
+                  <div class="timeline-content-card">
+                    ${fieldsHtml}
+                    ${respostaHtml}
+                  </div>
+                </div>
+              `;
+
+            } else if (evt.tipo === 'deliberacao') {
+              const d = evt.dados;
+              const dd = d.dados_deliberacao || {};
+              const perfil = PERFIL_NOMES[d.perfil] || d.perfil;
+              const dataStr = evt.dataObj.toLocaleString('pt-BR');
+              const isDev = dd.decisao === 'devolver' || dd.decisao === 'complementacao';
+              const classe = isDev ? 'deliberacao-devolvido' : 'deliberacao-aprovado';
+
+              let decisaoTexto = 'Aprovado e encaminhado.';
+              if (dd.decisao === 'devolver' || dd.decisao === 'complementacao') {
+                decisaoTexto = 'Solicita complementação / Devolvido.';
+              } else if (dd.decisao === 'cancelamento') {
+                decisaoTexto = 'Cancelamento.';
+              } else if (dd.decisao === 'ressalvas') {
+                decisaoTexto = 'Aprovado com ressalvas.';
+              } else if (dd.decisao === 'favoravel') {
+                decisaoTexto = 'Deliberação final favorável.';
+              }
+
+              let detalhe = '';
+              if (dd.motivo) {
+                detalhe = `<div class="delib-detalhe" style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed #e2e8f0; font-size: 0.85rem; color: #475569;">
+                  <strong>${isDev ? 'Motivo da Devolução:' : 'Observações:'}</strong> ${dd.motivo}
+                </div>`;
+              }
+
+              html += `
+                <div class="timeline-item ${classe}">
+                  <div class="timeline-marker"></div>
+                  <div class="timeline-header">
+                    <span>⚖️ Deliberação do perfil: ${perfil}</span>
+                    <span class="timeline-date">${dataStr}</span>
+                  </div>
+                  <div class="timeline-content-card" style="${isDev ? 'background-color: #fef2f2; border-color: #fecaca;' : 'background-color: #f0fdf4; border-color: #bbf7d0;'}">
+                    <div style="font-weight: 600; font-size: 0.95rem; color: ${isDev ? '#991b1b' : '#166534'};">
+                      <strong>Decisão:</strong> ${decisaoTexto}
+                    </div>
+                    ${detalhe}
+                  </div>
+                </div>
+              `;
+            }
+          });
+          html += '</div>';
+          timelineEl.innerHTML = html;
+        }
+
+        // Status atual
+        let checkpoint = '';
+        if (status?.[0]?.dados_json?.checkpoint) {
+          checkpoint = status[0].dados_json.checkpoint;
+        }
+
+        // Mostra conteúdo
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('content').style.display = 'block';
+
+        // Guarda para o PDF
+        window._processId = processId;
+        window._checkpoint = checkpoint;
+
+      } catch (err) {
+        document.getElementById('loading').innerText = 'Erro ao carregar dados: ' + err.message;
+        console.error(err);
+      }
+    }
+
+
+    // ============================================================
+    //  GERAÇÃO DE PDF
+    // ============================================================
+    function gerarPDF() {
+      const area = document.getElementById('print-area');
+      const btn = document.querySelector('.toolbar button');
+      btn.textContent = 'Gerando...';
+      btn.disabled = true;
+
+      const opt = {
+        margin: [10, 10, 10, 10],
+        filename: `Processo_${window._processId || 'documento'}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+      };
+
+      html2pdf().set(opt).from(area).save().then(() => {
+        btn.textContent = 'Gerar PDF';
+        btn.disabled = false;
+      }).catch(err => {
+        console.error(err);
+        btn.textContent = 'Gerar PDF';
+        btn.disabled = false;
+        alert('Erro ao gerar PDF: ' + err.message);
+      });
+    }
+
+    // ============================================================
+    //  INICIALIZAÇÃO
+    // ============================================================
+    loadAll();
+  </script>
+</body>
+</html>

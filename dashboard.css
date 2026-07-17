@@ -22,6 +22,10 @@
     --status-confirmada-text: #ffffff;
 }
 
+html {
+    scrollbar-gutter: stable;
+}
+
 body {
     margin: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -163,7 +167,7 @@ body {
 .filters-body {
     padding: 20px;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 15px;
     background-color: #ffffff;
 }
@@ -187,7 +191,7 @@ body {
 }
 
 .filter-group label {
-    font-size: 11px;
+    font-size: 13px;
     font-weight: 700;
     color: var(--spu-gray);
     text-transform: uppercase;
@@ -200,7 +204,7 @@ body {
     padding: 10px;
     border: 1.5px solid var(--spu-border);
     border-radius: 6px;
-    font-size: 13.5px;
+    font-size: 15.5px;
     font-family: inherit;
     outline: none;
     color: #334155;
@@ -296,19 +300,20 @@ body {
     border: 1px solid var(--spu-border);
     border-radius: 8px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.02);
-    overflow: hidden;
+    overflow-x: auto;
+    overflow-y: hidden;
 }
 
 .data-table {
     width: 100%;
     border-collapse: collapse;
     text-align: center;
-    font-size: 14.5px;
+    font-size: 15.5px;
 }
 
 .data-table th {
     background-color: #f1f5f9;
-    padding: 14px 18px;
+    padding: 14px 10px;
     font-weight: 700;
     color: var(--spu-blue);
     border-bottom: 1.5px solid var(--spu-border);
@@ -316,7 +321,7 @@ body {
 }
 
 .data-table td {
-    padding: 15px 18px;
+    padding: 15px 10px;
     border-bottom: 1px solid var(--spu-border);
     vertical-align: middle;
 }
@@ -331,11 +336,16 @@ body {
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 4px 10px;
-    border-radius: 12px;
-    font-size: 11px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13.5px;
     font-weight: 600;
     letter-spacing: 0.2px;
+    width: 190px;
+    min-height: 40px;
+    height: auto;
+    white-space: normal;
+    line-height: 1.2;
 }
 
 .badge-aguardando {
@@ -345,6 +355,10 @@ body {
     box-shadow: 0 1px 2px rgba(0,0,0,0.05);
     border-radius: 6px;
     padding: 5px 12px;
+}
+
+.badge-vazio {
+    display: none;
 }
 
 .badge-analise {
@@ -374,6 +388,53 @@ body {
     padding: 5px 12px;
 }
 
+.badge-em-andamento {
+    background-color: #dcfce7; /* light green */
+    color: #000000;
+    border: 1px solid #86efac;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    border-radius: 6px;
+    padding: 5px 12px;
+}
+
+/* Flag de Tramitação: Normal (processo sem devoluções) */
+.badge-normal {
+    background-color: #f0fdf4;
+    color: #15803d;
+    border: 1px solid #86efac;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    border-radius: 6px;
+    padding: 5px 12px;
+}
+
+.badge-deliberado {
+    background-color: #166534; /* dark green */
+    color: #ffffff;
+    border: 1px solid #14532d;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    border-radius: 6px;
+    padding: 5px 12px;
+}
+
+.badge-status-foco {
+    background-color: #f0f9ff; /* azul bem sutil */
+    color: #0369a1;            /* azul escuro para leitura */
+    border: 1px solid #bae6fd;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 130px;              /* largura padrão para quebrar até 3 linhas */
+    height: 52px;              /* altura padrão para caber as 3 linhas */
+    text-align: center;
+    line-height: 1.2;
+    white-space: normal;       /* garante a quebra de linha */
+}
+
 /* --- PRIORIDADE HIGHLIGHT --- */
 .row-prioridade {
     background-color: #fff7ed !important;
@@ -384,7 +445,7 @@ body {
 
 /* --- ORIGEM BADGES --- */
 .origem-indicator {
-    font-size: 11px;
+    font-size: 12.5px;
     color: #64748b;
     margin-top: 3px;
     display: flex;
@@ -432,3 +493,106 @@ body {
     color: var(--spu-gray);
     font-style: italic;
 }
+
+/* --- PROFILE SWITCHER (Simular Perfil) --- */
+.profile-switcher-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-right: 1.5px solid var(--spu-border);
+    padding-right: 20px;
+}
+
+.profile-switcher-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--spu-gray);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    white-space: nowrap;
+}
+
+#profileSelector {
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1.5px solid #cbd5e1;
+    font-size: 15.5px;
+    font-weight: 500;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8fafc;
+    color: #1e293b;
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+#profileSelector:focus {
+    border-color: var(--spu-blue);
+    box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.08);
+}
+
+/* --- TOGGLE "MEUS PROCESSOS" --- */
+.toggle-meus-processos-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-right: 1.5px solid var(--spu-border);
+    padding-right: 20px;
+}
+
+.toggle-label {
+    font-size: 15.5px;
+    font-weight: 600;
+    color: #475569;
+    white-space: nowrap;
+    user-select: none;
+    cursor: pointer;
+}
+
+/* Pill toggle — estilo iOS */
+.toggle-switch {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    width: 40px;
+    height: 22px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+}
+
+.toggle-slider {
+    position: absolute;
+    inset: 0;
+    background-color: #cbd5e1;
+    border-radius: 999px;
+    transition: background-color 0.25s ease;
+}
+
+.toggle-slider::before {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    left: 3px;
+    top: 3px;
+    background-color: white;
+    border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    transition: transform 0.25s ease;
+}
+
+.toggle-switch input:checked + .toggle-slider {
+    background-color: var(--spu-blue);
+}
+
+.toggle-switch input:checked + .toggle-slider::before {
+    transform: translateX(18px);
+}
+

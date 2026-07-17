@@ -515,13 +515,36 @@
 function toggleAccordion(element) {
   const item = element.closest(".accordion-item");
   const isActive = item.classList.contains("active");
+  const content = item.querySelector('.accordion-content');
 
+  // Fecha os outros imediatamente
   document.querySelectorAll(".accordion-item").forEach(function (accordionItem) {
-    accordionItem.classList.remove("active");
+    if (accordionItem !== item) {
+      accordionItem.classList.remove("active");
+    }
   });
 
   if (!isActive) {
     item.classList.add("active");
+    if (content) {
+      content.animate([
+          { opacity: 0, transform: 'translateY(-10px)' },
+          { opacity: 1, transform: 'translateY(0)' }
+      ], { duration: 250, easing: 'ease-out' });
+    }
+  } else {
+    if (content) {
+      const animation = content.animate([
+          { opacity: 1, transform: 'translateY(0)' },
+          { opacity: 0, transform: 'translateY(-5px)' }
+      ], { duration: 200, easing: 'ease-in' });
+      
+      animation.onfinish = () => {
+          item.classList.remove("active");
+      };
+    } else {
+      item.classList.remove("active");
+    }
   }
 }
 

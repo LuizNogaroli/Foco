@@ -13,62 +13,244 @@
 <body>
     <div class="report-container">
         <div class="report-header">
-            <p style="font-weight:bold; margin-top:10px;">Relatório - Dados do Requerimento</p>
+            <p style="font-weight:bold; margin-top:10px;">Relatório Consolidado - Aba 1 (Dados do Requerimento)</p>
         </div>
 
-        <div class="report-section">
-            <div class="report-section-title">Informações do Requerente</div>
-            <div class="report-grid">
-                <div class="report-item">
-                    <span class="report-label">Nome/Razão Social</span>
-                    <span class="report-value">Município de Exemplo da Serra</span>
-                </div>
-                <div class="report-item">
-                    <span class="report-label">CPF/CNPJ</span>
-                    <span class="report-value">12.345.678/0001-99</span>
-                </div>
-                <div class="report-item">
-                    <span class="report-label">E-mail</span>
-                    <span class="report-value">prefeitura@exemplo.gov.br</span>
-                </div>
-                <div class="report-item">
-                    <span class="report-label">Telefone</span>
-                    <span class="report-value">(11) 98765-4321</span>
+        <div id="loading" style="text-align: center; padding: 30px; font-weight: bold; color: #1e3a5f;">
+            Carregando relatório...
+        </div>
+
+        <div id="content" style="display: none;">
+            <div class="report-section">
+                <div class="report-section-title">Informações do Requerente</div>
+                <div class="report-grid">
+                    <div class="report-item">
+                        <span class="report-label">Nome do Requerente</span>
+                        <span class="report-value" id="val_nome">-</span>
+                    </div>
+                    <div class="report-item">
+                        <span class="report-label">CPF/CNPJ</span>
+                        <span class="report-value" id="val_cpf_cnpj">-</span>
+                    </div>
+                    <div class="report-item">
+                        <span class="report-label">Telefone</span>
+                        <span class="report-value" id="val_telefone">-</span>
+                    </div>
+                    <div class="report-item">
+                        <span class="report-label">Pessoa Estrangeira</span>
+                        <span class="report-value" id="val_estrangeira">-</span>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="report-section">
-            <div class="report-section-title">Dados do Processo SEI</div>
-            <div class="report-grid">
-                <div class="report-item">
-                    <span class="report-label">Número do Processo SEI</span>
-                    <span class="report-value">19739.100200/2026-10</span>
-                </div>
-                <div class="report-item">
-                    <span class="report-label">Tipo de Requerimento</span>
-                    <span class="report-value">Cessão de Uso Gratuita</span>
+            <div class="report-section">
+                <div class="report-section-title">Dados do Processo SEI e Requerimento</div>
+                <div class="report-grid">
+                    <div class="report-item">
+                        <span class="report-label">Número do Requerimento</span>
+                        <span class="report-value" id="val_num_req">-</span>
+                    </div>
+                    <div class="report-item">
+                        <span class="report-label">Data do Requerimento</span>
+                        <span class="report-value" id="val_data_req">-</span>
+                    </div>
+                    <div class="report-item">
+                        <span class="report-label">Número do Processo SEI</span>
+                        <span class="report-value" id="val_sei">-</span>
+                    </div>
+                    <div class="report-item">
+                        <span class="report-label">Prioridade Legal</span>
+                        <span class="report-value" id="val_prioridade">-</span>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- TRILHA DE AUDITORIA SIMULADA -->
-        <div style="margin-top: 40px; padding: 15px; border: 1px solid #ddd; border-left: 6px solid #1a7a4a; background: #fdfdfd; width: 100%; box-sizing: border-box; font-size: 0.85rem; color: #444; font-family: sans-serif;">
-            <div style="display: flex; justify-content: space-between; align-items: flex-end;">
-                <div style="line-height: 1.5;">
-                    Responsável: <span style="color:#1a4e8a; font-weight:bold;">João Silva (Analista Técnico SPU/UF)</span><br>
-                    Status do Documento: <span style="color:#1a7a4a; font-weight:bold;">CONSOLIDADO E CONFERIDO</span>
+            <div class="report-section">
+                <div class="report-section-title">Dados do Representante Legal</div>
+                <div class="report-grid">
+                    <div class="report-item">
+                        <span class="report-label">Nome</span>
+                        <span class="report-value" id="val_nome_rep">-</span>
+                    </div>
+                    <div class="report-item">
+                        <span class="report-label">CPF/CNPJ</span>
+                        <span class="report-value" id="val_cpf_rep">-</span>
+                    </div>
+                    <div class="report-item">
+                        <span class="report-label">Telefone</span>
+                        <span class="report-value" id="val_tel_rep">-</span>
+                    </div>
                 </div>
-                <div style="text-align: right; line-height: 1.5;">
-                    <strong>Data/Hora:</strong> 25/05/2026 14:30:15<br>
-                    <strong>ID de Autenticidade:</strong> <span style="font-family: monospace; color: #666;">A1B2-C3D4-E5F6</span>
+            </div>
+
+            <div class="report-section">
+                <div class="report-section-title">Indicação do Imóvel</div>
+                <div class="report-grid">
+                    <div class="report-item" style="grid-column: span 2;">
+                        <span class="report-label">Imóvel/Área Relacionados</span>
+                        <span class="report-value" id="val_conceituacao">-</span>
+                    </div>
+                    <div class="report-item" style="grid-column: span 2;">
+                        <span class="report-label">RIPs Associados</span>
+                        <span class="report-value" id="val_rips">-</span>
+                    </div>
+                    <div class="report-item" style="grid-column: span 2;">
+                        <span class="report-label">Cadastros Mínimos</span>
+                        <div class="report-value" id="val_cadastros">-</div>
+                    </div>
+                    <div class="report-item" style="grid-column: span 2;">
+                        <span class="report-label">Solicitação de Criação de RIP / Observações</span>
+                        <span class="report-value" id="val_obs">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 40px; padding: 15px; border: 1px solid #ddd; border-left: 6px solid #1a7a4a; background: #fdfdfd; width: 100%; box-sizing: border-box; font-size: 0.85rem; color: #444; font-family: sans-serif;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                    <div style="line-height: 1.5;">
+                        Responsável: <span style="color:#1a4e8a; font-weight:bold;">Sistema (Geração Automática)</span><br>
+                        Status do Documento: <span style="color:#1a7a4a; font-weight:bold;">CONSOLIDADO E CONFERIDO</span>
+                    </div>
+                    <div style="text-align: right; line-height: 1.5;">
+                        <strong>Data/Hora Relatório:</strong> <span id="val_data_relatorio">-</span><br>
+                        <strong>Processo Base:</strong> <span style="font-family: monospace; color: #666;" id="val_base_id">-</span>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="report-footer">
-            <p>Documento para simples conferência técnica e hierárquica.</p>
+            <p>Documento gerado automaticamente com base nos dados salvos no sistema. Simples conferência técnica e hierárquica.</p>
         </div>
     </div>
+
+    <script>
+        async function loadReport() {
+            const processId = localStorage.getItem('CURRENT_PROCESS_ID');
+            if (!processId) {
+                document.getElementById('loading').innerText = "Erro: Processo não identificado.";
+                return;
+            }
+
+            try {
+                const SUPA_URL = window.parent?.SUPABASE_URL || window.parent?.parent?.SUPABASE_URL;
+                const SUPA_KEY = window.parent?.SUPABASE_ANON_KEY || window.parent?.parent?.SUPABASE_ANON_KEY;
+
+                if (!SUPA_URL || !SUPA_KEY) {
+                    throw new Error("Credenciais do Supabase não encontradas.");
+                }
+
+                const url = `${SUPA_URL}/rest/v1/tabela_relatorios?select=*&process_id=eq.${encodeURIComponent(processId)}&aba=eq.aba1&limit=1`;
+                const res = await fetch(url, {
+                    headers: { 'apikey': SUPA_KEY, 'Authorization': `Bearer ${SUPA_KEY}` }
+                });
+
+                if (!res.ok) {
+                    const errorText = await res.text();
+                    throw new Error(`Status ${res.status}: ${res.statusText} - ${errorText}`);
+                }
+                
+                const data = await res.json();
+                if (data && data.length > 0) {
+                    const rel = data[0].dados_relatorio;
+                    
+                    document.getElementById('val_nome').textContent = rel.nome_requerente || '-';
+                    document.getElementById('val_cpf_cnpj').textContent = rel.cpf_cnpj || '-';
+                    document.getElementById('val_telefone').textContent = rel.telefone || '-';
+                    document.getElementById('val_estrangeira').textContent = rel.pessoa_estrangeira || '-';
+                    
+                    document.getElementById('val_num_req').textContent = rel.numero_requerimento || '-';
+                    document.getElementById('val_data_req').textContent = rel.data_requerimento || '-';
+                    document.getElementById('val_sei').textContent = rel.processo_sei || '-';
+                    document.getElementById('val_prioridade').textContent = rel.prioridade_legal || '-';
+                    
+                    document.getElementById('val_nome_rep').textContent = rel.nome_rep || '-';
+                    document.getElementById('val_cpf_rep').textContent = rel.cpf_cnpj_rep || '-';
+                    document.getElementById('val_tel_rep').textContent = rel.telefone_rep || '-';
+                    
+                    document.getElementById('val_conceituacao').textContent = rel.conceituacao_imovel || '-';
+                    document.getElementById('val_rips').textContent = (rel.rips && rel.rips.length > 0) ? rel.rips.join(', ') : '-';
+                    
+                    if (rel.cadastros_minimos && rel.cadastros_minimos.length > 0) {
+                        const cadHtml = rel.cadastros_minimos.map(c => `<div><strong>CEP:</strong> ${c.cep}, <strong>Área:</strong> ${c.area}m²</div>`).join('');
+                        document.getElementById('val_cadastros').innerHTML = cadHtml;
+                    } else {
+                        document.getElementById('val_cadastros').textContent = '-';
+                    }
+                    
+                    document.getElementById('val_obs').textContent = rel.solicitacao_criacao_rip || '-';
+
+                    // Bloco de Devolução / Retificação
+                    if (rel.motivo_devolucao || rel.resposta_devolucao) {
+                        const statusDiv = document.querySelector('div[style*="border-left: 6px solid #1a7a4a"]');
+                        if (statusDiv) {
+                            statusDiv.innerHTML += `
+                                <div style="margin-top: 25px; padding: 20px; background-color: #fffbeb; border: 1px solid #fde68a; border-radius: 8px;">
+                                    <h4 style="margin:0 0 15px 0; color: #d97706; border-bottom: 1px solid #fcd34d; padding-bottom: 8px;">
+                                        🔄 Histórico de Devolução e Retificação
+                                    </h4>
+                                    
+                                    <div style="margin-bottom: 15px; border-left: 4px solid #ef4444; padding-left: 12px;">
+                                        <p style="margin: 0 0 5px 0; color: #b91c1c; font-size: 13px; font-weight: bold;">Motivo da Devolução (Questionamento):</p>
+                                        <p style="margin: 0; font-size: 14px; color: #450a0a; white-space: pre-wrap;">${rel.motivo_devolucao || 'Não registrado'}</p>
+                                    </div>
+
+                                    <div style="border-left: 4px solid #10b981; padding-left: 12px;">
+                                        <p style="margin: 0 0 5px 0; color: #047857; font-size: 13px; font-weight: bold;">Resposta da Equipe (Correção realizada):</p>
+                                        <p style="margin: 0; font-size: 14px; color: #064e3b; white-space: pre-wrap;">${rel.resposta_devolucao || 'Não registrado'}</p>
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    }
+
+                    // Metadados
+                    const dateObj = new Date(data[0].updated_at);
+                    document.getElementById('val_data_relatorio').textContent = dateObj.toLocaleString('pt-BR');
+                    document.getElementById('val_base_id').textContent = processId;
+                    
+                    // Renderiza selo de aprovação
+                    if (rel.aprovacao && rel.aprovacao.status) {
+                        const aprovDate = new Date(rel.aprovacao.data).toLocaleString('pt-BR');
+                        const perfilAss = rel.aprovacao.perfil || 'Perfil Atual';
+                        const obsAss = rel.aprovacao.observacoes ? rel.aprovacao.observacoes : 'Sem observações adicionais.';
+                        const statusDiv = document.querySelector('div[style*="border-left: 6px solid #1a7a4a"]');
+                        if (statusDiv) {
+                            statusDiv.innerHTML += `
+                                <div style="margin-top: 25px; padding-top: 15px; border-top: 1px dashed #ccc; color: #333;">
+                                    <h4 style="margin:0 0 10px 0; color: #1e3a5f;">Conclusão e Manifestação</h4>
+                                    <div style="background: #e8f5e9; padding: 15px; border-radius: 4px; border-left: 4px solid #166534; margin-bottom: 15px;">
+                                        <p style="margin: 0 0 10px 0; font-size: 13px; color: #166534;">
+                                            <strong>Declaração:</strong> Declaro que as informações consignadas neste formulário foram inseridas com base nos dados disponíveis nos sistemas oficiais, nos documentos constantes do processo e nas verificações realizadas no âmbito desta unidade, estando compatíveis com os elementos analisados.
+                                        </p>
+                                        <div style="font-size: 14px; color: #166534;">
+                                            <strong>✅ Aprovado e Assinado Digitalmente</strong>
+                                            <br>Data: ${aprovDate}
+                                            <br>Perfil Responsável: <strong>${perfilAss}</strong>
+                                        </div>
+                                    </div>
+                                    
+                                    <div style="background: #f8fafc; padding: 15px; border-radius: 4px; border: 1px solid #cbd5e1;">
+                                        <h5 style="margin:0 0 8px 0; color: #334155; font-size: 14px;">Observações da Manifestação:</h5>
+                                        <p style="margin: 0; font-size: 13px; color: #475569; white-space: pre-wrap;">${obsAss}</p>
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    }
+                    
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('content').style.display = 'block';
+                } else {
+                    document.getElementById('loading').innerText = "Nenhum relatório salvo encontrado para este processo. Salve a Aba 1 para gerar.";
+                }
+            } catch (err) {
+                console.error(err);
+                document.getElementById('loading').innerText = "Erro ao carregar o relatório: " + err.message;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadReport);
+    </script>
 </body>
 </html>

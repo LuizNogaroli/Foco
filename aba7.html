@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Imóvel - SPU</title>
+
+  <!-- Leaflet CSS -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+  <!-- Credenciais Supabase (fallback local para não depender do window.parent) -->
+  <script>
+    window.SUPABASE_URL = "https://rzdmnzuweyzhilfcungl.supabase.co";
+    window.SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ6ZG1uenV3ZXl6aGlsZmN1bmdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE4NTk5NTcsImV4cCI6MjA5NzQzNTk1N30.IqRxw3n2c-zNCccbgOUfh7wLy8eNnOVKJzwa8AsoSnU";
+  </script>
+
+  <style>
+    :root {
+      --carousel-gap: 16px;
+      --carousel-height-desktop: 250px;
+      --carousel-height-mobile: 460px;
+      --spu-blue: #1e3a5f;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #ffffff;
+      color: #333333;
+    }
+
+    .page {
+      display: flex;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* =========================
+       LADO ESQUERDO
+    ========================== */
+
+    .left {
+      width: 50%;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding: 20px;
+      overflow-y: auto;
+      background: #ffffff;
+      scrollbar-gutter: stable;
+    }
+
+    #map {
+      width: 100%;
+      height: 50vh;
+      min-height: 480px;
+      border: 1px solid #cccccc;
+      border-radius: 6px;
+      flex: 0 0 auto;
+    }
+
+    /* =========================
+       CARROSSEL
+    ========================== */
+
+    .carousel-container {
+      width: 100%;
+      height: var(--carousel-height-desktop);
+      min-height: var(--carousel-height-desktop);
+      flex: 0 0 var(--carousel-height-desktop);
+      overflow: hidden;
+      position: relative;
+      border-radius: 12px;
+      background: #f2f2f2;
+    }
+
+    .carousel-track {
+      display: flex;
+      gap: var(--carousel-gap);
+      height: 100%;
+      transition: transform 0.4s ease-in-out;
+    }
+
+    .carousel-item {
+      flex: 0 0 calc((100% - var(--carousel-gap)) / 2);
+      height: 100%;
+      min-height: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #f2f2f2;
+      cursor: pointer;
+    }
+
+    .carousel-item img {
+      width: 100%;
+      height: 100%;
+      min-height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .carousel-button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 42px;
+      height: 90px;
+      border: none;
+      background: rgba(0, 0, 0, 0.28);
+      color: #ffffff;
+      font-size: 38px;
+      cursor: pointer;
+      border-radius: 6px;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+
+    .carousel-button:hover {
+      background: rgba(0, 0, 0, 0.48);
+    }
+
+    .carousel-button.prev {
+      left: 10px;
+    }
+
+    .carousel-button.next {
+      right: 10px;
+    }
+
+    /* =========================
+       LADO DIREITO
+    ========================== */
+
+    .right {
+      width: 50%;
+      padding: 20px;
+      overflow-y: auto;
+      background: #ffffff;
+      scrollbar-gutter: stable;
+    }
+
+.accordion {
+  width: 100%;
+  margin-right: 0px;
+}
+
+
+    .accordion-item {
+      margin-bottom: 10px;
+      border: none;
+    }
+
+    .accordion-header {
+      width: 100%;
+      background: var(--spu-blue);
+      color: #ffffff;
+      padding: 12px 16px;
+      font-size: 0.97em;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+
+    .accordion-header:hover {
+      background: #2d5282;
+    }
+
+    .accordion-header .arrow {
+      font-size: 0.85em;
+      transition: transform 0.25s ease;
+    }
+
+    .accordion-item.active .accordion-header .arrow {
+      transform: rotate(180deg);
+    }
+
+    .accordion-content {
+      display: none;
+      padding: 0;
+      border: 1px solid #dddddd;
+      border-top: none;
+      background: #ffffff;
+      border-radius: 0 0 4px 4px;
+      overflow: hidden;
+    }
+
+    .accordion-item.active .accordion-content {
+      display: block;
+    }
+
+    .accordion-iframe {
+      width: 100%;
+      height: 72vh;
+      min-height: 520px;
+      border: none;
+      display: block;
+      background: #ffffff;
+    }
+
+    .info-box {
+      width: 100%;
+      margin-top: 20px;
+      padding: 12px 15px;
+      background: #f3f7f9;
+      border-left: 4px solid var(--spu-blue);
+      font-size: 14px;
+      color: #444444;
+      border-radius: 4px;
+      line-height: 1.5;
+    }
+
+    /* =========================
+       RESPONSIVO
+    ========================== */
+
+    @media (max-width: 768px) {
+      .page {
+        flex-direction: column;
+        height: auto;
+        overflow: auto;
+      }
+
+      .left,
+      .right {
+        width: 100%;
+      }
+
+      #map {
+        height: 420px;
+        min-height: 320px;
+      }
+
+      .carousel-container {
+        height: var(--carousel-height-mobile);
+        min-height: var(--carousel-height-mobile);
+        flex: 0 0 var(--carousel-height-mobile);
+      }
+
+      .carousel-item {
+        flex: 0 0 100%;
+        height: 100%;
+        min-height: 100%;
+      }
+
+
+      .accordion-iframe {
+        height: 75vh;
+        min-height: 480px;
+      }
+    }
+
+    /* Estilos para os Cards do Histórico de Deliberações */
+    .delib-card {
+      position: relative;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+      transition: all 0.2s;
+    }
+    .delib-card::before {
+      content: '';
+      position: absolute;
+      left: -27px;
+      top: 22px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #3b82f6;
+      border: 2px solid #fff;
+      box-shadow: 0 0 0 2px #cbd5e1;
+    }
+    .delib-card.devolvido::before {
+      background: #ef4444;
+      box-shadow: 0 0 0 2px #fca5a5;
+    }
+    .delib-card.aprovado::before {
+      background: #10b981;
+      box-shadow: 0 0 0 2px #a7f3d0;
+    }
+    .delib-card .delib-header {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid #f1f5f9;
+      padding-bottom: 5px;
+      margin-bottom: 10px;
+      font-size: 0.8rem;
+      color: #64748b;
+      font-weight: 500;
+    }
+    .delib-card .delib-title {
+      font-weight: bold;
+      color: #1e3a5f;
+      font-size: 0.95rem;
+    }
+    .delib-card .delib-body {
+      font-size: 0.9rem;
+      color: #334155;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+    <!-- LADO ESQUERDO -->
+    <section class="left">
+      <!-- MAPA -->
+      <div id="map"></div>
+
+      <!-- CARROSSEL DE FOTOS -->
+      <div class="carousel-container">
+        <button class="carousel-button prev" type="button" onclick="moveCarousel(-1)">
+          ‹
+        </button>
+
+        <div class="carousel-track" id="carouselTrack">
+          <div class="carousel-item">
+            <img
+              src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1200&q=80"
+              alt="Foto do imóvel 1"
+            />
+          </div>
+
+          <div class="carousel-item">
+            <img
+              src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80"
+              alt="Foto do imóvel 2"
+            />
+          </div>
+
+          <div class="carousel-item">
+            <img
+              src="https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80"
+              alt="Foto do imóvel 3"
+            />
+          </div>
+
+          <div class="carousel-item">
+            <img
+              src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80"
+              alt="Foto do imóvel 4"
+            />
+          </div>
+
+          <div class="carousel-item">
+            <img
+              src="https://images.unsplash.com/photo-1605146769289-440113cc3d00?auto=format&fit=crop&w=1200&q=80"
+              alt="Foto do imóvel 5"
+            />
+          </div>
+
+          <div class="carousel-item">
+            <img
+              src="https://images.unsplash.com/photo-1582407947304-fd86f028f716?auto=format&fit=crop&w=1200&q=80"
+              alt="Foto do imóvel 6"
+            />
+          </div>
+        </div>
+
+        <button class="carousel-button next" type="button" onclick="moveCarousel(1)">
+          ›
+        </button>
+      </div>
+    </section>
+
+    <!-- LADO DIREITO -->
+    <section class="right">
+      <div class="accordion">
+        <!-- ABA 01 - INDICAÇÃO DO IMÓVEL -->
+        <div class="accordion-item" id="acc_aba1">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span>📋 Indicação do Imóvel</span>
+            <span class="arrow">▼</span>
+          </div>
+
+          <div class="accordion-content">
+            <iframe
+              class="accordion-iframe"
+              src="./foco-01-resumo.html"
+              title="Aba 1 (Indicação do Imóvel)"
+            ></iframe>
+          </div>
+        </div>
+
+        <!-- ABA 02 - CARACTERIZAÇÃO -->
+        <div class="accordion-item" id="acc_aba2">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span>📋 Diagnóstico Preliminar do Imóvel</span>
+            <span class="arrow">▼</span>
+          </div>
+
+          <div class="accordion-content">
+            <iframe
+              class="accordion-iframe"
+              src="./foco-02-resumo.html"
+              title="Aba 2 (Caracterização)"
+            ></iframe>
+          </div>
+        </div>
+
+        <!-- ABA 03 - DESTINAÇÃO -->
+        <div class="accordion-item" id="acc_aba3">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span>📋 Análise de Viabilidade do Imóvel e Proposta de Destinação</span>
+            <span class="arrow">▼</span>
+          </div>
+
+          <div class="accordion-content">
+            <iframe
+              class="accordion-iframe"
+              src="./foco-03-resumo.html"
+              title="Aba 3 (Destinação)"
+            ></iframe>
+          </div>
+      </div>
+
+        <!-- HISTÓRICO DE DELIBERAÇÕES (TIMELINE) -->
+        <div id="historico-deliberacoes-container" style="display: none; background: #fff; border: 1px solid #cbd5e1; border-radius: 8px; margin-top: 20px; padding: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+          <h3 style="margin-top: 0; color: #1e3a5f; font-size: 1.2rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 15px;">Histórico de Deliberações</h3>
+          <div id="historico-deliberacoes-timeline" style="position: relative; padding-left: 20px; border-left: 2px solid #cbd5e1; display: flex; flex-direction: column; gap: 20px; margin-top: 15px;">
+            <!-- Renderizado dinamicamente via JS -->
+          </div>
+          <div style="margin-top: 20px; text-align: right; padding-top: 15px; border-top: 1px solid #e2e8f0;">
+            <button type="button" onclick="gerarPDFProcesso()" style="background: #1e3a5f; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 0.9rem;">📄 Gerar PDF do Processo</button>
+          </div>
+        </div>
+
+        <!-- 1. CHEFIA SPU/UF -->
+        <div id="bloco-deliberacao-chefia" style="display: none; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; margin-top: 20px; padding: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+          <h3 style="margin-top: 0; color: #1e293b; font-size: 1.25rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 15px;">Manifestação - Chefia SPU/UF</h3>
+          
+          <div style="margin-bottom: 15px;">
+            <label style="display: block; margin-bottom: 8px; cursor: pointer;">
+              <input type="radio" name="decisao_chefia" value="aprovar" onclick="toggleArea('area-devolucao-chefia', false)" style="margin-right: 8px;">
+              Os elementos são suficientes para apreciação da viabilidade (envia para Coordenação SPU/UF)
+            </label>
+            <label style="display: block; margin-bottom: 8px; cursor: pointer;">
+              <input type="radio" name="decisao_chefia" value="devolver" onclick="toggleArea('area-devolucao-chefia', true)" style="margin-right: 8px;">
+              Solicita complementação das informações (Devolver processo)
+            </label>
+          </div>
+
+          <div id="area-devolucao-chefia" style="display: none; background: #fffbeb; border: 1px solid #fde68a; padding: 15px; border-radius: 6px; margin-top: 15px;">
+            <label style="display: block; font-weight: 500; margin-bottom: 5px;">Aba a ser corrigida (Destino):</label>
+            <select id="destino_devolucao_chefia" style="width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 4px; margin-bottom: 15px;">
+              <option value="">Selecione...</option>
+              <option value="aba2">CARACTERIZAÇÃO (Aba 2)</option>
+              <option value="aba3">DESTINAÇÃO (Aba 3)</option>
+            </select>
+            <label style="display: block; font-weight: 500; margin-bottom: 5px;">Observações (Quais informações necessita):</label>
+            <textarea id="motivo_devolucao_chefia" rows="4" style="width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 4px; resize: vertical;"></textarea>
+          </div>
+
+          <div style="margin-top: 20px; text-align: right;">
+            <button type="button" onclick="salvarChefia()" style="background: #0ea5e9; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 600; cursor: pointer;">Confirmar Manifestação</button>
+          </div>
+        </div>
+
+        <!-- 2. COORDENAÇÃO SPU/UF -->
+        <div id="bloco-deliberacao-coord" style="display: none; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; margin-top: 20px; padding: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+          <h3 style="margin-top: 0; color: #1e293b; font-size: 1.25rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 15px;">Manifestação - Coordenação SPU/UF</h3>
+          
+          <div style="margin-bottom: 15px;">
+            <label style="display: block; margin-bottom: 8px; cursor: pointer;">
+              <input type="radio" name="decisao_coord" value="aprovar" onclick="toggleArea('area-devolucao-coord', false)" style="margin-right: 8px;">
+              Os elementos são suficientes para apreciação da viabilidade (envia para Superintendência)
+            </label>
+            <label style="display: block; margin-bottom: 8px; cursor: pointer;">
+              <input type="radio" name="decisao_coord" value="devolver" onclick="toggleArea('area-devolucao-coord', true)" style="margin-right: 8px;">
+              Solicita complementação das informações (Devolver para Chefia SPU/UF)
+            </label>
+          </div>
+
+          <div id="area-devolucao-coord" style="display: none; background: #fffbeb; border: 1px solid #fde68a; padding: 15px; border-radius: 6px; margin-top: 15px;">
+            <label style="display: block; font-weight: 500; margin-bottom: 5px;">Observações (Quais informações necessita):</label>
+            <textarea id="motivo_devolucao_coord" rows="4" style="width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 4px; resize: vertical;"></textarea>
+          </div>
+
+          <div style="margin-top: 20px; text-align: right;">
+            <button type="button" onclick="salvarCoord()" style="background: #0ea5e9; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 600; cursor: pointer;">Confirmar Manifestação</button>
+          </div>
+        </div>
+
+        <!-- 3. SUPERINTENDÊNCIA -->
+        <div id="bloco-deliberacao-super" style="display: none; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; margin-top: 20px; padding: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+          <h3 style="margin-top: 0; color: #1e293b; font-size: 1.25rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 15px;">Manifestação - Superintendência</h3>
+          
+          <div style="margin-bottom: 20px;">
+            <p style="font-weight: 600; margin-bottom: 8px; color: #334155;">Aspectos de Interesse Público</p>
+            <label style="margin-right: 15px;"><input type="radio" name="super_interesse" value="consistente"> Evidenciado de forma consistente</label>
+            <label style="margin-right: 15px;"><input type="radio" name="super_interesse" value="ajustes"> Evidenciado com necessidade de ajustes</label>
+            <label><input type="radio" name="super_interesse" value="insuficiente"> Não suficientemente demonstrado</label>
+          </div>
+
+          <div style="margin-bottom: 20px;">
+            <p style="font-weight: 600; margin-bottom: 8px; color: #334155;">Escolha do Destinatário</p>
+            <label style="margin-right: 15px;"><input type="radio" name="super_destinatario" value="consistente"> Fundamentação consistente</label>
+            <label style="margin-right: 15px;"><input type="radio" name="super_destinatario" value="ressalvas"> Fundamentação suficiente com ressalvas</label>
+            <label><input type="radio" name="super_destinatario" value="insuficiente"> Fundamentação insuficiente</label>
+          </div>
+
+          <div style="margin-bottom: 20px;">
+            <p style="font-weight: 600; margin-bottom: 8px; color: #334155;">Impactos sociais, territoriais e ambientais</p>
+            <label style="margin-right: 15px;"><input type="radio" name="super_impacto" value="positivo"> Impacto positivo</label>
+            <label style="margin-right: 15px;"><input type="radio" name="super_impacto" value="neutro"> Impacto neutro</label>
+            <label><input type="radio" name="super_impacto" value="adverso"> Impacto potencialmente adverso</label>
+          </div>
+
+          <div style="margin-bottom: 20px;">
+            <p style="font-weight: 600; margin-bottom: 8px; color: #334155;">Regime de Destinação Proposto</p>
+            <label style="margin-right: 15px;"><input type="radio" name="super_regime" value="concordo"> Concordo com o regime proposto</label>
+            <label><input type="radio" name="super_regime" value="discordo"> Não concordo</label>
+          </div>
+
+          <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;">
+
+          <h4 style="margin-top: 0; color: #1e293b; margin-bottom: 15px;">Deliberação Final</h4>
+          <div style="margin-bottom: 15px;">
+            <label style="display: block; margin-bottom: 8px; cursor: pointer;">
+              <input type="radio" name="decisao_super" value="favoravel" onclick="toggleArea('area-obs-super', false)"> Favorável à proposta
+            </label>
+            <label style="display: block; margin-bottom: 8px; cursor: pointer;">
+              <input type="radio" name="decisao_super" value="ressalvas" onclick="toggleArea('area-obs-super', true)"> Favorável com ressalvas
+            </label>
+            <label style="display: block; margin-bottom: 8px; cursor: pointer;">
+              <input type="radio" name="decisao_super" value="complementacao" onclick="toggleArea('area-obs-super', true)"> Necessária complementação de informações/documentos
+            </label>
+            <label style="display: block; margin-bottom: 8px; cursor: pointer;">
+              <input type="radio" name="decisao_super" value="cancelamento" onclick="toggleArea('area-obs-super', true)"> Cancelamento
+            </label>
+          </div>
+
+          <div id="area-obs-super" style="display: none; background: #fffbeb; border: 1px solid #fde68a; padding: 15px; border-radius: 6px; margin-top: 15px;">
+            <label style="display: block; font-weight: 500; margin-bottom: 5px;">Observações / Justificativa:</label>
+            <textarea id="motivo_obs_super" rows="4" style="width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 4px; resize: vertical;"></textarea>
+          </div>
+
+          <div style="margin-top: 20px; text-align: right;">
+            <button type="button" onclick="salvarSuper()" style="background: #0ea5e9; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 600; cursor: pointer;">Confirmar Deliberação</button>
+          </div>
+        </div>
+
+        <!-- 4. EQUIPE C.G. -->
+        <div id="bloco-deliberacao-equipe-cg" style="display: none; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; margin-top: 20px; padding: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+          <h3 style="margin-top: 0; color: #1e293b; font-size: 1.25rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 15px;">Manifestação - Equipe C.G.</h3>
+          
+          <div style="margin-bottom: 15px;">
+            <label style="display: block; margin-bottom: 8px; cursor: pointer;">
+              <input type="radio" name="decisao_equipe_cg" value="aprovar" onclick="toggleArea('area-devolucao-equipe-cg', false)" style="margin-right: 8px;">
+              Os elementos são suficientes para apreciação (envia para Coordenação-Geral)
+            </label>
+            <label style="display: block; margin-bottom: 8px; cursor: pointer;">
+              <input type="radio" name="decisao_equipe_cg" value="devolver" onclick="toggleArea('area-devolucao-equipe-cg', true)" style="margin-right: 8px;">
+              Solicita complementação das informações (Devolver processo)
+            </label>
+          </div>
+
+          <div id="area-devolucao-equipe-cg" style="display: none; background: #fffbeb; border: 1px solid #fde68a; padding: 15px; border-radius: 6px; margin-top: 15px;">
+            <label style="display: block; font-weight: 500; margin-bottom: 5px;">Observações (Quais informações necessita):</label>
+            <textarea id="motivo_devolucao_equipe_cg" rows="4" style="width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 4px; resize: vertical;"></textarea>
+          </div>
+
+          <div style="margin-top: 20px; text-align: right;">
+            <button type="button" onclick="salvarEquipeCG()" style="background: #0ea5e9; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 600; cursor: pointer;">Confirmar Manifestação</button>
+          </div>
+        </div>
+
+        <!-- 5. COORDENAÇÃO-GERAL -->
+        <div id="bloco-deliberacao-coord-geral" style="display: none; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; margin-top: 20px; padding: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+          <h3 style="margin-top: 0; color: #1e293b; font-size: 1.25rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 15px;">Manifestação - Coordenação-Geral</h3>
+          
+          <div style="margin-bottom: 15px;">
+            <label style="display: block; margin-bottom: 8px; cursor: pointer;">
+              <input type="radio" name="decisao_coord_geral" value="aprovar" onclick="toggleArea('area-devolucao-coord-geral', false)" style="margin-right: 8px;">
+              Os elementos são suficientes para apreciação (envia para Direção)
+            </label>
+            <label style="display: block; margin-bottom: 8px; cursor: pointer;">
+              <input type="radio" name="decisao_coord_geral" value="devolver" onclick="toggleArea('area-devolucao-coord-geral', true)" style="margin-right: 8px;">
+              Solicita complementação das informações (Devolver processo)
+            </label>
+          </div>
+
+          <div id="area-devolucao-coord-geral" style="display: none; background: #fffbeb; border: 1px solid #fde68a; padding: 15px; border-radius: 6px; margin-top: 15px;">
+            <label style="display: block; font-weight: 500; margin-bottom: 5px;">Observações (Quais informações necessita):</label>
+            <textarea id="motivo_devolucao_coord_geral" rows="4" style="width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 4px; resize: vertical;"></textarea>
+          </div>
+
+          <div style="margin-top: 20px; text-align: right;">
+            <button type="button" onclick="salvarCoordGeral()" style="background: #0ea5e9; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 600; cursor: pointer;">Confirmar Manifestação</button>
+          </div>
+        </div>
+
+        <!-- 6. DIREÇÃO -->
+        <div id="bloco-deliberacao-diretoria" style="display: none; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; margin-top: 20px; padding: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+          <h3 style="margin-top: 0; color: #1e293b; font-size: 1.25rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 15px;">Manifestação - Direção</h3>
+          
+          <div style="margin-bottom: 15px;">
+            <label style="display: block; margin-bottom: 8px; cursor: pointer;">
+              <input type="radio" name="decisao_diretoria" value="aprovar" onclick="toggleArea('area-devolucao-diretoria', false)" style="margin-right: 8px;">
+              Aprovar o processo
+            </label>
+            <label style="display: block; margin-bottom: 8px; cursor: pointer;">
+              <input type="radio" name="decisao_diretoria" value="devolver" onclick="toggleArea('area-devolucao-diretoria', true)" style="margin-right: 8px;">
+              Solicita complementação das informações (Devolver processo)
+            </label>
+          </div>
+
+          <div id="area-devolucao-diretoria" style="display: none; background: #fffbeb; border: 1px solid #fde68a; padding: 15px; border-radius: 6px; margin-top: 15px;">
+            <label style="display: block; font-weight: 500; margin-bottom: 5px;">Observações (Quais informações necessita):</label>
+            <textarea id="motivo_devolucao_diretoria" rows="4" style="width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 4px; resize: vertical;"></textarea>
+          </div>
+
+          <div style="margin-top: 20px; text-align: right;">
+            <button type="button" onclick="salvarDiretoria()" style="background: #0ea5e9; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 600; cursor: pointer;">Confirmar Manifestação</button>
+          </div>
+        </div>
+
+        <!-- 7. CDE -->
+        <div id="bloco-deliberacao-cde" style="display: none; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; margin-top: 20px; padding: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+          <h3 style="margin-top: 0; color: #1e293b; font-size: 1.25rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 15px;">Deliberação - CDE</h3>
+          
+          <div style="margin-bottom: 20px;">
+            <p style="font-weight: 600; margin-bottom: 10px; color: #334155;">Conclusão da Deliberação</p>
+            <label style="display: block; margin-bottom: 8px;">
+              <input type="radio" name="decisao_cde" value="aprovar" onclick="toggleArea('area-pergunta-cde', true); toggleArea('area-devolucao-cde', false)" style="margin-right: 8px;">
+              Concluir Deliberação
+            </label>
+            <label style="display: block; margin-bottom: 8px;">
+              <input type="radio" name="decisao_cde" value="devolver" onclick="toggleArea('area-pergunta-cde', false); toggleArea('area-devolucao-cde', true)" style="margin-right: 8px;">
+              Solicitar complementação das informações (Devolver processo)
+            </label>
+          </div>
+
+          <div id="area-pergunta-cde" style="display: none; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 15px; border-radius: 6px; margin-top: 15px;">
+            <p style="font-weight: 600; margin-bottom: 10px; color: #166534;">Processo decisório é de Competência da Superintendência ou da CDE?</p>
+            <label style="display: block; margin-bottom: 8px;">
+              <input type="radio" name="competencia_cde" value="super" style="margin-right: 8px;">
+              Superintendência
+            </label>
+            <label style="display: block; margin-bottom: 8px;">
+              <input type="radio" name="competencia_cde" value="cde" style="margin-right: 8px;">
+              CDE
+            </label>
+          </div>
+
+          <div id="area-devolucao-cde" style="display: none; background: #fffbeb; border: 1px solid #fde68a; padding: 15px; border-radius: 6px; margin-top: 15px;">
+            <label style="display: block; font-weight: 500; margin-bottom: 5px;">Observações (Quais informações necessita):</label>
+            <textarea id="motivo_devolucao_cde" rows="4" style="width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 4px; resize: vertical;"></textarea>
+          </div>
+
+          <div style="margin-top: 20px; text-align: right;">
+            <button type="button" onclick="salvarCDE()" style="background: #0ea5e9; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 600; cursor: pointer;">Confirmar Deliberação</button>
+          </div>
+        </div>
+
+        <script>
+          function toggleArea(id, mostrar) {
+            document.getElementById(id).style.display = mostrar ? 'block' : 'none';
+          }
+          
+          async function enviarDeliberacaoSupabase(perfil, dados) {
+            // Pegar as constantes globais do pai
+            const supabaseUrl = window.SUPABASE_URL || (window.parent && window.parent.SUPABASE_URL);
+            const supabaseAnonKey = window.SUPABASE_ANON_KEY || (window.parent && window.parent.SUPABASE_ANON_KEY);
+            const processId = new URLSearchParams(window.location.search).get('processo') || 
+                              (window.parent && new URLSearchParams(window.parent.location.search).get('processo')) ||
+                              localStorage.getItem('CURRENT_PROCESS_ID');
+                              
+            if (!supabaseUrl || !supabaseAnonKey || !processId) {
+              console.warn("Configurações do Supabase ou Process ID não encontrados. Rodando em modo simulado.");
+              return { success: false, processId };
+            }
+
+            try {
+              const url = `${supabaseUrl}/rest/v1/tabela_deliberacoes`;
+              const payload = {
+                process_id: processId,
+                perfil: perfil,
+                dados_deliberacao: dados
+              };
+
+              const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                  'apikey': supabaseAnonKey,
+                  'Authorization': `Bearer ${supabaseAnonKey}`,
+                  'Content-Type': 'application/json',
+                  'Prefer': 'return=representation'
+                },
+                body: JSON.stringify(payload)
+              });
+
+              if (!response.ok) throw new Error("Erro ao salvar no Supabase");
+              return { success: true, processId };
+            } catch (err) {
+              console.error(err);
+              return { success: false, processId };
+            }
+          }
+
+          async function notificarStatusFluxo(processId, novoCheckpoint, novoStatus, novoPerfil) {
+            if (processId && window.parent && typeof window.parent.updateStatusFluxo === 'function') {
+                await window.parent.updateStatusFluxo(processId, novoCheckpoint, novoStatus, novoPerfil);
+            } else {
+                console.warn("⚠️ [aba7] window.parent.updateStatusFluxo não disponível.", {processId});
+            }
+          }
+
+          async function salvarChefia(event) {
+            const dec = document.querySelector('input[name="decisao_chefia"]:checked');
+            if(!dec) return alert("Selecione uma opção.");
+            
+            const btn = event ? event.target : document.querySelector('#bloco-deliberacao-chefia button');
+            btn.disabled = true;
+            btn.textContent = "Salvando...";
+
+            let dados = { decisao: dec.value };
+            let workflowId = 6; // Aprovar -> Aguardando Coordenação
+            let alertMsg = "Aprovado pela Chefia. Enviado para Coordenação.";
+
+            if(dec.value === 'devolver') {
+              const dest = document.getElementById('destino_devolucao_chefia').value;
+              const obs = document.getElementById('motivo_devolucao_chefia').value;
+              if(!dest || !obs.trim()) {
+                btn.disabled = false; btn.textContent = "Confirmar Manifestação";
+                return alert("Selecione a aba e preencha as observações.");
+              }
+              dados.destino = dest;
+              dados.motivo = obs;
+              
+              if (dest === 'aba2') {
+                workflowId = 13; // Devolver para Caracterização
+                alertMsg = "Devolvido para Equipe de Caracterização com sucesso.";
+              } else {
+                workflowId = 14; // Devolver para Destinação
+                alertMsg = "Devolvido para Equipe de Destinação com sucesso.";
+              }
+            } 
+            
+            const req = await enviarDeliberacaoSupabase('CHEFIA_SPU', dados);
+            if (req.processId) await notificarStatusFluxo(req.processId, workflowId);
+            alert(alertMsg);
+            
+            if (typeof carregarDeliberacoesETimeline === 'function') {
+              await carregarDeliberacoesETimeline();
+            }
+            
+            btn.disabled = false; btn.textContent = "Confirmar Manifestação";
+          }
+
+          async function salvarCoord(event) {
+            const dec = document.querySelector('input[name="decisao_coord"]:checked');
+            if(!dec) return alert("Selecione uma opção.");
+
+            const btn = event ? event.target : document.querySelector('#bloco-deliberacao-coord button');
+            btn.disabled = true;
+            btn.textContent = "Salvando...";
+            
+            let dados = { decisao: dec.value };
+            let workflowId = 7; // Aprovar -> Superintendência
+            let alertMsg = "Aprovado pela Coordenação. Enviado para Superintendência.";
+
+            if(dec.value === 'devolver') {
+              const obs = document.getElementById('motivo_devolucao_coord').value;
+              if(!obs.trim()) {
+                btn.disabled = false; btn.textContent = "Confirmar Manifestação";
+                return alert("Preencha as observações para devolução.");
+              }
+              dados.destino = "destinacao";
+              dados.motivo = obs;
+              
+              workflowId = 14; // Devolver para Destinação (Análise de viabilidade)
+              alertMsg = "Devolvido para Equipe de Destinação com sucesso.";
+            } 
+            
+            const req = await enviarDeliberacaoSupabase('COORDENACAO_SPU', dados);
+            if (req.processId) await notificarStatusFluxo(req.processId, workflowId);
+            alert(alertMsg);
+
+            if (typeof carregarDeliberacoesETimeline === 'function') {
+              await carregarDeliberacoesETimeline();
+            }
+
+            btn.disabled = false; btn.textContent = "Confirmar Manifestação";
+          }
+
+          async function salvarSuper(event) {
+            const dec = document.querySelector('input[name="decisao_super"]:checked');
+            if(!dec) return alert("Selecione uma deliberação final.");
+            
+            let dados = {
+              interesse: document.querySelector('input[name="super_interesse"]:checked')?.value,
+              destinatario: document.querySelector('input[name="super_destinatario"]:checked')?.value,
+              impacto: document.querySelector('input[name="super_impacto"]:checked')?.value,
+              regime: document.querySelector('input[name="super_regime"]:checked')?.value,
+              decisao: dec.value
+            };
+
+            const btn = event ? event.target : document.querySelector('#bloco-deliberacao-super button');
+            btn.disabled = true;
+            btn.textContent = "Salvando...";
+
+            let workflowId = 8; // Aprovar -> Equipe C.G.
+            let alertMsg = "Aprovado pela Superintendência. Enviado para Equipe C.G.";
+
+            if(dec.value !== 'favoravel') {
+              const obs = document.getElementById('motivo_obs_super').value;
+              if(!obs.trim()) {
+                btn.disabled = false; btn.textContent = "Confirmar Deliberação";
+                return alert("Preencha as observações/justificativa.");
+              }
+              dados.motivo = obs;
+              
+              if (dec.value === 'complementacao') {
+                dados.destino = "destinacao"; 
+                workflowId = 14; // Devolver para Destinação
+                alertMsg = "Devolvido para Equipe de Destinação com sucesso.";
+              } else if (dec.value === 'cancelamento') {
+                workflowId = "Processo Cancelado";
+                alertMsg = "Processo cancelado.";
+              } else {
+                workflowId = "Aprovado com Ressalvas";
+              }
+            }
+            
+            const req = await enviarDeliberacaoSupabase('SUPERINTENDENCIA', dados);
+            if (req.processId) await notificarStatusFluxo(req.processId, workflowId, (dec.value === 'cancelamento' ? 'Cancelado' : undefined));
+            alert(alertMsg);
+
+            if (typeof carregarDeliberacoesETimeline === 'function') {
+              await carregarDeliberacoesETimeline();
+            }
+
+            btn.disabled = false; btn.textContent = "Confirmar Deliberação";
+          }
+
+          async function salvarEquipeCG(event) {
+            const dec = document.querySelector('input[name="decisao_equipe_cg"]:checked');
+            if(!dec) return alert("Selecione uma opção.");
+            
+            const btn = event ? event.target : document.querySelector('#bloco-deliberacao-equipe-cg button');
+            btn.disabled = true;
+            btn.textContent = "Salvando...";
+
+            let dados = { decisao: dec.value };
+            let workflowId = 9; // Aprovar -> Coordenação-Geral SPU/UC
+            let alertMsg = "Aprovado pela Equipe C.G. Enviado para Coordenação-Geral.";
+
+            if(dec.value === 'devolver') {
+              const obs = document.getElementById('motivo_devolucao_equipe_cg').value;
+              if(!obs.trim()) {
+                btn.disabled = false; btn.textContent = "Confirmar Manifestação";
+                return alert("Preencha as observações para devolução.");
+              }
+              dados.destino = "superintendencia";
+              dados.motivo = obs;
+              
+              // Fallback variables for devolution since user hasn't specified the rules yet
+              let checkpoint = "Aguardando Superintendência";
+              let status_geral = "Devolvido";
+              let perfilDevolucao = "Superintendência";
+              
+              workflowId = checkpoint; // This triggers the string fallback in db.js
+              alertMsg = "Devolvido para Superintendência com sucesso.";
+            }
+            
+            const req = await enviarDeliberacaoSupabase('EQUIPE_CG', dados);
+            if (req.processId) await notificarStatusFluxo(req.processId, workflowId, (dec.value === 'devolver' ? 'Devolvido' : undefined));
+            alert(alertMsg);
+            
+            if (typeof carregarDeliberacoesETimeline === 'function') {
+              await carregarDeliberacoesETimeline();
+            }
+            
+            btn.disabled = false; btn.textContent = "Confirmar Manifestação";
+          }
+
+          async function salvarCoordGeral(event) {
+            const dec = document.querySelector('input[name="decisao_coord_geral"]:checked');
+            if(!dec) return alert("Selecione uma opção.");
+            
+            const btn = event ? event.target : document.querySelector('#bloco-deliberacao-coord-geral button');
+            btn.disabled = true;
+            btn.textContent = "Salvando...";
+
+            let dados = { decisao: dec.value };
+            let workflowId = 10; // Aprovar -> Direção SPU/UC
+            let alertMsg = "Aprovado pela Coordenação-Geral. Enviado para Direção.";
+
+            if(dec.value === 'devolver') {
+              const obs = document.getElementById('motivo_devolucao_coord_geral').value;
+              if(!obs.trim()) {
+                btn.disabled = false; btn.textContent = "Confirmar Manifestação";
+                return alert("Preencha as observações para devolução.");
+              }
+              dados.destino = "destinacao";
+              dados.motivo = obs;
+              
+              workflowId = 14; // Devolver para Destinação (Aba 3)
+              alertMsg = "Devolvido para Equipe de Destinação com sucesso.";
+            }
+            
+            const req = await enviarDeliberacaoSupabase('COORDENACAO_GERAL', dados);
+            if (req.processId) await notificarStatusFluxo(req.processId, workflowId);
+            alert(alertMsg);
+            
+            if (typeof carregarDeliberacoesETimeline === 'function') {
+              await carregarDeliberacoesETimeline();
+            }
+            
+            btn.disabled = false; btn.textContent = "Confirmar Manifestação";
+          }
+
+          async function salvarDiretoria(event) {
+            const dec = document.querySelector('input[name="decisao_diretoria"]:checked');
+            if(!dec) return alert("Selecione uma opção.");
+            
+            const btn = event ? event.target : document.querySelector('#bloco-deliberacao-diretoria button');
+            btn.disabled = true;
+            btn.textContent = "Salvando...";
+
+            let dados = { decisao: dec.value };
+            let workflowId = 11; // Aprovar -> CDE
+            let alertMsg = "Aprovado pela Direção. Enviado para CDE.";
+
+            if(dec.value === 'devolver') {
+              const obs = document.getElementById('motivo_devolucao_diretoria').value;
+              if(!obs.trim()) {
+                btn.disabled = false; btn.textContent = "Confirmar Manifestação";
+                return alert("Preencha as observações para devolução.");
+              }
+              dados.destino = "coord_geral";
+              dados.motivo = obs;
+              
+              workflowId = 15; // Devolver para Coordenação-Geral
+              alertMsg = "Devolvido para Coordenação-Geral com sucesso.";
+            }
+            
+            const req = await enviarDeliberacaoSupabase('DIRETORIA', dados);
+            if (req.processId) await notificarStatusFluxo(req.processId, workflowId);
+            alert(alertMsg);
+            
+            if (typeof carregarDeliberacoesETimeline === 'function') {
+              await carregarDeliberacoesETimeline();
+            }
+            
+            btn.disabled = false; btn.textContent = "Confirmar Manifestação";
+          }
+
+          async function salvarCDE(event) {
+            const dec = document.querySelector('input[name="decisao_cde"]:checked');
+            if(!dec) return alert("Selecione uma opção.");
+            
+            const btn = event ? event.target : document.querySelector('#bloco-deliberacao-cde button');
+            btn.disabled = true;
+            btn.textContent = "Salvando...";
+
+            let dados = { decisao: dec.value };
+            let workflowId = null;
+            let alertMsg = "Deliberação da CDE concluída com sucesso.";
+
+            if(dec.value === 'aprovar') {
+              const comp = document.querySelector('input[name="competencia_cde"]:checked');
+              if(!comp) {
+                btn.disabled = false; btn.textContent = "Confirmar Deliberação";
+                return alert("Responda de quem é a competência decisória.");
+              }
+              dados.competencia = comp.value;
+              workflowId = (comp.value === 'super') ? 17 : 18;
+            } else if(dec.value === 'devolver') {
+              const obs = document.getElementById('motivo_devolucao_cde').value;
+              if(!obs.trim()) {
+                btn.disabled = false; btn.textContent = "Confirmar Deliberação";
+                return alert("Preencha as observações para devolução.");
+              }
+              dados.destino = "superintendencia";
+              dados.motivo = obs;
+              
+              workflowId = 16; // Devolver para Superintendência
+              alertMsg = "Devolvido para Superintendência com sucesso.";
+            }
+            
+            const req = await enviarDeliberacaoSupabase('CDE', dados);
+            if (req.processId && workflowId) await notificarStatusFluxo(req.processId, workflowId, (dec.value === 'devolver' ? 'Devolvido' : undefined));
+            alert(alertMsg);
+            
+            if (typeof carregarDeliberacoesETimeline === 'function') {
+              await carregarDeliberacoesETimeline();
+            }
+            
+            btn.disabled = false; btn.textContent = "Confirmar Deliberação";
+          }
+        </script>
+    </section>
+  </div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <script>
+    /* =========================
+       MAPA
+    ========================== */
+
+    const map = L.map("map").setView([-15.7998, -47.8645], 15);
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: "&copy; OpenStreetMap"
+    }).addTo(map);
+
+    const polygon = L.polygon(
+      [
+        [-15.7989, -47.8660],
+        [-15.7987, -47.8634],
+        [-15.8010, -47.8631],
+        [-15.8013, -47.8657]
+      ],
+      {
+        color: "#176985",
+        fillColor: "#176985",
+        fillOpacity: 0.25,
+        weight: 3
+      }
+    ).addTo(map);
+
+    polygon.bindPopup("Polígono do imóvel");
+
+    const marker = L.marker([-15.7998, -47.8645]).addTo(map);
+
+    marker
+      .bindPopup("<strong>Imóvel selecionado</strong><br>Área de interesse")
+      .openPopup();
+
+    map.fitBounds(polygon.getBounds());
+
+    setTimeout(function () {
+      map.invalidateSize();
+    }, 300);
+
+/* =========================
+   ABAS SANFONA
+   Clique abre e também fecha a aba.
+========================== */
+
+function toggleAccordion(element) {
+  const item = element.closest(".accordion-item");
+  const isActive = item.classList.contains("active");
+  const content = item.querySelector('.accordion-content');
+
+  // Fecha os outros imediatamente (sem animação para não encavalar o layout)
+  document.querySelectorAll(".accordion-item").forEach(function (accordionItem) {
+    if (accordionItem !== item) {
+      accordionItem.classList.remove("active");
+    }
+  });
+
+  if (!isActive) {
+    item.classList.add("active");
+    if (content) {
+      content.animate([
+          { opacity: 0, transform: 'translateY(-10px)' },
+          { opacity: 1, transform: 'translateY(0)' }
+      ], { duration: 250, easing: 'ease-out' });
+    }
+  } else {
+    if (content) {
+      const animation = content.animate([
+          { opacity: 1, transform: 'translateY(0)' },
+          { opacity: 0, transform: 'translateY(-5px)' }
+      ], { duration: 200, easing: 'ease-in' });
+      
+      animation.onfinish = () => {
+          item.classList.remove("active");
+      };
+    } else {
+      item.classList.remove("active");
+    }
+  }
+}
+
+
+    /* =========================
+       CARROSSEL
+    ========================== */
+
+    let carouselPos = 0;
+
+    function getItemsVisible() {
+      return window.innerWidth <= 768 ? 1 : 2;
+    }
+
+    function getCarouselGap() {
+      const styles = getComputedStyle(document.documentElement);
+      return parseInt(styles.getPropertyValue("--carousel-gap"), 10) || 16;
+    }
+
+    function moveCarousel(direction) {
+      const track = document.getElementById("carouselTrack");
+      const items = document.querySelectorAll(".carousel-item");
+
+      if (!items.length) {
+        return;
+      }
+
+      const itemsVisible = getItemsVisible();
+      const maxPos = Math.max(items.length - itemsVisible, 0);
+
+      carouselPos += direction;
+
+      if (carouselPos < 0) {
+        carouselPos = 0;
+      }
+
+      if (carouselPos > maxPos) {
+        carouselPos = maxPos;
+      }
+
+      const gap = getCarouselGap();
+      const itemWidth = items[0].offsetWidth + gap;
+
+      track.style.transform = "translateX(-" + carouselPos * itemWidth + "px)";
+    }
+
+    window.addEventListener("resize", function () {
+      const track = document.getElementById("carouselTrack");
+      const items = document.querySelectorAll(".carousel-item");
+
+      if (!items.length) {
+        return;
+      }
+
+      const itemsVisible = getItemsVisible();
+      const maxPos = Math.max(items.length - itemsVisible, 0);
+
+      if (carouselPos > maxPos) {
+        carouselPos = maxPos;
+      }
+
+      const gap = getCarouselGap();
+      const itemWidth = items[0].offsetWidth + gap;
+
+      track.style.transform = "translateX(-" + carouselPos * itemWidth + "px)";
+
+      setTimeout(function () {
+        map.invalidateSize();
+      }, 300);
+    });
+
+    /* =========================
+       AMPLIAR FOTO
+    ========================== */
+
+    document.querySelectorAll(".carousel-item img").forEach(function (img) {
+      img.addEventListener("click", function () {
+        const overlay = document.createElement("div");
+
+        overlay.style.position = "fixed";
+        overlay.style.inset = "0";
+        overlay.style.background = "rgba(0, 0, 0, 0.82)";
+        overlay.style.display = "flex";
+        overlay.style.alignItems = "center";
+        overlay.style.justifyContent = "center";
+        overlay.style.zIndex = "9999";
+        overlay.style.cursor = "pointer";
+        overlay.style.padding = "20px";
+
+        const enlarged = document.createElement("img");
+
+        enlarged.src = img.src;
+        enlarged.alt = img.alt;
+        enlarged.style.maxWidth = "90vw";
+        enlarged.style.maxHeight = "90vh";
+        enlarged.style.objectFit = "contain";
+        enlarged.style.boxShadow = "0 0 30px rgba(0, 0, 0, 0.5)";
+        enlarged.style.borderRadius = "8px";
+
+        overlay.appendChild(enlarged);
+
+        overlay.addEventListener("click", function () {
+          overlay.remove();
+        });
+
+        document.body.appendChild(overlay);
+      });
+    });
+
+    /* =========================
+       CONTROLE DE PERFIS (RBAC)
+    ========================== */
+
+    const profilePermissions = {
+      // Chaves legado (compatibilidade retroativa)
+      'ALL':                ['acc_aba1', 'acc_aba2', 'acc_aba3'],
+      'SPU_CARACTERIZACAO': ['acc_aba1', 'acc_aba2'],
+      'SPU_DESTINACAO':     ['acc_aba1', 'acc_aba2', 'acc_aba3'],
+      'CHEFIA_SPU':         ['acc_aba1', 'acc_aba2', 'acc_aba3', 'bloco-deliberacao-chefia'],
+      'Chefia SPU/UF':      ['acc_aba1', 'acc_aba2', 'acc_aba3', 'bloco-deliberacao-chefia'],
+      'COORDENACAO_SPU':    ['acc_aba1', 'acc_aba2', 'acc_aba3', 'bloco-deliberacao-coord'],
+      'Coordenação SPU/UF': ['acc_aba1', 'acc_aba2', 'acc_aba3', 'bloco-deliberacao-coord'],
+      'SUPERINTENDENCIA':   ['acc_aba1', 'acc_aba2', 'acc_aba3', 'bloco-deliberacao-super'],
+      'Superintendência':   ['acc_aba1', 'acc_aba2', 'acc_aba3', 'bloco-deliberacao-super'],
+      'EQUIPE_CG':          ['acc_aba1', 'acc_aba2', 'acc_aba3', 'bloco-deliberacao-equipe-cg'],
+      'COORDENACAO_GERAL':  ['acc_aba1', 'acc_aba2', 'acc_aba3', 'bloco-deliberacao-coord-geral'],
+      'DIRETORIA':          ['acc_aba1', 'acc_aba2', 'acc_aba3', 'bloco-deliberacao-diretoria'],
+      'CDE':                ['acc_aba1', 'acc_aba2', 'acc_aba3', 'bloco-deliberacao-cde'],
+      // Aliases limpos (usados pelo profileSelector do dashboard — Foco-14)
+      'DESTINACAO':         ['acc_aba1', 'acc_aba2', 'acc_aba3'],
+      'CARACTERIZACAO':     ['acc_aba1', 'acc_aba2'],
+      'CHEFIA':             ['acc_aba1', 'acc_aba2', 'acc_aba3', 'bloco-deliberacao-chefia'],
+      'COORDENACAO':        ['acc_aba1', 'acc_aba2', 'acc_aba3', 'bloco-deliberacao-coord'],
+    };
+
+    function applyProfileView(profile, currentCheckpoint = "") {
+      const allowed = profilePermissions[profile] || profilePermissions['ALL'];
+      
+      const allElements = ['acc_aba1', 'acc_aba2', 'acc_aba3', 'bloco-deliberacao-chefia', 'bloco-deliberacao-coord', 'bloco-deliberacao-super', 'bloco-deliberacao-equipe-cg', 'bloco-deliberacao-coord-geral', 'bloco-deliberacao-diretoria', 'bloco-deliberacao-cde'];
+      
+      allElements.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          // Verifica se o perfil tem permissão geral para ver o bloco
+          let shouldShow = allowed.includes(id);
+
+          // Controle de fila baseado no checkpoint ativo
+          if (shouldShow) {
+            if (id === 'bloco-deliberacao-chefia') {
+              shouldShow = (currentCheckpoint === "Aguardando Chefia SPU/UF" || currentCheckpoint === "Devolvido para Chefia SPU/UF" || currentCheckpoint === "Validação análise de viabilidade - Chefia");
+            } else if (id === 'bloco-deliberacao-coord') {
+              shouldShow = (currentCheckpoint === "Aguardando Coordenação SPU/UF" || currentCheckpoint === "Devolvido para Coordenação SPU/UF" || currentCheckpoint === "Validação análise de viabilidade - Coordenação");
+            } else if (id === 'bloco-deliberacao-super') {
+              shouldShow = (currentCheckpoint === "Aguardando Superintendência" || currentCheckpoint === "Devolvido para Superintendência" || currentCheckpoint === "Deliberação Superintendência");
+            } else if (id === 'bloco-deliberacao-equipe-cg') {
+              shouldShow = (currentCheckpoint === "Aguardando Equipe C.G." || currentCheckpoint === "Devolvido para Equipe C.G." || currentCheckpoint === "Conferência análise de viabilidade");
+            } else if (id === 'bloco-deliberacao-coord-geral') {
+              shouldShow = (currentCheckpoint === "Aguardando Coordenação-Geral" || currentCheckpoint === "Devolvido para Coordenação-Geral" || currentCheckpoint === "Validação análise de viabilidade - Coordenação-Geral");
+            } else if (id === 'bloco-deliberacao-diretoria') {
+              shouldShow = (currentCheckpoint === "Aguardando Direção" || currentCheckpoint === "Devolvido para Direção" || currentCheckpoint === "Validação conferência");
+            } else if (id === 'bloco-deliberacao-cde') {
+              shouldShow = (currentCheckpoint === "Manifestação CDE" || currentCheckpoint === "Devolvido para CDE");
+            }
+          }
+
+          if (shouldShow) {
+            el.style.display = 'block';
+          } else {
+            el.style.display = 'none';
+          }
+        }
+      });
+    }
+
+    async function carregarDeliberacoesETimeline() {
+      const supabaseUrl = window.SUPABASE_URL || (window.parent && window.parent.SUPABASE_URL);
+      const supabaseAnonKey = window.SUPABASE_ANON_KEY || (window.parent && window.parent.SUPABASE_ANON_KEY);
+      
+      let processId = new URLSearchParams(window.location.search).get('processo');
+      if (!processId) processId = localStorage.getItem('CURRENT_PROCESS_ID');
+      if (!processId && window.parent) {
+        processId = new URLSearchParams(window.parent.location.search).get('processo');
+      }
+
+      if (!supabaseUrl || !supabaseAnonKey || !processId) return;
+
+      try {
+        // 1. Busca histórico de deliberações
+        const delibUrl = `${supabaseUrl}/rest/v1/tabela_deliberacoes?process_id=eq.${encodeURIComponent(processId)}&order=created_at.asc`;
+        const resDelib = await fetch(delibUrl, {
+          headers: {
+            'apikey': supabaseAnonKey,
+            'Authorization': `Bearer ${supabaseAnonKey}`
+          }
+        });
+
+        let timelineHtml = "";
+        let temDeliberacao = false;
+
+        if (resDelib.ok) {
+          const deliberacoes = await resDelib.json();
+          if (deliberacoes.length > 0) {
+            temDeliberacao = true;
+            
+            const nomesPerfis = {
+              'CHEFIA_SPU': 'Chefia SPU/UF',
+              'COORDENACAO_SPU': 'Coordenação SPU/UF',
+              'SUPERINTENDENCIA': 'Superintendência',
+              'EQUIPE_CG': 'Equipe C.G.',
+              'COORDENACAO_GERAL': 'Coordenação-Geral',
+              'DIRETORIA': 'Direção'
+            };
+
+            const nomesAba = {
+              'aba2': 'Caracterização (Aba 2)',
+              'aba3': 'Destinação (Aba 3)'
+            };
+
+            deliberacoes.forEach(item => {
+              const dados = item.dados_deliberacao;
+              const perfil = nomesPerfis[item.perfil] || item.perfil;
+              const dataFormatada = new Date(item.created_at).toLocaleString('pt-BR');
+              
+              let statusClass = "aprovado";
+              let decisaoTexto = "";
+              let detalheHtml = "";
+
+              if (dados.decisao === 'aprovar' || dados.decisao === 'favoravel') {
+                statusClass = "aprovado";
+                decisaoTexto = "Aprovado e encaminhado.";
+                if (item.perfil === 'SUPERINTENDENCIA') {
+                  decisaoTexto = "Deliberação final favorável.";
+                }
+              } else if (dados.decisao === 'ressalvas') {
+                statusClass = "aprovado";
+                decisaoTexto = "Aprovado com ressalvas.";
+              } else if (dados.decisao === 'devolver' || dados.decisao === 'complementacao') {
+                statusClass = "devolvido";
+                const abaDestino = nomesAba[dados.destino] || dados.destino || "Chefia SPU/UF";
+                decisaoTexto = `Solicita complementação das informações (Devolvido para ${abaDestino})`;
+                detalheHtml = `<div style="margin-top: 5px; color: #ef4444;"><strong>Motivo da Devolução:</strong> ${dados.motivo || 'Não informado'}</div>`;
+              } else if (dados.decisao === 'cancelamento') {
+                statusClass = "devolvido";
+                decisaoTexto = "Cancelamento do processo deliberado.";
+              }
+
+              // Especificidades da Superintendência
+              let checklistSuper = "";
+              if (item.perfil === 'SUPERINTENDENCIA') {
+                const mapInteresse = {
+                  'consistente': 'Evidenciado de forma consistente',
+                  'ajustes': 'Evidenciado com necessidade de ajustes',
+                  'insuficiente': 'Não suficientemente demonstrado'
+                };
+                const mapDestinatario = {
+                  'consistente': 'Fundamentação consistente',
+                  'ressalvas': 'Fundamentação suficiente com ressalvas',
+                  'insuficiente': 'Fundamentação insuficiente'
+                };
+                const mapImpacto = {
+                  'positivo': 'Impacto positivo',
+                  'neutro': 'Impacto neutro',
+                  'adverso': 'Impacto potencialmente adverso'
+                };
+                const mapRegime = {
+                  'concordo': 'Concordo com o regime proposto',
+                  'discordo': 'Não concordo'
+                };
+
+                const intText = mapInteresse[dados.interesse] || dados.interesse || '-';
+                const destText = mapDestinatario[dados.destinatario] || dados.destinatario || '-';
+                const impText = mapImpacto[dados.impacto] || dados.impacto || '-';
+                const regText = mapRegime[dados.regime] || dados.regime || '-';
+
+                checklistSuper = `
+                  <div style="font-size: 0.85rem; color: #64748b; margin-top: 8px; border-top: 1px dashed #e2e8f0; padding-top: 5px; line-height: 1.4;">
+                    <strong>Interesse Público:</strong> ${intText}<br>
+                    <strong>Destinatário:</strong> ${destText}<br>
+                    <strong>Impactos:</strong> ${impText}<br>
+                    <strong>Regime:</strong> ${regText}
+                  </div>
+                `;
+              }
+
+              // Observações gerais se houver
+              let obsGeral = "";
+              if (dados.motivo && dados.decisao !== 'devolver' && dados.decisao !== 'complementacao') {
+                obsGeral = `<div style="margin-top: 5px; font-style: italic; color: #475569;"><strong>Observações/Justificativa:</strong> ${dados.motivo}</div>`;
+              }
+
+              timelineHtml += `
+                <div class="delib-card ${statusClass}">
+                  <div class="delib-header">
+                    <span class="delib-title">${perfil}</span>
+                    <span>${dataFormatada}</span>
+                  </div>
+                  <div class="delib-body">
+                    <strong>Decisão:</strong> ${decisaoTexto}
+                    ${detalheHtml}
+                    ${obsGeral}
+                    ${checklistSuper}
+                  </div>
+                </div>
+              `;
+            });
+
+            document.getElementById('historico-deliberacoes-timeline').innerHTML = timelineHtml;
+            document.getElementById('historico-deliberacoes-container').style.display = 'block';
+          } else {
+            document.getElementById('historico-deliberacoes-container').style.display = 'none';
+          }
+        }
+
+        // 2. Busca checkpoint atual do fluxo
+        const statusUrl = `${supabaseUrl}/rest/v1/tabela_status_fluxo?select=dados_json&numero_requerimento=eq.${encodeURIComponent(processId)}&order=id.desc&limit=1`;
+        const resStatus = await fetch(statusUrl, {
+          headers: {
+            'apikey': supabaseAnonKey,
+            'Authorization': `Bearer ${supabaseAnonKey}`
+          }
+        });
+
+        let currentCheckpoint = "";
+        if (resStatus.ok) {
+          const statusData = await resStatus.json();
+          if (statusData.length > 0 && statusData[0].dados_json) {
+            currentCheckpoint = statusData[0].dados_json.checkpoint || "";
+          }
+        }
+
+        // 3. Aplica a visibilidade dos blocos
+        const profile = localStorage.getItem('CURRENT_USER_PROFILE') || 'ALL';
+        applyProfileView(profile, currentCheckpoint);
+
+      } catch (err) {
+        console.error("Erro ao carregar histórico e fila:", err);
+      }
+    }
+
+    // Inicializa com o perfil atual
+    window.addEventListener('message', function(event) {
+      if (event.data && event.data.type === 'PROFILE_CHANGED') {
+        localStorage.setItem('CURRENT_USER_PROFILE', event.data.profile);
+        carregarDeliberacoesETimeline();
+      }
+      if (event.data && event.data.type === 'RELOAD_DELIBERACOES') {
+        carregarDeliberacoesETimeline();
+      }
+    });
+
+    function gerarPDFProcesso() {
+      let processId = new URLSearchParams(window.location.search).get('processo');
+      if (!processId) processId = localStorage.getItem('CURRENT_PROCESS_ID');
+      if (!processId && window.parent) {
+        processId = new URLSearchParams(window.parent.location.search).get('processo');
+      }
+      if (!processId) {
+        alert('Processo não identificado.');
+        return;
+      }
+      window.open(`./processo-print.html?processo=${encodeURIComponent(processId)}`, '_blank');
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      carregarDeliberacoesETimeline();
+    });
+
+  </script>
+</body>
+</html>

@@ -76,6 +76,23 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Profile Switcher Logic
+    const profileSwitcher = document.getElementById('profileSwitcher');
+    if (profileSwitcher) {
+        // Restaura perfil salvo ou seta padrão
+        const savedProfile = localStorage.getItem('CURRENT_USER_PROFILE') || 'ALL';
+        profileSwitcher.value = savedProfile;
+
+        profileSwitcher.addEventListener('change', (e) => {
+            const newProfile = e.target.value;
+            localStorage.setItem('CURRENT_USER_PROFILE', newProfile);
+            // Envia mensagem para o iframe atualizar a view, se aplicável
+            if (iframe && iframe.contentWindow) {
+                iframe.contentWindow.postMessage({ type: 'PROFILE_CHANGED', profile: newProfile }, '*');
+            }
+        });
+    }
+
     // Adiciona evento de clique em todos os botões
     buttons.forEach(button => {
         button.addEventListener('click', () => {

@@ -9,9 +9,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Gestão SPU - FOCO</title>
-    <link rel="stylesheet" href="index.css?v=1782355313469">
-    
-    <script src="db.js?v=1782355313469"></script>
+    <link rel="stylesheet" href="index.css?v=202607142230">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="workflow.js?v=202607170020"></script>
+    <script src="db.js?v=202607170020"></script>
 </head>
 
 <body>
@@ -21,17 +22,17 @@
     <div class="buttons-container">
         <div class="button-wrapper">
             <button class="circle-btn" data-url="foco-01.html">1</button>
-            <span class="legend">Indicação de Imóvel</span>
+            <span class="legend">Indicação do Imóvel</span>
         </div>
 
         <div class="button-wrapper">
             <button class="circle-btn" data-url="foco-02.html">2</button>
-            <span class="legend">Caracterização</span>
+            <span class="legend">Diagnóstico Preliminar</span>
         </div>
 
         <div class="button-wrapper">
             <button class="circle-btn" data-url="foco-03.html">3</button>
-            <span class="legend">Destinação</span>
+            <span class="legend">Análise de Viabilidade</span>
         </div>
 
         <div class="button-wrapper">
@@ -48,17 +49,36 @@
             <button class="circle-btn" data-url="deliberacao-cde.html">6</button>
             <span class="legend">Deliberações CDE</span>
         </div>
+
+        <div class="button-wrapper">
+            <button class="circle-btn" data-url="aba7.html">7</button>
+            <span class="legend">Visão Painel</span>
+        </div>
     </div>
     
-    <button id="btnBackToDashboard" class="return-edit-btn" style="background-color: #1e3a5f; color: white; display: inline-block; margin-right: 10px;">🏠 Voltar ao Painel</button>
-    <button id="btnReturnEdit" class="return-edit-btn" style="display: none;">✏️ Visão da edição dos formulários</button>
+    <div style="position: absolute; right: 20px; bottom: 10px; display: flex; align-items: center; gap: 10px; z-index: 1001;">
+        <select id="profileSwitcher" style="padding: 6px; border-radius: 4px; border: 1px solid #ccc; background: white; font-weight: bold; color: #1e3a5f; font-size: 12px; height: 33px;">
+          <option value="ALL">Visualizar Tudo (Admin)</option>
+          <option value="SPU_DESTINACAO">Equipe SPU/UF (Destinação)</option>
+          <option value="SPU_CARACTERIZACAO">Equipe SPU/UF (Caracterização)</option>
+          <option value="CHEFIA_SPU">Chefia SPU/UF</option>
+          <option value="COORDENACAO_SPU">Coordenação SPU/UF</option>
+          <option value="SUPERINTENDENCIA">Superintendência</option>
+          <option value="EQUIPE_CG">Equipe C.G.</option>
+          <option value="COORDENACAO_GERAL">Coordenação-Geral</option>
+          <option value="DIRETORIA">Diretoria</option>
+          <option value="CDE">Comissão de Destinações Especiais (CDE)</option>
+        </select>
+        <button id="btnBackToDashboard" class="return-edit-btn" style="position: static; background-color: #1e3a5f; color: white;">🏠 Voltar ao Painel</button>
+        <button id="btnReturnEdit" class="return-edit-btn" style="position: static; display: none;">✏️ Visão da edição dos formulários</button>
+    </div>
 </header>
 
 <main>
     <iframe id="frame" src="foco-01.html" title="Conteúdo da etapa selecionada"></iframe>
 </main>
 
-<script src="index.js?v=9999992"></script>
+<script src="index.js?v=202607142230"></script>
 
 </body>
 </html>

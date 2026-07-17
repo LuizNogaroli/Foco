@@ -46,8 +46,8 @@ async function carregarDados() {
             return {
                 updated_at: r.updated_at,
                 form_data: {
-                    status: st.status_geral || 'Aguardando Análise',
-                    status_flow: st.checkpoint || 'SPU/' + (fd.uf || 'ND'),
+                    status: st.status || st.status_geral || 'Aguardando Análise',
+                    status_flow: st.instancia || st.checkpoint || 'SPU/' + (fd.uf || 'ND'),
                     uf: fd.uf || 'ND',
                     tipo_procedimento: fd.regime_requerido || 'Cessão Onerosa',
                     campo12: fd.data_req || ''

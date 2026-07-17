@@ -91,6 +91,7 @@ async function loadDraftFromDB() {
                 uf: reqJson.uf || '',
                 municipio: reqJson.municipio || '',
                 procedimento: reqJson.regime_requerido || '',
+                tipo_requerimento: reqJson.tipo_requerimento || '',
                 documentos_anexados: reqJson.documentos_anexados || [],
                 
                 status: statusJson.status_geral || 'Aguardando Análise',
@@ -211,32 +212,169 @@ window.forceSaveDraft = async function() {
     await executeSaveDraft();
 };
 
-window.updateStatusFluxo = async function(processId, novoCheckpoint, novoStatus) {
-    if (!processId || !window.supabaseClient) return;
+window.updateStatusFluxo = async function(processId, workflowId, oldStatusGeral, customPerfil, customTagFluxo) {
+    if (!processId) return;
+    
+    // Check if WORKFLOW_STAGES exists globally, if not we define it here as a fallback
+    const _WORKFLOW_STAGES = typeof WORKFLOW_STAGES !== 'undefined' ? WORKFLOW_STAGES : {
+        1:  { id_workflow: 1,  tag_fluxo: "", status: "Aguardando análise",                           instancia: "",                    perfil: "-",                     descricao: "Aguardando iniciar a análise" },
+        2:  { id_workflow: 2,  tag_fluxo: "Normal", status: "Indicação do imóvel",               instancia: "Destinação",           perfil: "Equipe (Destinação)",   descricao: "Indicação de imóvel/área" },
+        3:  { id_workflow: 3,  tag_fluxo: "Normal", status: "Diagnóstico preliminar do imóvel",             instancia: "Caracterização",       perfil: "Equipe (Caracterização)", descricao: "Diagnóstico das características do imóvel" },
+        4:  { id_workflow: 4,  tag_fluxo: "Normal", status: "Análise de viabilidade",            instancia: "Destinação",           perfil: "Equipe (Destinação)",   descricao: "Análise Preliminar do Imóvel" },
+        5:  { id_workflow: 5,  tag_fluxo: "Normal", status: "Validação análise de viabilidade - Chefia",               instancia: "Chefia",               perfil: "Chefia",                descricao: "Validação da Chefia no âmbito da SPU/UF" },
+        6:  { id_workflow: 6,  tag_fluxo: "Normal", status: "Validação análise de viabilidade - Coordenação",          instancia: "Coordenação SPU/UF",   perfil: "Coordenação",           descricao: "Validação da Coordenação no âmbito da SPU/UF" },
+        7:  { id_workflow: 7,  tag_fluxo: "Normal", status: "Deliberação Superintendência",   instancia: "Superintendência",     perfil: "Superintendência",      descricao: "Deliberação da Superintendência no âmbito da SPU/UF" },
+        8:  { id_workflow: 8,  tag_fluxo: "Normal", status: "Conferência análise de viabilidade",          instancia: "Equipe C.G.",          perfil: "Equipe C.G.",           descricao: "Validação da Equipe C.G. no âmbito da SPU/UC" },
+        9:  { id_workflow: 9,  tag_fluxo: "Normal", status: "Validação análise de viabilidade - Coordenação-Geral",    instancia: "Coordenação-Geral SPU/UC", perfil: "Coordenação-Geral",     descricao: "Validação da Coordenação-Geral no âmbito da SPU/UC" },
+        10: { id_workflow: 10, tag_fluxo: "Normal", status: "Validação conferência",              instancia: "Direção SPU/UC",       perfil: "Direção",               descricao: "Validação da Direção no âmbito da SPU/UC" },
+        11: { id_workflow: 11, tag_fluxo: "Normal", status: "Manifestação CDE",                instancia: "CDE",                  perfil: "CDE",                   descricao: "Deliberação da Comissão de Destinações Especiais" },
+        12: { id_workflow: 12, tag_fluxo: "Devolvido",    status: "Indicação do imóvel",               instancia: "Destinação",           perfil: "Equipe (Destinação)",     descricao: "Devolução para indicação de outro imóvel/área, acrescentar ou excluir imóvel/área" },
+        13: { id_workflow: 13, tag_fluxo: "Devolvido",    status: "Diagnóstico preliminar do imóvel",             instancia: "Caracterização",       perfil: "Equipe (Caracterização)", descricao: "Devolução para ajuste na análise preliminar do imóvel/área" },
+        14: { id_workflow: 14, tag_fluxo: "Devolvido",    status: "Análise de viabilidade",            instancia: "Destinação",           perfil: "Equipe (Destinação)",   descricao: "Devolução para ajuste na proposta de destinação" },
+        15: { id_workflow: 15, tag_fluxo: "Devolvido",    status: "Validação análise de viabilidade - Coordenação-Geral",    instancia: "Coordenação-Geral SPU/UC", perfil: "Coordenação-Geral",     descricao: "Devolução do processo para ajustes" },
+        16: { id_workflow: 16, tag_fluxo: "Devolvido",    status: "Deliberação Superintendência",   instancia: "Superintendência",     perfil: "Superintendência",      descricao: "Devolução do processo para ajustes" },
+        17: { id_workflow: 17, tag_fluxo: "Normal",   status: "Concluído",                                    instancia: "Superintendência",     perfil: "Superintendência",      descricao: "Processo concluído via Superintendência" },
+        18: { id_workflow: 18, tag_fluxo: "Normal",   status: "Concluído",                                    instancia: "CDE",                  perfil: "CDE",                   descricao: "Processo concluído via CDE" }
+    };
+
+    let json = {};
+    let existe = false;
+
     try {
         // Primeiro, busca o JSON atual
-        const urlGet = `${SUPABASE_URL}/rest/v1/tabela_status_fluxo?select=dados_json&numero_requerimento=eq.${processId}`;
+        const urlGet = `${SUPABASE_URL}/rest/v1/tabela_status_fluxo?select=id,dados_json&numero_requerimento=eq.${encodeURIComponent(processId)}&order=id.desc`;
         const resGet = await fetch(urlGet, {
             headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
         });
+        
         if (resGet.ok) {
             const data = await resGet.json();
-            let json = data.length > 0 ? data[0].dados_json : {};
-            json.checkpoint = novoCheckpoint;
-            json.status_geral = novoStatus || 'Em análise';
-            
+            if (data.length > 0) {
+                existe = true;
+                json = data[0].dados_json ? data[0].dados_json : {};
+            }
+        }
+
+        // Determina o ID do workflow de destino
+        let finalWorkflowId = workflowId;
+        const initialStage = _WORKFLOW_STAGES[workflowId];
+        
+        // Se já existe registro, e o novo status NÃO é devolução, mas o banco TEM retorno_devolucao_id salvo:
+        if (existe && json.retorno_devolucao_id && initialStage && initialStage.tag_fluxo !== "Devolvido") {
+            console.log(`🔄 [db.js] Processo saneado! Redirecionando de ID ${workflowId} de volta para a etapa de origem: ${json.retorno_devolucao_id}`);
+            finalWorkflowId = json.retorno_devolucao_id;
+            delete json.retorno_devolucao_id;
+        }
+
+        let stage = _WORKFLOW_STAGES[finalWorkflowId];
+        if (!stage && typeof finalWorkflowId === 'string') {
+            // Fallback para strings antigas
+            let fallbackTag = customTagFluxo || "Normal";
+            if (oldStatusGeral === 'Devolvido') fallbackTag = "Devolvido";
+            stage = { tag_fluxo: fallbackTag, status: finalWorkflowId, instancia: oldStatusGeral || finalWorkflowId, perfil: customPerfil || "-" };
+        } else if (!stage) {
+            console.error("Workflow ID não encontrado:", finalWorkflowId);
+            return;
+        }
+
+        // Se o NOVO estágio for do tipo "Devolvido", grava o retorno_devolucao_id
+        if (stage.tag_fluxo === "Devolvido") {
+            if (json.id_workflow) {
+                json.retorno_devolucao_id = json.id_workflow;
+                console.log(`💾 [db.js] Salvando retorno_devolucao_id = ${json.retorno_devolucao_id} (Etapa anterior à devolução)`);
+            }
+        }
+        
+        // --- INÍCIO DA LÓGICA DE KPI (TIMESTAMPS) ---
+        const nowIso = new Date().toISOString();
+        
+        if (!json.data_inicio_processo) {
+            json.data_inicio_processo = nowIso;
+        }
+        if (!json.historico_tramitacao || !Array.isArray(json.historico_tramitacao)) {
+            json.historico_tramitacao = [];
+        }
+        
+        // Carimba a data_saida da instância anterior se houver mudança de estado
+        if (json.historico_tramitacao.length > 0) {
+            const lastEntry = json.historico_tramitacao[json.historico_tramitacao.length - 1];
+            if (!lastEntry.data_saida && (lastEntry.instancia !== stage.instancia || lastEntry.status !== stage.status)) {
+                lastEntry.data_saida = nowIso;
+            }
+        }
+        
+        // Registra a nova entrada se mudou de estado
+        const isSameState = json.historico_tramitacao.length > 0 && 
+                            json.historico_tramitacao[json.historico_tramitacao.length - 1].instancia === stage.instancia &&
+                            json.historico_tramitacao[json.historico_tramitacao.length - 1].status === stage.status;
+                            
+        if (!isSameState) {
+            json.historico_tramitacao.push({
+                instancia: stage.instancia,
+                status: stage.status,
+                data_entrada: nowIso,
+                data_saida: null
+            });
+        }
+        
+        // Finaliza o processo se for concluído ou cancelado
+        const isConcluido = (stage.status === "Concluído" || stage.tag_fluxo === "Cancelado" || String(workflowId).includes("Cancelado"));
+        if (isConcluido) {
+            json.data_fim_processo = nowIso;
+            if (json.historico_tramitacao.length > 0) {
+                json.historico_tramitacao[json.historico_tramitacao.length - 1].data_saida = nowIso;
+            }
+        } else {
+            json.data_fim_processo = null;
+        }
+        // --- FIM DA LÓGICA DE KPI ---
+
+        // Flag permanente de tramitação: "Devolvido" é irreversível.
+        // Uma vez que o processo seja devolvido, o flag NÃO retorna para "Normal"
+        // mesmo após retomar a tramitação normal.
+        const isDevolution     = stage.tag_fluxo === "Devolvido";
+        const previouslyDevolv = json.tag_fluxo   === "Devolvido";
+        const newTagFluxo      = customTagFluxo || (isDevolution || previouslyDevolv ? "Devolvido" : stage.tag_fluxo);
+        if (stage.id_workflow) json.id_workflow = stage.id_workflow;
+        json.tag_fluxo   = newTagFluxo;
+        json.status = stage.status;
+        json.instancia = stage.instancia;
+        json.perfil = customPerfil || stage.perfil;
+        if (stage.descricao) json.descricao = stage.descricao;
+
+        // Retrocompatibilidade temporária
+        json.checkpoint   = stage.status;
+        json.status_geral = newTagFluxo;
+        
+        if (existe) {
             // Atualiza
-            await fetch(`${SUPABASE_URL}/rest/v1/tabela_status_fluxo?numero_requerimento=eq.${processId}`, {
+            const patchRes = await fetch(`${SUPABASE_URL}/rest/v1/tabela_status_fluxo?numero_requerimento=eq.${encodeURIComponent(processId)}`, {
                 method: 'PATCH',
                 headers: {
                     'apikey': SUPABASE_ANON_KEY,
                     'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ dados_json: json, updated_at: new Date().toISOString() })
+                body: JSON.stringify({ dados_json: json })
             });
-            console.log(`Status atualizado para ${novoCheckpoint} - ${json.status_geral}`);
+            if (!patchRes.ok) throw new Error('Erro no PATCH de tabela_status_fluxo: ' + await patchRes.text());
+        } else {
+            // Cria
+            const postRes = await fetch(`${SUPABASE_URL}/rest/v1/tabela_status_fluxo`, {
+                method: 'POST',
+                headers: {
+                    'apikey': SUPABASE_ANON_KEY,
+                    'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 
+                    numero_requerimento: processId, 
+                    dados_json: json 
+                })
+            });
+            if (!postRes.ok) throw new Error('Erro no POST de tabela_status_fluxo: ' + await postRes.text());
         }
+        console.log(`Status atualizado para ${json.instancia} - ${json.status_geral}`);
     } catch (e) {
         console.error("Erro ao atualizar status do fluxo:", e);
     }
@@ -1148,7 +1286,7 @@ window.saveToFinal = async function() {
     delete dataToSave.undefined;
     
     // Atualiza status local
-    dataToSave.status = dataToSave.status || "Em andamento";
+    dataToSave.status = dataToSave.status || "Normal";
 
     try {
         const url = `${SUPABASE_URL}/rest/v1/foco_final?on_conflict=process_id`;
@@ -1254,10 +1392,97 @@ window.carregarIndicacoes = async (processId) => {
     return null;
 };
 
+// Snapshot Histórico JSON
+window.salvarSnapshotHistorico = async (abaOrigem) => {
+    const processId = new URLSearchParams(window.location.search).get('processo');
+    if (!processId || !window.SUPABASE_URL || !window.SUPABASE_ANON_KEY) return;
+    
+    // Obter o estado atual dos dados para bater a foto exata (Snapshot)
+    const dadosSnapshot = JSON.parse(JSON.stringify(window.formDataState));
+
+    const payload = {
+        processo_id: processId,
+        aba_origem: abaOrigem,
+        dados_snapshot: dadosSnapshot
+    };
+
+    try {
+        const url = `${window.SUPABASE_URL}/rest/v1/foco_historico`;
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'apikey': window.SUPABASE_ANON_KEY,
+                'Authorization': `Bearer ${window.SUPABASE_ANON_KEY}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) {
+            console.error(`Erro ao salvar snapshot histórico da ${abaOrigem}:`, await res.text());
+        } else {
+            console.log(`Snapshot histórico da ${abaOrigem} salvo com sucesso no Supabase!`);
+        }
+    } catch (e) {
+        console.error("Erro na requisição salvarSnapshotHistorico:", e);
+    }
+};
+
 // Executa no carregamento inicial da página
 document.addEventListener('DOMContentLoaded', async () => {
     await loadDraftFromDB();
+    if (typeof window.verificarDevolucaoSupabase === 'function') {
+        await window.verificarDevolucaoSupabase();
+    }
 });
+
+// Verifica se há alguma devolução pendente para exibir no banner
+window.verificarDevolucaoSupabase = async function(doc = document) {
+    let processId = new URLSearchParams(window.location.search).get('processo');
+    if (!processId) processId = localStorage.getItem('CURRENT_PROCESS_ID');
+    if (!processId && window.parent) processId = new URLSearchParams(window.parent.location.search).get('processo');
+
+    const supabaseUrl = window.SUPABASE_URL || (window.parent && window.parent.SUPABASE_URL);
+    const supabaseKey = window.SUPABASE_ANON_KEY || (window.parent && window.parent.SUPABASE_ANON_KEY);
+
+    if (!processId || !supabaseUrl || !supabaseKey) return;
+
+    try {
+        const url = `${supabaseUrl}/rest/v1/tabela_deliberacoes?process_id=eq.${processId}&order=created_at.desc&limit=1`;
+        const res = await fetch(url, {
+            headers: {
+                'apikey': supabaseKey,
+                'Authorization': `Bearer ${supabaseKey}`
+            }
+        });
+        if (res.ok) {
+            const data = await res.json();
+            if (data.length > 0) {
+                const ultima = data[0].dados_deliberacao;
+                
+                // Se a última ação foi devolver/complementar
+                if (ultima.decisao === 'devolver' || ultima.decisao === 'complementacao') {
+                    if (ultima.destino) {
+                        const numAba = ultima.destino.replace('aba', '');
+                        const bannerId = `bannerDevolucaoAba${numAba}`;
+                        const textoId = `textoMotivoDevolucaoAba${numAba}`;
+                        
+                        const bannerEl = doc.getElementById(bannerId);
+                        const textoEl = doc.getElementById(textoId);
+                        
+                        // Exibe apenas se o elemento da aba correspondente existir na página atual
+                        if (bannerEl && textoEl) {
+                            textoEl.textContent = ultima.motivo || "Motivo não informado pela chefia.";
+                            bannerEl.style.display = 'block';
+                        }
+                    }
+                }
+            }
+        }
+    } catch (e) {
+        console.error("Erro ao verificar devoluções:", e);
+    }
+};
 
 
 // Mock arrays removed.

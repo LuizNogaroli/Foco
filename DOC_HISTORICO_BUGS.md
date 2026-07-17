@@ -80,3 +80,94 @@ Este documento foi elaborado para servir como um acervo técnico (Knowledge Base
 2. **Manipulação de DOM vs Regex:** Usar Regex para alterar códigos `.html` é perigoso. Exige validações estritas (como evitar modificar URLs externas de CDNs) para não quebrar dependências de terceiros vitais para a estrutura.
 3. **Persistência Blindada:** Não confie inteiramente na barra de endereços (URL) para trânsito de chaves primárias ou estados entre páginas caso o ecossistema backend e roteamento não for 100% conhecido. O `SessionStorage` e `LocalStorage` são grandes aliados arquiteturais.
 4. **Perigo do Auto-Save:** Rotinas de salvamento instantâneo devem ter condicionais que as impeçam de operar ("lockdown") caso o estado central não tenha sido positivamente hidratado/recebido pela base de dados inicial, evitando sobregravação acidental (corrupção por formulário limpo).
+
+---
+
+## 6. Dependência de window.parent para Fetch Crítico em Iframes (Devolução)
+
+**Sintoma:** Ao tentar salvar checkpoint de fluxo (ex: "Aguardando Coordenação SPU/UF") a partir de iframes como `foco-03.html` ou `aba7.html`, a operação falhava silenciosamente. O console não mostrava erro, mas o checkpoint não era salvo no Supabase.
+
+**Causa:** Os iframes chamavam funções de banco via `window.parent.updateStatusFluxo()` ou `window.parent.updateStatusFluxo`. Isso falhava em três cenários:
+1. `window.parent` não tinha o SDK carregado → `window.supabaseClient` nulo → early return
+2. A função não estava disponível no contexto correto do iframe
+3. Race condition: o parent não havia carregado ainda
+
+**Solução Desenvolvida (Fetch Direto Padrão):**
+- Padrão arquitetural: **nunca** usar `window.parent.funcao()` para operações críticas de banco em iframes.
+- Implementar `fetch` direto ao Supabase usando credenciais locais:
+```javascript
+const SUPA_URL = window.SUPABASE_URL || (window.parent && window.parent.SUPABASE_URL);
+const SUPA_KEY = window.SUPABASE_ANON_KEY || (window.parent && window.parent.SUPABASE_ANON_KEY);
+```
+- Credenciais Supabase embutidas diretamente no `<head>` dos iframes críticos (`aba7.html`, `foco-03.html`).
+- Padrão GET → PATCH/POST: primeiro verificar se existe registro em `tabela_status_fluxo`, depois PATCH se existe ou POST se não existe.
+
+---
+
+## 7. Ordem de Consulta em tabela_status_fluxo (Duplicatas)
+
+**Sintoma:** Ao consultar o checkpoint atual do processo, o sistema às vezes retornava um checkpoint antigo em vez do mais recente.
+
+**Causa:** A tabela `tabela_status_fluxo` não tem constraint UNIQUE no campo `numero_requerimento`. Pode haver múltiplas linhas para o mesmo processo (duplicatas de operações anteriores).
+
+**Solução Desenvolvida:**
+- Sempre usar `order=id.desc&limit=1` nas queries de `tabela_status_fluxo`.
+- Isso garante que se pega o registro mais recente, mesmo que existam duplicatas.
+
+---
+
+## 8. Cache de Browser em Alterações de JS (Cache Busting Obrigatório)
+
+**Sintoma:** Alterações em arquivos JavaScript não refletiam na interface, mesmo após upload para o servidor.
+
+**Causa:** O browser mantém cache agressivo de arquivos estáticos. Qualquer alteração em JS precisa de um bump no cache buster para forçar o download da nova versão.
+
+**Solução Desenvolvida:**
+- Tornar obrigatório o uso de cache buster (`?v=YYYYMMDDHHMI`) em todos os HTMLs que carregam scripts alterados.
+- Exemplo: `foco-03.html?v=202607142230`
+
+---
+
+## 9. Race Condition Após Salvar no Supabase (Navegação Prematura)
+
+**Sintoma:** Ao salvar checkpoint e navegar para outra aba imediatamente, a nova aba não via o checkpoint atualizado.
+
+**Causa:** O Supabase processa a escrita de forma assíncrona. Se a navegação acontece antes do banco processar, a leitura na nova aba retorna o estado antigo.
+
+**Solução Desenvolvida:**
+- Adicionar `await new Promise(resolve => setTimeout(resolve, 600))` antes de navegar após salvar no Supabase.
+- Isso garante que o servidor processou antes da próxima tela fazer a leitura.
+
+---
+
+## 10. Versionamento de Dados em Processos com Devolução
+
+**Sintoma:** Quando um processo é devolvido (ex: Coordenação devolve para Chefia), os dados da aba eram sobrescritos, perdendo o histórico de preenchimentos anteriores.
+
+**Causa:** O sistema original salvava dados em `tabela_foco` e `tabela_relatorios` usando UPSERT (sobrescrevia o registro existente). Não havia preservação de versões anteriores.
+
+**Solução Desenvolvida (Versionamento por Snapshots):**
+- Criada nova tabela `tabela_versoes_formulario` no Supabase:
+  - `id`, `processo_id`, `aba` (aba1/aba2/aba3), `versao` (integer), `dados_json` (jsonb), `criado_por`, `criado_em`
+- Ao salvar qualquer aba, além do UPSERT em `tabela_relatorios`, grava-se uma nova versão em `tabela_versoes_formulario` com `versao = ultima_versao + 1`.
+- `tabela_foco` e `tabela_relatorios` continuam como "snapshot ativo" para não quebrar telas existentes.
+- PDF (`processo-print.html`) busca a versão mais recente de cada aba na tabela de versões, com fallback para `tabela_relatorios` se não houver versão (compatibilidade com processos antigos).
+
+**Lições Arquiteturais:**
+1. Em processos administrativos, **nunca sobrescrever** dados — sempre append (criar nova versão).
+2. Manter "snapshot ativo" para performance, mas preservar todas as versões para auditoria.
+3. O versionamento deve ser transparente para o usuário — ele continua salvando normalmente.
+
+---
+
+### Lições Gerais Atualizadas
+
+1. **Iframes e Cache:** Jamais dependa de atualizações forçadas (F5) em arquiteturas que embutem frames. Uma estratégia automatizada de *Cache Busting* por hashes/timestamps é obrigatória.
+2. **Manipulação de DOM vs Regex:** Usar Regex para alterar códigos `.html` é perigoso. Exige validações estritas.
+3. **Persistência Blindada:** Não confie na barra de endereços (URL) para trânsito de chaves primárias. Use `localStorage` como backup.
+4. **Perigo do Auto-Save:** Rotinas de salvamento devem ter "lockdown" se o estado central não foi hidratado.
+5. **Fetch Direto em Iframes:** Nunca usar `window.parent.funcao()` para operações críticas de banco. Sempre fazer `fetch` direto com credenciais locais.
+6. **Ordenação em Queries:** Sempre usar `order=id.desc&limit=1` em tabelas sem constraint UNIQUE.
+7. **Cache Busting Obrigatório:** Toda alteração em JS deve ser acompanhada de bump no cache buster em todos os HTMLs.
+8. **Delay Após Supabase:** Aguardar 600ms após salvar antes de navegar para outra aba.
+9. **Versionamento de Dados:** Em processos administrativos, nunca sobrescrever — sempre criar nova versão.

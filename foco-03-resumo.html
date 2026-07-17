@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta charset="UTF-8">
+    <title>Resumo - Destinação (Aba 3)</title>
+    <link rel="stylesheet" href="report.css?v=1782355313469">
+</head>
+<body>
+    <div id="loading" style="padding: 30px; text-align: center; font-size: 1.2em; color: #64748b; font-family: sans-serif;">
+        🔄 Carregando relatório da base de dados...
+    </div>
+
+    <div id="content" class="report-container" style="display: none;">
+        <div class="report-header">
+            <p style="font-weight:bold; margin-top:10px;">Relatório Consolidado - Aba 3 (Destinação)</p>
+        </div>
+
+        <!-- 1. Análise do Destinatário -->
+        <div class="report-section">
+            <div class="report-section-title">1. Análise do Destinatário</div>
+            <div class="report-grid">
+                <div class="report-item">
+                    <span class="report-label">CPF/CNPJ regular?</span>
+                    <span class="report-value" id="val_cpf_cnpj_regular">-</span>
+                </div>
+                <div class="report-item">
+                    <span class="report-label">Observações CPF/CNPJ</span>
+                    <span class="report-value" id="val_obs_cpf_cnpj_irregular">-</span>
+                </div>
+                <div class="report-item">
+                    <span class="report-label">Natureza da Destinação (Jurídica)</span>
+                    <span class="report-value" id="val_natureza">-</span>
+                </div>
+                <div class="report-item">
+                    <span class="report-label">Pendências Contratuais/Documentais?</span>
+                    <span class="report-value" id="val_pendencias">-</span>
+                </div>
+                <div class="report-item" style="grid-column: span 2;">
+                    <span class="report-label">Observações sobre Pendências</span>
+                    <span class="report-value" id="val_pendencias_obs">-</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Capacidade Financeira -->
+        <div class="report-section">
+            <div class="report-section-title">2. Capacidade Financeira</div>
+            <div class="report-grid">
+                <div class="report-item" style="grid-column: span 2;">
+                    <span class="report-label">Capacidade financeira/orçamentária para a destinação pretendida?</span>
+                    <span class="report-value" id="val_capacidade_fin">-</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Ações judiciais ou órgãos de controle -->
+        <div class="report-section">
+            <div class="report-section-title">3. Ações judiciais ou órgãos de controle</div>
+            <div class="report-grid">
+                <div class="report-item">
+                    <span class="report-label">NUP SEI</span>
+                    <span class="report-value" id="val_nup_sei">-</span>
+                </div>
+                <div class="report-item">
+                    <span class="report-label">Tipo de Processo</span>
+                    <span class="report-value" id="val_tipo_processo">-</span>
+                </div>
+                <div class="report-item" style="grid-column: span 2;">
+                    <span class="report-label">Resumo da Ação</span>
+                    <span class="report-value" id="val_resumo_acao">-</span>
+                </div>
+                <div class="report-item" style="grid-column: span 2;">
+                    <span class="report-label">Descrição da Ação</span>
+                    <span class="report-value" id="val_descricao_acao">-</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Dados de Comparação de Área e Valor -->
+        <div class="report-section">
+            <div class="report-section-title">4. Dados de Comparação de Área e Valor</div>
+            <div class="report-grid">
+                <div class="report-item">
+                    <span class="report-label">Área total do imóvel (m²)</span>
+                    <span class="report-value" id="val_area_total_imovel">-</span>
+                </div>
+                <div class="report-item">
+                    <span class="report-label">Valor total do imóvel (R$)</span>
+                    <span class="report-value" id="val_valor_total_imovel">-</span>
+                </div>
+                <div class="report-item">
+                    <span class="report-label">Área do terreno destinada (m²)</span>
+                    <span class="report-value" id="val_area_terreno_destinada">-</span>
+                </div>
+                <div class="report-item">
+                    <span class="report-label">Área construída destinada (m²)</span>
+                    <span class="report-value" id="val_area_construida_destinada">-</span>
+                </div>
+                <div class="report-item" style="grid-column: span 2;">
+                    <span class="report-label">Valor de referência da área destinada (R$)</span>
+                    <span class="report-value" id="val_valor_area_destinada">-</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. Custos de Manutenção e Outros Interessados -->
+        <div class="report-section">
+            <div class="report-section-title">5. Custos de Manutenção e Outros Interessados</div>
+            <div class="report-grid">
+                <div class="report-item">
+                    <span class="report-label">Gera custos de manutenção para a SPU?</span>
+                    <span class="report-value" id="val_custos_manutencao">-</span>
+                </div>
+                <div class="report-item">
+                    <span class="report-label">Valor Anual dos Custos (R$)</span>
+                    <span class="report-value" id="val_custos_valor">-</span>
+                </div>
+                <div class="report-item">
+                    <span class="report-label">Há outros interessados no imóvel?</span>
+                    <span class="report-value" id="val_outros_interessados">-</span>
+                </div>
+                <div class="report-item" style="grid-column: span 2;">
+                    <span class="report-label">Observações sobre Outros Interessados</span>
+                    <span class="report-value" id="val_obs_outros_interessados">-</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. Proposta de Destinação e Impactos -->
+        <div class="report-section">
+            <div class="report-section-title">6. Proposta de Destinação e Impactos</div>
+            <div class="report-grid">
+                <div class="report-item">
+                    <span class="report-label">Tipo de procedimento pretendido</span>
+                    <span class="report-value" id="val_modalidade">-</span>
+                </div>
+                <div class="report-item">
+                    <span class="report-label">Informações complementares (Procedimento)</span>
+                    <span class="report-value" id="val_destinacao_obs">-</span>
+                </div>
+                <div class="report-item">
+                    <span class="report-label">Tipo de uso imobiliário pretendido</span>
+                    <span class="report-value" id="val_tipo_uso_imobiliario">-</span>
+                </div>
+                <div class="report-item">
+                    <span class="report-label">Tipo de uso específico pretendido</span>
+                    <span class="report-value" id="val_tipo_uso_especifico">-</span>
+                </div>
+                <div class="report-item">
+                    <span class="report-label">Regime sugerido</span>
+                    <span class="report-value" id="val_cessao">-</span>
+                </div>
+                <div class="report-item">
+                    <span class="report-label">Observações adicionais (Regime)</span>
+                    <span class="report-value" id="val_cessao_obs">-</span>
+                </div>
+                <div class="report-item">
+                    <span class="report-label">Previsão de modificação física no terreno?</span>
+                    <span class="report-value" id="val_previsao_modificacao">-</span>
+                </div>
+                <div class="report-item">
+                    <span class="report-label">Descrição da modificação</span>
+                    <span class="report-value" id="val_previsao_modificacao_desc">-</span>
+                </div>
+                <div class="report-item">
+                    <span class="report-label">Compatibilidade urbanística</span>
+                    <span class="report-value" id="val_compatibilidade_urbanistica">-</span>
+                </div>
+                <div class="report-item">
+                    <span class="report-label">Observações compatibilidade</span>
+                    <span class="report-value" id="val_compatibilidade_urbanistica_obs">-</span>
+                </div>
+                
+                <div class="report-item">
+                    <span class="report-label">Vinculação com Programas Governamentais?</span>
+                    <span class="report-value" id="val_vinculacao_programas_radio">-</span>
+                </div>
+                <div class="report-item">
+                    <span class="report-label">Programas Governamentais</span>
+                    <span class="report-value" id="val_vinculacao_programas">-</span>
+                </div>
+                <div class="report-item" style="grid-column: span 2;">
+                    <span class="report-label">Observações Programas Governamentais</span>
+                    <span class="report-value" id="val_vinculacao_programas_obs">-</span>
+                </div>
+
+                <div class="report-item">
+                    <span class="report-label">Vinculação com Políticas Públicas?</span>
+                    <span class="report-value" id="val_vinculacao_politicas_radio">-</span>
+                </div>
+                <div class="report-item">
+                    <span class="report-label">Políticas Públicas</span>
+                    <span class="report-value" id="val_vinculacao_politicas">-</span>
+                </div>
+                <div class="report-item" style="grid-column: span 2;">
+                    <span class="report-label">Observações Políticas Públicas</span>
+                    <span class="report-value" id="val_vinculacao_politicas_obs">-</span>
+                </div>
+
+                <div class="report-item">
+                    <span class="report-label">Expectativa de impacto social?</span>
+                    <span class="report-value" id="val_expectativa_impacto_social">-</span>
+                </div>
+                <div class="report-item">
+                    <span class="report-label">Impacto Social esperado</span>
+                    <span class="report-value" id="val_impacto_social">-</span>
+                </div>
+                <div class="report-item">
+                    <span class="report-label">Número estimado de beneficiários</span>
+                    <span class="report-value" id="val_num_beneficiarios">-</span>
+                </div>
+                <div class="report-item">
+                    <span class="report-label">Observações Impacto Social</span>
+                    <span class="report-value" id="val_impacto_social_obs">-</span>
+                </div>
+
+                <div class="report-item">
+                    <span class="report-label">Expectativa de impacto ambiental?</span>
+                    <span class="report-value" id="val_expectativa_impacto_ambiental">-</span>
+                </div>
+                <div class="report-item">
+                    <span class="report-label">Impacto Ambiental esperado</span>
+                    <span class="report-value" id="val_impacto_ambiental">-</span>
+                </div>
+                <div class="report-item" style="grid-column: span 2;">
+                    <span class="report-label">Observações Impacto Ambiental</span>
+                    <span class="report-value" id="val_impacto_ambiental_obs">-</span>
+                </div>
+
+                <div class="report-item" style="grid-column: span 2;">
+                    <span class="report-label">Observações Gerais da Destinação</span>
+                    <span class="report-value" id="val_obs_geral_destinacao">-</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 7. Despacho e Ação Final -->
+        <div class="report-section">
+            <div class="report-section-title">7. Despacho e Ação Final</div>
+            <div class="report-grid">
+                <div class="report-item">
+                    <span class="report-label">Decisão Final da Etapa</span>
+                    <span class="report-value" id="val_despacho_final" style="font-weight: bold; color: #1a4e8a;">-</span>
+                </div>
+                <div class="report-item" style="grid-column: span 2;">
+                    <span class="report-label">Motivo da Devolução (se aplicável)</span>
+                    <span class="report-value" id="val_motivo_devolucao" style="color: #dc2626;">-</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- TRILHA DE AUDITORIA SIMULADA -->
+        <div style="margin-top: 40px; padding: 15px; border: 1px solid #ddd; border-left: 6px solid #1a7a4a; background: #fdfdfd; width: 100%; box-sizing: border-box; font-size: 0.85rem; color: #444; font-family: sans-serif;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                <div style="line-height: 1.5;">
+                    Responsável: <span style="color:#1a4e8a; font-weight:bold;">Sistema (Geração Automática)</span><br>
+                    Status do Documento: <span style="color:#1a7a4a; font-weight:bold;">CONSOLIDADO E CONFERIDO</span>
+                </div>
+                <div style="text-align: right; line-height: 1.5;">
+                    <strong>Data/Hora Relatório:</strong> <span id="val_data_relatorio">-</span><br>
+                    <strong>Processo Base:</strong> <span style="font-family: monospace; color: #666;" id="val_base_id">-</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="report-footer">
+            <p>Documento gerado automaticamente com base nos dados salvos no sistema. Simples conferência técnica e hierárquica.</p>
+        </div>
+    </div>
+
+    <script>
+        async function loadReport() {
+            const processId = localStorage.getItem('CURRENT_PROCESS_ID');
+            if (!processId) {
+                document.getElementById('loading').innerText = "Erro: Processo não identificado.";
+                return;
+            }
+
+            try {
+                const SUPA_URL = window.parent?.SUPABASE_URL || window.parent?.parent?.SUPABASE_URL;
+                const SUPA_KEY = window.parent?.SUPABASE_ANON_KEY || window.parent?.parent?.SUPABASE_ANON_KEY;
+
+                if (!SUPA_URL || !SUPA_KEY) {
+                    throw new Error("Credenciais do Supabase não encontradas.");
+                }
+
+                const url = `${SUPA_URL}/rest/v1/tabela_relatorios?select=*&process_id=eq.${encodeURIComponent(processId)}&aba=eq.aba3&limit=1`;
+                const res = await fetch(url, {
+                    headers: { 'apikey': SUPA_KEY, 'Authorization': `Bearer ${SUPA_KEY}` }
+                });
+
+                if (!res.ok) {
+                    const errTxt = await res.text();
+                    throw new Error(`Status ${res.status}: ${res.statusText} - ${errTxt}`);
+                }
+                
+                const data = await res.json();
+                if (data && data.length > 0) {
+                    const rel = data[0].dados_relatorio;
+                    
+                    // 1. Análise do Destinatário
+                    document.getElementById('val_cpf_cnpj_regular').textContent = rel.cpf_cnpj_regular || '-';
+                    document.getElementById('val_obs_cpf_cnpj_irregular').textContent = rel.obs_cpf_cnpj_irregular || '-';
+                    document.getElementById('val_natureza').textContent = rel.natureza_destinacao || '-';
+                    document.getElementById('val_pendencias').textContent = (rel.ha_pendencias_contratuais === 'Sim' && rel.pendencias && rel.pendencias.length > 0) ? (Array.isArray(rel.pendencias) ? rel.pendencias.join(', ') : rel.pendencias) : rel.ha_pendencias_contratuais || '-';
+                    document.getElementById('val_pendencias_obs').textContent = rel.pendencias_obs || '-';
+
+                    // 2. Capacidade Financeira
+                    document.getElementById('val_capacidade_fin').textContent = rel.capacidade_fin ? (rel.capacidade_fin === 'demonstrada' ? 'Demonstrada formalmente' : rel.capacidade_fin === 'não demonstrada' ? 'Não demonstrada' : 'Não se aplica') : '-';
+
+                    // 3. Ações judiciais ou órgãos de controle
+                    document.getElementById('val_nup_sei').textContent = rel.nup_sei || '-';
+                    document.getElementById('val_tipo_processo').textContent = rel.tipo_processo || '-';
+                    document.getElementById('val_resumo_acao').textContent = rel.resumo_acao || '-';
+                    document.getElementById('val_descricao_acao').textContent = rel.descricao_acao || '-';
+
+                    // 4. Dados de Comparação de Área e Valor
+                    document.getElementById('val_area_total_imovel').textContent = rel.area_total_imovel || '-';
+                    document.getElementById('val_valor_total_imovel').textContent = rel.valor_total_imovel || '-';
+                    document.getElementById('val_area_terreno_destinada').textContent = rel.area_terreno_destinada || '-';
+                    document.getElementById('val_area_construida_destinada').textContent = rel.area_construida_destinada || '-';
+                    document.getElementById('val_valor_area_destinada').textContent = rel.valor_area_destinada || '-';
+
+                    // 5. Custos de Manutenção e Outros Interessados
+                    document.getElementById('val_custos_manutencao').textContent = rel.custos_manutencao || '-';
+                    document.getElementById('val_custos_valor').textContent = rel.custos_valor || '-';
+                    document.getElementById('val_outros_interessados').textContent = rel.outros_interessados || '-';
+                    document.getElementById('val_obs_outros_interessados').textContent = rel.obs_outros_interessados || '-';
+
+                    // 6. Proposta de Destinação e Impactos
+                    document.getElementById('val_modalidade').textContent = rel.modalidade || '-';
+                    document.getElementById('val_destinacao_obs').textContent = rel.destinacao_obs || '-';
+                    
+                    const mapaUsoImobiliario = {
+                        "0101": "01.01 Uso administrativo e representativo",
+                        "0102": "01.02 Uso para agropecuária, aquicultura, produção florestal e pesca",
+                        "0103": "01.03 Uso ambiental e dos recursos naturais",
+                        "0104": "01.04 Uso cultural, esportivo e de lazer",
+                        "0105": "01.05 Uso em eventos de curta duração",
+                        "0106": "01.06 Uso habitacional",
+                        "0107": "01.07 Uso industrial, comercial ou de prestação de serviços",
+                        "0108": "01.08 Uso em infraestrutura de serviços públicos",
+                        "0109": "01.09 Uso em infraestrutura de transportes",
+                        "0110": "01.10 Uso multifinalitário em projeto de requalificação urbana",
+                        "0111": "01.11 Uso por povos originários e comunidades tradicionais",
+                        "0112": "01.12 Uso em serviço de ensino, pesquisa e extensão",
+                        "0113": "01.13 Uso em serviço socioassistêncial e de cidadania",
+                        "0114": "01.14 Uso em serviços de saúde",
+                        "0115": "01.15 Uso residential para servidor",
+                        "0116": "01.16 Uso para segurança pública e defesa nacional",
+                        "0117": "01.17 Uso religioso",
+                        "0118": "01.18 Sem informação",
+                        "0119": "01.19 Sem uso definido/vinculação"
+                    };
+                    document.getElementById('val_tipo_uso_imobiliario').textContent = mapaUsoImobiliario[rel.tipo_uso_imobiliario] || rel.tipo_uso_imobiliario || '-';
+                    document.getElementById('val_tipo_uso_especifico').textContent = rel.tipo_uso_especifico || '-';
+                    
+                    document.getElementById('val_cessao').textContent = rel.cessao_onerosa || '-';
+                    document.getElementById('val_cessao_obs').textContent = rel.cessao_obs || '-';
+                    
+                    document.getElementById('val_previsao_modificacao').textContent = rel.previsao_modificacao || '-';
+                    document.getElementById('val_previsao_modificacao_desc').textContent = rel.previsao_modificacao_desc || '-';
+                    document.getElementById('val_compatibilidade_urbanistica').textContent = rel.compatibilidade_urbanistica || '-';
+                    document.getElementById('val_compatibilidade_urbanistica_obs').textContent = rel.compatibilidade_urbanistica_obs || '-';
+                    
+                    document.getElementById('val_vinculacao_programas_radio').textContent = rel.vinculacao_programas_radio || '-';
+                    document.getElementById('val_vinculacao_programas').textContent = (Array.isArray(rel.vinculacao_programas) ? rel.vinculacao_programas.join(', ') : rel.vinculacao_programas) || '-';
+                    document.getElementById('val_vinculacao_programas_obs').textContent = rel.vinculacao_programas_obs || '-';
+
+                    document.getElementById('val_vinculacao_politicas_radio').textContent = rel.vinculacao_politicas_radio || '-';
+                    document.getElementById('val_vinculacao_politicas').textContent = (Array.isArray(rel.vinculacao_politicas) ? rel.vinculacao_politicas.join(', ') : rel.vinculacao_politicas) || '-';
+                    document.getElementById('val_vinculacao_politicas_obs').textContent = rel.vinculacao_politicas_obs || '-';
+
+                    document.getElementById('val_expectativa_impacto_social').textContent = rel.expectativa_impacto_social || '-';
+                    document.getElementById('val_impacto_social').textContent = rel.impacto_social || '-';
+                    document.getElementById('val_num_beneficiarios').textContent = rel.num_beneficiarios || '-';
+                    document.getElementById('val_impacto_social_obs').textContent = rel.impacto_social_obs || '-';
+
+                    document.getElementById('val_expectativa_impacto_ambiental').textContent = rel.expectativa_impacto_ambiental || '-';
+                    document.getElementById('val_impacto_ambiental').textContent = rel.impacto_ambiental || '-';
+                    document.getElementById('val_impacto_ambiental_obs').textContent = rel.impacto_ambiental_obs || '-';
+                    
+                    document.getElementById('val_obs_geral_destinacao').textContent = rel.obs_geral_destinacao || '-';
+
+                    // 7. Despacho e Ação Final
+                    const mapaDespacho = {
+                        "aprovar": "✅ Aprovar e Concluir Processo",
+                        "devolver_aba2": "⚠️ Devolver para Caracterização (Aba 2)",
+                        "devolver_aba1": "🛑 Devolver para Indicação (Aba 1)"
+                    };
+                    document.getElementById('val_despacho_final').textContent = mapaDespacho[rel.despacho_final] || rel.despacho_final || '-';
+                    document.getElementById('val_motivo_devolucao').textContent = rel.motivo_devolucao || '-';
+
+                    // Metadados
+                    const dateObj = new Date(data[0].updated_at);
+                    document.getElementById('val_data_relatorio').textContent = dateObj.toLocaleString('pt-BR');
+                    document.getElementById('val_base_id').textContent = processId;
+                    
+                    // Renderiza selo de aprovação
+                    if (rel.aprovacao && rel.aprovacao.status) {
+                        const aprovDate = new Date(rel.aprovacao.data).toLocaleString('pt-BR');
+                        const perfilAss = rel.aprovacao.perfil || 'Perfil Atual';
+                        const obsAss = rel.aprovacao.observacoes ? rel.aprovacao.observacoes : 'Sem observações adicionais.';
+                        const statusDiv = document.querySelector('div[style*="border-left: 6px solid #1a7a4a"]');
+                        if (statusDiv) {
+                            statusDiv.innerHTML += `
+                                <div style="margin-top: 25px; padding-top: 15px; border-top: 1px dashed #ccc; color: #333;">
+                                    <h4 style="margin:0 0 10px 0; color: #1e3a5f;">Conclusão e Manifestação</h4>
+                                    <div style="background: #e8f5e9; padding: 15px; border-radius: 4px; border-left: 4px solid #166534; margin-bottom: 15px;">
+                                        <p style="margin: 0 0 10px 0; font-size: 13px; color: #166534;">
+                                            <strong>Declaração:</strong> Declaro que as informações consignadas neste formulário foram inseridas com base nos dados disponíveis nos sistemas oficiais, nos documentos constantes do processo e nas verificações realizadas no âmbito desta unidade, estando compatíveis com os elementos analisados.
+                                        </p>
+                                        <div style="font-size: 14px; color: #166534;">
+                                            <strong>✅ Aprovado e Assinado Digitalmente</strong>
+                                            <br>Data: ${aprovDate}
+                                            <br>Perfil Responsável: <strong>${perfilAss}</strong>
+                                        </div>
+                                    </div>
+                                    
+                                    <div style="background: #f8fafc; padding: 15px; border-radius: 4px; border: 1px solid #cbd5e1;">
+                                        <h5 style="margin:0 0 8px 0; color: #334155; font-size: 14px;">Observações da Manifestação:</h5>
+                                        <p style="margin: 0; font-size: 13px; color: #475569; white-space: pre-wrap;">${obsAss}</p>
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    }
+                    
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('content').style.display = 'block';
+                } else {
+                    document.getElementById('loading').innerText = "Nenhum relatório salvo encontrado para a Aba 3. Salve a Aba 3 para gerar.";
+                }
+            } catch (err) {
+                console.error(err);
+                document.getElementById('loading').innerText = "Erro ao carregar o relatório: " + err.message;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadReport);
+    </script>
+</body>
+</html>

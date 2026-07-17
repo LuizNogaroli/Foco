@@ -192,7 +192,7 @@
         }
 
         // Função para preencher os campos do formulário atual com o estado central
-        function populateForm(state) {
+        async function populateForm(state) {
             console.log("🚩 [sync.js] populateForm chamado. Estado:", state);
             if (!state) return;
 
@@ -200,7 +200,7 @@
             console.log('📝 [sync.js] pathname:', window.location.pathname, 'isAba2:', isCurrentPage('foco-02'));
             if (isCurrentPage('foco-02')) {
                 console.log("🚩 [sync.js] foco-02 detectado. Restaurando blocos dinâmicos.");
-                restoreFoco02DynamicBlocks(state);
+                await restoreFoco02DynamicBlocks(state);
             }
 
             // 2. Preenche todos os inputs normais do formulário
@@ -341,7 +341,7 @@
             }
         }
 
-        function restoreFoco02DynamicBlocks(state) {
+        async function restoreFoco02DynamicBlocks(state) {
             console.log('📝 [sync.js] restoreFoco02DynamicBlocks state keys:', Object.keys(state || {}));
             console.log('📝 [sync.js] state._ripsPesquisados:', state?.['_ripsPesquisados']);
             console.log('📝 [sync.js] state.rips:', state?.['rips']);
@@ -404,7 +404,7 @@
                     window.criarBlocoImovel(rip, dados);
                     // Após criar o bloco, busca dados do SPU e preenche/tranca campos
                     if (typeof window.carregarCamposRIP === 'function') {
-                        window.carregarCamposRIP(rip);
+                        await window.carregarCamposRIP(rip);
                     }
                 }
             } else {
@@ -445,6 +445,12 @@
         setTimeout(() => {
             console.log("🚩 [sync.js] Temporizador esgotado. Populando formulário e ocultando overlay.");
             isSimulatedLoadFinished = true;
+            
+            // Fallback robusto: se o db.js recriou o objeto e perdemos o postMessage por milissegundos
+            if (window.parent && window.parent.formDataState && Object.keys(window.parent.formDataState).length > 0) {
+                dbState = window.parent.formDataState;
+            }
+            
             populateForm(dbState);
 
             loader.style.opacity = '0';
@@ -498,6 +504,67 @@
                     saveField(input);
                 }
             });
+
+            // ==========================================
+            // BLOQUEIO BASEADO NO WORKFLOW (STATUS E PERFIL)
+            // ==========================================
+            if (window.parent && window.parent.formDataState) {
+                const fd = window.parent.formDataState;
+                const estadoFluxo = fd.status_flow || '';
+                const perfilEsperado = fd.perfil || 'Todos';
+                const perfilAtual = localStorage.getItem('CURRENT_USER_PROFILE') || 'ALL';
+                
+                let abaEditavel = false;
+                
+                // Mapeia abas para Instâncias
+                if (isCurrentPage('foco-01')) {
+                    abaEditavel = (estadoFluxo === 'Painel de Requerimentos' || estadoFluxo === 'Admissibilidade');
+                } else if (isCurrentPage('foco-02')) {
+                    abaEditavel = (estadoFluxo === 'Caracterização');
+                } else if (isCurrentPage('foco-03')) {
+                    abaEditavel = (estadoFluxo === 'Destinação');
+                }
+                
+                let perfilAutorizado = true;
+                if (perfilEsperado && perfilEsperado !== 'Todos' && perfilEsperado !== 'Indefinido') {
+                    if (perfilAtual !== 'ALL' && perfilAtual !== perfilEsperado && perfilAtual !== 'Admin') {
+                        perfilAutorizado = false;
+                    }
+                }
+                
+                if (!abaEditavel || !perfilAutorizado) {
+                    // Trava o formulário
+                    document.querySelectorAll('input, select, textarea, button').forEach(el => {
+                        if (!el.classList.contains('nav-btn') && !el.closest('.navbar')) {
+                            el.disabled = true;
+                        }
+                    });
+                    
+                    // Exibir banner de aviso se ainda não existir
+                    if (!document.getElementById('banner-lock-workflow')) {
+                        const banner = document.createElement('div');
+                        banner.id = 'banner-lock-workflow';
+                        banner.style.backgroundColor = '#fef3c7';
+                        banner.style.color = '#92400e';
+                        banner.style.padding = '10px';
+                        banner.style.textAlign = 'center';
+                        banner.style.fontWeight = 'bold';
+                        banner.style.marginBottom = '15px';
+                        banner.style.borderRadius = '4px';
+                        banner.style.border = '1px solid #f59e0b';
+                        
+                        let msg = `Modo Somente Leitura. `;
+                        if (!abaEditavel) {
+                            msg += `O processo encontra-se na instância: ${estadoFluxo}. `;
+                        } else if (!perfilAutorizado) {
+                            msg += `Apenas o perfil '${perfilEsperado}' pode editar. (Seu perfil: ${perfilAtual}).`;
+                        }
+                        
+                        banner.innerHTML = msg;
+                        document.body.insertBefore(banner, document.body.firstChild);
+                    }
+                }
+            }
             
             // Regras de transição de status_flow de acordo com a aba
             if (window.parent && window.parent.formDataState) {
@@ -528,7 +595,7 @@
                 const uf = window.parent.formDataState.uf || 'BR';
                 const processId = localStorage.getItem('CURRENT_PROCESS_ID');
                 if (processId) {
-                    await window.parent.updateStatusFluxo(processId, 'SPU/' + uf, 'Aguardando deliberação SPU/' + uf);
+                    await window.parent.updateStatusFluxo(processId, 5); // ID 5: Validação Chefia
                 }
             }
 
@@ -585,6 +652,11 @@
                     window.parent.updateField('_ripsPesquisados', window.ripsPesquisados);
                 };
             }
+        }
+
+        // Verifica banners de devolução se aplicável
+        if (window.parent && typeof window.parent.verificarDevolucaoSupabase === 'function') {
+            window.parent.verificarDevolucaoSupabase(document);
         }
     });
 })();

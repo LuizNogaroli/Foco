@@ -8,6 +8,7 @@ tabela_requerimentos
   "interessado": "Prefeitura Municipal A",
   "processo_sei": "10480.002401/2026-66",
   "regime_requerido": "Cessão Onerosa",
+  "tipo_requerimento": "Alterar Regime ou Contrato de Utilização de Imóvel da União",
   "checkpoint": "SPU/PR - Destinação",
   "atribuido_para": "Não atribuído",
   "status": "Aguardando Análise"
