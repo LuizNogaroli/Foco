@@ -2781,9 +2781,13 @@
                 // Helper para renderizar campo readonly
                 function buildFieldRO(label, value) {
                     return `
-                        <div style="margin-bottom: 12px; text-align: left;">
-                            <span style="display: block; font-size: 0.85rem; font-weight: bold; color: #475569; margin-bottom: 3px;">${label}</span>
-                            <span style="display: block; font-size: 0.95rem; color: #1e293b; background: #f1f5f9; padding: 8px 12px; border-radius: 4px; border: 1px solid #e2e8f0; min-height: 18px;">${value || '-'}</span>
+                        <div style="display: flex; align-items: baseline; margin-bottom: 6px; padding: 5px 0; font-size: 0.9rem;">
+                            <span style="display: flex; width: 240px;">
+                                <span style="font-weight: 600; color: #334155; white-space: nowrap;">${label}</span>
+                                <span style="flex: 1; border-bottom: 1px dotted #94a3b8; min-width: 10px;"></span>
+                                <span style="white-space: nowrap; color: #334155;">:</span>
+                            </span>
+                            <span style="flex: 1; margin-left: 6px; padding: 3px 10px; background: #f1f5f9; color: #0f172a; border-radius: 3px;">${value || '-'}</span>
                         </div>
                     `;
                 }
@@ -2807,14 +2811,27 @@
                             <span style="transition: transform 0.2s;">▼</span>
                         </div>
                         <div style="padding: 16px; display: none; background: #fff;">
-                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                            <div style="display: flex; flex-direction: column;">
+                                ${buildFieldRO('Conceituação do Imóvel', dadosSPU.conceituacao)}
+                                ${buildFieldRO('Condição de Urbanização', dadosSPU.condicao_urbanizacao)}
                                 ${buildFieldRO('Natureza do Terreno', dadosSPU.natureza || dadosSPU.natureza_terreno)}
-                                ${buildFieldRO('Área Total (m²)', dadosSPU.area_total)}
-                                ${buildFieldRO('Área da União (m²)', dadosSPU.area_uniao || dadosSPU.area_terreno_uniao)}
+                                ${buildFieldRO('Tipo de Imóvel', dadosSPU.tipo_imovel)}
                                 ${buildFieldRO('CEP', dadosSPU.cep)}
                                 ${buildFieldRO('Logradouro', dadosSPU.logradouro || dadosSPU.endereco)}
                                 ${buildFieldRO('Bairro', dadosSPU.bairro)}
                                 ${buildFieldRO('Município / UF', `${dadosSPU.municipio || ''} / ${dadosSPU.uf || ''}`)}
+                                ${buildFieldRO('Área Total (m²)', dadosSPU.area_total)}
+                                ${buildFieldRO('Área da União (m²)', dadosSPU.area_uniao || dadosSPU.area_terreno_uniao)}
+                                ${buildFieldRO('Área Construída Total (m²)', dadosSPU.area_construida_total)}
+                                ${buildFieldRO('Área Construída Disponível (m²)', dadosSPU.area_construida_disponivel)}
+                                ${buildFieldRO('Área de Terreno Disponível (m²)', dadosSPU.area_terreno_disponivel)}
+                                ${buildFieldRO('Benfeitorias', dadosSPU.benfeitorias)}
+                                ${buildFieldRO('Situação da Incorporação', dadosSPU.situacao_incorporacao || dadosSPU.situacao)}
+                                ${buildFieldRO('Processo de Incorporação', dadosSPU.processo_incorporacao)}
+                                ${buildFieldRO('LPM/1831 ou LMEO Homologadas?', dadosSPU.lpm_homologada)}
+                                ${buildFieldRO('Valor da Avaliação (R$)', dadosSPU.valor_avaliado || dadosSPU.valor_avaliacao)}
+                                ${buildFieldRO('Data da Avaliação', dadosSPU.data_avaliacao)}
+                                ${buildFieldRO('Instrumento de Avaliação', dadosSPU.instrumento_avaliacao)}
                             </div>
                         </div>
                     `;
@@ -2831,7 +2848,7 @@
                             <span style="transition: transform 0.2s;">▼</span>
                         </div>
                         <div style="padding: 16px; display: none; background: #fff;">
-                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                            <div style="display: flex; flex-direction: column;">
                                 ${buildFieldRO('CEP', cad.cep)}
                                 ${buildFieldRO('Área (m²)', cad.area)}
                                 ${buildFieldRO('Logradouro', cad.logradouro || cad.endereco)}
