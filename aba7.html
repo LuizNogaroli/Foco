@@ -1227,43 +1227,186 @@ function toggleAccordion(element) {
       'COORDENACAO':        ['acc_aba1', 'acc_aba2', 'acc_aba3', 'bloco-deliberacao-coord'],
     };
 
+    // Níveis hierárquicos (quanto maior o número, mais alto no fluxo)
+    const HIERARQUY_LEVELS = {
+      'equipe': 1,        // Equipe Destinação / Equipe Caracterização
+      'chefia': 2,
+      'coordenacao': 3,
+      'superintendencia': 4,
+      'equipe_cg': 5,
+      'coordenacao_geral': 6,
+      'diretoria': 7,
+      'cde': 8
+    };
+
+    // Mapeamento de blocos de deliberação → nível hierárquico
+    const BLOCK_HIERARQUY = {
+      'bloco-deliberacao-chefia': 'chefia',
+      'bloco-deliberacao-coord': 'coordenacao',
+      'bloco-deliberacao-super': 'superintendencia',
+      'bloco-deliberacao-equipe-cg': 'equipe_cg',
+      'bloco-deliberacao-coord-geral': 'coordenacao_geral',
+      'bloco-deliberacao-diretoria': 'diretoria',
+      'bloco-deliberacao-cde': 'cde'
+    };
+
+    // Mapeamento de checkpoints → nível hierárquico
+    const CHECKPOINT_LEVELS = {
+      "Aguardando Chefia SPU/UF": 'chefia',
+      "Devolvido para Chefia SPU/UF": 'chefia',
+      "Validação análise de viabilidade - Chefia": 'chefia',
+      "Aguardando Validação da Chefia": 'chefia',
+      "Aguardando Coordenação SPU/UF": 'coordenacao',
+      "Devolvido para Coordenação SPU/UF": 'coordenacao',
+      "Validação análise de viabilidade - Coordenação": 'coordenacao',
+      "Aguardando Superintendência": 'superintendencia',
+      "Devolvido para Superintendência": 'superintendencia',
+      "Deliberação Superintendência": 'superintendencia',
+      "Aguardando Equipe C.G.": 'equipe_cg',
+      "Devolvido para Equipe C.G.": 'equipe_cg',
+      "Conferência análise de viabilidade": 'equipe_cg',
+      "Aguardando Coordenação-Geral": 'coordenacao_geral',
+      "Devolvido para Coordenação-Geral": 'coordenacao_geral',
+      "Validação análise de viabilidade - Coordenação-Geral": 'coordenacao_geral',
+      "Aguardando Direção": 'diretoria',
+      "Devolvido para Direção": 'diretoria',
+      "Validação conferência": 'diretoria',
+      "Manifestação CDE": 'cde',
+      "Devolvido para CDE": 'cde'
+    };
+
+    // Resolução por substring para checkpoints não mapeados
+    function resolveCheckpointLevel(cp) {
+      if (CHECKPOINT_LEVELS[cp]) return CHECKPOINT_LEVELS[cp];
+      const lower = cp.toLowerCase();
+      if (lower.includes('cde')) return 'cde';
+      if (lower.includes('direção') || lower.includes('diretor')) return 'diretoria';
+      if (lower.includes('coordenação-geral') || lower.includes('coordenacao-geral') || lower.includes('coord-geral')) return 'coordenacao_geral';
+      if (lower.includes('equipe c.g') || lower.includes('equipe cg')) return 'equipe_cg';
+      if (lower.includes('superintend')) return 'superintendencia';
+      if (lower.includes('coordenação') || lower.includes('coordenacao')) return 'coordenacao';
+      if (lower.includes('chefia')) return 'chefia';
+      if (lower.includes('aprova') || lower.includes('aprovad') || lower.includes('final')) return 'cde';
+      return null;
+    }
+
+    // Mapeamento de perfis → nível hierárquico
+    const PROFILE_LEVELS = {
+      'DESTINACAO': 'equipe',
+      'CARACTERIZACAO': 'equipe',
+      'SPU_DESTINACAO': 'equipe',
+      'SPU_CARACTERIZACAO': 'equipe',
+      'CHEFIA_SPU': 'chefia',
+      'Chefia SPU/UF': 'chefia',
+      'CHEFIA': 'chefia',
+      'COORDENACAO_SPU': 'coordenacao',
+      'Coordenação SPU/UF': 'coordenacao',
+      'COORDENACAO': 'coordenacao',
+      'SUPERINTENDENCIA': 'superintendencia',
+      'Superintendência': 'superintendencia',
+      'EQUIPE_CG': 'equipe_cg',
+      'COORDENACAO_GERAL': 'coordenacao_geral',
+      'DIRETORIA': 'diretoria',
+      'CDE': 'cde'
+    };
+
+    function setBlockReadOnly(blockId, readOnly) {
+      const el = document.getElementById(blockId);
+      if (!el) return;
+
+      // Botões de ação
+      el.querySelectorAll('button').forEach(btn => {
+        btn.disabled = readOnly;
+        btn.style.opacity = readOnly ? '0.5' : '1';
+        btn.style.cursor = readOnly ? 'not-allowed' : 'pointer';
+      });
+
+      // Radio buttons
+      el.querySelectorAll('input[type="radio"]').forEach(radio => {
+        radio.disabled = readOnly;
+      });
+
+      // Textareas
+      el.querySelectorAll('textarea').forEach(ta => {
+        ta.disabled = readOnly;
+        ta.style.opacity = readOnly ? '0.7' : '1';
+      });
+
+      // Selects
+      el.querySelectorAll('select').forEach(sel => {
+        sel.disabled = readOnly;
+        sel.style.opacity = readOnly ? '0.7' : '1';
+      });
+
+      // Banner de aviso seReadOnly
+      let banner = el.querySelector('.readonly-banner');
+      if (readOnly && !banner) {
+        banner = document.createElement('div');
+        banner.className = 'readonly-banner';
+        banner.style.cssText = 'background: #fef3c7; border: 1px solid #f59e0b; color: #92400e; padding: 10px 14px; border-radius: 6px; margin-bottom: 15px; font-size: 0.9rem; font-weight: 500;';
+        banner.textContent = '👁️ Este nível hierárquico já manifestou seu parecer. Visualização somente leitura.';
+        el.insertBefore(banner, el.firstChild);
+      } else if (!readOnly && banner) {
+        banner.remove();
+      }
+    }
+
     function applyProfileView(profile, currentCheckpoint = "") {
       const allowed = profilePermissions[profile] || profilePermissions['ALL'];
-      
+
+      // Determinar nível do checkpoint atual (busca exata + fallback por substring)
+      const checkpointLevel = CHECKPOINT_LEVELS[currentCheckpoint] || resolveCheckpointLevel(currentCheckpoint);
+      const checkpointLevelNum = checkpointLevel ? HIERARQUY_LEVELS[checkpointLevel] : 0;
+
       const allElements = ['acc_aba1', 'acc_aba2', 'acc_aba3', 'bloco-deliberacao-chefia', 'bloco-deliberacao-coord', 'bloco-deliberacao-super', 'bloco-deliberacao-equipe-cg', 'bloco-deliberacao-coord-geral', 'bloco-deliberacao-diretoria', 'bloco-deliberacao-cde'];
-      
+
       allElements.forEach(id => {
         const el = document.getElementById(id);
-        if (el) {
-          // Verifica se o perfil tem permissão geral para ver o bloco
-          let shouldShow = allowed.includes(id);
+        if (!el) return;
 
-          // Controle de fila baseado no checkpoint ativo
-          if (shouldShow) {
-            if (id === 'bloco-deliberacao-chefia') {
-              shouldShow = (currentCheckpoint === "Aguardando Chefia SPU/UF" || currentCheckpoint === "Devolvido para Chefia SPU/UF" || currentCheckpoint === "Validação análise de viabilidade - Chefia");
-            } else if (id === 'bloco-deliberacao-coord') {
-              shouldShow = (currentCheckpoint === "Aguardando Coordenação SPU/UF" || currentCheckpoint === "Devolvido para Coordenação SPU/UF" || currentCheckpoint === "Validação análise de viabilidade - Coordenação");
-            } else if (id === 'bloco-deliberacao-super') {
-              shouldShow = (currentCheckpoint === "Aguardando Superintendência" || currentCheckpoint === "Devolvido para Superintendência" || currentCheckpoint === "Deliberação Superintendência");
-            } else if (id === 'bloco-deliberacao-equipe-cg') {
-              shouldShow = (currentCheckpoint === "Aguardando Equipe C.G." || currentCheckpoint === "Devolvido para Equipe C.G." || currentCheckpoint === "Conferência análise de viabilidade");
-            } else if (id === 'bloco-deliberacao-coord-geral') {
-              shouldShow = (currentCheckpoint === "Aguardando Coordenação-Geral" || currentCheckpoint === "Devolvido para Coordenação-Geral" || currentCheckpoint === "Validação análise de viabilidade - Coordenação-Geral");
-            } else if (id === 'bloco-deliberacao-diretoria') {
-              shouldShow = (currentCheckpoint === "Aguardando Direção" || currentCheckpoint === "Devolvido para Direção" || currentCheckpoint === "Validação conferência");
-            } else if (id === 'bloco-deliberacao-cde') {
-              shouldShow = (currentCheckpoint === "Manifestação CDE" || currentCheckpoint === "Devolvido para CDE");
+        let shouldShow = allowed.includes(id);
+
+        if (shouldShow) {
+          const blockLevel = BLOCK_HIERARQUY[id];
+
+          if (blockLevel) {
+            const blockLevelNum = HIERARQUY_LEVELS[blockLevel];
+
+            if (checkpointLevelNum === 0) {
+              // Checkpoint não reconhecido → mantém comportamento original
+              shouldShow = idMatchesCheckpoint(id, currentCheckpoint);
+            } else if (checkpointLevelNum === blockLevelNum) {
+              // Nível atual = bloco → editar
+              shouldShow = true;
+              setBlockReadOnly(id, false);
+            } else if (checkpointLevelNum > blockLevelNum) {
+              // Processo já passou deste nível → somente leitura
+              shouldShow = true;
+              setBlockReadOnly(id, true);
+            } else {
+              // Processo ainda não chegou neste nível → esconde
+              shouldShow = false;
+              setBlockReadOnly(id, false);
             }
           }
-
-          if (shouldShow) {
-            el.style.display = 'block';
-          } else {
-            el.style.display = 'none';
-          }
         }
+
+        el.style.display = shouldShow ? 'block' : 'none';
+        if (!shouldShow) setBlockReadOnly(id, false);
       });
+    }
+
+    function idMatchesCheckpoint(id, cp) {
+      const map = {
+        'bloco-deliberacao-chefia': ["Aguardando Chefia SPU/UF", "Devolvido para Chefia SPU/UF", "Validação análise de viabilidade - Chefia"],
+        'bloco-deliberacao-coord': ["Aguardando Coordenação SPU/UF", "Devolvido para Coordenação SPU/UF", "Validação análise de viabilidade - Coordenação"],
+        'bloco-deliberacao-super': ["Aguardando Superintendência", "Devolvido para Superintendência", "Deliberação Superintendência"],
+        'bloco-deliberacao-equipe-cg': ["Aguardando Equipe C.G.", "Devolvido para Equipe C.G.", "Conferência análise de viabilidade"],
+        'bloco-deliberacao-coord-geral': ["Aguardando Coordenação-Geral", "Devolvido para Coordenação-Geral", "Validação análise de viabilidade - Coordenação-Geral"],
+        'bloco-deliberacao-diretoria': ["Aguardando Direção", "Devolvido para Direção", "Validação conferência"],
+        'bloco-deliberacao-cde': ["Manifestação CDE", "Devolvido para CDE"]
+      };
+      return (map[id] || []).includes(cp);
     }
 
     async function carregarDeliberacoesETimeline() {
